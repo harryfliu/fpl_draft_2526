@@ -157,7 +157,66 @@ function populateLeaderboard() {
         return;
     }
     
-    dashboardData.leaderboard.forEach(team => {
+    // Get partial results to calculate live standings
+    let liveLeaderboard = [];
+    
+    if (dataManager) {
+        const partialResults = dataManager.getAllPartialResults();
+        
+        if (partialResults.length > 0) {
+            // Calculate live standings from partial results
+            liveLeaderboard = dashboardData.leaderboard.map(team => {
+                const performance = calculateTeamPerformanceFromResults(team.teamName);
+                
+                // Get GW points from partial results
+                let gwPoints = 0;
+                partialResults.forEach(result => {
+                    if (result.homeTeam === team.teamName) {
+                        gwPoints = result.homeScore;
+                    } else if (result.awayTeam === team.teamName) {
+                        gwPoints = result.awayScore;
+                    }
+                });
+                
+                return {
+                    ...team,
+                    points: performance.points,
+                    gwPoints: gwPoints,
+                    form: `${performance.wins > 0 ? 'W'.repeat(performance.wins) : ''}${performance.draws > 0 ? 'D'.repeat(performance.draws) : ''}${performance.losses > 0 ? 'L'.repeat(performance.losses) : ''}`.split('').join('-') || 'N/A'
+                };
+            });
+            
+            // Sort by points (highest first), then by GW points (FPL points) as tiebreaker, then by goal difference, then by goals for
+            liveLeaderboard.sort((a, b) => {
+                if (b.points !== a.points) {
+                    return b.points - a.points;
+                }
+                // If points are equal, sort by GW points (FPL points) as tiebreaker
+                if (b.gwPoints !== a.gwPoints) {
+                    return b.gwPoints - a.gwPoints;
+                }
+                // If GW points are equal, sort by goal difference
+                const aGoalDiff = (a.goalsFor || 0) - (a.goalsAgainst || 0);
+                const bGoalDiff = (b.goalsFor || 0) - (b.goalsAgainst || 0);
+                if (bGoalDiff !== aGoalDiff) {
+                    return bGoalDiff - aGoalDiff;
+                }
+                // If goal difference is equal, sort by goals for
+                return (b.goalsFor || 0) - (a.goalsFor || 0);
+            });
+            
+            // Update positions after sorting
+            liveLeaderboard.forEach((team, index) => {
+                team.position = index + 1;
+            });
+        } else {
+            liveLeaderboard = dashboardData.leaderboard;
+        }
+    } else {
+        liveLeaderboard = dashboardData.leaderboard;
+    }
+    
+    liveLeaderboard.forEach(team => {
         const row = document.createElement('tr');
         
         // Add special styling for top 3 positions
@@ -181,7 +240,6 @@ function populateLeaderboard() {
                     </div>
                     <div>
                         <div class="font-bold text-white">${team.manager}</div>
-                        <div class="text-sm text-white">${team.teamName}</div>
                     </div>
                 </div>
             </td>
@@ -194,8 +252,8 @@ function populateLeaderboard() {
             </td>
             <td>
                 <div class="flex gap-1">
-                    ${(team.form || 'L-L-L-L-L').split('-').map(result => 
-                        `<div class="w-2 h-2 rounded-full ${result === 'W' ? 'bg-success' : 'bg-error'}"></div>`
+                    ${(team.form || 'N/A').split('-').map(result => 
+                        `<div class="w-2 h-2 rounded-full ${result === 'W' ? 'bg-success' : result === 'D' ? 'bg-warning' : result === 'L' ? 'bg-error' : 'bg-gray-500'}"></div>`
                     ).join('')}
                 </div>
             </td>
@@ -275,6 +333,45 @@ function getManagerFromTeamName(teamName) {
     return team ? team.manager : 'Unknown Manager';
 }
 
+// Calculate team performance from partial results
+function calculateTeamPerformanceFromResults(teamName) {
+    if (!dataManager) return { wins: 0, draws: 0, losses: 0, points: 0, goalsFor: 0, goalsAgainst: 0 };
+    
+    const partialResults = dataManager.getAllPartialResults();
+    let wins = 0, draws = 0, losses = 0, goalsFor = 0, goalsAgainst = 0;
+    
+    partialResults.forEach(result => {
+        if (result.homeTeam === teamName) {
+            // Team is home
+            if (result.homeScore > result.awayScore) {
+                wins++;
+            } else if (result.homeScore < result.awayScore) {
+                losses++;
+            } else {
+                draws++;
+            }
+            goalsFor += result.homeScore;
+            goalsAgainst += result.awayScore;
+        } else if (result.awayTeam === teamName) {
+            // Team is away
+            if (result.awayScore > result.homeScore) {
+                wins++;
+            } else if (result.awayScore < result.homeScore) {
+                losses++;
+            } else {
+                draws++;
+            }
+            goalsFor += result.awayScore;
+            goalsAgainst += result.homeScore;
+        }
+    });
+    
+    // Calculate points (3 for win, 1 for draw, 0 for loss)
+    const points = (wins * 3) + draws;
+    
+    return { wins, draws, losses, points, goalsFor, goalsAgainst };
+}
+
 // Populate current fixtures for the current gameweek only
 function populateCurrentFixtures() {
     const container = document.getElementById('currentFixturesContainer');
@@ -331,6 +428,24 @@ function populateCurrentFixtures() {
         const homeManager = getManagerFromTeamName(fixture.homeTeam);
         const awayManager = getManagerFromTeamName(fixture.awayTeam);
         
+        // Check if we have partial results for this fixture
+        const partialResult = dataManager?.getPartialResults()?.find(result => 
+            (result.homeTeam === fixture.homeTeam && result.awayTeam === fixture.awayTeam) ||
+            (result.homeTeam === fixture.awayTeam && result.awayTeam === fixture.homeTeam)
+        );
+        
+        // Determine which team is home/away in the fixture vs partial result
+        let homeScore, awayScore;
+        if (partialResult) {
+            if (partialResult.homeTeam === fixture.homeTeam) {
+                homeScore = partialResult.homeScore;
+                awayScore = partialResult.awayScore;
+            } else {
+                homeScore = partialResult.awayScore;
+                awayScore = partialResult.homeScore;
+            }
+        }
+        
         fixtureElement.innerHTML = `
             <div class="card-body p-4">
                 <div class="flex items-center justify-between mb-3">
@@ -345,7 +460,9 @@ function populateCurrentFixtures() {
                             <div class="text-xs text-white">${homeManager}</div>
                         </div>
                     </div>
-                    <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg">VS</div>
+                    <div class="bg-gradient-to-r ${partialResult ? (partialResult.homeScore > partialResult.awayScore ? 'from-green-600 to-green-700' : partialResult.homeScore < partialResult.awayScore ? 'from-red-600 to-red-700' : 'from-yellow-600 to-yellow-700') : 'from-purple-600 to-blue-600'} text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg">
+                        ${partialResult ? `${partialResult.homeScore} - ${partialResult.awayScore}` : 'VS'}
+                    </div>
                     <div class="flex items-center gap-3">
                         <div class="text-center">
                             <div class="font-semibold text-white">${fixture.awayTeam}</div>
@@ -358,6 +475,12 @@ function populateCurrentFixtures() {
                         </div>
                     </div>
                 </div>
+                ${partialResult ? `
+                <div class="text-center text-xs text-gray-400 mt-2">
+                    <i class="fas fa-trophy mr-1"></i>
+                    Partial result from GW${partialResult.gameweek} - Day ${partialResult.day}
+                </div>
+                ` : ''}
             </div>
         `;
         
@@ -589,13 +712,51 @@ function populateMonthlyStandings() {
         return;
     }
     
-    // Create monthly standings from leaderboard
-    dashboardData.monthlyStandings = dashboardData.leaderboard.map(team => ({
-        position: team.position,
-        manager: team.manager,
-        points: team.points || 0,
-        winnings: team.totalWinnings || 0
-    }));
+    // Create monthly standings from leaderboard with partial results data
+    dashboardData.monthlyStandings = dashboardData.leaderboard.map(team => {
+        const performance = calculateTeamPerformanceFromResults(team.teamName);
+        
+        // Calculate total GW points (FPL points) for this month
+        const partialResults = dataManager.getAllPartialResults();
+        let totalGWPoints = 0;
+        
+        // Sum up all FPL points this team earned
+        partialResults.forEach(result => {
+            if (result.homeTeam === team.teamName) {
+                totalGWPoints += result.homeScore; // Home team's FPL points
+            } else if (result.awayTeam === team.teamName) {
+                totalGWPoints += result.awayScore; // Away team's FPL points
+            }
+        });
+        
+        return {
+            position: team.position,
+            manager: team.manager,
+            teamName: team.teamName,
+            totalGWPoints: totalGWPoints, // Total FPL points earned this month
+            winnings: team.totalWinnings || 0,
+            wins: performance.wins,
+            draws: performance.draws,
+            losses: performance.losses,
+            goalsFor: performance.goalsFor,
+            goalsAgainst: performance.goalsAgainst
+        };
+    });
+    
+    // Sort by total GW points (FPL points) highest first, then by goal difference
+    dashboardData.monthlyStandings.sort((a, b) => {
+        if (b.totalGWPoints !== a.totalGWPoints) {
+            return b.totalGWPoints - a.totalGWPoints;
+        }
+        const aGoalDiff = a.goalsFor - a.goalsAgainst;
+        const bGoalDiff = b.goalsFor - b.goalsAgainst;
+        return bGoalDiff - aGoalDiff;
+    });
+    
+    // Update positions after sorting by GW points
+    dashboardData.monthlyStandings.forEach((standing, index) => {
+        standing.position = index + 1;
+    });
     
     dashboardData.monthlyStandings.forEach(standing => {
         const standingElement = document.createElement('div');
@@ -605,7 +766,33 @@ function populateMonthlyStandings() {
             <div class="card-body p-6">
                 <div class="text-3xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent mb-2">${standing.position}</div>
                 <div class="font-semibold text-white mb-2">${standing.manager}</div>
-                <div class="text-sm text-white mb-3">${standing.points} pts</div>
+                <div class="text-sm text-gray-300 mb-1">${standing.teamName}</div>
+                <div class="text-lg font-bold text-white mb-2">${standing.totalGWPoints} FPL pts</div>
+                
+                <!-- Performance stats from partial results -->
+                <div class="grid grid-cols-3 gap-2 mb-3 text-xs">
+                    <div class="text-center">
+                        <div class="text-green-400 font-bold">${standing.wins || 0}</div>
+                        <div class="text-gray-400">W</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-yellow-400 font-bold">${standing.draws || 0}</div>
+                        <div class="text-gray-400">D</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-red-400 font-bold">${standing.losses || 0}</div>
+                        <div class="text-gray-400">L</div>
+                    </div>
+                </div>
+                
+                <!-- Goal difference -->
+                ${standing.goalsFor !== undefined ? `
+                <div class="text-xs text-gray-400 mb-3">
+                    <i class="fas fa-futbol mr-1"></i>
+                    ${standing.goalsFor} - ${standing.goalsAgainst} (${standing.goalsFor - standing.goalsAgainst > 0 ? '+' : ''}${standing.goalsFor - standing.goalsAgainst})
+                </div>
+                ` : ''}
+                
                 ${standing.winnings > 0 ? 
                     `<div class="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-3 py-2 rounded-full text-sm font-semibold shadow-lg gap-1 inline-flex items-center">
                         <i class="fas fa-dollar-sign"></i>
@@ -921,15 +1108,81 @@ function handleTeamSelection(event) {
         return;
     }
     
-    // Find the selected team
-    const selectedTeam = dashboardData.leaderboard.find(team => team.teamName === selectedTeamName);
+    // Find the selected team from the live leaderboard (same data source as the displayed table)
+    let selectedTeam = null;
+    
+    if (dataManager) {
+        const partialResults = dataManager.getAllPartialResults();
+        
+        if (partialResults.length > 0) {
+            // Get the live leaderboard data (same as populateLeaderboard)
+            const liveLeaderboard = dashboardData.leaderboard.map(leaderboardTeam => {
+                const performance = calculateTeamPerformanceFromResults(leaderboardTeam.teamName);
+                
+                // Get GW points from partial results
+                let gwPoints = 0;
+                partialResults.forEach(result => {
+                    if (result.homeTeam === leaderboardTeam.teamName) {
+                        gwPoints = result.homeScore;
+                    } else if (result.awayTeam === leaderboardTeam.teamName) {
+                        gwPoints = result.awayScore;
+                    }
+                });
+                
+                return {
+                    ...leaderboardTeam,
+                    points: performance.points,
+                    gwPoints: gwPoints,
+                    goalsFor: performance.goalsFor,
+                    goalsAgainst: performance.goalsAgainst
+                };
+            });
+            
+            // Sort by points (highest first), then by GW points (FPL points) as tiebreaker, then by goal difference, then by goals for
+            liveLeaderboard.sort((a, b) => {
+                if (b.points !== a.points) {
+                    return b.points - a.points;
+                }
+                // If points are equal, sort by GW points (FPL points) as tiebreaker
+                if (b.gwPoints !== a.gwPoints) {
+                    return b.gwPoints - a.gwPoints;
+                }
+                // If GW points are equal, sort by goal difference
+                const aGoalDiff = (a.goalsFor || 0) - (a.goalsAgainst || 0);
+                const bGoalDiff = (b.goalsFor || 0) - (b.goalsAgainst || 0);
+                if (bGoalDiff !== aGoalDiff) {
+                    return bGoalDiff - aGoalDiff;
+                }
+                // If goal difference is equal, sort by goals for
+                return (b.goalsFor || 0) - (a.goalsFor || 0);
+            });
+            
+            // Update positions after sorting
+            liveLeaderboard.forEach((leaderboardTeam, index) => {
+                leaderboardTeam.position = index + 1;
+            });
+            
+            // Find the team in the live leaderboard
+            selectedTeam = liveLeaderboard.find(team => team.teamName === selectedTeamName);
+        }
+    }
+    
+    // Fallback to original leaderboard if no live data
+    if (!selectedTeam) {
+        selectedTeam = dashboardData.leaderboard.find(team => team.teamName === selectedTeamName);
+    }
+    
     if (selectedTeam) {
+        console.log('🔍 DEBUG: Selected team from live leaderboard:', selectedTeam);
         displayTeamDetails(selectedTeam);
     }
 }
 
 // Display team details
 function displayTeamDetails(team) {
+    console.log('🔍 DEBUG: displayTeamDetails called with team:', team);
+    console.log('🔍 DEBUG: Team position from object:', team.position);
+    
     // Show team details container
     const teamDetailsContainer = document.getElementById('team-details-container');
     const teamSelectionPrompt = document.getElementById('team-selection-prompt');
@@ -950,28 +1203,129 @@ function displayTeamDetails(team) {
     if (teamManager) teamManager.textContent = team.manager;
     if (teamPosition) teamPosition.textContent = `#${team.position}`;
     
-    // Update team stats
+    // Update team stats with partial results data
+    const teamPerformance = calculateTeamPerformanceFromResults(team.teamName);
     const teamTotalPoints = document.getElementById('team-total-points');
     const teamGWPoints = document.getElementById('team-gw-points');
     const teamForm = document.getElementById('team-form');
     const teamWinnings = document.getElementById('team-winnings');
     
-    if (teamTotalPoints) teamTotalPoints.textContent = team.points || 0;
-    if (teamGWPoints) teamGWPoints.textContent = team.gwPoints || 0;
-    if (teamForm) teamForm.textContent = team.form || 'L-L-L-L-L';
+    // Use partial results for points if available
+    if (teamPerformance.points > 0) {
+        if (teamTotalPoints) teamTotalPoints.textContent = teamPerformance.points;
+    } else {
+        if (teamTotalPoints) teamTotalPoints.textContent = team.points || 0;
+    }
+    
+    // Calculate GW Points from partial results (actual FPL points earned)
+    if (teamPerformance.points > 0) {
+        // Get the actual FPL points from the partial results
+        const partialResults = dataManager.getAllPartialResults();
+        let gwPoints = 0;
+        
+        // Find the result where this team played and get their score
+        partialResults.forEach(result => {
+            if (result.homeTeam === team.teamName) {
+                gwPoints = result.homeScore; // Home team's FPL points
+            } else if (result.awayTeam === team.teamName) {
+                gwPoints = result.awayScore; // Away team's FPL points
+            }
+        });
+        
+        if (teamGWPoints) teamGWPoints.textContent = gwPoints;
+    } else {
+        if (teamGWPoints) teamGWPoints.textContent = team.gwPoints || 0;
+    }
+    
+    // Generate form string from recent results (W-D-L format)
+    if (teamPerformance.wins > 0 || teamPerformance.draws > 0 || teamPerformance.losses > 0) {
+        const formResults = [];
+        // Add wins
+        for (let i = 0; i < teamPerformance.wins; i++) {
+            formResults.push('W');
+        }
+        // Add draws
+        for (let i = 0; i < teamPerformance.draws; i++) {
+            formResults.push('D');
+        }
+        // Add losses
+        for (let i = 0; i < teamPerformance.losses; i++) {
+            formResults.push('L');
+        }
+        
+        // Take last 5 results or pad with L's if less than 5
+        const recentForm = formResults.slice(-5);
+        while (recentForm.length < 5) {
+            recentForm.unshift('L');
+        }
+        
+        if (teamForm) teamForm.textContent = recentForm.join('-');
+    } else {
+        if (teamForm) teamForm.textContent = team.form || 'L-L-L-L-L';
+    }
+    
     if (teamWinnings) teamWinnings.textContent = `$${team.totalWinnings || 0}`;
     
-    // Update team performance (get from results data)
-    const teamStandings = dashboardData.recentStandings.find(standing => standing.teamName === team.teamName);
+    // Update team performance (get from partial results data)
     const teamWins = document.getElementById('team-wins');
     const teamDraws = document.getElementById('team-draws');
     const teamLosses = document.getElementById('team-losses');
     const teamRank = document.getElementById('team-rank');
     
-    if (teamWins) teamWins.textContent = teamStandings?.wins || 0;
-    if (teamDraws) teamDraws.textContent = teamStandings?.draws || 0;
-    if (teamLosses) teamLosses.textContent = teamStandings?.losses || 0;
-    if (teamRank) teamRank.textContent = teamStandings ? `#${teamStandings.rank || team.position}` : `#${team.position}`;
+    if (teamWins) teamWins.textContent = teamPerformance.wins;
+    if (teamDraws) teamDraws.textContent = teamPerformance.draws;
+    if (teamLosses) teamLosses.textContent = teamPerformance.losses;
+    // Use the exact same ranking from the live Season Leaderboard
+    if (dataManager && teamPerformance.points > 0) {
+        console.log('🔍 DEBUG: Looking for team position for:', team.teamName);
+        
+        // Instead of recalculating, get the team's position from the DOM table that's already been populated
+        const leaderboardTable = document.getElementById('leaderboardBody');
+        if (leaderboardTable) {
+            const rows = leaderboardTable.querySelectorAll('tr');
+            console.log('🔍 DEBUG: Found', rows.length, 'rows in leaderboard table');
+            
+            let teamPosition = null;
+            
+            // Find the row that contains this team
+            for (let i = 0; i < rows.length; i++) {
+                const row = rows[i];
+                const teamNameCell = row.querySelector('td:nth-child(3)'); // Team name is in 3rd column
+                if (teamNameCell) {
+                    console.log(`🔍 DEBUG: Row ${i} team name: "${teamNameCell.textContent.trim()}" vs looking for: "${team.teamName}"`);
+                    if (teamNameCell.textContent.trim() === team.teamName) {
+                        // Get the position from the first column
+                        const positionCell = row.querySelector('td:first-child span.font-bold');
+                        if (positionCell) {
+                            teamPosition = positionCell.textContent.trim();
+                            console.log('🔍 DEBUG: Found team position in DOM:', teamPosition);
+                            break;
+                        } else {
+                            console.log('🔍 DEBUG: Position cell not found in row', i);
+                        }
+                    }
+                } else {
+                    console.log(`🔍 DEBUG: No team name cell found in row ${i}`);
+                }
+            }
+            
+            if (teamPosition && teamRank) {
+                console.log('🔍 DEBUG: Setting team rank to:', teamPosition);
+                teamRank.textContent = `#${teamPosition}`;
+            } else {
+                // Fallback: use the team's original position
+                console.log('🔍 DEBUG: Using fallback position:', team.position);
+                if (teamRank) teamRank.textContent = `#${team.position}`;
+            }
+        } else {
+            // Fallback: use the team's original position
+            console.log('🔍 DEBUG: Leaderboard table not found, using fallback position:', team.position);
+            if (teamRank) teamRank.textContent = `#${team.position}`;
+        }
+    } else {
+        console.log('🔍 DEBUG: No dataManager or no points, using original position:', team.position);
+        if (teamRank) teamRank.textContent = `#${team.position}`;
+    }
     
     // Update current squad
     displayTeamCurrentSquad(team);
@@ -1422,46 +1776,126 @@ function analyzeHeadToHead() {
     const container = document.getElementById('h2h-analysis');
     if (!container) return;
     
-    // Since we don't have actual match results yet, we'll analyze potential matchups from fixtures
-    const fixtures = dashboardData.upcomingFixtures || [];
-    const teams = dashboardData.leaderboard || [];
-    
-    if (teams.length === 0) {
-        container.innerHTML = '<p class="text-white">No team data available</p>';
+    if (!dataManager) {
+        container.innerHTML = '<p class="text-white">Data manager not available</p>';
         return;
     }
     
-    // Analyze upcoming rivalries based on current standings
-    const topTeam = teams[0];
-    const bottomTeam = teams[teams.length - 1];
-    const midTableTeams = teams.slice(1, teams.length - 1);
+    const partialResults = dataManager.getAllPartialResults();
+    const teams = dashboardData.leaderboard || [];
+    
+    if (teams.length === 0 || partialResults.length === 0) {
+        container.innerHTML = '<p class="text-white">No match data available</p>';
+        return;
+    }
+    
+    // Calculate team performance from partial results
+    const teamPerformance = teams.map(team => {
+        const performance = calculateTeamPerformanceFromResults(team.teamName);
+        
+        // Get GW points from partial results
+        let gwPoints = 0;
+        partialResults.forEach(result => {
+            if (result.homeTeam === team.teamName) {
+                gwPoints = result.homeScore;
+            } else if (result.awayTeam === team.teamName) {
+                gwPoints = result.awayScore;
+            }
+        });
+        
+        return {
+            ...team,
+            ...performance,
+            gwPoints: gwPoints
+        };
+    });
+    
+    // Sort by points (highest first), then by GW points (FPL points) as tiebreaker, then by goal difference, then by goals for
+    teamPerformance.sort((a, b) => {
+        if (b.points !== a.points) {
+            return b.points - a.points;
+        }
+        // If points are equal, sort by GW points (FPL points) as tiebreaker
+        if (b.gwPoints !== a.gwPoints) {
+            return b.gwPoints - a.gwPoints;
+        }
+        // If GW points are equal, sort by goal difference
+        const aGoalDiff = (a.goalsFor || 0) - (a.goalsAgainst || 0);
+        const bGoalDiff = (b.goalsFor || 0) - (b.goalsAgainst || 0);
+        if (bGoalDiff !== aGoalDiff) {
+            return bGoalDiff - aGoalDiff;
+        }
+        // If goal difference is equal, sort by goals for
+        return (b.goalsFor || 0) - (a.goalsFor || 0);
+    });
+    
+    const topTeam = teamPerformance[0];
+    const bottomTeam = teamPerformance[teamPerformance.length - 1];
+    
+    // Find biggest upset (team with lower points beating team with higher points)
+    let biggestUpset = null;
+    let upsetMargin = 0;
+    
+    partialResults.forEach(result => {
+        const homeTeam = teamPerformance.find(t => t.teamName === result.homeTeam);
+        const awayTeam = teamPerformance.find(t => t.teamName === result.awayTeam);
+        
+        if (homeTeam && awayTeam) {
+            if (homeTeam.points < awayTeam.points && result.homeScore > result.awayScore) {
+                const margin = awayTeam.points - homeTeam.points;
+                if (margin > upsetMargin) {
+                    upsetMargin = margin;
+                    biggestUpset = { winner: homeTeam, loser: awayTeam, score: `${result.homeScore}-${result.awayScore}` };
+                }
+            } else if (awayTeam.points < homeTeam.points && result.awayScore > result.homeScore) {
+                const margin = homeTeam.points - awayTeam.points;
+                if (margin > upsetMargin) {
+                    upsetMargin = margin;
+                    biggestUpset = { winner: awayTeam, loser: homeTeam, score: `${result.awayScore}-${result.homeScore}` };
+                }
+            }
+        }
+    });
     
     container.innerHTML = `
         <div class="space-y-3">
             <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
                 <div>
                     <div class="font-semibold text-green-800">👑 League Leader</div>
-                    <div class="text-sm text-green-600">${topTeam.manager} (${topTeam.teamName})</div>
+                    <div class="text-sm text-green-800">${topTeam.manager} (${topTeam.teamName})</div>
                 </div>
                 <div class="text-right">
                     <div class="font-bold text-green-800">${topTeam.points} pts</div>
-                    <div class="text-xs text-green-600">Form: ${topTeam.form || 'W-W-W-W-W'}</div>
+                    <div class="text-xs text-green-800">${topTeam.wins}W ${topTeam.draws}D ${topTeam.losses}L</div>
                 </div>
             </div>
             
             <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-200">
                 <div>
                     <div class="font-semibold text-red-800">📉 Last Place</div>
-                    <div class="text-sm text-red-600">${bottomTeam.manager} (${bottomTeam.teamName})</div>
+                    <div class="text-sm text-red-800">${bottomTeam.manager} (${bottomTeam.teamName})</div>
                 </div>
                 <div class="text-right">
                     <div class="font-bold text-red-800">${bottomTeam.points} pts</div>
-                    <div class="text-xs text-red-600">Gap: -${topTeam.points - bottomTeam.points} pts</div>
+                    <div class="text-xs text-red-800">${bottomTeam.wins}W ${bottomTeam.draws}D ${bottomTeam.losses}L</div>
                 </div>
             </div>
             
+            ${biggestUpset ? `
+            <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                <div>
+                    <div class="font-semibold text-yellow-800">🎯 Biggest Upset</div>
+                    <div class="text-sm text-yellow-800">${biggestUpset.winner.teamName} beats ${biggestUpset.loser.teamName}</div>
+                </div>
+                <div class="text-right">
+                    <div class="font-bold text-yellow-800">${biggestUpset.score}</div>
+                    <div class="text-xs text-yellow-800">${upsetMargin} pt gap</div>
+                </div>
+            </div>
+            ` : ''}
+            
             <div class="text-xs text-white mt-2">
-                ${teams.length} managers • Point gap: ${topTeam.points - bottomTeam.points} points
+                ${teams.length} managers • ${partialResults.length} matches played • Point gap: ${topTeam.points - bottomTeam.points} points
             </div>
         </div>
     `;
@@ -1545,30 +1979,77 @@ function analyzeConsistency() {
     const container = document.getElementById('consistency-analysis');
     if (!container) return;
     
-    const teams = dashboardData.leaderboard || [];
-    
-    if (!Array.isArray(teams) || teams.length === 0) {
-        container.innerHTML = '<p class="text-white">No team data available</p>';
+    if (!dataManager) {
+        container.innerHTML = '<p class="text-white">Data manager not available</p>';
         return;
     }
     
-    // Analyze form strings to determine consistency
+    const partialResults = dataManager.getAllPartialResults();
+    const teams = dashboardData.leaderboard || [];
+    
+    if (!Array.isArray(teams) || teams.length === 0 || partialResults.length === 0) {
+        container.innerHTML = '<p class="text-white">No match data available</p>';
+        return;
+    }
+    
+    // Calculate team performance from partial results
     const consistencyRankings = teams.map(team => {
-        const form = team.form || 'W-W-W-W-W';
-        const formArray = form.split('-');
+        const performance = calculateTeamPerformanceFromResults(team.teamName);
         
-        // Calculate consistency score (more varied = less consistent)
-        const unique = [...new Set(formArray)].length;
-        const consistencyScore = 5 - unique; // Higher = more consistent
+        // Get GW points from partial results
+        let gwPoints = 0;
+        partialResults.forEach(result => {
+            if (result.homeTeam === team.teamName) {
+                gwPoints = result.homeScore;
+            } else if (result.awayTeam === team.teamName) {
+                gwPoints = result.awayScore;
+            }
+        });
+        
+        // Calculate consistency based on performance
+        let consistencyScore = 0;
+        let performanceNote = '';
+        
+        if (performance.wins > 0 && performance.losses === 0) {
+            consistencyScore = 5; // All wins = most consistent
+            performanceNote = 'Perfect record';
+        } else if (performance.wins > 0 && performance.draws > 0 && performance.losses === 0) {
+            consistencyScore = 4; // Wins + draws only
+            performanceNote = 'Unbeaten';
+        } else if (performance.wins > 0 && performance.losses > 0) {
+            consistencyScore = 2; // Mixed results
+            performanceNote = 'Mixed form';
+        } else if (performance.losses > 0 && performance.wins === 0) {
+            consistencyScore = 1; // All losses
+            performanceNote = 'Struggling';
+        } else {
+            consistencyScore = 3; // Default
+            performanceNote = 'Balanced';
+        }
         
         return {
             manager: team.manager,
             teamName: team.teamName,
-            form: form,
+            wins: performance.wins,
+            draws: performance.draws,
+            losses: performance.losses,
             consistencyScore: consistencyScore,
-            points: team.points
+            performanceNote: performanceNote,
+            points: performance.points,
+            gwPoints: gwPoints
         };
-    }).sort((a, b) => b.consistencyScore - a.consistencyScore);
+    }).sort((a, b) => {
+        // Sort by consistency score first, then by GW points (FPL points) as tiebreaker
+        if (b.consistencyScore !== a.consistencyScore) {
+            return b.consistencyScore - a.consistencyScore;
+        }
+        // If consistency score is equal, sort by GW points (FPL points) as tiebreaker
+        if (b.gwPoints !== a.gwPoints) {
+            return b.gwPoints - a.gwPoints;
+        }
+        // If GW points are equal, sort by points
+        return b.points - a.points;
+    });
     
     const mostConsistent = consistencyRankings.slice(0, 3);
     const leastConsistent = consistencyRankings.slice(-2);
@@ -1582,7 +2063,7 @@ function analyzeConsistency() {
                         <div class="flex items-center justify-between p-2 bg-green-50 rounded border border-green-200">
                             <div>
                                 <div class="font-medium text-green-800">${index + 1}. ${team.manager}</div>
-                                <div class="text-xs text-green-600">Form: ${team.form}</div>
+                                <div class="text-xs text-green-600">${team.performanceNote} • ${team.wins}W ${team.draws}D ${team.losses}L</div>
                             </div>
                             <div class="text-green-800 font-bold">${team.points} pts</div>
                         </div>
@@ -1613,40 +2094,89 @@ function analyzeWeeklyWinners() {
     const container = document.getElementById('winners-analysis');
     if (!container) return;
     
-    const teams = dashboardData.leaderboard || [];
-    
-    if (!Array.isArray(teams) || teams.length === 0) {
-        container.innerHTML = '<p class="text-white">No team data available</p>';
+    if (!dataManager) {
+        container.innerHTML = '<p class="text-white">Data manager not available</p>';
         return;
     }
     
-    // Simulate weekly winner frequency based on current standings and winnings
-    const topEarner = teams.reduce((max, team) => 
-        (team.totalWinnings || 0) > (max.totalWinnings || 0) ? team : max, teams[0]);
+    const partialResults = dataManager.getAllPartialResults();
     
-    const avgWinnings = teams.reduce((sum, team) => sum + (team.totalWinnings || 0), 0) / teams.length;
+    if (partialResults.length === 0) {
+        container.innerHTML = '<p class="text-white">No match results available</p>';
+        return;
+    }
+    
+    // Find the highest and lowest scoring teams this week
+    // For lowest scorer, consider goal difference as tiebreaker when GW points are equal
+    let highestScore = 0;
+    let highestScoringTeam = null;
+    let lowestScore = Infinity;
+    let lowestScoringTeam = null;
+    
+    // Get all teams with their GW points and goal differences for proper ranking
+    const teamScores = [];
+    partialResults.forEach(result => {
+        // Add home team
+        const homePerformance = calculateTeamPerformanceFromResults(result.homeTeam);
+        teamScores.push({
+            name: result.homeTeam,
+            score: result.homeScore,
+            manager: result.homeManager,
+            goalDifference: (homePerformance.goalsFor || 0) - (homePerformance.goalsAgainst || 0)
+        });
+        
+        // Add away team
+        const awayPerformance = calculateTeamPerformanceFromResults(result.awayTeam);
+        teamScores.push({
+            name: result.awayTeam,
+            score: result.awayScore,
+            manager: result.awayManager,
+            goalDifference: (awayPerformance.goalsFor || 0) - (awayPerformance.goalsAgainst || 0)
+        });
+    });
+    
+    // Sort by score (highest first), then by goal difference (highest first) as tiebreaker
+    teamScores.sort((a, b) => {
+        if (b.score !== a.score) {
+            return b.score - a.score;
+        }
+        // If scores are equal, sort by goal difference (highest first)
+        return b.goalDifference - a.goalDifference;
+    });
+    
+    // Get highest scorer (first in sorted array)
+    highestScoringTeam = teamScores[0];
+    highestScore = highestScoringTeam.score;
+    
+    // Get lowest scorer (last in sorted array)
+    lowestScoringTeam = teamScores[teamScores.length - 1];
+    lowestScore = lowestScoringTeam.score;
+    
+    // Calculate average score
+    const totalScores = partialResults.reduce((sum, result) => sum + result.homeScore + result.awayScore, 0);
+    const averageScore = Math.round(totalScores / (partialResults.length * 2));
     
     container.innerHTML = `
         <div class="space-y-4">
-            <div class="p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                <div class="font-semibold text-yellow-800">💰 Top Earner</div>
-                <div class="text-sm text-yellow-700">${topEarner.manager}</div>
-                <div class="font-bold text-yellow-800">$${topEarner.totalWinnings || 0} earned</div>
+            <div class="text-center p-3 bg-green-50 rounded-lg border border-green-200">
+                <div class="font-semibold text-green-800">🏆 Highest Scorer</div>
+                <div class="text-lg font-bold text-green-800">${highestScoringTeam?.name}</div>
+                <div class="text-sm text-green-600">${highestScoringTeam?.manager} • ${highestScoringTeam?.score} pts</div>
             </div>
             
-            <div class="grid grid-cols-2 gap-2 text-center">
-                <div class="p-2 bg-blue-50 rounded border border-blue-200">
-                    <div class="font-bold text-blue-800">$${avgWinnings.toFixed(0)}</div>
-                    <div class="text-xs text-blue-600">Avg Winnings</div>
-                </div>
-                <div class="p-2 bg-purple-50 rounded border border-purple-200">
-                    <div class="font-bold text-purple-800">${dashboardData.currentGameweek || 1}</div>
-                    <div class="text-xs text-purple-600">Weeks Played</div>
-                </div>
+            <div class="text-center p-3 bg-red-50 rounded-lg border border-red-200">
+                <div class="font-semibold text-red-800">📉 Lowest Scorer</div>
+                <div class="text-sm text-red-600">${lowestScoringTeam?.manager} • ${lowestScoringTeam?.score} pts</div>
             </div>
             
-            <div class="text-xs text-white">
-                💡 Weekly winner earns $${teams.length - 1} from other managers
+            <div class="text-center p-3 bg-blue-50 rounded-lg border border-blue-200">
+                <div class="font-semibold text-blue-800">📊 League Average</div>
+                <div class="text-lg font-bold text-blue-800">${averageScore} pts</div>
+                <div class="text-sm text-blue-600">${partialResults.length * 2} teams</div>
+            </div>
+            
+            <div class="text-xs text-white text-center">
+                Based on ${partialResults.length} matches played
             </div>
         </div>
     `;
@@ -1665,21 +2195,98 @@ function analyzeMarqueeMatches() {
         return;
     }
     
-    // Create team lookup for quick access to stats
+    // Create team lookup using live partial results data (same logic as populateLeaderboard)
     const teamLookup = {};
-    teams.forEach((team, index) => {
-        teamLookup[team.teamName] = {
-            ...team,
-            position: index + 1,
-            points: parseInt(team.points) || 0,
-            gwPoints: parseInt(team.gwPoints) || 0,
-            form: team.form || 'N/A'
-        };
-    });
+    
+    if (dataManager) {
+        const partialResults = dataManager.getAllPartialResults();
+        
+        if (partialResults.length > 0) {
+            // Calculate live standings from partial results (identical to populateLeaderboard)
+            const liveLeaderboard = teams.map(leaderboardTeam => {
+                const performance = calculateTeamPerformanceFromResults(leaderboardTeam.teamName);
+                
+                // Get GW points from partial results
+                let gwPoints = 0;
+                partialResults.forEach(result => {
+                    if (result.homeTeam === leaderboardTeam.teamName) {
+                        gwPoints = result.homeScore;
+                    } else if (result.awayTeam === leaderboardTeam.teamName) {
+                        gwPoints = result.awayScore;
+                    }
+                });
+                
+                return {
+                    ...leaderboardTeam,
+                    points: performance.points,
+                    gwPoints: gwPoints,
+                    goalsFor: performance.goalsFor,
+                    goalsAgainst: performance.goalsAgainst
+                };
+            });
+            
+            // Sort by points (highest first), then by GW points (FPL points) as tiebreaker, then by goal difference, then by goals for
+            liveLeaderboard.sort((a, b) => {
+                if (b.points !== a.points) {
+                    return b.points - a.points;
+                }
+                // If points are equal, sort by GW points (FPL points) as tiebreaker
+                if (b.gwPoints !== a.gwPoints) {
+                    return b.gwPoints - a.gwPoints;
+                }
+                // If GW points are equal, sort by goal difference
+                const aGoalDiff = (a.goalsFor || 0) - (a.goalsAgainst || 0);
+                const bGoalDiff = (b.goalsFor || 0) - (b.goalsAgainst || 0);
+                if (bGoalDiff !== aGoalDiff) {
+                    return bGoalDiff - aGoalDiff;
+                }
+                // If goal difference is equal, sort by goals for
+                return (b.goalsFor || 0) - (a.goalsFor || 0);
+            });
+            
+            // Update positions after sorting
+            liveLeaderboard.forEach((leaderboardTeam, index) => {
+                leaderboardTeam.position = index + 1;
+            });
+            
+            // Create team lookup from live data
+            liveLeaderboard.forEach((team, index) => {
+                teamLookup[team.teamName] = {
+                    ...team,
+                    position: team.position,
+                    points: team.points,
+                    gwPoints: team.gwPoints,
+                    form: `${team.wins > 0 ? 'W'.repeat(team.wins) : ''}${team.draws > 0 ? 'D'.repeat(team.draws) : ''}${team.losses > 0 ? 'L'.repeat(team.losses) : ''}`.split('').join('-') || 'N/A'
+                };
+            });
+        } else {
+            // Fallback to original data if no partial results
+            teams.forEach((team, index) => {
+                teamLookup[team.teamName] = {
+                    ...team,
+                    position: index + 1,
+                    points: parseInt(team.points) || 0,
+                    gwPoints: parseInt(team.gwPoints) || 0,
+                    form: team.form || 'N/A'
+                };
+            });
+        }
+    } else {
+        // Fallback to original data if no data manager
+        teams.forEach((team, index) => {
+            teamLookup[team.teamName] = {
+                ...team,
+                position: index + 1,
+                points: parseInt(team.points) || 0,
+                gwPoints: parseInt(team.gwPoints) || 0,
+                form: team.form || 'N/A'
+            };
+        });
+    }
     
     // Analyze upcoming fixtures and score them for "marquee" potential
     const currentGW = dashboardData.currentGameweek || 1;
-    const nextFixtures = fixtures.filter(f => f.gameweek > currentGW && f.gameweek <= currentGW + 5);
+    const nextFixtures = fixtures.filter(f => f.gameweek >= currentGW && f.gameweek <= currentGW + 1);
     
     const marqueeFixtures = nextFixtures.map(fixture => {
         const homeTeam = teamLookup[fixture.homeTeam];
@@ -1749,7 +2356,9 @@ function analyzeMarqueeMatches() {
         }
         
         // 9. Gameweek timing bonus
-        if (fixture.gameweek === currentGW + 1) {
+        if (fixture.gameweek === currentGW) {
+            hypeScore += 30; // Current gameweek gets highest priority
+        } else if (fixture.gameweek === currentGW + 1) {
             hypeScore += 20; // Next gameweek gets priority
         }
         
@@ -1887,15 +2496,70 @@ function generateKeyInsights() {
         return;
     }
     
+    // Get live standings from partial results (same logic as populateLeaderboard)
+    let liveTeams = teams;
+    if (dataManager) {
+        const partialResults = dataManager.getAllPartialResults();
+        
+        if (partialResults.length > 0) {
+            // Calculate live standings from partial results (identical to populateLeaderboard)
+            liveTeams = teams.map(leaderboardTeam => {
+                const performance = calculateTeamPerformanceFromResults(leaderboardTeam.teamName);
+                
+                // Get GW points from partial results
+                let gwPoints = 0;
+                partialResults.forEach(result => {
+                    if (result.homeTeam === leaderboardTeam.teamName) {
+                        gwPoints = result.homeScore;
+                    } else if (result.awayTeam === leaderboardTeam.teamName) {
+                        gwPoints = result.awayScore;
+                    }
+                });
+                
+                return {
+                    ...leaderboardTeam,
+                    points: performance.points,
+                    gwPoints: gwPoints,
+                    goalsFor: performance.goalsFor,
+                    goalsAgainst: performance.goalsAgainst
+                };
+            });
+            
+            // Sort by points (highest first), then by GW points (FPL points) as tiebreaker, then by goal difference, then by goals for
+            liveTeams.sort((a, b) => {
+                if (b.points !== a.points) {
+                    return b.points - a.points;
+                }
+                // If points are equal, sort by GW points (FPL points) as tiebreaker
+                if (b.gwPoints !== a.gwPoints) {
+                    return b.gwPoints - a.gwPoints;
+                }
+                // If GW points are equal, sort by goal difference
+                const aGoalDiff = (a.goalsFor || 0) - (a.goalsAgainst || 0);
+                const bGoalDiff = (b.goalsFor || 0) - (b.goalsAgainst || 0);
+                if (bGoalDiff !== aGoalDiff) {
+                    return bGoalDiff - aGoalDiff;
+                }
+                // If goal difference is equal, sort by goals for
+                return (b.goalsFor || 0) - (a.goalsFor || 0);
+            });
+            
+            // Update positions after sorting
+            liveTeams.forEach((leaderboardTeam, index) => {
+                leaderboardTeam.position = index + 1;
+            });
+        }
+    }
+    
     const insights = [];
     
     // === LEAGUE STANDING INSIGHTS === //
     
     // League competitiveness analysis
-    const topPoints = teams[0]?.points || 0;
-    const bottomPoints = teams[teams.length - 1]?.points || 0;
+    const topPoints = liveTeams[0]?.points || 0;
+    const bottomPoints = liveTeams[liveTeams.length - 1]?.points || 0;
     const pointsGap = topPoints - bottomPoints;
-    const midTablePoints = teams[Math.floor(teams.length / 2)]?.points || 0;
+    const midTablePoints = liveTeams[Math.floor(liveTeams.length / 2)]?.points || 0;
     
     if (pointsGap === 0) {
         insights.push({
@@ -1930,8 +2594,8 @@ function generateKeyInsights() {
     }
     
     // Top 3 analysis
-    const topThreeGap = (teams[0]?.points || 0) - (teams[2]?.points || 0);
-    if (teams.length >= 3 && topThreeGap < 10) {
+    const topThreeGap = (liveTeams[0]?.points || 0) - (liveTeams[2]?.points || 0);
+    if (liveTeams.length >= 3 && topThreeGap < 10) {
         insights.push({
             icon: '🥇',
             text: 'Three-way title race! Top 3 managers separated by less than 10 points.',
@@ -1940,8 +2604,8 @@ function generateKeyInsights() {
     }
     
     // Bottom 3 analysis
-    if (teams.length >= 3) {
-        const bottomThreeGap = (teams[teams.length - 3]?.points || 0) - (teams[teams.length - 1]?.points || 0);
+    if (liveTeams.length >= 3) {
+        const bottomThreeGap = (liveTeams[liveTeams.length - 3]?.points || 0) - (liveTeams[liveTeams.length - 1]?.points || 0);
         if (bottomThreeGap < 15) {
             insights.push({
                 icon: '⚠️',
@@ -1952,10 +2616,10 @@ function generateKeyInsights() {
     }
     
     // Middle pack competitiveness
-    if (teams.length >= 6) {
-        const midStart = Math.floor(teams.length * 0.3);
-        const midEnd = Math.floor(teams.length * 0.7);
-        const midPackGap = (teams[midStart]?.points || 0) - (teams[midEnd]?.points || 0);
+    if (liveTeams.length >= 6) {
+        const midStart = Math.floor(liveTeams.length * 0.3);
+        const midEnd = Math.floor(liveTeams.length * 0.7);
+        const midPackGap = (liveTeams[midStart]?.points || 0) - (liveTeams[midEnd]?.points || 0);
         if (midPackGap < 25) {
             insights.push({
                 icon: '🌊',
@@ -1989,19 +2653,19 @@ function generateKeyInsights() {
     }
     
     // GW Points analysis
-    const highestGWPoints = Math.max(...teams.map(team => parseInt(team.gwPoints) || 0));
-    const lowestGWPoints = Math.min(...teams.filter(team => (team.gwPoints || 0) > 0).map(team => parseInt(team.gwPoints) || 0));
+    const highestGWPoints = Math.max(...liveTeams.map(team => parseInt(team.gwPoints) || 0));
+    const lowestGWPoints = Math.min(...liveTeams.filter(team => (team.gwPoints || 0) > 0).map(team => parseInt(team.gwPoints) || 0));
     const gwPointsGap = highestGWPoints - lowestGWPoints;
     
     if (highestGWPoints > 100) {
-        const topGWManager = teams.find(team => parseInt(team.gwPoints) === highestGWPoints);
+        const topGWManager = liveTeams.find(team => parseInt(team.gwPoints) === highestGWPoints);
         insights.push({
             icon: '💥',
             text: `${topGWManager?.manager} had an explosive gameweek with ${highestGWPoints} points!`,
             type: 'performance'
         });
     } else if (highestGWPoints > 80) {
-        const topGWManager = teams.find(team => parseInt(team.gwPoints) === highestGWPoints);
+        const topGWManager = liveTeams.find(team => parseInt(team.gwPoints) === highestGWPoints);
         insights.push({
             icon: '⭐',
             text: `${topGWManager?.manager} dominated the gameweek with ${highestGWPoints} points.`,
@@ -2010,7 +2674,7 @@ function generateKeyInsights() {
     }
     
     if (lowestGWPoints < 20 && lowestGWPoints > 0) {
-        const lowGWManager = teams.find(team => parseInt(team.gwPoints) === lowestGWPoints);
+        const lowGWManager = liveTeams.find(team => parseInt(team.gwPoints) === lowestGWPoints);
         insights.push({
             icon: '📉',
             text: `Tough gameweek for ${lowGWManager?.manager} with only ${lowestGWPoints} points.`,
@@ -2154,10 +2818,10 @@ function generateKeyInsights() {
     
     // Inactive managers
     const activeManagers = new Set(Object.keys(managerActivity));
-    const allManagers = teams.map(team => team.manager);
+    const allManagers = liveTeams.map(team => team.manager);
     const inactiveManagers = allManagers.filter(manager => !activeManagers.has(manager));
     
-    if (inactiveManagers.length >= teams.length / 2) {
+    if (inactiveManagers.length >= liveTeams.length / 2) {
         insights.push({
             icon: '🧘',
             text: `${inactiveManagers.length} managers haven't made any transfers - trusting their draft!`,
@@ -2167,7 +2831,7 @@ function generateKeyInsights() {
     
     // === FINANCIAL INSIGHTS === //
     
-    const totalWinnings = teams.reduce((sum, team) => sum + (parseInt(team.totalWinnings) || 0), 0);
+    const totalWinnings = liveTeams.reduce((sum, team) => sum + (parseInt(team.totalWinnings) || 0), 0);
     if (totalWinnings > 100) {
         insights.push({
             icon: '💰',
@@ -2183,11 +2847,11 @@ function generateKeyInsights() {
     }
     
     // High earner
-    const topEarner = teams.reduce((max, team) => {
+    const topEarner = liveTeams.reduce((max, team) => {
         const maxEarnings = parseInt(max.totalWinnings) || 0;
         const teamEarnings = parseInt(team.totalWinnings) || 0;
         return teamEarnings > maxEarnings ? team : max;
-    }, teams[0]);
+    }, liveTeams[0]);
     
     if (topEarner && (parseInt(topEarner.totalWinnings) || 0) > 30) {
         insights.push({
@@ -2519,7 +3183,67 @@ function populatePrizePool() {
     }
 
     const targetGameweek = dashboardData.currentGameweek || 1;
+    
+    // Get live standings from partial results for final payouts
+    let liveLeaderboard = dashboardData.leaderboard || [];
+    if (dataManager) {
+        const partialResults = dataManager.getAllPartialResults();
+        
+        if (partialResults.length > 0) {
+            // Calculate live standings from partial results (identical to populateLeaderboard)
+            liveLeaderboard = dashboardData.leaderboard.map(leaderboardTeam => {
+                const performance = calculateTeamPerformanceFromResults(leaderboardTeam.teamName);
+                
+                // Get GW points from partial results
+                let gwPoints = 0;
+                partialResults.forEach(result => {
+                    if (result.homeTeam === leaderboardTeam.teamName) {
+                        gwPoints = result.homeScore;
+                    } else if (result.awayTeam === leaderboardTeam.teamName) {
+                        gwPoints = result.awayScore;
+                    }
+                });
+                
+                return {
+                    ...leaderboardTeam,
+                    points: performance.points,
+                    gwPoints: gwPoints,
+                    goalsFor: performance.goalsFor,
+                    goalsAgainst: performance.goalsAgainst
+                };
+            });
+            
+            // Sort by points (highest first), then by GW points (FPL points) as tiebreaker, then by goal difference, then by goals for
+            liveLeaderboard.sort((a, b) => {
+                if (b.points !== a.points) {
+                    return b.points - a.points;
+                }
+                // If points are equal, sort by GW points (FPL points) as tiebreaker
+                if (b.gwPoints !== a.gwPoints) {
+                    return b.gwPoints - a.gwPoints;
+                }
+                // If GW points are equal, sort by goal difference
+                const aGoalDiff = (a.goalsFor || 0) - (a.goalsAgainst || 0);
+                const bGoalDiff = (b.goalsFor || 0) - (b.goalsAgainst || 0);
+                if (bGoalDiff !== aGoalDiff) {
+                    return bGoalDiff - aGoalDiff;
+                }
+                // If goal difference is equal, sort by goals for
+                return (b.goalsFor || 0) - (a.goalsFor || 0);
+            });
+            
+            // Update positions after sorting
+            liveLeaderboard.forEach((leaderboardTeam, index) => {
+                leaderboardTeam.position = index + 1;
+            });
+        }
+    }
+    
+    // Calculate earnings with live leaderboard for final payouts
     const earnings = prizePoolManager.calculateEarningsUpToGameweek(targetGameweek);
+    
+    // Override final payouts with live data
+    earnings.finalPayouts = prizePoolManager.calculateFinalPayouts(liveLeaderboard, prizePoolManager.leaguePot);
     
     console.log(`💰 Prize pool calculated for GW1-${targetGameweek}:`, earnings);
 

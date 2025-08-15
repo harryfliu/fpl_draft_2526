@@ -108,12 +108,13 @@ class FPLDataManager {
         
         try {
             // Load the main data files plus Premier League fixtures and transfer history with correct relative paths
-            const [fixtures, standings, draft, plFixtures, transferHistory] = await Promise.all([
+            const [fixtures, standings, draft, plFixtures, transferHistory, partialResults] = await Promise.all([
                 this.loadCSVFile(`./${gameweek}/fixture_list.csv`),
                 this.loadCSVFile(`./${gameweek}/standings.csv`),
                 this.loadCSVFile(`./${gameweek}/starting_draft.csv`),
                 this.loadPLFixtures(gameweek.replace('gw', '')),
-                this.loadTransferHistory(gameweek)
+                this.loadTransferHistory(gameweek),
+                this.loadCSVFile(`./${gameweek}/partial_results_gw1.csv`)
             ]);
             
             // Parse standings data first
@@ -124,12 +125,17 @@ class FPLDataManager {
             const parsedFixtures = this.parseFixturesData(fixtures);
             console.log(`🎯 STORING ${parsedFixtures.length} fixtures for ${gameweek}`);
             
+            // Parse partial results
+            const parsedPartialResults = this.parsePartialResultsData(partialResults);
+            console.log(`🏆 Parsed partial results for ${gameweek}:`, parsedPartialResults);
+            
             this.gameweekData.set(gameweek, {
                 fixtures: parsedFixtures,
                 standings: parsedStandings,
                 draft: this.parseDraftData(draft, parsedStandings),
                 plFixtures: plFixtures,
                 transferHistory: transferHistory,
+                partialResults: parsedPartialResults,
                 timestamp: new Date().toISOString()
             });
             
@@ -144,6 +150,7 @@ class FPLDataManager {
                 draft: null,
                 plFixtures: [],
                 transferHistory: { waivers: [], freeAgents: [], trades: [] },
+                partialResults: [],
                 timestamp: null
             });
         }
@@ -590,6 +597,24 @@ class FPLDataManager {
         return data;
     }
 
+    // Get partial results for a specific gameweek
+    getPartialResults(gameweek = null) {
+        const targetGameweek = gameweek || this.currentGameweek;
+        const gameweekData = this.gameweekData.get(`gw${targetGameweek}`);
+        return gameweekData?.partialResults || [];
+    }
+
+    // Get all partial results across all gameweeks
+    getAllPartialResults() {
+        const allResults = [];
+        for (const [gameweek, data] of this.gameweekData) {
+            if (data.partialResults && data.partialResults.length > 0) {
+                allResults.push(...data.partialResults);
+            }
+        }
+        return allResults;
+    }
+
     // Get data for a specific gameweek
     getGameweekData(gameweek) {
         const gwKey = `gw${gameweek}`;
@@ -784,6 +809,103 @@ class FPLDataManager {
         
         console.log('📊 Parsed transfer history:', result);
         return result;
+    }
+
+    // Parse partial results data from the special CSV format
+    parsePartialResultsData(csvData) {
+        console.log('🏆 Parsing partial results data...');
+        
+        if (!csvData || !csvData.originalText) {
+            console.log('❌ No partial results data to parse');
+            return [];
+        }
+        
+        const rawCsvText = csvData.originalText;
+        const csvLines = this.parseCSVLines(rawCsvText);
+        const results = [];
+        
+        console.log(`📊 Parsed ${csvLines.length} lines from partial results`);
+        
+        for (let i = 0; i < csvLines.length; i++) {
+            const lineData = csvLines[i];
+            console.log(`📋 Processing line ${i + 1}:`, lineData);
+            
+            // Skip empty lines
+            if (lineData.length === 0 || (lineData.length === 1 && !lineData[0])) {
+                continue;
+            }
+            
+            // Check if this is a gameweek header line (e.g., "Gameweek 1 - Day 1")
+            if (lineData.length >= 1 && lineData[0] && lineData[0].startsWith('Gameweek ')) {
+                console.log(`🎯 Found gameweek header: ${lineData[0]}`);
+                continue;
+            }
+            
+            // Check if this is a result line (should have 3 columns: team1, score, team2)
+            if (lineData.length >= 3 && lineData[1] && lineData[1].includes(' - ')) {
+                console.log(`⚽ Found result line: ${lineData[1]}`);
+                
+                const team1Text = lineData[0];
+                const scoreText = lineData[1];
+                const team2Text = lineData[2];
+                
+                // Parse score (e.g., "4 - 0")
+                const scoreMatch = scoreText.match(/(\d+)\s*-\s*(\d+)/);
+                if (!scoreMatch) {
+                    console.log(`❌ Could not parse score: ${scoreText}`);
+                    continue;
+                }
+                
+                const homeScore = parseInt(scoreMatch[1]);
+                const awayScore = parseInt(scoreMatch[2]);
+                
+                // Parse team1 (home team)
+                let homeTeam, homeManager;
+                if (team1Text.includes('\n')) {
+                    const team1Lines = team1Text.split('\n');
+                    homeTeam = team1Lines[0]?.trim().replace(/^"|"$/g, '');
+                    homeManager = team1Lines[1]?.trim().replace(/^"|"$/g, '');
+                } else {
+                    homeTeam = team1Text.trim().replace(/^"|"$/g, '');
+                    homeManager = '';
+                }
+                
+                // Parse team2 (away team)
+                let awayTeam, awayManager;
+                if (team2Text.includes('\n')) {
+                    const team2Lines = team2Text.split('\n');
+                    awayTeam = team2Lines[0]?.trim().replace(/^"|"$/g, '');
+                    awayManager = team2Lines[1]?.trim().replace(/^"|"$/g, '');
+                } else {
+                    awayTeam = team2Text.trim().replace(/^"|"$/g, '');
+                    awayManager = '';
+                }
+                
+                if (homeTeam && awayTeam) {
+                    const result = {
+                        homeTeam,
+                        homeManager,
+                        awayTeam,
+                        awayManager,
+                        homeScore,
+                        awayScore,
+                        gameweek: 1, // Extract from filename or header
+                        day: 1, // Extract from header if available
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    console.log(`✅ Parsed result: ${homeTeam} ${homeScore}-${awayScore} ${awayTeam}`);
+                    results.push(result);
+                } else {
+                    console.log(`❌ Missing team names: home="${homeTeam}", away="${awayTeam}"`);
+                }
+            } else {
+                console.log(`❌ Not a result line: ${lineData.length} columns, score="${lineData[1]}"`);
+            }
+        }
+        
+        console.log(`🏆 Final partial results array (${results.length} results):`, results);
+        return results;
     }
 }
 

@@ -691,7 +691,7 @@
                         <div class="flex justify-between items-center mb-6">
                             <h2 class="card-title text-2xl text-white">
                                 <i class="fas fa-medal text-purple-400 mr-3"></i>
-                                Season Leaderboard
+                                Season Leaderboard (live)
                             </h2>
                         </div>
                         <div class="overflow-x-auto">
@@ -715,20 +715,7 @@
                     </div>
                 </div>
 
-                <!-- Initial Draft Picks -->
-                <div class="dark-card" id="draft-picks">
-                    <div class="card-body">
-                        <h2 class="card-title text-2xl font-bold text-white">
-                            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            Initial Draft Picks
-                        </h2>
-                        <div id="draft-picks-content">
-                            <p class="text-white">No data loaded</p>
-                        </div>
-                    </div>
-                </div>
+
 
                 <!-- Teams Section -->
                 <div class="dark-card" id="teams">
@@ -841,6 +828,23 @@
                     </div>
                 </div>
 
+                <!-- Current Fixtures Section -->
+                <div class="dark-card mb-8 current-fixtures-section" id="current-fixtures">
+                    <div class="card-body">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="card-title text-2xl text-white">
+                                <i class="fas fa-calendar-check text-purple-400 mr-3"></i>
+                                Current Fixtures
+                                <span class="badge badge-secondary badge-lg ml-3 current-gameweek-indicator">GW 1</span>
+                            </h2>
+                        </div>
+                        
+                        <div id="currentFixturesContainer">
+                            <!-- Current gameweek fixtures will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Player Movement Section -->
                 <div class="dark-card mb-8" id="player-movement">
                     <div class="card-body">
@@ -942,19 +946,18 @@
                     </div>
                 </div>
 
-                <!-- Current Fixtures Section -->
-                <div class="dark-card mb-8 current-fixtures-section" id="current-fixtures">
+                <!-- Monthly Standings -->
+                <div class="dark-card mb-8" id="monthly">
                     <div class="card-body">
                         <div class="flex justify-between items-center mb-6">
                             <h2 class="card-title text-2xl text-white">
-                                <i class="fas fa-calendar-check text-purple-400 mr-3"></i>
-                                Current Fixtures
-                                <span class="badge badge-secondary badge-lg ml-3 current-gameweek-indicator">GW 1</span>
+                                <i class="fas fa-calendar-month text-purple-400 mr-3"></i>
+                                Monthly Standings
                             </h2>
                         </div>
                         
-                        <div id="currentFixturesContainer">
-                            <!-- Current gameweek fixtures will be populated here -->
+                        <div class="grid grid-cols-1 gap-3 md:gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" id="monthlyContainer">
+                            <!-- Monthly standings will be populated here -->
                         </div>
                     </div>
                 </div>
@@ -1003,21 +1006,7 @@
                     </div>
                 </div>
 
-                <!-- Monthly Standings -->
-                <div class="dark-card mb-8" id="monthly">
-                    <div class="card-body">
-                        <div class="flex justify-between items-center mb-6">
-                            <h2 class="card-title text-2xl text-white">
-                                <i class="fas fa-calendar-month text-purple-400 mr-3"></i>
-                                Monthly Standings
-                            </h2>
-                        </div>
-                        
-                        <div class="grid grid-cols-1 gap-3 md:gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" id="monthlyContainer">
-                            <!-- Monthly standings will be populated here -->
-                        </div>
-                    </div>
-                </div>
+
 
                 <!-- Analytics Section -->
                 <div class="dark-card mb-8" id="analytics">
@@ -1136,6 +1125,21 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Initial Draft Picks -->
+                <div class="dark-card mb-8" id="draft-picks">
+                    <div class="card-body">
+                        <h2 class="card-title text-2xl font-bold text-white">
+                            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Initial Draft Picks
+                        </h2>
+                        <div id="draft-picks-content">
+                            <p class="text-white">No data loaded</p>
                         </div>
                     </div>
                 </div>
@@ -1339,17 +1343,17 @@
                 <li><a href="#leaderboard" class="hover:bg-purple-900/30 text-white rounded-lg transition-all">
                     <i class="fas fa-trophy text-purple-400"></i> Leaderboard
                 </a></li>
-                <li><a href="#draft-picks" class="hover:bg-purple-900/30 text-white rounded-lg transition-all">
-                    <i class="fas fa-drafting-compass text-purple-400"></i> Draft Picks
-                </a></li>
                 <li><a href="#teams" class="hover:bg-purple-900/30 text-white rounded-lg transition-all">
                     <i class="fas fa-users text-purple-400"></i> Teams
+                </a></li>
+                <li><a href="#current-fixtures" class="hover:bg-purple-900/30 text-white rounded-lg transition-all">
+                    <i class="fas fa-calendar-check text-purple-400"></i> Current Fixtures
                 </a></li>
                 <li><a href="#player-movement" class="hover:bg-purple-900/30 text-white rounded-lg transition-all">
                     <i class="fas fa-exchange-alt text-purple-400"></i> Player Movement
                 </a></li>
-                <li><a href="#current-fixtures" class="hover:bg-purple-900/30 text-white rounded-lg transition-all">
-                    <i class="fas fa-calendar-check text-purple-400"></i> Current Fixtures
+                <li><a href="#monthly" class="hover:bg-purple-900/30 text-white rounded-lg transition-all">
+                    <i class="fas fa-calendar-alt text-purple-400"></i> Monthly Standings
                 </a></li>
                 <li><a href="#fixtures" class="hover:bg-purple-900/30 text-white rounded-lg transition-all">
                     <i class="fas fa-calendar text-purple-400"></i> Upcoming Fixtures
@@ -1357,11 +1361,11 @@
                 <li><a href="#premier-league" class="hover:bg-purple-900/30 text-white rounded-lg transition-all">
                     <i class="fas fa-futbol text-purple-400"></i> Premier League
                 </a></li>
-                <li><a href="#monthly" class="hover:bg-purple-900/30 text-white rounded-lg transition-all">
-                    <i class="fas fa-calendar-alt text-purple-400"></i> Monthly Standings
-                </a></li>
                 <li><a href="#analytics" class="hover:bg-purple-900/30 text-white rounded-lg transition-all">
                     <i class="fas fa-chart-bar text-purple-400"></i> Analytics
+                </a></li>
+                <li><a href="#draft-picks" class="hover:bg-purple-900/30 text-white rounded-lg transition-all">
+                    <i class="fas fa-drafting-compass text-purple-400"></i> Draft Picks
                 </a></li>
                 
                 <li class="menu-title text-secondary-light text-xs font-semibold uppercase tracking-wider mt-6">Finance</li>
