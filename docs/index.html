@@ -119,6 +119,222 @@
         .top-3-row:hover td {
             background-color: transparent !important;
         }
+
+        /* Sticky column for tables */
+        .sticky-col {
+            position: sticky;
+            left: 0;
+            background-color: var(--card-bg);
+            z-index: 10;
+        }
+
+        /* Mobile-optimized table styles */
+        .table.min-w-max {
+            min-width: 600px;
+        }
+
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            /* Reduce padding and margins on mobile */
+            .container, main {
+                padding-left: 0.75rem !important;
+                padding-right: 0.75rem !important;
+            }
+            
+            .card-body {
+                padding: 1rem !important;
+            }
+            
+            /* Main content padding optimization */
+            main.flex-1 {
+                padding: 1rem !important;
+            }
+            
+            /* Optimize navbar height */
+            .navbar {
+                min-height: 4rem;
+                padding: 0.5rem 1rem;
+            }
+            
+            /* Better mobile navbar layout */
+            .navbar .flex-1 {
+                min-width: 0;
+            }
+            
+            .navbar .flex-1 h1 {
+                font-size: 1.125rem !important;
+                line-height: 1.25;
+            }
+            
+            .navbar .flex-1 p {
+                font-size: 0.75rem !important;
+            }
+            
+            /* Mobile gameweek selector */
+            .navbar .flex-none {
+                gap: 0.5rem;
+            }
+            
+            .navbar select {
+                width: 5rem !important;
+                font-size: 0.75rem;
+            }
+            
+            /* Mobile stats cards */
+            .grid {
+                gap: 0.75rem !important;
+            }
+            
+            /* Mobile table optimization */
+            .table {
+                font-size: 0.75rem;
+            }
+            
+            .table th, .table td {
+                padding: 0.4rem 0.3rem;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+            
+            /* Better mobile table scrolling */
+            .overflow-x-auto {
+                scrollbar-width: thin;
+                scrollbar-color: var(--primary-purple) var(--card-bg);
+            }
+            
+            .overflow-x-auto::-webkit-scrollbar {
+                height: 6px;
+            }
+            
+            .overflow-x-auto::-webkit-scrollbar-track {
+                background: var(--card-bg);
+            }
+            
+            .overflow-x-auto::-webkit-scrollbar-thumb {
+                background: var(--primary-purple);
+                border-radius: 3px;
+            }
+            
+            /* Mobile-specific text sizes */
+            .text-3xl {
+                font-size: 1.5rem !important;
+            }
+            
+            .text-2xl {
+                font-size: 1.25rem !important;
+            }
+            
+            .text-xl {
+                font-size: 1.125rem !important;
+            }
+            
+            /* Mobile drawer width */
+            .drawer-side .menu {
+                width: 16rem !important;
+                padding: 0.75rem !important;
+            }
+            
+            /* Mobile sidebar menu items */
+            .drawer-side .menu li a {
+                padding: 0.5rem 0.75rem !important;
+                font-size: 0.875rem;
+            }
+            
+            .drawer-side .menu-title {
+                font-size: 0.75rem !important;
+                margin-bottom: 0.75rem !important;
+            }
+            
+            /* Better mobile spacing */
+            .mb-8 {
+                margin-bottom: 1.5rem !important;
+            }
+            
+            .mb-6 {
+                margin-bottom: 1rem !important;
+            }
+            
+            /* Mobile analytics grid */
+            #analytics .grid {
+                grid-template-columns: 1fr !important;
+            }
+            
+            /* Mobile badge adjustments */
+            .badge-lg {
+                font-size: 0.75rem !important;
+                padding: 0.25rem 0.5rem !important;
+            }
+            
+            /* Mobile card titles */
+            .card-title {
+                font-size: 1.25rem !important;
+            }
+            
+            /* Mobile stats optimization */
+            .stats .stat {
+                padding: 1rem 0.5rem !important;
+            }
+            
+            .stat-value {
+                font-size: 1.5rem !important;
+            }
+            
+            /* Mobile icon sizing */
+            .card-title i {
+                font-size: 1rem !important;
+            }
+            
+            .fas, .far {
+                font-size: 0.875rem !important;
+            }
+            
+            /* Mobile button sizing */
+            .btn {
+                padding: 0.5rem 0.75rem !important;
+                font-size: 0.75rem !important;
+            }
+            
+            /* Mobile form elements */
+            .form-control label {
+                font-size: 0.75rem !important;
+            }
+            
+            .select, .input {
+                font-size: 0.75rem !important;
+                padding: 0.5rem !important;
+            }
+        }
+        
+        /* Very small mobile screens */
+        @media (max-width: 480px) {
+            /* Force single column on very small screens */
+            .grid-cols-2, .grid-cols-3, .grid-cols-4,
+            .md\\:grid-cols-2, .md\\:grid-cols-3, .md\\:grid-cols-4,
+            .lg\\:grid-cols-2, .lg\\:grid-cols-3, .lg\\:grid-cols-4 {
+                grid-template-columns: 1fr !important;
+            }
+            
+            /* Even smaller text for tiny screens */
+            .navbar h1 {
+                font-size: 1rem !important;
+            }
+            
+            .navbar p {
+                font-size: 0.625rem !important;
+            }
+            
+            /* Compact gameweek display */
+            .navbar .bg-gradient-to-r {
+                padding: 0.25rem 0.5rem !important;
+                font-size: 0.75rem !important;
+            }
+            
+            /* Hide team name column on very small screens */
+            .table th:nth-child(3),
+            .table td:nth-child(3) {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 <body class="font-inter text-white min-h-screen">
@@ -149,25 +365,25 @@
                     </div>
                 </div>
                 <div class="flex-none">
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-2 md:gap-3">
                         <div class="form-control">
-                            <label class="label">
+                            <label class="label hidden md:block">
                                 <span class="label-text text-xs text-white">Select Gameweek</span>
                             </label>
-                            <div class="flex gap-2">
-                                <select class="select bg-gray-800/90 border-gray-600/50 text-white select-sm w-28 focus:border-purple-400" id="gameweekSelector">
+                            <div class="flex gap-1 md:gap-2">
+                                <select class="select bg-gray-800/90 border-gray-600/50 text-white select-sm w-16 md:w-28 focus:border-purple-400 text-xs md:text-sm" id="gameweekSelector">
                                     <!-- Gameweek options will be populated by JavaScript -->
                                 </select>
-                                <button class="btn bg-purple-600 hover:bg-purple-700 border-purple-600 text-white btn-sm" onclick="jumpToCurrentGameweek()" title="Jump to Current Gameweek">
-                                    <i class="fas fa-calendar-day"></i>
+                                <button class="btn bg-purple-600 hover:bg-purple-700 border-purple-600 text-white btn-sm w-8 md:w-auto" onclick="jumpToCurrentGameweek()" title="Jump to Current Gameweek">
+                                    <i class="fas fa-calendar-day text-xs"></i>
                                 </button>
                             </div>
                         </div>
                         <div class="text-center">
-                            <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2 rounded-full font-semibold shadow-lg">
+                            <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-2 py-1 md:px-4 md:py-2 rounded-full font-semibold shadow-lg text-xs md:text-sm">
                                 GW <span id="currentGameweek">1</span>
                             </div>
-                            <div class="text-xs text-white mt-1">Current</div>
+                            <div class="text-xs text-white mt-1 hidden md:block">Current</div>
                         </div>
                     </div>
                 </div>
@@ -175,8 +391,8 @@
 
             <!-- Main Content -->
             <main class="flex-1 p-6">
-                <!-- Import Section -->
-                <div class="dark-card mb-8">
+                <!-- Import Section - Hidden for public deployment -->
+                <div class="dark-card mb-8 hidden">
                     <div class="card-body">
                         <div class="flex justify-between items-center mb-6">
                             <h2 class="card-title text-2xl text-white">
@@ -195,7 +411,7 @@
                             </div>
                         </div>
                         
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 gap-4 md:gap-6 md:grid-cols-2">
                             <div>
                                 <h3 class="text-lg font-semibold text-white mb-3">Auto-Detection System</h3>
                                 <p class="text-white mb-4">The dashboard automatically detects and loads data from your gameweek folders:</p>
@@ -260,7 +476,7 @@
                             </div>
                             <div>
                                 <h3 class="text-lg font-semibold text-white mb-2">Gameweek Navigation</h3>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-white">
+                                <div class="grid grid-cols-1 gap-3 md:gap-4 md:grid-cols-2 text-sm text-white">
                                     <div>
                                         <h4 class="font-semibold text-white mb-2">Mouse Controls:</h4>
                                         <ul class="space-y-1">
@@ -392,16 +608,16 @@
                             </h2>
                         </div>
                         <div class="overflow-x-auto">
-                            <table class="table table-zebra w-full">
+                            <table class="table table-zebra w-full min-w-max">
                                 <thead>
                                     <tr class="bg-gray-800/90 border-b border-gray-700/50">
-                                        <th class="text-white font-semibold">Position</th>
+                                        <th class="text-white font-semibold sticky-col">Pos</th>
                                         <th class="text-white font-semibold">Manager</th>
-                                        <th class="text-white font-semibold">Team Name</th>
+                                        <th class="text-white font-semibold hidden sm:table-cell">Team Name</th>
                                         <th class="text-white font-semibold">Points</th>
-                                        <th class="text-white font-semibold">GW Points</th>
-                                        <th class="text-white font-semibold">Form</th>
-                                        <th class="text-white font-semibold">Total Winnings</th>
+                                        <th class="text-white font-semibold">GW Pts</th>
+                                        <th class="text-white font-semibold hidden md:table-cell">Form</th>
+                                        <th class="text-white font-semibold hidden lg:table-cell">Winnings</th>
                                     </tr>
                                 </thead>
                                 <tbody id="leaderboardBody">
@@ -470,7 +686,7 @@
                             </div>
                             
                             <!-- Team Stats Grid -->
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                            <div class="grid grid-cols-2 gap-3 md:gap-4 md:grid-cols-4 mb-6">
                                 <div class="stat bg-base-200 rounded-lg">
                                     <div class="stat-title text-xs">Total Points</div>
                                     <div class="stat-value text-lg" id="team-total-points">0</div>
@@ -490,7 +706,7 @@
                             </div>
                             
                             <!-- Team Performance -->
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                            <div class="grid grid-cols-2 gap-3 md:gap-4 md:grid-cols-4 mb-6">
                                 <div class="stat bg-base-200 rounded-lg">
                                     <div class="stat-title text-xs">Wins</div>
                                     <div class="stat-value text-lg" id="team-wins">0</div>
@@ -515,7 +731,7 @@
                                     <i class="fas fa-users text-green-400 mr-2"></i>
                                     Current Squad
                                 </h4>
-                                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3" id="team-current-squad">
+                                <div class="grid grid-cols-2 gap-2 md:gap-3 md:grid-cols-3 lg:grid-cols-4" id="team-current-squad">
                                     <!-- Current squad will be populated here -->
                                 </div>
                                 <div id="team-current-squad-empty" class="text-center py-4 text-gray-400 hidden">
@@ -530,7 +746,7 @@
                                     <i class="fas fa-drafting-compass text-blue-400 mr-2"></i>
                                     Initial Draft Picks
                                 </h4>
-                                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3" id="team-draft-picks">
+                                <div class="grid grid-cols-2 gap-2 md:gap-3 md:grid-cols-3 lg:grid-cols-4" id="team-draft-picks">
                                     <!-- Draft picks will be populated here -->
                                 </div>
                             </div>
@@ -562,14 +778,14 @@
                                 Free Agent Signings
                             </h3>
                             <div class="overflow-x-auto">
-                                <table class="table table-zebra bg-gray-800/50">
+                                <table class="table table-zebra bg-gray-800/50 min-w-max">
                                     <thead>
                                         <tr class="bg-gray-800/90 border-b border-gray-700/50">
-                                            <th class="text-white">GW</th>
-                                            <th class="text-white">Manager</th>
-                                            <th class="text-white">Player In</th>
-                                            <th class="text-white">Player Out</th>
-                                            <th class="text-white">Date</th>
+                                            <th class="text-white text-xs">GW</th>
+                                            <th class="text-white text-xs">Manager</th>
+                                            <th class="text-white text-xs">In</th>
+                                            <th class="text-white text-xs">Out</th>
+                                            <th class="text-white text-xs hidden md:table-cell">Date</th>
                                         </tr>
                                     </thead>
                                     <tbody id="free-agents-table">
@@ -586,14 +802,14 @@
                                 Waiver Wire Claims
                             </h3>
                             <div class="overflow-x-auto">
-                                <table class="table table-zebra bg-gray-800/50">
+                                <table class="table table-zebra bg-gray-800/50 min-w-max">
                                     <thead>
                                         <tr class="bg-gray-800/90 border-b border-gray-700/50">
-                                            <th class="text-white">GW</th>
-                                            <th class="text-white">Manager</th>
-                                            <th class="text-white">Player In</th>
-                                            <th class="text-white">Player Out</th>
-                                            <th class="text-white">Result</th>
+                                            <th class="text-white text-xs">GW</th>
+                                            <th class="text-white text-xs">Manager</th>
+                                            <th class="text-white text-xs">In</th>
+                                            <th class="text-white text-xs">Out</th>
+                                            <th class="text-white text-xs hidden sm:table-cell">Result</th>
                                         </tr>
                                     </thead>
                                     <tbody id="waivers-table">
@@ -610,16 +826,16 @@
                                 Trades
                             </h3>
                             <div class="overflow-x-auto">
-                                <table class="table table-zebra bg-gray-800/50">
+                                <table class="table table-zebra bg-gray-800/50 min-w-max">
                                     <thead>
                                         <tr class="bg-gray-800/90 border-b border-gray-700/50">
-                                            <th class="text-white">GW</th>
-                                            <th class="text-white">From</th>
-                                            <th class="text-white">To</th>
-                                            <th class="text-white">Offered</th>
-                                            <th class="text-white">Requested</th>
-                                            <th class="text-white">Result</th>
-                                            <th class="text-white">Date</th>
+                                            <th class="text-white text-xs">GW</th>
+                                            <th class="text-white text-xs">From</th>
+                                            <th class="text-white text-xs">To</th>
+                                            <th class="text-white text-xs hidden sm:table-cell">Offered</th>
+                                            <th class="text-white text-xs hidden sm:table-cell">Requested</th>
+                                            <th class="text-white text-xs hidden md:table-cell">Result</th>
+                                            <th class="text-white text-xs hidden lg:table-cell">Date</th>
                                         </tr>
                                     </thead>
                                     <tbody id="trades-table">
@@ -710,7 +926,7 @@
                             </h2>
                         </div>
                         
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="monthlyContainer">
+                        <div class="grid grid-cols-1 gap-3 md:gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" id="monthlyContainer">
                             <!-- Monthly standings will be populated here -->
                         </div>
                     </div>
@@ -728,7 +944,7 @@
                         </div>
                         
                         <!-- Analytics Grid -->
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="grid grid-cols-1 gap-4 lg:gap-6 lg:grid-cols-2">
                             
                             <!-- Head-to-Head Records -->
                             <div class="card bg-gray-800/50 border border-gray-700/50">
@@ -849,7 +1065,7 @@
                         </div>
                         
                         <!-- Overall Prize Pool Stats -->
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="grid grid-cols-1 gap-3 md:gap-4 md:grid-cols-3 mb-6">
                             <div class="card bg-gray-900/90 border border-gray-700/50 shadow-2xl backdrop-blur-sm">
                                 <div class="card-body text-center">
                                     <div class="text-3xl font-bold text-green-400" id="total-pool-amount">$0</div>
@@ -886,7 +1102,7 @@
                                     <div class="text-4xl font-bold bg-gradient-to-r from-emerald-400 to-green-400 bg-clip-text text-transparent mb-2" id="total-paid-out">$0</div>
                                     <div class="text-sm text-emerald-300">Running total of all payments</div>
                                     <div class="divider divider-success opacity-30"></div>
-                                    <div class="grid grid-cols-2 gap-4 mt-4">
+                                    <div class="grid grid-cols-2 gap-3 mt-4">
                                         <div class="text-center">
                                             <div class="text-lg font-bold text-emerald-400" id="total-weekly-paid">$0</div>
                                             <div class="text-xs text-white">Weekly Payouts</div>
@@ -907,13 +1123,13 @@
                                 Weekly Winners
                             </h3>
                             <div class="overflow-x-auto">
-                                <table class="table table-zebra bg-gray-800/50">
+                                <table class="table table-zebra bg-gray-800/50 min-w-max">
                                     <thead>
                                         <tr class="bg-gray-800/90 border-b border-gray-700/50">
-                                            <th class="text-white">Gameweek</th>
-                                            <th class="text-white">Winner</th>
-                                            <th class="text-white">Points</th>
-                                            <th class="text-white">Winnings</th>
+                                            <th class="text-white text-xs">GW</th>
+                                            <th class="text-white text-xs">Winner</th>
+                                            <th class="text-white text-xs hidden sm:table-cell">Points</th>
+                                            <th class="text-white text-xs">Winnings</th>
                                         </tr>
                                     </thead>
                                     <tbody id="weekly-winners-table">
@@ -930,13 +1146,13 @@
                                 Monthly Winners
                             </h3>
                             <div class="overflow-x-auto">
-                                <table class="table table-zebra bg-gray-800/50">
+                                <table class="table table-zebra bg-gray-800/50 min-w-max">
                                     <thead>
                                         <tr class="bg-gray-800/90 border-b border-gray-700/50">
-                                            <th class="text-white">Month</th>
-                                            <th class="text-white">Winner</th>
-                                            <th class="text-white">Total Points</th>
-                                            <th class="text-white">Winnings</th>
+                                            <th class="text-white text-xs">Month</th>
+                                            <th class="text-white text-xs">Winner</th>
+                                            <th class="text-white text-xs hidden sm:table-cell">Total Pts</th>
+                                            <th class="text-white text-xs">Winnings</th>
                                         </tr>
                                     </thead>
                                     <tbody id="monthly-winners-table">
@@ -952,7 +1168,7 @@
                                 <i class="fas fa-medal text-purple-400 mr-2"></i>
                                 Final Season Payouts (Current Standings)
                             </h3>
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="grid grid-cols-1 gap-3 md:gap-4 md:grid-cols-3">
                                 <!-- 1st Place -->
                                 <div class="card bg-gradient-to-br from-yellow-600/20 to-yellow-800/20 border border-yellow-500/50 shadow-2xl backdrop-blur-sm">
                                     <div class="card-body text-center">
@@ -991,7 +1207,7 @@
                                 <i class="fas fa-receipt text-purple-400 mr-2"></i>
                                 Payment Summary
                             </h3>
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="grid grid-cols-1 gap-3 md:gap-4 md:grid-cols-2">
                                 <!-- Top Earners -->
                                 <div class="card bg-gray-900/90 border border-gray-700/50 shadow-2xl backdrop-blur-sm">
                                     <div class="card-body">
@@ -1028,7 +1244,7 @@
         <div class="drawer-side">
             <label for="my-drawer-2" aria-label="close sidebar" class="drawer-overlay"></label>
             <!-- Sidebar content -->
-            <ul class="menu p-4 w-80 min-h-full sidebar-dark text-white">
+            <ul class="menu p-3 w-64 md:w-80 min-h-full sidebar-dark text-white">
                 <li class="menu-title text-secondary-light text-xs font-semibold uppercase tracking-wider mb-4">Navigation</li>
                 <li><a href="#overview" class="hover:bg-purple-900/30 text-white rounded-lg transition-all">
                     <i class="fas fa-chart-line text-purple-400"></i> Overview
