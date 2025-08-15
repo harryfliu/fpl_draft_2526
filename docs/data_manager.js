@@ -39,13 +39,14 @@ class FPLDataManager {
     async detectGameweekFolders() {
         // For GitHub Pages, we'll manually check for known gameweeks
         const availableGameweeks = [];
-        for (let gw = 1; gw <= 5; gw++) { // Only check first 5 to avoid too many requests
-            const gwData = await this.loadJSONFile(`./data/gw${gw}.json`);
-            if (gwData) {
-                availableGameweeks.push(`gw${gw}`);
-                console.log(`✓ Found gameweek ${gw}`);
-            }
+        
+        // Only check for gw1 initially to reduce 404 errors
+        const gw1Data = await this.loadJSONFile(`./data/gw1.json`);
+        if (gw1Data) {
+            availableGameweeks.push(`gw1`);
+            console.log(`✓ Found gameweek 1`);
         }
+        
         return availableGameweeks;
     }
 
@@ -162,5 +163,17 @@ class FPLDataManager {
             currentGameweek: this.currentGameweek,
             totalGameweeks: availableGameweeks.length
         };
+    }
+
+    isDataLoaded() {
+        return this.gameweekData.size > 0;
+    }
+
+    async loadGameweekDataIfNeeded(gameweek) {
+        const gwKey = `gw${gameweek}`;
+        if (!this.gameweekData.has(gwKey)) {
+            await this.loadGameweekData(gwKey);
+        }
+        return this.gameweekData.get(gwKey);
     }
 }
