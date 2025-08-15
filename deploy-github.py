@@ -157,41 +157,48 @@ def parse_standings_csv(csv_path):
         return []
 
 def parse_fixtures_csv(csv_path):
-    """Parse fixture_list.csv with gameweek headers"""
+    """Parse fixture_list.csv with multi-line quoted team names"""
+    import csv
     try:
-        with open(csv_path, 'r', encoding='utf-8') as csvfile:
-            content = csvfile.read()
-            
         fixtures = []
-        lines = content.strip().split('\n')
         current_gameweek = 1
         
-        for line in lines:
-            line = line.strip()
-            if not line:
-                continue
-                
-            # Check for gameweek header
-            if line.startswith('Gameweek') and ',,' in line:
-                import re
-                gw_match = re.search(r'Gameweek (\d+)', line)
-                if gw_match:
-                    current_gameweek = int(gw_match.group(1))
-                continue
+        with open(csv_path, 'r', encoding='utf-8') as csvfile:
+            reader = csv.reader(csvfile)
             
-            # Parse fixture line with vs pattern
-            if ' v ' in line or ' vs ' in line:
-                parts = line.replace(' vs ', ' v ').split(' v ')
-                if len(parts) == 2:
-                    home_team = parts[0].strip()
-                    away_team = parts[1].strip()
+            for row in reader:
+                if not row or not any(cell.strip() for cell in row):
+                    continue
+                
+                # Check for gameweek header
+                if len(row) >= 1 and row[0].startswith('Gameweek'):
+                    import re
+                    gw_match = re.search(r'Gameweek (\d+)', row[0])
+                    if gw_match:
+                        current_gameweek = int(gw_match.group(1))
+                    continue
+                
+                # Parse fixture row (expecting: "Home Team\nManager", "v", "Away Team\nManager")
+                if len(row) >= 3 and row[1].strip().lower() == 'v':
+                    home_info = row[0].strip()
+                    away_info = row[2].strip()
                     
-                    fixtures.append({
-                        'gameweek': current_gameweek,
-                        'homeTeam': home_team,
-                        'awayTeam': away_team
-                    })
+                    # Extract team name (first line) from multi-line team info
+                    home_team = home_info.split('\n')[0].strip() if '\n' in home_info else home_info
+                    away_team = away_info.split('\n')[0].strip() if '\n' in away_info else away_info
+                    
+                    # Clean up quotes if present
+                    home_team = home_team.strip('"').strip()
+                    away_team = away_team.strip('"').strip()
+                    
+                    if home_team and away_team:
+                        fixtures.append({
+                            'gameweek': current_gameweek,
+                            'homeTeam': home_team,
+                            'awayTeam': away_team
+                        })
         
+        print(f"🏟️ Parsed {len(fixtures)} fixtures from {csv_path}")
         return fixtures
     except Exception as e:
         print(f"⚠️ Error parsing fixtures CSV: {e}")
@@ -252,47 +259,47 @@ def parse_transfer_history_csv(csv_path):
         return {'waivers': [], 'freeAgents': [], 'trades': []}
 
 def parse_pl_fixtures_csv(csv_path):
-    """Parse Premier League fixtures CSV"""
+    """Parse Premier League fixtures CSV with 4-line format per fixture"""
     try:
         with open(csv_path, 'r', encoding='utf-8') as csvfile:
             content = csvfile.read()
             
         fixtures = []
-        lines = content.strip().split('\n')
+        lines = [line.strip() for line in content.strip().split('\n') if line.strip()]
+        
+        i = 0
         current_date = ""
         
-        for line in lines:
-            line = line.strip()
-            if not line:
-                continue
+        while i < len(lines):
+            line = lines[i]
             
             # Check if line is a date
             if any(day in line for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']):
                 current_date = line
+                i += 1
                 continue
             
-            # Parse fixture line
-            parts = line.split()
-            if len(parts) >= 3:
-                # Find the time (contains :)
-                time_idx = -1
-                for i, part in enumerate(parts):
-                    if ':' in part:
-                        time_idx = i
-                        break
+            # Parse 3-line fixture format: [Home Team], [Time], [Away Team]
+            if i + 2 < len(lines):
+                home_team = lines[i]
+                time = lines[i + 1]
+                away_team = lines[i + 2]
                 
-                if time_idx > 0 and time_idx < len(parts) - 1:
-                    home_team = ' '.join(parts[:time_idx])
-                    time = parts[time_idx]
-                    away_team = ' '.join(parts[time_idx + 1:])
-                    
+                # Validate that this looks like a fixture (time has colon)
+                if ':' in time and home_team and away_team:
                     fixtures.append({
                         'date': current_date,
                         'time': time,
                         'homeTeam': home_team,
                         'awayTeam': away_team
                     })
+                    i += 3  # Skip the 3 lines we just processed
+                else:
+                    i += 1  # Move to next line if not a valid fixture
+            else:
+                i += 1
         
+        print(f"⚽ Parsed {len(fixtures)} PL fixtures from {csv_path}")
         return fixtures
     except Exception as e:
         print(f"⚠️ Error parsing PL fixtures CSV: {e}")

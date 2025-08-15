@@ -1,6 +1,1208 @@
 {
-  "fixture_list": [],
-  "pl_gw1": [],
+  "fixture_list": [
+    {
+      "gameweek": 1,
+      "homeTeam": "Peattle Pounders",
+      "awayTeam": "cunha believe it"
+    },
+    {
+      "gameweek": 1,
+      "homeTeam": "FootAndBallFetish",
+      "awayTeam": "This Year FC"
+    },
+    {
+      "gameweek": 1,
+      "homeTeam": "Schr\u00f6dongers",
+      "awayTeam": "Atl\u00e9tico SeaSlug"
+    },
+    {
+      "gameweek": 1,
+      "homeTeam": "Trophies Matter FC",
+      "awayTeam": "Extended Foreplay"
+    },
+    {
+      "gameweek": 1,
+      "homeTeam": "son4lyfe",
+      "awayTeam": "Cunha Get Me Points"
+    },
+    {
+      "gameweek": 1,
+      "homeTeam": "Gweepy",
+      "awayTeam": "thenotsospecialone"
+    },
+    {
+      "gameweek": 2,
+      "homeTeam": "cunha believe it",
+      "awayTeam": "Gweepy"
+    },
+    {
+      "gameweek": 2,
+      "homeTeam": "thenotsospecialone",
+      "awayTeam": "son4lyfe"
+    },
+    {
+      "gameweek": 2,
+      "homeTeam": "Cunha Get Me Points",
+      "awayTeam": "Trophies Matter FC"
+    },
+    {
+      "gameweek": 2,
+      "homeTeam": "Extended Foreplay",
+      "awayTeam": "Schr\u00f6dongers"
+    },
+    {
+      "gameweek": 2,
+      "homeTeam": "Atl\u00e9tico SeaSlug",
+      "awayTeam": "FootAndBallFetish"
+    },
+    {
+      "gameweek": 2,
+      "homeTeam": "This Year FC",
+      "awayTeam": "Peattle Pounders"
+    },
+    {
+      "gameweek": 3,
+      "homeTeam": "FootAndBallFetish",
+      "awayTeam": "cunha believe it"
+    },
+    {
+      "gameweek": 3,
+      "homeTeam": "Schr\u00f6dongers",
+      "awayTeam": "Peattle Pounders"
+    },
+    {
+      "gameweek": 3,
+      "homeTeam": "Trophies Matter FC",
+      "awayTeam": "This Year FC"
+    },
+    {
+      "gameweek": 3,
+      "homeTeam": "son4lyfe",
+      "awayTeam": "Atl\u00e9tico SeaSlug"
+    },
+    {
+      "gameweek": 3,
+      "homeTeam": "Gweepy",
+      "awayTeam": "Extended Foreplay"
+    },
+    {
+      "gameweek": 3,
+      "homeTeam": "thenotsospecialone",
+      "awayTeam": "Cunha Get Me Points"
+    },
+    {
+      "gameweek": 4,
+      "homeTeam": "cunha believe it",
+      "awayTeam": "thenotsospecialone"
+    },
+    {
+      "gameweek": 4,
+      "homeTeam": "Cunha Get Me Points",
+      "awayTeam": "Gweepy"
+    },
+    {
+      "gameweek": 4,
+      "homeTeam": "Extended Foreplay",
+      "awayTeam": "son4lyfe"
+    },
+    {
+      "gameweek": 4,
+      "homeTeam": "Atl\u00e9tico SeaSlug",
+      "awayTeam": "Trophies Matter FC"
+    },
+    {
+      "gameweek": 4,
+      "homeTeam": "This Year FC",
+      "awayTeam": "Schr\u00f6dongers"
+    },
+    {
+      "gameweek": 4,
+      "homeTeam": "Peattle Pounders",
+      "awayTeam": "FootAndBallFetish"
+    },
+    {
+      "gameweek": 5,
+      "homeTeam": "Schr\u00f6dongers",
+      "awayTeam": "cunha believe it"
+    },
+    {
+      "gameweek": 5,
+      "homeTeam": "Trophies Matter FC",
+      "awayTeam": "FootAndBallFetish"
+    },
+    {
+      "gameweek": 5,
+      "homeTeam": "son4lyfe",
+      "awayTeam": "Peattle Pounders"
+    },
+    {
+      "gameweek": 5,
+      "homeTeam": "Gweepy",
+      "awayTeam": "This Year FC"
+    },
+    {
+      "gameweek": 5,
+      "homeTeam": "thenotsospecialone",
+      "awayTeam": "Atl\u00e9tico SeaSlug"
+    },
+    {
+      "gameweek": 5,
+      "homeTeam": "Cunha Get Me Points",
+      "awayTeam": "Extended Foreplay"
+    },
+    {
+      "gameweek": 6,
+      "homeTeam": "cunha believe it",
+      "awayTeam": "Cunha Get Me Points"
+    },
+    {
+      "gameweek": 6,
+      "homeTeam": "Extended Foreplay",
+      "awayTeam": "thenotsospecialone"
+    },
+    {
+      "gameweek": 6,
+      "homeTeam": "Atl\u00e9tico SeaSlug",
+      "awayTeam": "Gweepy"
+    },
+    {
+      "gameweek": 6,
+      "homeTeam": "This Year FC",
+      "awayTeam": "son4lyfe"
+    },
+    {
+      "gameweek": 6,
+      "homeTeam": "Peattle Pounders",
+      "awayTeam": "Trophies Matter FC"
+    },
+    {
+      "gameweek": 6,
+      "homeTeam": "FootAndBallFetish",
+      "awayTeam": "Schr\u00f6dongers"
+    },
+    {
+      "gameweek": 7,
+      "homeTeam": "Trophies Matter FC",
+      "awayTeam": "cunha believe it"
+    },
+    {
+      "gameweek": 7,
+      "homeTeam": "son4lyfe",
+      "awayTeam": "Schr\u00f6dongers"
+    },
+    {
+      "gameweek": 7,
+      "homeTeam": "Gweepy",
+      "awayTeam": "FootAndBallFetish"
+    },
+    {
+      "gameweek": 7,
+      "homeTeam": "thenotsospecialone",
+      "awayTeam": "Peattle Pounders"
+    },
+    {
+      "gameweek": 7,
+      "homeTeam": "Cunha Get Me Points",
+      "awayTeam": "This Year FC"
+    },
+    {
+      "gameweek": 7,
+      "homeTeam": "Extended Foreplay",
+      "awayTeam": "Atl\u00e9tico SeaSlug"
+    },
+    {
+      "gameweek": 8,
+      "homeTeam": "cunha believe it",
+      "awayTeam": "Extended Foreplay"
+    },
+    {
+      "gameweek": 8,
+      "homeTeam": "Atl\u00e9tico SeaSlug",
+      "awayTeam": "Cunha Get Me Points"
+    },
+    {
+      "gameweek": 8,
+      "homeTeam": "This Year FC",
+      "awayTeam": "thenotsospecialone"
+    },
+    {
+      "gameweek": 8,
+      "homeTeam": "Peattle Pounders",
+      "awayTeam": "Gweepy"
+    },
+    {
+      "gameweek": 8,
+      "homeTeam": "FootAndBallFetish",
+      "awayTeam": "son4lyfe"
+    },
+    {
+      "gameweek": 8,
+      "homeTeam": "Schr\u00f6dongers",
+      "awayTeam": "Trophies Matter FC"
+    },
+    {
+      "gameweek": 9,
+      "homeTeam": "son4lyfe",
+      "awayTeam": "cunha believe it"
+    },
+    {
+      "gameweek": 9,
+      "homeTeam": "Gweepy",
+      "awayTeam": "Trophies Matter FC"
+    },
+    {
+      "gameweek": 9,
+      "homeTeam": "thenotsospecialone",
+      "awayTeam": "Schr\u00f6dongers"
+    },
+    {
+      "gameweek": 9,
+      "homeTeam": "Cunha Get Me Points",
+      "awayTeam": "FootAndBallFetish"
+    },
+    {
+      "gameweek": 9,
+      "homeTeam": "Extended Foreplay",
+      "awayTeam": "Peattle Pounders"
+    },
+    {
+      "gameweek": 9,
+      "homeTeam": "Atl\u00e9tico SeaSlug",
+      "awayTeam": "This Year FC"
+    },
+    {
+      "gameweek": 10,
+      "homeTeam": "cunha believe it",
+      "awayTeam": "Atl\u00e9tico SeaSlug"
+    },
+    {
+      "gameweek": 10,
+      "homeTeam": "This Year FC",
+      "awayTeam": "Extended Foreplay"
+    },
+    {
+      "gameweek": 10,
+      "homeTeam": "Peattle Pounders",
+      "awayTeam": "Cunha Get Me Points"
+    },
+    {
+      "gameweek": 10,
+      "homeTeam": "FootAndBallFetish",
+      "awayTeam": "thenotsospecialone"
+    },
+    {
+      "gameweek": 10,
+      "homeTeam": "Schr\u00f6dongers",
+      "awayTeam": "Gweepy"
+    },
+    {
+      "gameweek": 10,
+      "homeTeam": "Trophies Matter FC",
+      "awayTeam": "son4lyfe"
+    },
+    {
+      "gameweek": 11,
+      "homeTeam": "This Year FC",
+      "awayTeam": "cunha believe it"
+    },
+    {
+      "gameweek": 11,
+      "homeTeam": "Peattle Pounders",
+      "awayTeam": "Atl\u00e9tico SeaSlug"
+    },
+    {
+      "gameweek": 11,
+      "homeTeam": "FootAndBallFetish",
+      "awayTeam": "Extended Foreplay"
+    },
+    {
+      "gameweek": 11,
+      "homeTeam": "Schr\u00f6dongers",
+      "awayTeam": "Cunha Get Me Points"
+    },
+    {
+      "gameweek": 11,
+      "homeTeam": "Trophies Matter FC",
+      "awayTeam": "thenotsospecialone"
+    },
+    {
+      "gameweek": 11,
+      "homeTeam": "son4lyfe",
+      "awayTeam": "Gweepy"
+    },
+    {
+      "gameweek": 12,
+      "homeTeam": "Peattle Pounders",
+      "awayTeam": "cunha believe it"
+    },
+    {
+      "gameweek": 12,
+      "homeTeam": "FootAndBallFetish",
+      "awayTeam": "This Year FC"
+    },
+    {
+      "gameweek": 12,
+      "homeTeam": "Schr\u00f6dongers",
+      "awayTeam": "Atl\u00e9tico SeaSlug"
+    },
+    {
+      "gameweek": 12,
+      "homeTeam": "Trophies Matter FC",
+      "awayTeam": "Extended Foreplay"
+    },
+    {
+      "gameweek": 12,
+      "homeTeam": "son4lyfe",
+      "awayTeam": "Cunha Get Me Points"
+    },
+    {
+      "gameweek": 12,
+      "homeTeam": "Gweepy",
+      "awayTeam": "thenotsospecialone"
+    },
+    {
+      "gameweek": 13,
+      "homeTeam": "cunha believe it",
+      "awayTeam": "Gweepy"
+    },
+    {
+      "gameweek": 13,
+      "homeTeam": "thenotsospecialone",
+      "awayTeam": "son4lyfe"
+    },
+    {
+      "gameweek": 13,
+      "homeTeam": "Cunha Get Me Points",
+      "awayTeam": "Trophies Matter FC"
+    },
+    {
+      "gameweek": 13,
+      "homeTeam": "Extended Foreplay",
+      "awayTeam": "Schr\u00f6dongers"
+    },
+    {
+      "gameweek": 13,
+      "homeTeam": "Atl\u00e9tico SeaSlug",
+      "awayTeam": "FootAndBallFetish"
+    },
+    {
+      "gameweek": 13,
+      "homeTeam": "This Year FC",
+      "awayTeam": "Peattle Pounders"
+    },
+    {
+      "gameweek": 14,
+      "homeTeam": "FootAndBallFetish",
+      "awayTeam": "cunha believe it"
+    },
+    {
+      "gameweek": 14,
+      "homeTeam": "Schr\u00f6dongers",
+      "awayTeam": "Peattle Pounders"
+    },
+    {
+      "gameweek": 14,
+      "homeTeam": "Trophies Matter FC",
+      "awayTeam": "This Year FC"
+    },
+    {
+      "gameweek": 14,
+      "homeTeam": "son4lyfe",
+      "awayTeam": "Atl\u00e9tico SeaSlug"
+    },
+    {
+      "gameweek": 14,
+      "homeTeam": "Gweepy",
+      "awayTeam": "Extended Foreplay"
+    },
+    {
+      "gameweek": 14,
+      "homeTeam": "thenotsospecialone",
+      "awayTeam": "Cunha Get Me Points"
+    },
+    {
+      "gameweek": 15,
+      "homeTeam": "cunha believe it",
+      "awayTeam": "thenotsospecialone"
+    },
+    {
+      "gameweek": 15,
+      "homeTeam": "Cunha Get Me Points",
+      "awayTeam": "Gweepy"
+    },
+    {
+      "gameweek": 15,
+      "homeTeam": "Extended Foreplay",
+      "awayTeam": "son4lyfe"
+    },
+    {
+      "gameweek": 15,
+      "homeTeam": "Atl\u00e9tico SeaSlug",
+      "awayTeam": "Trophies Matter FC"
+    },
+    {
+      "gameweek": 15,
+      "homeTeam": "This Year FC",
+      "awayTeam": "Schr\u00f6dongers"
+    },
+    {
+      "gameweek": 15,
+      "homeTeam": "Peattle Pounders",
+      "awayTeam": "FootAndBallFetish"
+    },
+    {
+      "gameweek": 16,
+      "homeTeam": "Schr\u00f6dongers",
+      "awayTeam": "cunha believe it"
+    },
+    {
+      "gameweek": 16,
+      "homeTeam": "Trophies Matter FC",
+      "awayTeam": "FootAndBallFetish"
+    },
+    {
+      "gameweek": 16,
+      "homeTeam": "son4lyfe",
+      "awayTeam": "Peattle Pounders"
+    },
+    {
+      "gameweek": 16,
+      "homeTeam": "Gweepy",
+      "awayTeam": "This Year FC"
+    },
+    {
+      "gameweek": 16,
+      "homeTeam": "thenotsospecialone",
+      "awayTeam": "Atl\u00e9tico SeaSlug"
+    },
+    {
+      "gameweek": 16,
+      "homeTeam": "Cunha Get Me Points",
+      "awayTeam": "Extended Foreplay"
+    },
+    {
+      "gameweek": 17,
+      "homeTeam": "cunha believe it",
+      "awayTeam": "Cunha Get Me Points"
+    },
+    {
+      "gameweek": 17,
+      "homeTeam": "Extended Foreplay",
+      "awayTeam": "thenotsospecialone"
+    },
+    {
+      "gameweek": 17,
+      "homeTeam": "Atl\u00e9tico SeaSlug",
+      "awayTeam": "Gweepy"
+    },
+    {
+      "gameweek": 17,
+      "homeTeam": "This Year FC",
+      "awayTeam": "son4lyfe"
+    },
+    {
+      "gameweek": 17,
+      "homeTeam": "Peattle Pounders",
+      "awayTeam": "Trophies Matter FC"
+    },
+    {
+      "gameweek": 17,
+      "homeTeam": "FootAndBallFetish",
+      "awayTeam": "Schr\u00f6dongers"
+    },
+    {
+      "gameweek": 18,
+      "homeTeam": "Trophies Matter FC",
+      "awayTeam": "cunha believe it"
+    },
+    {
+      "gameweek": 18,
+      "homeTeam": "son4lyfe",
+      "awayTeam": "Schr\u00f6dongers"
+    },
+    {
+      "gameweek": 18,
+      "homeTeam": "Gweepy",
+      "awayTeam": "FootAndBallFetish"
+    },
+    {
+      "gameweek": 18,
+      "homeTeam": "thenotsospecialone",
+      "awayTeam": "Peattle Pounders"
+    },
+    {
+      "gameweek": 18,
+      "homeTeam": "Cunha Get Me Points",
+      "awayTeam": "This Year FC"
+    },
+    {
+      "gameweek": 18,
+      "homeTeam": "Extended Foreplay",
+      "awayTeam": "Atl\u00e9tico SeaSlug"
+    },
+    {
+      "gameweek": 19,
+      "homeTeam": "cunha believe it",
+      "awayTeam": "Extended Foreplay"
+    },
+    {
+      "gameweek": 19,
+      "homeTeam": "Atl\u00e9tico SeaSlug",
+      "awayTeam": "Cunha Get Me Points"
+    },
+    {
+      "gameweek": 19,
+      "homeTeam": "This Year FC",
+      "awayTeam": "thenotsospecialone"
+    },
+    {
+      "gameweek": 19,
+      "homeTeam": "Peattle Pounders",
+      "awayTeam": "Gweepy"
+    },
+    {
+      "gameweek": 19,
+      "homeTeam": "FootAndBallFetish",
+      "awayTeam": "son4lyfe"
+    },
+    {
+      "gameweek": 19,
+      "homeTeam": "Schr\u00f6dongers",
+      "awayTeam": "Trophies Matter FC"
+    },
+    {
+      "gameweek": 20,
+      "homeTeam": "son4lyfe",
+      "awayTeam": "cunha believe it"
+    },
+    {
+      "gameweek": 20,
+      "homeTeam": "Gweepy",
+      "awayTeam": "Trophies Matter FC"
+    },
+    {
+      "gameweek": 20,
+      "homeTeam": "thenotsospecialone",
+      "awayTeam": "Schr\u00f6dongers"
+    },
+    {
+      "gameweek": 20,
+      "homeTeam": "Cunha Get Me Points",
+      "awayTeam": "FootAndBallFetish"
+    },
+    {
+      "gameweek": 20,
+      "homeTeam": "Extended Foreplay",
+      "awayTeam": "Peattle Pounders"
+    },
+    {
+      "gameweek": 20,
+      "homeTeam": "Atl\u00e9tico SeaSlug",
+      "awayTeam": "This Year FC"
+    },
+    {
+      "gameweek": 21,
+      "homeTeam": "cunha believe it",
+      "awayTeam": "Atl\u00e9tico SeaSlug"
+    },
+    {
+      "gameweek": 21,
+      "homeTeam": "This Year FC",
+      "awayTeam": "Extended Foreplay"
+    },
+    {
+      "gameweek": 21,
+      "homeTeam": "Peattle Pounders",
+      "awayTeam": "Cunha Get Me Points"
+    },
+    {
+      "gameweek": 21,
+      "homeTeam": "FootAndBallFetish",
+      "awayTeam": "thenotsospecialone"
+    },
+    {
+      "gameweek": 21,
+      "homeTeam": "Schr\u00f6dongers",
+      "awayTeam": "Gweepy"
+    },
+    {
+      "gameweek": 21,
+      "homeTeam": "Trophies Matter FC",
+      "awayTeam": "son4lyfe"
+    },
+    {
+      "gameweek": 22,
+      "homeTeam": "This Year FC",
+      "awayTeam": "cunha believe it"
+    },
+    {
+      "gameweek": 22,
+      "homeTeam": "Peattle Pounders",
+      "awayTeam": "Atl\u00e9tico SeaSlug"
+    },
+    {
+      "gameweek": 22,
+      "homeTeam": "FootAndBallFetish",
+      "awayTeam": "Extended Foreplay"
+    },
+    {
+      "gameweek": 22,
+      "homeTeam": "Schr\u00f6dongers",
+      "awayTeam": "Cunha Get Me Points"
+    },
+    {
+      "gameweek": 22,
+      "homeTeam": "Trophies Matter FC",
+      "awayTeam": "thenotsospecialone"
+    },
+    {
+      "gameweek": 22,
+      "homeTeam": "son4lyfe",
+      "awayTeam": "Gweepy"
+    },
+    {
+      "gameweek": 23,
+      "homeTeam": "Peattle Pounders",
+      "awayTeam": "cunha believe it"
+    },
+    {
+      "gameweek": 23,
+      "homeTeam": "FootAndBallFetish",
+      "awayTeam": "This Year FC"
+    },
+    {
+      "gameweek": 23,
+      "homeTeam": "Schr\u00f6dongers",
+      "awayTeam": "Atl\u00e9tico SeaSlug"
+    },
+    {
+      "gameweek": 23,
+      "homeTeam": "Trophies Matter FC",
+      "awayTeam": "Extended Foreplay"
+    },
+    {
+      "gameweek": 23,
+      "homeTeam": "son4lyfe",
+      "awayTeam": "Cunha Get Me Points"
+    },
+    {
+      "gameweek": 23,
+      "homeTeam": "Gweepy",
+      "awayTeam": "thenotsospecialone"
+    },
+    {
+      "gameweek": 24,
+      "homeTeam": "cunha believe it",
+      "awayTeam": "Gweepy"
+    },
+    {
+      "gameweek": 24,
+      "homeTeam": "thenotsospecialone",
+      "awayTeam": "son4lyfe"
+    },
+    {
+      "gameweek": 24,
+      "homeTeam": "Cunha Get Me Points",
+      "awayTeam": "Trophies Matter FC"
+    },
+    {
+      "gameweek": 24,
+      "homeTeam": "Extended Foreplay",
+      "awayTeam": "Schr\u00f6dongers"
+    },
+    {
+      "gameweek": 24,
+      "homeTeam": "Atl\u00e9tico SeaSlug",
+      "awayTeam": "FootAndBallFetish"
+    },
+    {
+      "gameweek": 24,
+      "homeTeam": "This Year FC",
+      "awayTeam": "Peattle Pounders"
+    },
+    {
+      "gameweek": 25,
+      "homeTeam": "FootAndBallFetish",
+      "awayTeam": "cunha believe it"
+    },
+    {
+      "gameweek": 25,
+      "homeTeam": "Schr\u00f6dongers",
+      "awayTeam": "Peattle Pounders"
+    },
+    {
+      "gameweek": 25,
+      "homeTeam": "Trophies Matter FC",
+      "awayTeam": "This Year FC"
+    },
+    {
+      "gameweek": 25,
+      "homeTeam": "son4lyfe",
+      "awayTeam": "Atl\u00e9tico SeaSlug"
+    },
+    {
+      "gameweek": 25,
+      "homeTeam": "Gweepy",
+      "awayTeam": "Extended Foreplay"
+    },
+    {
+      "gameweek": 25,
+      "homeTeam": "thenotsospecialone",
+      "awayTeam": "Cunha Get Me Points"
+    },
+    {
+      "gameweek": 26,
+      "homeTeam": "cunha believe it",
+      "awayTeam": "thenotsospecialone"
+    },
+    {
+      "gameweek": 26,
+      "homeTeam": "Cunha Get Me Points",
+      "awayTeam": "Gweepy"
+    },
+    {
+      "gameweek": 26,
+      "homeTeam": "Extended Foreplay",
+      "awayTeam": "son4lyfe"
+    },
+    {
+      "gameweek": 26,
+      "homeTeam": "Atl\u00e9tico SeaSlug",
+      "awayTeam": "Trophies Matter FC"
+    },
+    {
+      "gameweek": 26,
+      "homeTeam": "This Year FC",
+      "awayTeam": "Schr\u00f6dongers"
+    },
+    {
+      "gameweek": 26,
+      "homeTeam": "Peattle Pounders",
+      "awayTeam": "FootAndBallFetish"
+    },
+    {
+      "gameweek": 27,
+      "homeTeam": "Schr\u00f6dongers",
+      "awayTeam": "cunha believe it"
+    },
+    {
+      "gameweek": 27,
+      "homeTeam": "Trophies Matter FC",
+      "awayTeam": "FootAndBallFetish"
+    },
+    {
+      "gameweek": 27,
+      "homeTeam": "son4lyfe",
+      "awayTeam": "Peattle Pounders"
+    },
+    {
+      "gameweek": 27,
+      "homeTeam": "Gweepy",
+      "awayTeam": "This Year FC"
+    },
+    {
+      "gameweek": 27,
+      "homeTeam": "thenotsospecialone",
+      "awayTeam": "Atl\u00e9tico SeaSlug"
+    },
+    {
+      "gameweek": 27,
+      "homeTeam": "Cunha Get Me Points",
+      "awayTeam": "Extended Foreplay"
+    },
+    {
+      "gameweek": 28,
+      "homeTeam": "cunha believe it",
+      "awayTeam": "Cunha Get Me Points"
+    },
+    {
+      "gameweek": 28,
+      "homeTeam": "Extended Foreplay",
+      "awayTeam": "thenotsospecialone"
+    },
+    {
+      "gameweek": 28,
+      "homeTeam": "Atl\u00e9tico SeaSlug",
+      "awayTeam": "Gweepy"
+    },
+    {
+      "gameweek": 28,
+      "homeTeam": "This Year FC",
+      "awayTeam": "son4lyfe"
+    },
+    {
+      "gameweek": 28,
+      "homeTeam": "Peattle Pounders",
+      "awayTeam": "Trophies Matter FC"
+    },
+    {
+      "gameweek": 28,
+      "homeTeam": "FootAndBallFetish",
+      "awayTeam": "Schr\u00f6dongers"
+    },
+    {
+      "gameweek": 29,
+      "homeTeam": "Trophies Matter FC",
+      "awayTeam": "cunha believe it"
+    },
+    {
+      "gameweek": 29,
+      "homeTeam": "son4lyfe",
+      "awayTeam": "Schr\u00f6dongers"
+    },
+    {
+      "gameweek": 29,
+      "homeTeam": "Gweepy",
+      "awayTeam": "FootAndBallFetish"
+    },
+    {
+      "gameweek": 29,
+      "homeTeam": "thenotsospecialone",
+      "awayTeam": "Peattle Pounders"
+    },
+    {
+      "gameweek": 29,
+      "homeTeam": "Cunha Get Me Points",
+      "awayTeam": "This Year FC"
+    },
+    {
+      "gameweek": 29,
+      "homeTeam": "Extended Foreplay",
+      "awayTeam": "Atl\u00e9tico SeaSlug"
+    },
+    {
+      "gameweek": 30,
+      "homeTeam": "cunha believe it",
+      "awayTeam": "Extended Foreplay"
+    },
+    {
+      "gameweek": 30,
+      "homeTeam": "Atl\u00e9tico SeaSlug",
+      "awayTeam": "Cunha Get Me Points"
+    },
+    {
+      "gameweek": 30,
+      "homeTeam": "This Year FC",
+      "awayTeam": "thenotsospecialone"
+    },
+    {
+      "gameweek": 30,
+      "homeTeam": "Peattle Pounders",
+      "awayTeam": "Gweepy"
+    },
+    {
+      "gameweek": 30,
+      "homeTeam": "FootAndBallFetish",
+      "awayTeam": "son4lyfe"
+    },
+    {
+      "gameweek": 30,
+      "homeTeam": "Schr\u00f6dongers",
+      "awayTeam": "Trophies Matter FC"
+    },
+    {
+      "gameweek": 31,
+      "homeTeam": "son4lyfe",
+      "awayTeam": "cunha believe it"
+    },
+    {
+      "gameweek": 31,
+      "homeTeam": "Gweepy",
+      "awayTeam": "Trophies Matter FC"
+    },
+    {
+      "gameweek": 31,
+      "homeTeam": "thenotsospecialone",
+      "awayTeam": "Schr\u00f6dongers"
+    },
+    {
+      "gameweek": 31,
+      "homeTeam": "Cunha Get Me Points",
+      "awayTeam": "FootAndBallFetish"
+    },
+    {
+      "gameweek": 31,
+      "homeTeam": "Extended Foreplay",
+      "awayTeam": "Peattle Pounders"
+    },
+    {
+      "gameweek": 31,
+      "homeTeam": "Atl\u00e9tico SeaSlug",
+      "awayTeam": "This Year FC"
+    },
+    {
+      "gameweek": 32,
+      "homeTeam": "cunha believe it",
+      "awayTeam": "Atl\u00e9tico SeaSlug"
+    },
+    {
+      "gameweek": 32,
+      "homeTeam": "This Year FC",
+      "awayTeam": "Extended Foreplay"
+    },
+    {
+      "gameweek": 32,
+      "homeTeam": "Peattle Pounders",
+      "awayTeam": "Cunha Get Me Points"
+    },
+    {
+      "gameweek": 32,
+      "homeTeam": "FootAndBallFetish",
+      "awayTeam": "thenotsospecialone"
+    },
+    {
+      "gameweek": 32,
+      "homeTeam": "Schr\u00f6dongers",
+      "awayTeam": "Gweepy"
+    },
+    {
+      "gameweek": 32,
+      "homeTeam": "Trophies Matter FC",
+      "awayTeam": "son4lyfe"
+    },
+    {
+      "gameweek": 33,
+      "homeTeam": "This Year FC",
+      "awayTeam": "cunha believe it"
+    },
+    {
+      "gameweek": 33,
+      "homeTeam": "Peattle Pounders",
+      "awayTeam": "Atl\u00e9tico SeaSlug"
+    },
+    {
+      "gameweek": 33,
+      "homeTeam": "FootAndBallFetish",
+      "awayTeam": "Extended Foreplay"
+    },
+    {
+      "gameweek": 33,
+      "homeTeam": "Schr\u00f6dongers",
+      "awayTeam": "Cunha Get Me Points"
+    },
+    {
+      "gameweek": 33,
+      "homeTeam": "Trophies Matter FC",
+      "awayTeam": "thenotsospecialone"
+    },
+    {
+      "gameweek": 33,
+      "homeTeam": "son4lyfe",
+      "awayTeam": "Gweepy"
+    },
+    {
+      "gameweek": 34,
+      "homeTeam": "Peattle Pounders",
+      "awayTeam": "cunha believe it"
+    },
+    {
+      "gameweek": 34,
+      "homeTeam": "FootAndBallFetish",
+      "awayTeam": "This Year FC"
+    },
+    {
+      "gameweek": 34,
+      "homeTeam": "Schr\u00f6dongers",
+      "awayTeam": "Atl\u00e9tico SeaSlug"
+    },
+    {
+      "gameweek": 34,
+      "homeTeam": "Trophies Matter FC",
+      "awayTeam": "Extended Foreplay"
+    },
+    {
+      "gameweek": 34,
+      "homeTeam": "son4lyfe",
+      "awayTeam": "Cunha Get Me Points"
+    },
+    {
+      "gameweek": 34,
+      "homeTeam": "Gweepy",
+      "awayTeam": "thenotsospecialone"
+    },
+    {
+      "gameweek": 35,
+      "homeTeam": "cunha believe it",
+      "awayTeam": "Gweepy"
+    },
+    {
+      "gameweek": 35,
+      "homeTeam": "thenotsospecialone",
+      "awayTeam": "son4lyfe"
+    },
+    {
+      "gameweek": 35,
+      "homeTeam": "Cunha Get Me Points",
+      "awayTeam": "Trophies Matter FC"
+    },
+    {
+      "gameweek": 35,
+      "homeTeam": "Extended Foreplay",
+      "awayTeam": "Schr\u00f6dongers"
+    },
+    {
+      "gameweek": 35,
+      "homeTeam": "Atl\u00e9tico SeaSlug",
+      "awayTeam": "FootAndBallFetish"
+    },
+    {
+      "gameweek": 35,
+      "homeTeam": "This Year FC",
+      "awayTeam": "Peattle Pounders"
+    },
+    {
+      "gameweek": 36,
+      "homeTeam": "FootAndBallFetish",
+      "awayTeam": "cunha believe it"
+    },
+    {
+      "gameweek": 36,
+      "homeTeam": "Schr\u00f6dongers",
+      "awayTeam": "Peattle Pounders"
+    },
+    {
+      "gameweek": 36,
+      "homeTeam": "Trophies Matter FC",
+      "awayTeam": "This Year FC"
+    },
+    {
+      "gameweek": 36,
+      "homeTeam": "son4lyfe",
+      "awayTeam": "Atl\u00e9tico SeaSlug"
+    },
+    {
+      "gameweek": 36,
+      "homeTeam": "Gweepy",
+      "awayTeam": "Extended Foreplay"
+    },
+    {
+      "gameweek": 36,
+      "homeTeam": "thenotsospecialone",
+      "awayTeam": "Cunha Get Me Points"
+    },
+    {
+      "gameweek": 37,
+      "homeTeam": "cunha believe it",
+      "awayTeam": "thenotsospecialone"
+    },
+    {
+      "gameweek": 37,
+      "homeTeam": "Cunha Get Me Points",
+      "awayTeam": "Gweepy"
+    },
+    {
+      "gameweek": 37,
+      "homeTeam": "Extended Foreplay",
+      "awayTeam": "son4lyfe"
+    },
+    {
+      "gameweek": 37,
+      "homeTeam": "Atl\u00e9tico SeaSlug",
+      "awayTeam": "Trophies Matter FC"
+    },
+    {
+      "gameweek": 37,
+      "homeTeam": "This Year FC",
+      "awayTeam": "Schr\u00f6dongers"
+    },
+    {
+      "gameweek": 37,
+      "homeTeam": "Peattle Pounders",
+      "awayTeam": "FootAndBallFetish"
+    },
+    {
+      "gameweek": 38,
+      "homeTeam": "Schr\u00f6dongers",
+      "awayTeam": "cunha believe it"
+    },
+    {
+      "gameweek": 38,
+      "homeTeam": "Trophies Matter FC",
+      "awayTeam": "FootAndBallFetish"
+    },
+    {
+      "gameweek": 38,
+      "homeTeam": "son4lyfe",
+      "awayTeam": "Peattle Pounders"
+    },
+    {
+      "gameweek": 38,
+      "homeTeam": "Gweepy",
+      "awayTeam": "This Year FC"
+    },
+    {
+      "gameweek": 38,
+      "homeTeam": "thenotsospecialone",
+      "awayTeam": "Atl\u00e9tico SeaSlug"
+    },
+    {
+      "gameweek": 38,
+      "homeTeam": "Cunha Get Me Points",
+      "awayTeam": "Extended Foreplay"
+    }
+  ],
+  "pl_gw1": [
+    {
+      "date": "Friday 15 August 2025",
+      "time": "12:00",
+      "homeTeam": "Liverpool",
+      "awayTeam": "Bournemouth"
+    },
+    {
+      "date": "Saturday 16 August 2025",
+      "time": "4:30",
+      "homeTeam": "Aston Villa",
+      "awayTeam": "Newcastle"
+    },
+    {
+      "date": "Saturday 16 August 2025",
+      "time": "7:00",
+      "homeTeam": "Brighton",
+      "awayTeam": "Fulham"
+    },
+    {
+      "date": "Saturday 16 August 2025",
+      "time": "7:00",
+      "homeTeam": "Spurs",
+      "awayTeam": "Burnley"
+    },
+    {
+      "date": "Saturday 16 August 2025",
+      "time": "7:00",
+      "homeTeam": "Sunderland",
+      "awayTeam": "West Ham"
+    },
+    {
+      "date": "Saturday 16 August 2025",
+      "time": "9:30",
+      "homeTeam": "Wolves",
+      "awayTeam": "Man City"
+    },
+    {
+      "date": "Sunday 17 August 2025",
+      "time": "6:00",
+      "homeTeam": "Chelsea",
+      "awayTeam": "Crystal Palace"
+    },
+    {
+      "date": "Sunday 17 August 2025",
+      "time": "6:00",
+      "homeTeam": "Nott'm Forest",
+      "awayTeam": "Brentford"
+    },
+    {
+      "date": "Sunday 17 August 2025",
+      "time": "8:30",
+      "homeTeam": "Man Utd",
+      "awayTeam": "Arsenal"
+    },
+    {
+      "date": "Monday 18 August 2025",
+      "time": "12:00",
+      "homeTeam": "Leeds",
+      "awayTeam": "Everton"
+    }
+  ],
   "starting_draft": [
     {
       "Round": "1",
