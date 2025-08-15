@@ -252,6 +252,16 @@ function getPositionBadge(position) {
     return badges[position] || '';
 }
 
+// Helper function to get manager name from team name
+function getManagerFromTeamName(teamName) {
+    if (!dashboardData.leaderboard || dashboardData.leaderboard.length === 0) {
+        return 'Unknown Manager';
+    }
+    
+    const team = dashboardData.leaderboard.find(team => team.teamName === teamName);
+    return team ? team.manager : 'Unknown Manager';
+}
+
 // Populate current fixtures for the current gameweek only
 function populateCurrentFixtures() {
     const container = document.getElementById('currentFixturesContainer');
@@ -303,6 +313,10 @@ function populateCurrentFixtures() {
         const fixtureElement = document.createElement('div');
         fixtureElement.className = 'card bg-gray-900/90 border border-gray-700/50 mb-4 shadow-2xl backdrop-blur-sm hover:shadow-purple-500/20 transition-all duration-300';
         
+        // Get manager names for both teams
+        const homeManager = getManagerFromTeamName(fixture.homeTeam);
+        const awayManager = getManagerFromTeamName(fixture.awayTeam);
+        
         fixtureElement.innerHTML = `
             <div class="card-body p-4">
                 <div class="flex items-center justify-between mb-3">
@@ -314,14 +328,14 @@ function populateCurrentFixtures() {
                         </div>
                         <div class="text-center">
                             <div class="font-semibold text-white">${fixture.homeTeam}</div>
-                            <div class="text-xs text-white">${fixture.homeManager}</div>
+                            <div class="text-xs text-white">${homeManager}</div>
                         </div>
                     </div>
                     <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg">VS</div>
                     <div class="flex items-center gap-3">
                         <div class="text-center">
                             <div class="font-semibold text-white">${fixture.awayTeam}</div>
-                            <div class="text-xs text-white">${fixture.awayManager}</div>
+                            <div class="text-xs text-white">${awayManager}</div>
                         </div>
                         <div class="avatar placeholder">
                             <div class="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-full w-10">
@@ -423,6 +437,10 @@ function populateFixtures() {
         const fixtureElement = document.createElement('div');
         fixtureElement.className = 'card bg-gray-900/90 border border-gray-700/50 mb-4 shadow-2xl backdrop-blur-sm hover:shadow-purple-500/20 transition-all duration-300';
         
+        // Get manager names for both teams
+        const homeManager = getManagerFromTeamName(fixture.homeTeam);
+        const awayManager = getManagerFromTeamName(fixture.awayTeam);
+        
         fixtureElement.innerHTML = `
             <div class="card-body p-4">
                 <div class="flex items-center justify-between mb-3">
@@ -434,14 +452,14 @@ function populateFixtures() {
                         </div>
                         <div class="text-center">
                             <div class="font-semibold text-white">${fixture.homeTeam}</div>
-                            <div class="text-xs text-white">${fixture.homeManager}</div>
+                            <div class="text-xs text-white">${homeManager}</div>
                         </div>
                     </div>
                     <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2 rounded-full font-bold text-sm shadow-lg">VS</div>
                     <div class="flex items-center gap-3">
                         <div class="text-center">
                             <div class="font-semibold text-white">${fixture.awayTeam}</div>
-                            <div class="text-xs text-white">${fixture.awayManager}</div>
+                            <div class="text-xs text-white">${awayManager}</div>
                         </div>
                         <div class="avatar placeholder">
                             <div class="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-full w-10">
