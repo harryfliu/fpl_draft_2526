@@ -39,13 +39,13 @@ class FPLDataManager {
     async detectGameweekFolders() {
         console.log('📁 Detecting gameweek folders...');
         
-        // Since we're in a local environment, we know gw1 exists
-        // In a real web environment, this would scan the filesystem
-        // For now, we'll check if we can access the files we know exist
+        // For GitHub Pages, we need to use absolute paths
+        // Check if we're running on GitHub Pages (has a base path)
+        const basePath = window.location.pathname.includes('/fpl_draft_2526/') ? '/fpl_draft_2526' : '';
         
         try {
             // Check if gw1 exists by trying to read a file
-            const response = await fetch('./gw1/starting_draft.csv');
+            const response = await fetch(`${basePath}/gw1/starting_draft.csv`);
             if (response.ok) {
                 this.availableGameweeks.push('gw1');
                 console.log('✅ Found data in gw1');
@@ -61,7 +61,7 @@ class FPLDataManager {
         
         for (const gw of possibleGameweeks) {
             try {
-                const response = await fetch(`./${gw}/starting_draft.csv`);
+                const response = await fetch(`${basePath}/${gw}/starting_draft.csv`);
                 if (response.ok) {
                     this.availableGameweeks.push(gw);
                     console.log(`✅ Found data in ${gw}`);
@@ -107,7 +107,8 @@ class FPLDataManager {
         console.log(`📥 Loading data from ${gameweek}...`);
         
         try {
-            // Load the main data files plus Premier League fixtures and transfer history with correct relative paths
+            // Load the main data files plus Premier League fixtures and transfer history
+            // Note: loadCSVFile now handles base path automatically
             const [fixtures, standings, draft, plFixtures, transferHistory, partialResults] = await Promise.all([
                 this.loadCSVFile(`./${gameweek}/fixture_list.csv`),
                 this.loadCSVFile(`./${gameweek}/standings.csv`),
