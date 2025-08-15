@@ -130,7 +130,24 @@
 
         /* Mobile-optimized table styles */
         .table.min-w-max {
-            min-width: 600px;
+            min-width: 500px;
+        }
+        
+        /* Text overflow fixes for mobile */
+        .card-body h3, .card-body p, .stat-value, .team-name {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            hyphens: auto;
+        }
+        
+        /* Fixture card text overflow fix */
+        .fixture-card .team-name {
+            font-size: 0.875rem;
+            line-height: 1.1;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         /* Mobile Optimizations */
@@ -191,9 +208,33 @@
             }
             
             .table th, .table td {
-                padding: 0.4rem 0.3rem;
+                padding: 0.4rem 0.2rem;
                 white-space: nowrap;
                 text-overflow: ellipsis;
+                max-width: 80px;
+                overflow: hidden;
+            }
+            
+            /* Ensure essential columns stay visible on very small screens */
+            .table.min-w-max {
+                min-width: 400px !important;
+            }
+            
+            /* Better text overflow handling for fixture cards */
+            .card-body {
+                overflow: hidden;
+            }
+            
+            /* Fix for team names in fixture cards */
+            .text-xl, .text-lg {
+                font-size: 1rem !important;
+                line-height: 1.2 !important;
+            }
+            
+            /* Compact fixture card layout */
+            .grid-cols-2 > div {
+                min-width: 0;
+                overflow: hidden;
             }
             
             /* Better mobile table scrolling */
@@ -305,7 +346,7 @@
             }
         }
         
-        /* Very small mobile screens */
+        /* Very small mobile screens (iPhone portrait) */
         @media (max-width: 480px) {
             /* Force single column on very small screens */
             .grid-cols-2, .grid-cols-3, .grid-cols-4,
@@ -329,10 +370,56 @@
                 font-size: 0.75rem !important;
             }
             
-            /* Hide team name column on very small screens */
-            .table th:nth-child(3),
-            .table td:nth-child(3) {
-                display: none !important;
+            /* More aggressive table optimization for iPhone */
+            .table.min-w-max {
+                min-width: 350px !important;
+            }
+            
+            .table th, .table td {
+                padding: 0.3rem 0.15rem !important;
+                font-size: 0.65rem !important;
+                max-width: 60px !important;
+            }
+            
+            /* Keep essential Player Movement columns visible */
+            .table th:nth-child(1), .table th:nth-child(2), .table th:nth-child(3), .table th:nth-child(4),
+            .table td:nth-child(1), .table td:nth-child(2), .table td:nth-child(3), .table td:nth-child(4) {
+                display: table-cell !important;
+            }
+            
+            /* Fixture card text improvements */
+            .text-xl, .text-lg, .text-2xl {
+                font-size: 0.875rem !important;
+                line-height: 1.1 !important;
+            }
+            
+            /* Better card padding */
+            .card-body {
+                padding: 0.75rem !important;
+            }
+            
+            /* Compact team name display */
+            .team-name, h3, h4 {
+                font-size: 0.8rem !important;
+                line-height: 1.1 !important;
+            }
+        }
+        
+        /* Extra small screens (older iPhones) */
+        @media (max-width: 375px) {
+            .table.min-w-max {
+                min-width: 320px !important;
+            }
+            
+            .table th, .table td {
+                padding: 0.25rem 0.1rem !important;
+                font-size: 0.6rem !important;
+                max-width: 50px !important;
+            }
+            
+            /* Even more compact fixture cards */
+            .text-xl, .text-lg, .text-2xl, h1, h2, h3 {
+                font-size: 0.75rem !important;
             }
         }
     </style>
@@ -785,7 +872,7 @@
                                             <th class="text-white text-xs">Manager</th>
                                             <th class="text-white text-xs">In</th>
                                             <th class="text-white text-xs">Out</th>
-                                            <th class="text-white text-xs hidden md:table-cell">Date</th>
+                                            <th class="text-white text-xs hidden sm:table-cell">Date</th>
                                         </tr>
                                     </thead>
                                     <tbody id="free-agents-table">
