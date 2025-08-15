@@ -550,6 +550,31 @@ class FPLDataManager {
             .sort((a, b) => a - b);
     }
 
+    mergeStandingsWithDraft(standings, draftTeams) {
+        // Merge standings data (which has leaderboard info) with draft teams (which has draft picks)
+        const mergedTeams = standings.map(standing => {
+            // Find corresponding draft team by team name
+            const draftTeam = draftTeams.find(team => team.teamName === standing.teamName);
+            
+            return {
+                position: standing.position,
+                teamName: standing.teamName,
+                manager: standing.manager,
+                firstName: standing.manager.split(' ')[0], // Extract first name for dropdown
+                points: standing.points,
+                wins: standing.wins,
+                draws: standing.draws,
+                losses: standing.losses,
+                gwPoints: standing.gwPoints,
+                form: standing.form,
+                draftPicks: draftTeam ? draftTeam.draftPicks : []
+            };
+        });
+        
+        console.log('🔗 Merged standings with draft data:', mergedTeams.length, 'teams');
+        return mergedTeams;
+    }
+
     async loadGameweekDataIfNeeded(gameweek) {
         const gwKey = `gw${gameweek}`;
         if (!this.gameweekData.has(gwKey)) {

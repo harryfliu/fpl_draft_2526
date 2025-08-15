@@ -30,10 +30,13 @@ let dashboardData = {
 // Initialize the dashboard
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('🚀 Initializing FPL Dashboard...');
+    console.log('🔧 DEBUG: DOMContentLoaded event fired');
     
     // Initialize the data manager
     dataManager = new FPLDataManager();
+    console.log('🔧 DEBUG: Data manager created');
     const success = await dataManager.initialize();
+    console.log('🔧 DEBUG: Data manager initialize result:', success);
     
     if (success) {
         // Load data from the data manager
@@ -60,6 +63,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 // Load data from the data manager
 async function loadDataFromManager() {
+    console.log('🔧 DEBUG: loadDataFromManager called');
     if (!dataManager || !dataManager.isDataLoaded()) {
         console.warn('Data manager not ready');
         return;
@@ -67,12 +71,15 @@ async function loadDataFromManager() {
     
     // Get current gameweek data
     const currentData = dataManager.getCurrentGameweekData();
+    console.log('🔧 DEBUG: currentData from data manager:', currentData);
     if (currentData) {
         // Update dashboard data
         dashboardData.leaderboard = currentData.draft?.teams || [];
         dashboardData.draft = currentData.draft || null; // Add this line to fix draft picks
         dashboardData.upcomingFixtures = currentData.fixtures || [];
         dashboardData.recentStandings = currentData.standings || [];
+        
+        console.log('🔧 DEBUG: dashboardData.leaderboard after assignment:', dashboardData.leaderboard);
         dashboardData.transferHistory = currentData.transferHistory || { waivers: [], freeAgents: [], trades: [] };
         
         // Update current gameweek
