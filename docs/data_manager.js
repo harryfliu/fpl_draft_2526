@@ -108,14 +108,13 @@ class FPLDataManager {
         
         try {
             // Load the main data files plus Premier League fixtures and transfer history with correct relative paths
-            const [fixtures, standings, draft, plFixtures, transferHistory, partialResults, players] = await Promise.all([
+            const [fixtures, standings, draft, plFixtures, transferHistory, partialResults] = await Promise.all([
                 this.loadCSVFile(`./${gameweek}/fixture_list.csv`),
                 this.loadCSVFile(`./${gameweek}/standings.csv`),
                 this.loadCSVFile(`./${gameweek}/starting_draft.csv`),
                 this.loadPLFixtures(gameweek.replace('gw', '')),
                 this.loadTransferHistory(gameweek),
-                this.loadCSVFile(`./${gameweek}/partial_results_gw1.csv`),
-                this.loadCSVFile(`./${gameweek}/players_partial_gw1.csv`)
+                this.loadCSVFile(`./${gameweek}/partial_results_gw1.csv`)
             ]);
             
             // Parse standings data first
@@ -130,10 +129,6 @@ class FPLDataManager {
             const parsedPartialResults = this.parsePartialResultsData(partialResults);
             console.log(`🏆 Parsed partial results for ${gameweek}:`, parsedPartialResults);
             
-            // Parse players data
-            const parsedPlayers = this.parsePlayersData(players);
-            console.log(`⚽ Parsed players data for ${gameweek}:`, parsedPlayers);
-            
             this.gameweekData.set(gameweek, {
                 fixtures: parsedFixtures,
                 standings: parsedStandings,
@@ -141,7 +136,6 @@ class FPLDataManager {
                 plFixtures: plFixtures,
                 transferHistory: transferHistory,
                 partialResults: parsedPartialResults,
-                players: parsedPlayers,
                 timestamp: new Date().toISOString()
             });
             
@@ -167,8 +161,13 @@ class FPLDataManager {
         try {
             console.log(`🔍 Attempting to load: ${filePath}`);
             
-            // Try to fetch the CSV file
-            const response = await fetch(filePath);
+            // For GitHub Pages, we need to use absolute paths
+            // Check if we're running on GitHub Pages (has a base path)
+            const basePath = window.location.pathname.includes('/fpl_draft_2526/') ? '/fpl_draft_2526' : '';
+            const fullPath = basePath + filePath;
+            
+            console.log(`📡 Attempting to load from: ${fullPath}`);
+            const response = await fetch(fullPath);
             console.log(`📡 Response status: ${response.status} ${response.statusText}`);
             
             if (!response.ok) {
@@ -621,30 +620,6 @@ class FPLDataManager {
         return allResults;
     }
 
-    // Get players data for a specific gameweek
-    getPlayers(gameweek = null) {
-        if (gameweek) {
-            const gwKey = `gw${gameweek}`;
-            const gameweekData = this.gameweekData.get(gwKey);
-            return gameweekData?.players || [];
-        }
-        // Return players from current gameweek
-        const currentGWKey = `gw${this.currentGameweek}`;
-        const currentGameweekData = this.gameweekData.get(currentGWKey);
-        return currentGameweekData?.players || [];
-    }
-
-    // Get all players data across all loaded gameweeks
-    getAllPlayers() {
-        const allPlayers = [];
-        for (const [gameweek, data] of this.gameweekData) {
-            if (data.players && data.players.length > 0) {
-                allPlayers.push(...data.players);
-            }
-        }
-        return allPlayers;
-    }
-
     // Get data for a specific gameweek
     getGameweekData(gameweek) {
         const gwKey = `gw${gameweek}`;
@@ -936,72 +911,6 @@ class FPLDataManager {
         
         console.log(`🏆 Final partial results array (${results.length} results):`, results);
         return results;
-    }
-
-    // Parse players data from the CSV format
-    parsePlayersData(csvData) {
-        console.log('⚽ Parsing players data...');
-        
-        if (!csvData || !csvData.data || csvData.data.length === 0) {
-            console.log('❌ No players data to parse');
-            return [];
-        }
-        
-        const players = [];
-        
-        csvData.data.forEach((row, index) => {
-            if (index === 0) return; // Skip header row
-            
-            const playerText = row.Player || row[0];
-            const points = parseInt(row.PT || row[1]) || 0;
-            
-            if (!playerText) return;
-            
-            // Parse player name and team/position from the format:
-            // "Player Name\nTEAMNAMEPOSITION"
-            let playerName, teamName, position;
-            
-            if (playerText.includes('\n')) {
-                const lines = playerText.split('\n');
-                playerName = lines[0]?.trim().replace(/^"|"$/g, '');
-                const teamPos = lines[1]?.trim().replace(/^"|"$/g, '');
-                
-                // Extract team name and position from TEAMNAMEPOSITION
-                // Examples: BOUMID, LIVFWD, BOUDEF, BOUGKP
-                if (teamPos) {
-                    // Find the position suffix (last 3-4 characters)
-                    const positionMatch = teamPos.match(/(MID|FWD|DEF|GKP)$/);
-                    if (positionMatch) {
-                        position = positionMatch[0];
-                        teamName = teamPos.replace(position, '');
-                    } else {
-                        // Fallback if no position found
-                        teamName = teamPos;
-                        position = 'Unknown';
-                    }
-                }
-            } else {
-                playerName = playerText.trim().replace(/^"|"$/g, '');
-                teamName = 'Unknown';
-                position = 'Unknown';
-            }
-            
-            if (playerName) {
-                const player = {
-                    name: playerName,
-                    team: teamName,
-                    position: position,
-                    points: points,
-                    originalText: playerText
-                };
-                
-                players.push(player);
-                console.log(`✅ Parsed player: ${playerName} (${teamName} ${position}) - ${points} pts`);
-            }
-        });
-        
-        console.log(`⚽ Final players array (${players.length} players):`, players);
-        return players;
     }
 }
 

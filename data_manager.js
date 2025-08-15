@@ -161,8 +161,13 @@ class FPLDataManager {
         try {
             console.log(`🔍 Attempting to load: ${filePath}`);
             
-            // Try to fetch the CSV file
-            const response = await fetch(filePath);
+            // For GitHub Pages, we need to use absolute paths
+            // Check if we're running on GitHub Pages (has a base path)
+            const basePath = window.location.pathname.includes('/fpl_draft_2526/') ? '/fpl_draft_2526' : '';
+            const fullPath = basePath + filePath;
+            
+            console.log(`📡 Attempting to load from: ${fullPath}`);
+            const response = await fetch(fullPath);
             console.log(`📡 Response status: ${response.status} ${response.statusText}`);
             
             if (!response.ok) {
