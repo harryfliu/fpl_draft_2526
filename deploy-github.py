@@ -315,6 +315,24 @@ class FPLDataManager {
         this.currentMonth = 'August';
     }
 
+    async initialize() {
+        console.log('🔄 Initializing GitHub Pages data manager...');
+        try {
+            const availableGameweeks = await this.detectGameweekFolders();
+            console.log('📁 Available gameweeks:', availableGameweeks);
+            
+            if (availableGameweeks.length > 0) {
+                // Load the first available gameweek
+                await this.loadGameweekData(availableGameweeks[0]);
+                console.log('✅ Data manager initialized successfully');
+            } else {
+                console.warn('⚠️ No gameweek data found');
+            }
+        } catch (error) {
+            console.error('❌ Failed to initialize data manager:', error);
+        }
+    }
+
     async loadJSONFile(path) {
         try {
             const response = await fetch(path);
@@ -329,31 +347,59 @@ class FPLDataManager {
     async detectGameweekFolders() {
         // For GitHub Pages, we'll manually check for known gameweeks
         const availableGameweeks = [];
-        for (let gw = 1; gw <= 38; gw++) {
+        for (let gw = 1; gw <= 5; gw++) { // Only check first 5 to avoid too many requests
             const gwData = await this.loadJSONFile(`./data/gw${gw}.json`);
             if (gwData) {
                 availableGameweeks.push(`gw${gw}`);
+                console.log(`✓ Found gameweek ${gw}`);
             }
         }
         return availableGameweeks;
     }
 
     async loadGameweekData(gameweek) {
+        console.log(`📊 Loading ${gameweek} data...`);
         const gwData = await this.loadJSONFile(`./data/${gameweek}.json`);
-        if (!gwData) return;
+        if (!gwData) {
+            console.warn(`No data found for ${gameweek}`);
+            return;
+        }
 
         // Process the data similar to the original CSV version
         const processedData = {
-            fixtures: gwData.fixture_list || [],
+            fixtures: this.parseFixturesData(gwData.fixture_list || []),
             standings: gwData.standings || [],
             draft: this.processDraftData(gwData.starting_draft || [], gwData.standings || []),
-            plFixtures: gwData.pl_gw || [],
+            plFixtures: this.parsePLFixtures(gwData.pl_gw1 || gwData.pl_gw2 || []),
             transferHistory: gwData.transfer_history || { waivers: [], freeAgents: [], trades: [] },
             timestamp: new Date().toISOString()
         };
 
         this.gameweekData.set(gameweek, processedData);
-        console.log(`📊 Loaded ${gameweek} data:`, processedData);
+        console.log(`✅ Loaded ${gameweek} data:`, processedData);
+    }
+
+    parseFixturesData(fixtureData) {
+        // Convert the fixture data to expected format
+        if (!Array.isArray(fixtureData)) return [];
+        
+        return fixtureData.map(fixture => ({
+            gameweek: fixture.gameweek || 1,
+            homeTeam: fixture.homeTeam || '',
+            awayTeam: fixture.awayTeam || ''
+        }));
+    }
+
+    parsePLFixtures(plData) {
+        // Convert PL fixtures to expected format
+        if (!Array.isArray(plData)) return [];
+        
+        return plData.map(fixture => ({
+            date: fixture.date || '',
+            time: fixture.time || '',
+            homeTeam: fixture.homeTeam || '',
+            awayTeam: fixture.awayTeam || ''
+        }));
     }
 
     processDraftData(draftData, standingsData) {
@@ -365,25 +411,41 @@ class FPLDataManager {
         
         const teamMap = {};
         
-        // Group draft picks by manager
-        draftData.forEach(pick => {
-            const manager = pick.Manager || pick.manager;
-            const teamName = pick['Team Name'] || pick.teamName || `${manager}'s Team`;
-            const player = pick.Player || pick.Pick || pick.player || pick.pick;
-            
-            if (manager && player) {
-                if (!teamMap[manager]) {
-                    teamMap[manager] = {
-                        manager: manager,
-                        teamName: teamName,
-                        draftPicks: []
-                    };
+        // First, get manager names from standings if available
+        const managerLookup = {};
+        if (Array.isArray(standingsData)) {
+            standingsData.forEach(standing => {
+                if (standing.Manager && standing['Team Name']) {
+                    managerLookup[standing.Manager] = standing['Team Name'];
                 }
-                teamMap[manager].draftPicks.push(player);
-            }
+            });
+        }
+        
+        // Process draft data - handle different formats
+        draftData.forEach(pick => {
+            // Extract manager and player info from various possible formats
+            const possibleManagers = Object.keys(pick).filter(key => 
+                key !== 'Round' && key !== 'Pick' && key !== 'Player' && pick[key]
+            );
+            
+            possibleManagers.forEach(managerKey => {
+                const player = pick[managerKey];
+                if (player && player.trim()) {
+                    if (!teamMap[managerKey]) {
+                        teamMap[managerKey] = {
+                            manager: managerKey,
+                            teamName: managerLookup[managerKey] || `${managerKey}'s Team`,
+                            draftPicks: []
+                        };
+                    }
+                    teamMap[managerKey].draftPicks.push(player.trim());
+                }
+            });
         });
 
-        return { teams: Object.values(teamMap) };
+        const teams = Object.values(teamMap);
+        console.log('📝 Processed draft teams:', teams.length);
+        return { teams };
     }
 
     getCurrentGameweek() {
