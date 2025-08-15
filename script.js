@@ -254,11 +254,17 @@ function getPositionBadge(position) {
 
 // Helper function to get manager name from team name
 function getManagerFromTeamName(teamName) {
+    console.log('🔍 Looking up manager for team:', teamName);
+    console.log('📊 Leaderboard data:', dashboardData.leaderboard);
+    
     if (!dashboardData.leaderboard || dashboardData.leaderboard.length === 0) {
+        console.log('❌ No leaderboard data available');
         return 'Unknown Manager';
     }
     
     const team = dashboardData.leaderboard.find(team => team.teamName === teamName);
+    console.log('🎯 Found team:', team);
+    
     return team ? team.manager : 'Unknown Manager';
 }
 
