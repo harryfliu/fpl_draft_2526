@@ -17,7 +17,7 @@ let dashboardData = {
     leagueSize: 12,
     prizePool: 420,
     currentMonth: "August",
-    weeklyWinner: "Not Set",
+    weeklyWinner: "TBD",
     dataSource: "Auto-detected from gameweek folders",
     lastUpdated: "Never",
     
@@ -103,7 +103,7 @@ async function loadDataFromManager() {
                 dashboardData.weeklyWinner = `${weeklyWinner.manager} (${weeklyWinner.gwPoints} pts)`;
                 console.log(`🏆 Weekly winner: ${dashboardData.weeklyWinner}`);
             } else {
-                dashboardData.weeklyWinner = "Not Set";
+                dashboardData.weeklyWinner = "TBD";
                 console.log(`🏆 No weekly winner yet (no GW points recorded)`);
             }
         }
