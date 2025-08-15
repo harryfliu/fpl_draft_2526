@@ -281,6 +281,7 @@ function populateCurrentFixtures() {
     
     console.log('📅 Current gameweek:', dashboardData.currentGameweek);
     console.log('📅 All fixtures:', dashboardData.upcomingFixtures);
+    console.log('🏆 Leaderboard at fixture render time:', dashboardData.leaderboard);
     
     if (!dashboardData.upcomingFixtures || dashboardData.upcomingFixtures.length === 0) {
         container.innerHTML = `
