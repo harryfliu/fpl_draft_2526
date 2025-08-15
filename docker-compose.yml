@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  fpl-dashboard:
+    build: .
+    container_name: fpl_dashboard
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount data folders for easy updates
+      - ./gw1:/app/gw1:ro
+      - ./gw2:/app/gw2:ro  
+      - ./gw3:/app/gw3:ro
+      # Add more as season progresses
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3

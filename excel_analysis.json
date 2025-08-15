@@ -1,0 +1,220 @@
+{
+  "fixture list": {
+    "rows": 265,
+    "columns": [
+      "Gameweek 1",
+      "Unnamed: 1",
+      "Unnamed: 2"
+    ],
+    "data_types": {
+      "Gameweek 1": "object",
+      "Unnamed: 1": "object",
+      "Unnamed: 2": "object"
+    },
+    "sample_data": [
+      {
+        "Gameweek 1": "Peattle Pounders\nPeter Henze",
+        "Unnamed: 1": "v",
+        "Unnamed: 2": "cunha believe it\nHarry Liu"
+      },
+      {
+        "Gameweek 1": "FootAndBallFetish\nZryan Bhao",
+        "Unnamed: 1": "v",
+        "Unnamed: 2": "This Year FC\nRoy Boateng"
+      },
+      {
+        "Gameweek 1": "Schr\u00f6dongers\nchris duncam",
+        "Unnamed: 1": "v",
+        "Unnamed: 2": "Atl\u00e9tico SeaSlug\nRonangel Rojas"
+      },
+      {
+        "Gameweek 1": "Trophies Matter FC\nNoah Wilson",
+        "Unnamed: 1": "v",
+        "Unnamed: 2": "Extended Foreplay\nKyle Herrera"
+      },
+      {
+        "Gameweek 1": "son4lyfe\nDon Kim",
+        "Unnamed: 1": "v",
+        "Unnamed: 2": "Cunha Get Me Points\nAndrew Smith"
+      }
+    ]
+  },
+  "results": {
+    "rows": 12,
+    "columns": [
+      "Rank",
+      "Team & Manager",
+      "W",
+      "D",
+      "L",
+      "\"+\"",
+      "Pts"
+    ],
+    "data_types": {
+      "Rank": "object",
+      "Team & Manager": "object",
+      "W": "int64",
+      "D": "int64",
+      "L": "int64",
+      "\"+\"": "int64",
+      "Pts": "int64"
+    },
+    "sample_data": [
+      {
+        "Rank": "-",
+        "Team & Manager": "cunha believe it\nHarry",
+        "W": 0,
+        "D": 0,
+        "L": 0,
+        "\"+\"": 0,
+        "Pts": 0
+      },
+      {
+        "Rank": "-",
+        "Team & Manager": "Gweepy\nSean",
+        "W": 0,
+        "D": 0,
+        "L": 0,
+        "\"+\"": 0,
+        "Pts": 0
+      },
+      {
+        "Rank": "-",
+        "Team & Manager": "thenotsospecialone\nJosiah",
+        "W": 0,
+        "D": 0,
+        "L": 0,
+        "\"+\"": 0,
+        "Pts": 0
+      },
+      {
+        "Rank": "-",
+        "Team & Manager": "Cunha Get Me Points\nAndrew",
+        "W": 0,
+        "D": 0,
+        "L": 0,
+        "\"+\"": 0,
+        "Pts": 0
+      },
+      {
+        "Rank": "-",
+        "Team & Manager": "Extended Foreplay\nKyle",
+        "W": 0,
+        "D": 0,
+        "L": 0,
+        "\"+\"": 0,
+        "Pts": 0
+      }
+    ]
+  },
+  "starting draft": {
+    "rows": 15,
+    "columns": [
+      "Round",
+      "Extended Foreplay",
+      "Cunha Get Me Points",
+      "cunha believe it",
+      "Schr\u00f6dongers",
+      "son4lyfe",
+      "thenotsospecialone",
+      "Trophies Matter FC",
+      "Peattle Pounders",
+      "This Year FC",
+      "Atl\u00e9tico SeaSlug",
+      "Gweepy",
+      "FootAndBallFetish"
+    ],
+    "data_types": {
+      "Round": "int64",
+      "Extended Foreplay": "object",
+      "Cunha Get Me Points": "object",
+      "cunha believe it": "object",
+      "Schr\u00f6dongers": "object",
+      "son4lyfe": "object",
+      "thenotsospecialone": "object",
+      "Trophies Matter FC": "object",
+      "Peattle Pounders": "object",
+      "This Year FC": "object",
+      "Atl\u00e9tico SeaSlug": "object",
+      "Gweepy": "object",
+      "FootAndBallFetish": "object"
+    },
+    "sample_data": [
+      {
+        "Round": 1,
+        "Extended Foreplay": "M.Salah",
+        "Cunha Get Me Points": "Haaland",
+        "cunha believe it": "Palmer",
+        "Schr\u00f6dongers": "Isak",
+        "son4lyfe": "B.Fernandes",
+        "thenotsospecialone": "Jo\u00e3o Pedro",
+        "Trophies Matter FC": "Watkins",
+        "Peattle Pounders": "Wirtz",
+        "This Year FC": "Mbeumo",
+        "Atl\u00e9tico SeaSlug": "Gy\u00f6keres",
+        "Gweepy": "Saka",
+        "FootAndBallFetish": "Ekitik\u00e9"
+      },
+      {
+        "Round": 2,
+        "Extended Foreplay": "Delap",
+        "Cunha Get Me Points": "Strand Larsen",
+        "cunha believe it": "\u0160e\u0161ko",
+        "Schr\u00f6dongers": "Wood",
+        "son4lyfe": "Mateta",
+        "thenotsospecialone": "Eze",
+        "Trophies Matter FC": "Marmoush",
+        "Peattle Pounders": "Bowen",
+        "This Year FC": "\u00d8degaard",
+        "Atl\u00e9tico SeaSlug": "Gakpo",
+        "Gweepy": "Foden",
+        "FootAndBallFetish": "Cunha"
+      },
+      {
+        "Round": 3,
+        "Extended Foreplay": "Madueke",
+        "Cunha Get Me Points": "Sarr",
+        "cunha believe it": "Solanke",
+        "Schr\u00f6dongers": "Wissa",
+        "son4lyfe": "Rogers",
+        "thenotsospecialone": "Kudus",
+        "Trophies Matter FC": "Virgil",
+        "Peattle Pounders": "Evanilson",
+        "This Year FC": "Trossard",
+        "Atl\u00e9tico SeaSlug": "Elanga",
+        "Gweepy": "Raya",
+        "FootAndBallFetish": "Gordon"
+      },
+      {
+        "Round": 4,
+        "Extended Foreplay": "J.Murphy",
+        "Cunha Get Me Points": "Minteh",
+        "cunha believe it": "Mitoma",
+        "Schr\u00f6dongers": "A\u00eft-Nouri",
+        "son4lyfe": "Johnson",
+        "thenotsospecialone": "Semenyo",
+        "Trophies Matter FC": "Neto",
+        "Peattle Pounders": "Gabriel",
+        "This Year FC": "Rice",
+        "Atl\u00e9tico SeaSlug": "Grealish",
+        "Gweepy": "Pickford",
+        "FootAndBallFetish": "Ndiaye"
+      },
+      {
+        "Round": 5,
+        "Extended Foreplay": "A.Becker",
+        "Cunha Get Me Points": "Saliba",
+        "cunha believe it": "Gibbs-White",
+        "Schr\u00f6dongers": "Reijnders",
+        "son4lyfe": "Frimpong",
+        "thenotsospecialone": "Pedro Porro",
+        "Trophies Matter FC": "Robertson",
+        "Peattle Pounders": "Schade",
+        "This Year FC": "Enzo",
+        "Atl\u00e9tico SeaSlug": "Ra\u00fal",
+        "Gweepy": "Gvardiol",
+        "FootAndBallFetish": "Iwobi"
+      }
+    ]
+  }
+}

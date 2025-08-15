@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FPL Draft Dashboard 2025-26</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'fpl-primary': '#1e293b',
+                        'fpl-secondary': '#475569',
+                        'fpl-accent': '#3b82f6',
+                        'fpl-success': '#10b981',
+                        'fpl-warning': '#f59e0b',
+                        'fpl-error': '#ef4444',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Dark theme inspired by the screenshot */
+        :root {
+            --primary-purple: #8b5cf6;
+            --secondary-purple: #a855f7;
+            --dark-bg: #0f0f23;
+            --darker-bg: #0a0a18;
+            --card-bg: #1a1a2e;
+            --card-highlight: #16213e;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --border-color: #2d3748;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--darker-bg) 0%, var(--dark-bg) 50%, #1e1e3f 100%);
+            color: var(--text-primary);
+        }
+        
+        .dark-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+        
+        .dark-card-highlight {
+            background: linear-gradient(135deg, var(--primary-purple), var(--secondary-purple));
+            border: 1px solid var(--primary-purple);
+        }
+        
+        .glass-effect {
+            backdrop-filter: blur(16px);
+            background: rgba(26, 26, 46, 0.7);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+        
+        .sidebar-dark {
+            background: var(--card-bg);
+            border-right: 1px solid var(--border-color);
+        }
+        
+        .text-primary-light {
+            color: var(--text-primary);
+        }
+        
+        .text-secondary-light {
+            color: var(--text-secondary);
+        }
+        
+        .text-muted-light {
+            color: var(--text-muted);
+        }
+        
+        /* Custom badges and buttons */
+        .badge-purple {
+            background: var(--primary-purple);
+            color: white;
+            border: none;
+        }
+        
+        .btn-purple {
+            background: linear-gradient(135deg, var(--primary-purple), var(--secondary-purple));
+            border: none;
+            color: white;
+        }
+        
+        .btn-purple:hover {
+            background: linear-gradient(135deg, var(--secondary-purple), var(--primary-purple));
+            transform: translateY(-1px);
+        }
+        
+        /* Custom table hover effect */
+        .table-zebra tbody tr:hover {
+            background-color: rgba(239, 68, 68, 0.08) !important; /* Very subtle red with 8% opacity */
+        }
+        
+        .table-zebra tbody tr:hover td {
+            background-color: transparent !important;
+        }
+        
+        /* Top 3 rows hover effect */
+        .top-3-row:hover {
+            background-color: rgba(239, 68, 68, 0.08) !important; /* Same subtle red for top 3 */
+        }
+        
+        .top-3-row:hover td {
+            background-color: transparent !important;
+        }
+    </style>
+</head>
+<body class="font-inter text-white min-h-screen">
+    <div class="drawer lg:drawer-open">
+        <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
+        
+        <!-- Mobile menu button -->
+        <div class="drawer-content flex flex-col">
+            <div class="navbar bg-gray-900/90 backdrop-blur-xl border-b border-gray-700/50 sticky top-0 z-50 shadow-2xl">
+                <div class="flex-none lg:hidden">
+                    <label for="my-drawer-2" class="btn btn-square btn-ghost text-white hover:bg-purple-600/20">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </label>
+                </div>
+                <div class="flex-1">
+                    <div class="flex items-center gap-3">
+                        <div class="avatar placeholder">
+                            <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl w-12">
+                                <i class="fas fa-trophy text-xl"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold text-white">FPL Draft Dashboard</h1>
+                            <p class="text-sm text-secondary-light">2025-26 Season</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-none">
+                    <div class="flex items-center gap-3">
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text text-xs text-white">Select Gameweek</span>
+                            </label>
+                            <div class="flex gap-2">
+                                <select class="select bg-gray-800/90 border-gray-600/50 text-white select-sm w-28 focus:border-purple-400" id="gameweekSelector">
+                                    <!-- Gameweek options will be populated by JavaScript -->
+                                </select>
+                                <button class="btn bg-purple-600 hover:bg-purple-700 border-purple-600 text-white btn-sm" onclick="jumpToCurrentGameweek()" title="Jump to Current Gameweek">
+                                    <i class="fas fa-calendar-day"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2 rounded-full font-semibold shadow-lg">
+                                GW <span id="currentGameweek">1</span>
+                            </div>
+                            <div class="text-xs text-white mt-1">Current</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-6">
+                <!-- Import Section -->
+                <div class="dark-card mb-8">
+                    <div class="card-body">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="card-title text-2xl text-white">
+                                <i class="fas fa-folder-open text-purple-400 mr-3"></i>
+                                Data Auto-Detection
+                            </h2>
+                            <div class="flex gap-2">
+                                <button class="btn btn-primary btn-outline gap-2" id="exportBtn">
+                                    <i class="fas fa-download"></i>
+                                    Export
+                                </button>
+                                <button class="btn btn-accent gap-2" onclick="refreshData()">
+                                    <i class="fas fa-sync-alt"></i>
+                                    Refresh
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="text-lg font-semibold text-white mb-3">Auto-Detection System</h3>
+                                <p class="text-white mb-4">The dashboard automatically detects and loads data from your gameweek folders:</p>
+                                
+                                <div class="space-y-3">
+                                    <div class="alert alert-success">
+                                        <i class="fas fa-check-circle"></i>
+                                        <div>
+                                            <div class="font-semibold">Automatic Detection</div>
+                                            <div class="text-sm">Scans gw1, gw2, gw3, etc. folders</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-file-csv"></i>
+                                        <div>
+                                            <div class="font-semibold">CSV Files</div>
+                                            <div class="text-sm">Reads fixture_list.csv, results.csv, starting_draft.csv</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="alert alert-warning">
+                                        <i class="fas fa-calendar"></i>
+                                        <div>
+                                            <div class="font-semibold">Gameweek Tracking</div>
+                                            <div class="text-sm">Tracks data across all available gameweeks</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-white mb-3">Data Status</h3>
+                                <div class="stats stats-vertical">
+                                    <div class="stat">
+                                        <div class="stat-title">Data Source</div>
+                                        <div class="stat-value text-lg" id="dataSource">Initializing...</div>
+                                    </div>
+                                    <div class="stat">
+                                        <div class="stat-title">Gameweeks Found</div>
+                                        <div class="stat-value text-lg" id="gameweeksFound">-</div>
+                                    </div>
+                                    <div class="stat">
+                                        <div class="stat-title">Current Gameweek</div>
+                                        <div class="stat-value text-lg" id="currentGameweekStatus">-</div>
+                                    </div>
+                                    <div class="stat">
+                                        <div class="stat-title">Last Updated</div>
+                                        <div class="stat-value text-lg" id="lastUpdated">-</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gameweek Controls Info -->
+                <div class="card bg-blue-50/80 backdrop-blur-sm shadow-sm border border-blue-200/50 mb-8">
+                    <div class="card-body">
+                        <div class="flex items-start gap-3">
+                            <div class="text-blue-600">
+                                <i class="fas fa-info-circle text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-white mb-2">Gameweek Navigation</h3>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-white">
+                                    <div>
+                                        <h4 class="font-semibold text-white mb-2">Mouse Controls:</h4>
+                                        <ul class="space-y-1">
+                                            <li>• <strong>Dropdown:</strong> Select any gameweek 1-38</li>
+                                            <li>• <strong>Calendar Button:</strong> Jump to current gameweek</li>
+                                            <li>• <strong>Current Badge:</strong> Shows selected gameweek</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-white mb-2">Keyboard Shortcuts:</h4>
+                                        <ul class="space-y-1">
+                                            <li>• <strong>← →:</strong> Previous/Next gameweek</li>
+                                            <li>• <strong>Home:</strong> Jump to GW 1</li>
+                                            <li>• <strong>End:</strong> Jump to GW 38</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Overview -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8" id="overview">
+                    <!-- League Size -->
+                    <div class="card bg-gray-900/90 border border-gray-700/50 shadow-2xl backdrop-blur-sm hover:shadow-purple-500/20 transition-all duration-300">
+                        <div class="card-body p-6 text-center">
+                            <div class="flex justify-center mb-4">
+                                <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-4 rounded-full shadow-lg">
+                                    <i class="fas fa-users text-2xl text-white"></i>
+                                </div>
+                            </div>
+                            <div class="text-gray-400 text-sm font-medium uppercase tracking-wider mb-2">League Size</div>
+                            <div class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">12 Teams</div>
+                            <div class="text-gray-500 text-xs">Active managers</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Prize Pool -->
+                    <div class="card bg-gray-900/90 border border-gray-700/50 shadow-2xl backdrop-blur-sm hover:shadow-purple-500/20 transition-all duration-300">
+                        <div class="card-body p-6 text-center">
+                            <div class="flex justify-center mb-4">
+                                <div class="bg-gradient-to-r from-green-600 to-emerald-600 p-4 rounded-full shadow-lg">
+                                    <i class="fas fa-dollar-sign text-2xl text-white"></i>
+                                </div>
+                            </div>
+                            <div class="text-gray-400 text-sm font-medium uppercase tracking-wider mb-2">Prize Pool</div>
+                            <div class="text-3xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent mb-2" id="overview-prize-pool">$420</div>
+                            <div class="text-gray-500 text-xs">Total pot</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Current Month -->
+                    <div class="card bg-gray-900/90 border border-gray-700/50 shadow-2xl backdrop-blur-sm hover:shadow-purple-500/20 transition-all duration-300">
+                        <div class="card-body p-6 text-center">
+                            <div class="flex justify-center mb-4">
+                                <div class="bg-gradient-to-r from-cyan-600 to-blue-600 p-4 rounded-full shadow-lg">
+                                    <i class="fas fa-calendar text-2xl text-white"></i>
+                                </div>
+                            </div>
+                            <div class="text-gray-400 text-sm font-medium uppercase tracking-wider mb-2">Current Month</div>
+                            <div class="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-2" id="current-month-display">August</div>
+                            <div class="text-gray-500 text-xs">Season start</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Weekly Winner -->
+                    <div class="card bg-gray-900/90 border border-gray-700/50 shadow-2xl backdrop-blur-sm hover:shadow-purple-500/20 transition-all duration-300">
+                        <div class="card-body p-6 text-center">
+                            <div class="flex justify-center mb-4">
+                                <div class="bg-gradient-to-r from-yellow-600 to-orange-600 p-4 rounded-full shadow-lg">
+                                    <i class="fas fa-trophy text-2xl text-white"></i>
+                                </div>
+                            </div>
+                            <div class="text-gray-400 text-sm font-medium uppercase tracking-wider mb-2">Weekly Winner</div>
+                            <div class="text-3xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent mb-2" id="weekly-winner-display">Not Set</div>
+                            <div class="text-gray-500 text-xs">This gameweek</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Weekly Summary -->
+                <div class="card bg-gray-900/90 border border-gray-700/50 shadow-2xl backdrop-blur-sm hover:shadow-purple-500/20 transition-all duration-300 mb-8">
+                    <div class="card-body p-6">
+                        <h2 class="card-title text-2xl text-white mb-4">
+                            <i class="fas fa-newspaper text-purple-400 mr-3"></i>
+                            Weekly Summary
+                            <span class="badge badge-accent badge-lg ml-3" id="summary-gameweek-badge">GW1</span>
+                        </h2>
+                        
+                        <!-- Summary Content -->
+                        <div id="weekly-summary-content" class="prose prose-invert max-w-none">
+                            <div class="bg-gray-800/50 border border-gray-600/50 rounded-lg p-6 text-center">
+                                <div class="text-gray-400 mb-4">
+                                    <i class="fas fa-magic text-4xl mb-3"></i>
+                                </div>
+                                <h3 class="text-xl font-semibold text-white mb-2">AI-Generated Summary</h3>
+                                <p class="text-gray-300 mb-4">
+                                    Weekly summaries will appear here after each gameweek concludes.
+                                </p>
+                                <div class="text-sm text-gray-400">
+                                    <p class="mb-2">📊 Powered by advanced language model analysis</p>
+                                    <p>🎯 Covering highlights, surprises, and key moments</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Summary Status -->
+                        <div class="mt-4 flex items-center justify-between text-sm">
+                            <div class="flex items-center gap-2 text-gray-400">
+                                <i class="fas fa-clock"></i>
+                                <span id="summary-last-updated">Awaiting gameweek completion</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-gray-400">
+                                <i class="fas fa-robot"></i>
+                                <span>AI Analysis</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Leaderboard -->
+                <div class="dark-card mb-8" id="leaderboard">
+                    <div class="card-body">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="card-title text-2xl text-white">
+                                <i class="fas fa-medal text-purple-400 mr-3"></i>
+                                Season Leaderboard
+                            </h2>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="table table-zebra w-full">
+                                <thead>
+                                    <tr class="bg-gray-800/90 border-b border-gray-700/50">
+                                        <th class="text-white font-semibold">Position</th>
+                                        <th class="text-white font-semibold">Manager</th>
+                                        <th class="text-white font-semibold">Team Name</th>
+                                        <th class="text-white font-semibold">Points</th>
+                                        <th class="text-white font-semibold">GW Points</th>
+                                        <th class="text-white font-semibold">Form</th>
+                                        <th class="text-white font-semibold">Total Winnings</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="leaderboardBody">
+                                    <!-- Leaderboard data will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Initial Draft Picks -->
+                <div class="dark-card" id="draft-picks">
+                    <div class="card-body">
+                        <h2 class="card-title text-2xl font-bold text-white">
+                            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Initial Draft Picks
+                        </h2>
+                        <div id="draft-picks-content">
+                            <p class="text-white">No data loaded</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Teams Section -->
+                <div class="dark-card" id="teams">
+                    <div class="card-body">
+                        <h2 class="card-title text-2xl font-bold text-white">
+                            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                            Teams
+                        </h2>
+                        <div class="form-control w-full max-w-xs">
+                            <label class="label">
+                                <span class="label-text">Select a Team</span>
+                            </label>
+                            <select id="team-selector" class="select select-bordered">
+                                <option value="">Choose a team...</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Team Selection Prompt -->
+                        <div id="team-selection-prompt" class="text-center py-8">
+                            <div class="text-white">
+                                <i class="fas fa-users text-4xl mb-2"></i>
+                                <p>Select a team from the dropdown above to view details</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Team Details Container -->
+                        <div id="team-details-container" class="hidden">
+                            <!-- Team Header Info -->
+                            <div class="flex items-center gap-4 mb-6 p-4 bg-base-200 rounded-lg">
+                                <div class="avatar placeholder">
+                                    <div class="bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full w-16">
+                                        <span class="text-2xl font-bold" id="team-initial">T</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-white" id="team-name">Team Name</h3>
+                                    <p class="text-white" id="team-manager">Manager Name</p>
+                                    <div class="badge badge-primary mt-1" id="team-position">#1</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Team Stats Grid -->
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                                <div class="stat bg-base-200 rounded-lg">
+                                    <div class="stat-title text-xs">Total Points</div>
+                                    <div class="stat-value text-lg" id="team-total-points">0</div>
+                                </div>
+                                <div class="stat bg-base-200 rounded-lg">
+                                    <div class="stat-title text-xs">GW Points</div>
+                                    <div class="stat-value text-lg" id="team-gw-points">0</div>
+                                </div>
+                                <div class="stat bg-base-200 rounded-lg">
+                                    <div class="stat-title text-xs">Form</div>
+                                    <div class="stat-value text-lg" id="team-form">L-L-L-L-L</div>
+                                </div>
+                                <div class="stat bg-base-200 rounded-lg">
+                                    <div class="stat-title text-xs">Winnings</div>
+                                    <div class="stat-value text-lg" id="team-winnings">$0</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Team Performance -->
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                                <div class="stat bg-base-200 rounded-lg">
+                                    <div class="stat-title text-xs">Wins</div>
+                                    <div class="stat-value text-lg" id="team-wins">0</div>
+                                </div>
+                                <div class="stat bg-base-200 rounded-lg">
+                                    <div class="stat-title text-xs">Draws</div>
+                                    <div class="stat-value text-lg" id="team-draws">0</div>
+                                </div>
+                                <div class="stat bg-base-200 rounded-lg">
+                                    <div class="stat-title text-xs">Losses</div>
+                                    <div class="stat-value text-lg" id="team-losses">0</div>
+                                </div>
+                                <div class="stat bg-base-200 rounded-lg">
+                                    <div class="stat-title text-xs">Rank</div>
+                                    <div class="stat-value text-lg" id="team-rank">#1</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Current Team -->
+                            <div class="mb-6">
+                                <h4 class="text-lg font-semibold text-white mb-3">
+                                    <i class="fas fa-users text-green-400 mr-2"></i>
+                                    Current Squad
+                                </h4>
+                                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3" id="team-current-squad">
+                                    <!-- Current squad will be populated here -->
+                                </div>
+                                <div id="team-current-squad-empty" class="text-center py-4 text-gray-400 hidden">
+                                    <i class="fas fa-info-circle mr-2"></i>
+                                    Current squad will be calculated from draft picks and transfer history
+                                </div>
+                            </div>
+                            
+                            <!-- Team Draft Picks -->
+                            <div class="mb-4">
+                                <h4 class="text-lg font-semibold text-white mb-3">
+                                    <i class="fas fa-drafting-compass text-blue-400 mr-2"></i>
+                                    Initial Draft Picks
+                                </h4>
+                                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3" id="team-draft-picks">
+                                    <!-- Draft picks will be populated here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Player Movement Section -->
+                <div class="dark-card mb-8" id="player-movement">
+                    <div class="card-body">
+                        <h2 class="card-title text-2xl text-white">
+                            <i class="fas fa-exchange-alt text-purple-400 mr-3"></i>
+                            Player Movement
+                            <span class="badge badge-accent badge-lg ml-3">All Activity</span>
+                        </h2>
+                        
+                        <!-- Movement Filter Tabs -->
+                        <div class="tabs tabs-boxed bg-gray-800/50 mb-6">
+                            <a class="tab tab-active text-white" id="all-movements-tab" onclick="showMovementType('all')">All</a>
+                            <a class="tab text-white" id="free-agents-tab" onclick="showMovementType('freeAgents')">Free Agents</a>
+                            <a class="tab text-white" id="waivers-tab" onclick="showMovementType('waivers')">Waivers</a>
+                            <a class="tab text-white" id="trades-tab" onclick="showMovementType('trades')">Trades</a>
+                        </div>
+                        
+                        <!-- Free Agents Section -->
+                        <div class="mb-6" id="free-agents-section">
+                            <h3 class="text-lg font-semibold text-white mb-4">
+                                <i class="fas fa-user-plus text-green-400 mr-2"></i>
+                                Free Agent Signings
+                            </h3>
+                            <div class="overflow-x-auto">
+                                <table class="table table-zebra bg-gray-800/50">
+                                    <thead>
+                                        <tr class="bg-gray-800/90 border-b border-gray-700/50">
+                                            <th class="text-white">GW</th>
+                                            <th class="text-white">Manager</th>
+                                            <th class="text-white">Player In</th>
+                                            <th class="text-white">Player Out</th>
+                                            <th class="text-white">Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="free-agents-table">
+                                        <!-- Free agent moves will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Waivers Section -->
+                        <div class="mb-6" id="waivers-section">
+                            <h3 class="text-lg font-semibold text-white mb-4">
+                                <i class="fas fa-gavel text-yellow-400 mr-2"></i>
+                                Waiver Wire Claims
+                            </h3>
+                            <div class="overflow-x-auto">
+                                <table class="table table-zebra bg-gray-800/50">
+                                    <thead>
+                                        <tr class="bg-gray-800/90 border-b border-gray-700/50">
+                                            <th class="text-white">GW</th>
+                                            <th class="text-white">Manager</th>
+                                            <th class="text-white">Player In</th>
+                                            <th class="text-white">Player Out</th>
+                                            <th class="text-white">Result</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="waivers-table">
+                                        <!-- Waiver moves will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Trades Section -->
+                        <div class="mb-6" id="trades-section">
+                            <h3 class="text-lg font-semibold text-white mb-4">
+                                <i class="fas fa-handshake text-blue-400 mr-2"></i>
+                                Trades
+                            </h3>
+                            <div class="overflow-x-auto">
+                                <table class="table table-zebra bg-gray-800/50">
+                                    <thead>
+                                        <tr class="bg-gray-800/90 border-b border-gray-700/50">
+                                            <th class="text-white">GW</th>
+                                            <th class="text-white">From</th>
+                                            <th class="text-white">To</th>
+                                            <th class="text-white">Offered</th>
+                                            <th class="text-white">Requested</th>
+                                            <th class="text-white">Result</th>
+                                            <th class="text-white">Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="trades-table">
+                                        <!-- Trade moves will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Empty State -->
+                        <div id="no-movements-message" class="text-center py-8 hidden">
+                            <div class="text-white">
+                                <i class="fas fa-exchange-alt text-4xl mb-2 text-gray-400"></i>
+                                <p>No player movements found for this gameweek</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Current Fixtures Section -->
+                <div class="dark-card mb-8 current-fixtures-section" id="current-fixtures">
+                    <div class="card-body">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="card-title text-2xl text-white">
+                                <i class="fas fa-calendar-check text-purple-400 mr-3"></i>
+                                Current Fixtures
+                                <span class="badge badge-secondary badge-lg ml-3 current-gameweek-indicator">GW 1</span>
+                            </h2>
+                        </div>
+                        
+                        <div id="currentFixturesContainer">
+                            <!-- Current gameweek fixtures will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Fixtures Section -->
+                <div class="dark-card mb-8 fixtures-section" id="fixtures">
+                    <div class="card-body">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="card-title text-2xl text-white">
+                                <i class="fas fa-calendar text-purple-400 mr-3"></i>
+                                Upcoming Fixtures
+                                <span class="badge badge-primary badge-lg ml-3 upcoming-gameweek-indicator">GW 2+</span>
+                            </h2>
+                            <!-- Pagination Controls -->
+                            <div class="join" id="fixture-pagination-controls" style="display: none;">
+                                <button class="join-item btn btn-sm" id="prev-fixture-page" onclick="changeFixturePage(-1)">
+                                    <i class="fas fa-chevron-left"></i>
+                                </button>
+                                <span class="join-item btn btn-sm btn-active" id="current-fixture-page">GW 2</span>
+                                <button class="join-item btn btn-sm" id="next-fixture-page" onclick="changeFixturePage(1)">
+                                    <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="fixturesContainer">
+                            <!-- Future gameweek fixtures will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Premier League Fixtures Section -->
+                <div class="dark-card mb-8" id="premier-league">
+                    <div class="card-body">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="card-title text-2xl text-white">
+                                <i class="fas fa-futbol text-purple-400 mr-3"></i>
+                                Premier League Fixtures
+                                <span class="badge badge-accent badge-lg ml-3" id="pl-gameweek-indicator">GW 1</span>
+                            </h2>
+                        </div>
+                        
+                        <div id="plFixturesContainer">
+                            <!-- Premier League fixtures will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Monthly Standings -->
+                <div class="dark-card mb-8" id="monthly">
+                    <div class="card-body">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="card-title text-2xl text-white">
+                                <i class="fas fa-calendar-month text-purple-400 mr-3"></i>
+                                Monthly Standings
+                            </h2>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="monthlyContainer">
+                            <!-- Monthly standings will be populated here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Section -->
+                <div class="dark-card mb-8" id="analytics">
+                    <div class="card-body">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="card-title text-2xl text-white">
+                                <i class="fas fa-chart-bar text-purple-400 mr-3"></i>
+                                League Analytics
+                                <span class="badge badge-accent badge-sm ml-3">INSIGHTS</span>
+                            </h2>
+                        </div>
+                        
+                        <!-- Analytics Grid -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            
+                            <!-- Head-to-Head Records -->
+                            <div class="card bg-gray-800/50 border border-gray-700/50">
+                                <div class="card-body p-4">
+                                    <h3 class="card-title text-lg font-semibold text-white mb-4">
+                                        <i class="fas fa-handshake text-primary mr-2"></i>
+                                        Head-to-Head Dominance
+                                    </h3>
+                                    <div id="h2h-analysis">
+                                        <p class="text-white">Analyzing head-to-head records...</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Performance Consistency -->
+                            <div class="card bg-gray-800/50 border border-gray-700/50">
+                                <div class="card-body p-4">
+                                    <h3 class="card-title text-lg font-semibold text-white mb-4">
+                                        <i class="fas fa-chart-line text-primary mr-2"></i>
+                                        Consistency Rankings
+                                    </h3>
+                                    <div id="consistency-analysis">
+                                        <p class="text-white">Analyzing performance consistency...</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Money & Winners -->
+                            <div class="card bg-gray-800/50 border border-gray-700/50">
+                                <div class="card-body p-4">
+                                    <h3 class="card-title text-lg font-semibold text-white mb-4">
+                                        <i class="fas fa-dollar-sign text-primary mr-2"></i>
+                                        Weekly Winners
+                                    </h3>
+                                    <div id="winners-analysis">
+                                        <p class="text-white">Analyzing weekly winner patterns...</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Marquee Matches -->
+                            <div class="card bg-gray-800/50 border border-gray-700/50">
+                                <div class="card-body p-4">
+                                    <h3 class="card-title text-lg font-semibold text-white mb-4">
+                                        <i class="fas fa-fire text-red-400 mr-2"></i>
+                                        Marquee Matches
+                                    </h3>
+                                    <div id="marquee-matches-analysis">
+                                        <p class="text-white">Finding the most exciting upcoming matchups...</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Transfer Activity Analysis -->
+                            <div class="card bg-gray-800/50 border border-gray-700/50">
+                                <div class="card-body p-4">
+                                    <h3 class="card-title text-lg font-semibold text-white mb-4">
+                                        <i class="fas fa-exchange-alt text-green-400 mr-2"></i>
+                                        Transfer Activity
+                                    </h3>
+                                    <div id="transfer-activity-analysis">
+                                        <p class="text-white">Analyzing transfer patterns...</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Player Popularity Analysis -->
+                            <div class="card bg-gray-800/50 border border-gray-700/50">
+                                <div class="card-body p-4">
+                                    <h3 class="card-title text-lg font-semibold text-white mb-4">
+                                        <i class="fas fa-star text-yellow-400 mr-2"></i>
+                                        Transfer Targets
+                                    </h3>
+                                    <div id="player-popularity-analysis">
+                                        <p class="text-white">Finding most wanted players...</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Manager Behavior Analysis -->
+                            <div class="card bg-gray-800/50 border border-gray-700/50">
+                                <div class="card-body p-4">
+                                    <h3 class="card-title text-lg font-semibold text-white mb-4">
+                                        <i class="fas fa-user-cog text-blue-400 mr-2"></i>
+                                        Manager Profiles
+                                    </h3>
+                                    <div id="manager-behavior-analysis">
+                                        <p class="text-white">Analyzing manager strategies...</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- League Insights -->
+                            <div class="card bg-gray-800/50 border border-gray-700/50">
+                                <div class="card-body p-4">
+                                    <h3 class="card-title text-lg font-semibold text-white mb-4">
+                                        <i class="fas fa-lightbulb text-primary mr-2"></i>
+                                        Key Insights
+                                    </h3>
+                                    <div id="key-insights">
+                                        <p class="text-white">Generating insights...</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prize Pool & Finance Section -->
+                <div class="dark-card mb-8" id="finance">
+                    <div class="card-body">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="card-title text-2xl text-white">
+                                <i class="fas fa-dollar-sign text-purple-400 mr-3"></i>
+                                Prize Pool & Earnings
+                                <span class="badge badge-success badge-lg ml-3" id="total-pool-indicator">$420</span>
+                            </h2>
+                        </div>
+                        
+                        <!-- Overall Prize Pool Stats -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div class="card bg-gray-900/90 border border-gray-700/50 shadow-2xl backdrop-blur-sm">
+                                <div class="card-body text-center">
+                                    <div class="text-3xl font-bold text-green-400" id="total-pool-amount">$0</div>
+                                    <div class="text-sm text-white">Total Prize Pool</div>
+                                    <div class="text-xs text-white mt-1" id="pool-breakdown">Through GW1</div>
+                                </div>
+                            </div>
+                            <div class="card bg-gray-900/90 border border-gray-700/50 shadow-2xl backdrop-blur-sm">
+                                <div class="card-body text-center">
+                                    <div class="text-3xl font-bold text-blue-400" id="weekly-pool-amount">$0</div>
+                                    <div class="text-sm text-white">Weekly Winnings</div>
+                                    <div class="text-xs text-white mt-1" id="weekly-breakdown">0 weeks</div>
+                                </div>
+                            </div>
+                            <div class="card bg-gray-900/90 border border-gray-700/50 shadow-2xl backdrop-blur-sm">
+                                <div class="card-body text-center">
+                                    <div class="text-3xl font-bold text-purple-400" id="monthly-pool-amount">$0</div>
+                                    <div class="text-sm text-white">Monthly Winnings</div>
+                                    <div class="text-xs text-white mt-1" id="monthly-breakdown">0 months</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Total Paid Out Section -->
+                        <div class="mb-6">
+                            <div class="card bg-gradient-to-br from-emerald-900/30 to-green-900/30 border border-emerald-500/50 shadow-2xl backdrop-blur-sm">
+                                <div class="card-body text-center">
+                                    <div class="flex justify-center mb-4">
+                                        <div class="bg-gradient-to-r from-emerald-600 to-green-600 p-4 rounded-full shadow-lg">
+                                            <i class="fas fa-hand-holding-dollar text-2xl text-white"></i>
+                                        </div>
+                                    </div>
+                                    <h3 class="text-xl font-bold text-white mb-2">Total Paid Out To Date</h3>
+                                    <div class="text-4xl font-bold bg-gradient-to-r from-emerald-400 to-green-400 bg-clip-text text-transparent mb-2" id="total-paid-out">$0</div>
+                                    <div class="text-sm text-emerald-300">Running total of all payments</div>
+                                    <div class="divider divider-success opacity-30"></div>
+                                    <div class="grid grid-cols-2 gap-4 mt-4">
+                                        <div class="text-center">
+                                            <div class="text-lg font-bold text-emerald-400" id="total-weekly-paid">$0</div>
+                                            <div class="text-xs text-white">Weekly Payouts</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-lg font-bold text-emerald-400" id="total-monthly-paid">$0</div>
+                                            <div class="text-xs text-white">Monthly Payouts</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Weekly Winners History -->
+                        <div class="mb-6">
+                            <h3 class="text-lg font-semibold text-white mb-4">
+                                <i class="fas fa-calendar-week text-purple-400 mr-2"></i>
+                                Weekly Winners
+                            </h3>
+                            <div class="overflow-x-auto">
+                                <table class="table table-zebra bg-gray-800/50">
+                                    <thead>
+                                        <tr class="bg-gray-800/90 border-b border-gray-700/50">
+                                            <th class="text-white">Gameweek</th>
+                                            <th class="text-white">Winner</th>
+                                            <th class="text-white">Points</th>
+                                            <th class="text-white">Winnings</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="weekly-winners-table">
+                                        <!-- Weekly winners will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Monthly Winners History -->
+                        <div class="mb-6">
+                            <h3 class="text-lg font-semibold text-white mb-4">
+                                <i class="fas fa-calendar-alt text-purple-400 mr-2"></i>
+                                Monthly Winners
+                            </h3>
+                            <div class="overflow-x-auto">
+                                <table class="table table-zebra bg-gray-800/50">
+                                    <thead>
+                                        <tr class="bg-gray-800/90 border-b border-gray-700/50">
+                                            <th class="text-white">Month</th>
+                                            <th class="text-white">Winner</th>
+                                            <th class="text-white">Total Points</th>
+                                            <th class="text-white">Winnings</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="monthly-winners-table">
+                                        <!-- Monthly winners will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Final Season Payouts -->
+                        <div class="mb-6">
+                            <h3 class="text-lg font-semibold text-white mb-4">
+                                <i class="fas fa-medal text-purple-400 mr-2"></i>
+                                Final Season Payouts (Current Standings)
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <!-- 1st Place -->
+                                <div class="card bg-gradient-to-br from-yellow-600/20 to-yellow-800/20 border border-yellow-500/50 shadow-2xl backdrop-blur-sm">
+                                    <div class="card-body text-center">
+                                        <div class="text-4xl mb-2">🥇</div>
+                                        <div class="text-lg font-bold text-yellow-400">1st Place (60%)</div>
+                                        <div class="text-sm text-white" id="final-first-manager">TBD</div>
+                                        <div class="text-2xl font-bold text-green-400" id="final-first-payout">$0</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 2nd Place -->
+                                <div class="card bg-gradient-to-br from-gray-600/20 to-gray-800/20 border border-gray-500/50 shadow-2xl backdrop-blur-sm">
+                                    <div class="card-body text-center">
+                                        <div class="text-4xl mb-2">🥈</div>
+                                        <div class="text-lg font-bold text-gray-400">2nd Place (30%)</div>
+                                        <div class="text-sm text-white" id="final-second-manager">TBD</div>
+                                        <div class="text-2xl font-bold text-green-400" id="final-second-payout">$0</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 3rd Place -->
+                                <div class="card bg-gradient-to-br from-orange-600/20 to-orange-800/20 border border-orange-500/50 shadow-2xl backdrop-blur-sm">
+                                    <div class="card-body text-center">
+                                        <div class="text-4xl mb-2">🥉</div>
+                                        <div class="text-lg font-bold text-orange-400">3rd Place (10%)</div>
+                                        <div class="text-sm text-white" id="final-third-manager">TBD</div>
+                                        <div class="text-2xl font-bold text-green-400" id="final-third-payout">$0</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Summary -->
+                        <div class="mb-6">
+                            <h3 class="text-lg font-semibold text-white mb-4">
+                                <i class="fas fa-receipt text-purple-400 mr-2"></i>
+                                Payment Summary
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- Top Earners -->
+                                <div class="card bg-gray-900/90 border border-gray-700/50 shadow-2xl backdrop-blur-sm">
+                                    <div class="card-body">
+                                        <h4 class="font-semibold text-white mb-3">
+                                            <i class="fas fa-trophy text-green-400 mr-2"></i>
+                                            Top Earners (Weekly/Monthly)
+                                        </h4>
+                                        <div id="top-earners-list">
+                                            <!-- Top earners will be populated here -->
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Payment Debts -->
+                                <div class="card bg-gray-900/90 border border-gray-700/50 shadow-2xl backdrop-blur-sm">
+                                    <div class="card-body">
+                                        <h4 class="font-semibold text-white mb-3">
+                                            <i class="fas fa-credit-card text-red-400 mr-2"></i>
+                                            Outstanding Payments
+                                        </h4>
+                                        <div id="payment-debts-list">
+                                            <!-- Payment calculations will be populated here -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="drawer-side">
+            <label for="my-drawer-2" aria-label="close sidebar" class="drawer-overlay"></label>
+            <!-- Sidebar content -->
+            <ul class="menu p-4 w-80 min-h-full sidebar-dark text-white">
+                <li class="menu-title text-secondary-light text-xs font-semibold uppercase tracking-wider mb-4">Navigation</li>
+                <li><a href="#overview" class="hover:bg-purple-900/30 text-white rounded-lg transition-all">
+                    <i class="fas fa-chart-line text-purple-400"></i> Overview
+                </a></li>
+                <li><a href="#leaderboard" class="hover:bg-purple-900/30 text-white rounded-lg transition-all">
+                    <i class="fas fa-trophy text-purple-400"></i> Leaderboard
+                </a></li>
+                <li><a href="#draft-picks" class="hover:bg-purple-900/30 text-white rounded-lg transition-all">
+                    <i class="fas fa-drafting-compass text-purple-400"></i> Draft Picks
+                </a></li>
+                <li><a href="#teams" class="hover:bg-purple-900/30 text-white rounded-lg transition-all">
+                    <i class="fas fa-users text-purple-400"></i> Teams
+                </a></li>
+                <li><a href="#player-movement" class="hover:bg-purple-900/30 text-white rounded-lg transition-all">
+                    <i class="fas fa-exchange-alt text-purple-400"></i> Player Movement
+                </a></li>
+                <li><a href="#current-fixtures" class="hover:bg-purple-900/30 text-white rounded-lg transition-all">
+                    <i class="fas fa-calendar-check text-purple-400"></i> Current Fixtures
+                </a></li>
+                <li><a href="#fixtures" class="hover:bg-purple-900/30 text-white rounded-lg transition-all">
+                    <i class="fas fa-calendar text-purple-400"></i> Upcoming Fixtures
+                </a></li>
+                <li><a href="#premier-league" class="hover:bg-purple-900/30 text-white rounded-lg transition-all">
+                    <i class="fas fa-futbol text-purple-400"></i> Premier League
+                </a></li>
+                <li><a href="#monthly" class="hover:bg-purple-900/30 text-white rounded-lg transition-all">
+                    <i class="fas fa-calendar-alt text-purple-400"></i> Monthly Standings
+                </a></li>
+                <li><a href="#analytics" class="hover:bg-purple-900/30 text-white rounded-lg transition-all">
+                    <i class="fas fa-chart-bar text-purple-400"></i> Analytics
+                </a></li>
+                
+                <li class="menu-title text-secondary-light text-xs font-semibold uppercase tracking-wider mt-6">Finance</li>
+                <li><a href="#finance" class="hover:bg-purple-900/30 text-white rounded-lg transition-all">
+                    <i class="fas fa-dollar-sign text-purple-400"></i> Prize Pool
+                </a></li>
+
+            </ul>
+        </div>
+    </div>
+
+    <script src="data_manager.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
