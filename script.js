@@ -726,6 +726,24 @@ function updateCurrentGameweek() {
     }
 }
 
+// Helper function to get season month number from month name
+function getSeasonMonthNumber(monthName) {
+    const monthMap = {
+        'August': 1,
+        'September': 2,
+        'October': 3,
+        'November': 4,
+        'December': 5,
+        'January': 6,
+        'February': 7,
+        'March': 8,
+        'April': 9,
+        'May': 10
+    };
+    
+    return monthMap[monthName] || 1; // Default to Month 1 if not found
+}
+
 // Update overview stats (Current Month and Weekly Winner)
 function updateOverviewStats() {
     // Update Current Month display
@@ -733,6 +751,14 @@ function updateOverviewStats() {
     if (currentMonthElement) {
         currentMonthElement.textContent = dashboardData.currentMonth;
         console.log(`📅 Updated Current Month display to: ${dashboardData.currentMonth}`);
+    }
+    
+    // Update Season Month display
+    const seasonMonthElement = document.getElementById('season-month-display');
+    if (seasonMonthElement) {
+        const monthNumber = getSeasonMonthNumber(dashboardData.currentMonth);
+        seasonMonthElement.textContent = `Month ${monthNumber}`;
+        console.log(`📅 Updated Season Month display to: Month ${monthNumber}`);
     }
     
     // Update Weekly Winner display
