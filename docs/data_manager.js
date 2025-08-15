@@ -17,11 +17,14 @@ class FPLDataManager {
                 // Load the first available gameweek
                 await this.loadGameweekData(availableGameweeks[0]);
                 console.log('✅ Data manager initialized successfully');
+                return true; // Return success
             } else {
                 console.warn('⚠️ No gameweek data found');
+                return false; // Return failure
             }
         } catch (error) {
             console.error('❌ Failed to initialize data manager:', error);
+            return false; // Return failure
         }
     }
 
@@ -145,11 +148,8 @@ class FPLDataManager {
         return this.currentGameweek;
     }
 
-    async getCurrentGameweekData() {
+    getCurrentGameweekData() {
         const gameweek = `gw${this.currentGameweek}`;
-        if (!this.gameweekData.has(gameweek)) {
-            await this.loadGameweekData(gameweek);
-        }
         return this.gameweekData.get(gameweek);
     }
 
