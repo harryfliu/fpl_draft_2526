@@ -235,4 +235,4 @@ MIT License - Free for personal and commercial use.
 
 **Built with ❤️ for FPL Draft League managers everywhere! ⚽🏆**
 
-*Last updated: January 2025*
+*Last updated: August 2025*
