@@ -50,19 +50,29 @@ class FPLDataManager {
 
     processDraftData(draftData, standingsData) {
         // Convert draft data to the expected format
-        const teams = [];
+        if (!Array.isArray(draftData) || draftData.length === 0) {
+            console.warn('No draft data available');
+            return { teams: [] };
+        }
+        
         const teamMap = {};
         
         // Group draft picks by manager
         draftData.forEach(pick => {
-            if (!teamMap[pick.Manager]) {
-                teamMap[pick.Manager] = {
-                    manager: pick.Manager,
-                    teamName: pick['Team Name'] || `${pick.Manager}'s Team`,
-                    draftPicks: []
-                };
+            const manager = pick.Manager || pick.manager;
+            const teamName = pick['Team Name'] || pick.teamName || `${manager}'s Team`;
+            const player = pick.Player || pick.Pick || pick.player || pick.pick;
+            
+            if (manager && player) {
+                if (!teamMap[manager]) {
+                    teamMap[manager] = {
+                        manager: manager,
+                        teamName: teamName,
+                        draftPicks: []
+                    };
+                }
+                teamMap[manager].draftPicks.push(player);
             }
-            teamMap[pick.Manager].draftPicks.push(pick.Player || pick.Pick);
         });
 
         return { teams: Object.values(teamMap) };

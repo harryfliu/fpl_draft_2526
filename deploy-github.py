@@ -41,6 +41,11 @@ def create_github_pages():
 def convert_data_to_json(docs_path):
     """Convert CSV files to JSON for web access"""
     import csv
+    import sys
+    import os
+    
+    # Import the original data manager for proper CSV parsing
+    sys.path.append('.')
     
     data_path = os.path.join(docs_path, "data")
     os.makedirs(data_path, exist_ok=True)
@@ -50,15 +55,32 @@ def convert_data_to_json(docs_path):
         if os.path.isdir(folder) and folder.startswith('gw'):
             gw_data = {}
             
-            # Convert each CSV to JSON
+            # Process each CSV file with proper parsing
             for file in os.listdir(folder):
                 if file.endswith('.csv'):
                     csv_path = os.path.join(folder, file)
                     file_key = file.replace('.csv', '')
                     
-                    with open(csv_path, 'r') as csvfile:
-                        reader = csv.DictReader(csvfile)
-                        gw_data[file_key] = list(reader)
+                    # Handle different CSV types with specific parsing
+                    if file_key == 'starting_draft':
+                        gw_data[file_key] = parse_draft_csv(csv_path)
+                    elif file_key == 'standings':
+                        gw_data[file_key] = parse_standings_csv(csv_path)
+                    elif file_key == 'fixture_list':
+                        gw_data[file_key] = parse_fixtures_csv(csv_path)
+                    elif file_key == 'transfer_history':
+                        gw_data[file_key] = parse_transfer_history_csv(csv_path)
+                    elif file_key.startswith('pl_gw'):
+                        gw_data[file_key] = parse_pl_fixtures_csv(csv_path)
+                    else:
+                        # Default CSV parsing
+                        try:
+                            with open(csv_path, 'r', encoding='utf-8') as csvfile:
+                                reader = csv.DictReader(csvfile)
+                                gw_data[file_key] = list(reader)
+                        except Exception as e:
+                            print(f"⚠️ Error parsing {csv_path}: {e}")
+                            gw_data[file_key] = []
             
             # Save as JSON
             json_path = os.path.join(data_path, f"{folder}.json")
@@ -66,6 +88,215 @@ def convert_data_to_json(docs_path):
                 json.dump(gw_data, jsonfile, indent=2)
             
             print(f"✓ Converted {folder}/ to JSON")
+
+def parse_draft_csv(csv_path):
+    """Parse starting_draft.csv with proper handling"""
+    import csv
+    try:
+        with open(csv_path, 'r', encoding='utf-8') as csvfile:
+            reader = csv.DictReader(csvfile)
+            return list(reader)
+    except Exception as e:
+        print(f"⚠️ Error parsing draft CSV: {e}")
+        return []
+
+def parse_standings_csv(csv_path):
+    """Parse standings.csv with semicolon delimiter handling"""
+    import csv
+    try:
+        with open(csv_path, 'r', encoding='utf-8') as csvfile:
+            content = csvfile.read()
+            lines = content.strip().split('\n')
+            
+            if not lines:
+                return []
+            
+            # Get headers
+            headers = [h.strip() for h in lines[0].split(',')]
+            data = []
+            
+            for line in lines[1:]:
+                if not line.strip():
+                    continue
+                    
+                # Split by comma and handle quoted fields
+                fields = []
+                current_field = ""
+                in_quotes = False
+                
+                for char in line:
+                    if char == '"':
+                        in_quotes = not in_quotes
+                    elif char == ',' and not in_quotes:
+                        fields.append(current_field.strip())
+                        current_field = ""
+                    else:
+                        current_field += char
+                
+                fields.append(current_field.strip())
+                
+                # Create row object
+                if len(fields) >= len(headers):
+                    row = {}
+                    for i, header in enumerate(headers):
+                        value = fields[i] if i < len(fields) else ""
+                        
+                        # Handle "Team & Manager" column with semicolon
+                        if header == "Team & Manager" and ';' in value:
+                            team_name, manager_name = value.split(';', 1)
+                            row['Team Name'] = team_name.strip()
+                            row['Manager'] = manager_name.strip()
+                        else:
+                            row[header] = value.strip()
+                    
+                    data.append(row)
+            
+            return data
+    except Exception as e:
+        print(f"⚠️ Error parsing standings CSV: {e}")
+        return []
+
+def parse_fixtures_csv(csv_path):
+    """Parse fixture_list.csv with gameweek headers"""
+    try:
+        with open(csv_path, 'r', encoding='utf-8') as csvfile:
+            content = csvfile.read()
+            
+        fixtures = []
+        lines = content.strip().split('\n')
+        current_gameweek = 1
+        
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
+                
+            # Check for gameweek header
+            if line.startswith('Gameweek') and ',,' in line:
+                import re
+                gw_match = re.search(r'Gameweek (\d+)', line)
+                if gw_match:
+                    current_gameweek = int(gw_match.group(1))
+                continue
+            
+            # Parse fixture line with vs pattern
+            if ' v ' in line or ' vs ' in line:
+                parts = line.replace(' vs ', ' v ').split(' v ')
+                if len(parts) == 2:
+                    home_team = parts[0].strip()
+                    away_team = parts[1].strip()
+                    
+                    fixtures.append({
+                        'gameweek': current_gameweek,
+                        'homeTeam': home_team,
+                        'awayTeam': away_team
+                    })
+        
+        return fixtures
+    except Exception as e:
+        print(f"⚠️ Error parsing fixtures CSV: {e}")
+        return []
+
+def parse_transfer_history_csv(csv_path):
+    """Parse transfer_history.csv with multiple sections"""
+    try:
+        with open(csv_path, 'r', encoding='utf-8') as csvfile:
+            content = csvfile.read()
+            
+        result = {'waivers': [], 'freeAgents': [], 'trades': []}
+        lines = content.strip().split('\n')
+        current_section = None
+        headers = []
+        
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
+                
+            # Section headers
+            if 'Waivers History' in line:
+                current_section = 'waivers'
+                continue
+            elif 'Free Agents History' in line:
+                current_section = 'freeAgents'
+                continue
+            elif 'Trades History' in line:
+                current_section = 'trades'
+                continue
+            
+            # Skip "no transactions" lines
+            if 'No waiver transactions' in line or 'No trades have been made' in line:
+                continue
+            
+            # Parse data
+            if current_section:
+                fields = [f.strip() for f in line.split(',')]
+                
+                # Check if it's a header row
+                if fields[0] in ['GW', 'Offered By']:
+                    headers = fields
+                    continue
+                
+                # Parse data row
+                if headers and len(fields) >= len(headers):
+                    row = {}
+                    for i, header in enumerate(headers):
+                        row[header] = fields[i] if i < len(fields) else ''
+                    
+                    if row.get('GW') or row.get('Offered By'):
+                        result[current_section].append(row)
+        
+        return result
+    except Exception as e:
+        print(f"⚠️ Error parsing transfer history CSV: {e}")
+        return {'waivers': [], 'freeAgents': [], 'trades': []}
+
+def parse_pl_fixtures_csv(csv_path):
+    """Parse Premier League fixtures CSV"""
+    try:
+        with open(csv_path, 'r', encoding='utf-8') as csvfile:
+            content = csvfile.read()
+            
+        fixtures = []
+        lines = content.strip().split('\n')
+        current_date = ""
+        
+        for line in lines:
+            line = line.strip()
+            if not line:
+                continue
+            
+            # Check if line is a date
+            if any(day in line for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']):
+                current_date = line
+                continue
+            
+            # Parse fixture line
+            parts = line.split()
+            if len(parts) >= 3:
+                # Find the time (contains :)
+                time_idx = -1
+                for i, part in enumerate(parts):
+                    if ':' in part:
+                        time_idx = i
+                        break
+                
+                if time_idx > 0 and time_idx < len(parts) - 1:
+                    home_team = ' '.join(parts[:time_idx])
+                    time = parts[time_idx]
+                    away_team = ' '.join(parts[time_idx + 1:])
+                    
+                    fixtures.append({
+                        'date': current_date,
+                        'time': time,
+                        'homeTeam': home_team,
+                        'awayTeam': away_team
+                    })
+        
+        return fixtures
+    except Exception as e:
+        print(f"⚠️ Error parsing PL fixtures CSV: {e}")
+        return []
 
 def update_data_manager_for_web(docs_path):
     """Update data manager to load from JSON instead of CSV"""
@@ -127,19 +358,29 @@ class FPLDataManager {
 
     processDraftData(draftData, standingsData) {
         // Convert draft data to the expected format
-        const teams = [];
+        if (!Array.isArray(draftData) || draftData.length === 0) {
+            console.warn('No draft data available');
+            return { teams: [] };
+        }
+        
         const teamMap = {};
         
         // Group draft picks by manager
         draftData.forEach(pick => {
-            if (!teamMap[pick.Manager]) {
-                teamMap[pick.Manager] = {
-                    manager: pick.Manager,
-                    teamName: pick['Team Name'] || `${pick.Manager}'s Team`,
-                    draftPicks: []
-                };
+            const manager = pick.Manager || pick.manager;
+            const teamName = pick['Team Name'] || pick.teamName || `${manager}'s Team`;
+            const player = pick.Player || pick.Pick || pick.player || pick.pick;
+            
+            if (manager && player) {
+                if (!teamMap[manager]) {
+                    teamMap[manager] = {
+                        manager: manager,
+                        teamName: teamName,
+                        draftPicks: []
+                    };
+                }
+                teamMap[manager].draftPicks.push(player);
             }
-            teamMap[pick.Manager].draftPicks.push(pick.Player || pick.Pick);
         });
 
         return { teams: Object.values(teamMap) };
