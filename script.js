@@ -76,6 +76,8 @@ async function loadDataFromManager() {
         // Update dashboard data
         dashboardData.leaderboard = currentData.draft?.teams || [];
         dashboardData.draft = currentData.draft || null; // Add this line to fix draft picks
+        
+        console.log('🔍 DEBUG: currentData.fixtures from data manager:', currentData.fixtures);
         dashboardData.upcomingFixtures = currentData.fixtures || [];
         dashboardData.recentStandings = currentData.standings || [];
         

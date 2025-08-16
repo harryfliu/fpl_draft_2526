@@ -448,14 +448,28 @@ def parse_players_gw_csv(csv_path):
 
 def extract_player_info(concatenated_string):
     """Extract player name, team, and position from concatenated string"""
-    # List of Premier League teams for reference
+    # List of Premier League teams for reference (including common abbreviations)
     premier_league_teams = [
         'Arsenal', 'Aston Villa', 'Bournemouth', 'Brentford', 'Brighton & Hove Albion',
-        'Burnley', 'Chelsea', 'Crystal Palace', 'Everton', 'Fulham', 'Leeds United',
-        'Liverpool', 'Manchester City', 'Manchester United', 'Newcastle United',
-        'Nottingham Forest', 'Sunderland', 'Tottenham Hotspur', 'West Ham United',
-        'Wolverhampton Wanderers'
+        'Brighton', 'Burnley', 'Chelsea', 'Crystal Palace', 'Everton', 'Fulham', 'Leeds United',
+        'Liverpool', 'Manchester City', 'Man City', 'Manchester United', 'Man United', 
+        'Newcastle United', 'Newcastle', 'Nottingham Forest', 'Nott\'m Forest',
+        'Sunderland', 'Tottenham Hotspur', 'Tottenham', 'Spurs', 'West Ham United', 
+        'West Ham', 'Wolverhampton Wanderers', 'Wolves'
     ]
+    
+    # Team name normalization mapping
+    team_mapping = {
+        'Man City': 'Manchester City',
+        'Man United': 'Manchester United', 
+        'Newcastle': 'Newcastle United',
+        'Nott\'m Forest': 'Nottingham Forest',
+        'Tottenham': 'Tottenham Hotspur',
+        'Spurs': 'Tottenham Hotspur',
+        'West Ham': 'West Ham United',
+        'Wolves': 'Wolverhampton Wanderers',
+        'Brighton': 'Brighton & Hove Albion'
+    }
     
     # List of positions - handle both GK and GKP
     positions = ['FWD', 'MID', 'DEF', 'GKP', 'GK']
@@ -483,13 +497,13 @@ def extract_player_info(concatenated_string):
         team_start = concatenated_string.find(found_team)
         player_name = concatenated_string[:team_start].strip()
         
-        # Extract team name
-        team_name = found_team
+        # Normalize team name using mapping
+        normalized_team = team_mapping.get(found_team, found_team)
         
         # Extract position
         position = found_position
         
-        return [player_name, team_name, position]
+        return [player_name, normalized_team, position]
     
     # Fallback: return as-is
     return [concatenated_string, 'Unknown Team', 'Unknown Position']

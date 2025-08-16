@@ -982,14 +982,28 @@ class FPLDataManager {
     extractPlayerInfo(concatenatedString) {
         console.log(`🔍 Extracting player info from: "${concatenatedString}"`);
         
-        // List of Premier League teams for reference
+        // List of Premier League teams for reference (including common abbreviations)
         const premierLeagueTeams = [
             'Arsenal', 'Aston Villa', 'Bournemouth', 'Brentford', 'Brighton & Hove Albion',
-            'Burnley', 'Chelsea', 'Crystal Palace', 'Everton', 'Fulham', 'Leeds United',
-            'Liverpool', 'Manchester City', 'Manchester United', 'Newcastle United',
-            'Nottingham Forest', 'Sunderland', 'Tottenham Hotspur', 'West Ham United',
-            'Wolverhampton Wanderers'
+            'Brighton', 'Burnley', 'Chelsea', 'Crystal Palace', 'Everton', 'Fulham', 'Leeds United',
+            'Liverpool', 'Manchester City', 'Man City', 'Manchester United', 'Man United', 
+            'Newcastle United', 'Newcastle', 'Nottingham Forest', 'Nott\'m Forest',
+            'Sunderland', 'Tottenham Hotspur', 'Tottenham', 'Spurs', 'West Ham United', 
+            'West Ham', 'Wolverhampton Wanderers', 'Wolves'
         ];
+        
+        // Team name normalization mapping
+        const teamMapping = {
+            'Man City': 'Manchester City',
+            'Man United': 'Manchester United', 
+            'Newcastle': 'Newcastle United',
+            'Nott\'m Forest': 'Nottingham Forest',
+            'Tottenham': 'Tottenham Hotspur',
+            'Spurs': 'Tottenham Hotspur',
+            'West Ham': 'West Ham United',
+            'Wolves': 'Wolverhampton Wanderers',
+            'Brighton': 'Brighton & Hove Albion'
+        };
         
         // List of positions (note: CSV uses GKP instead of GK)
         const positions = ['FWD', 'MID', 'DEF', 'GKP'];
@@ -1019,9 +1033,12 @@ class FPLDataManager {
             const teamStart = concatenatedString.indexOf(foundTeam);
             const playerName = concatenatedString.substring(0, teamStart).trim();
             
+            // Normalize team name using mapping
+            const normalizedTeam = teamMapping[foundTeam] || foundTeam;
+            
             const result = {
                 name: playerName,
-                team: foundTeam,
+                team: normalizedTeam,
                 position: foundPosition
             };
             
