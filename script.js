@@ -113,6 +113,12 @@ async function loadDataFromManager() {
         // Update last updated timestamp
         dashboardData.lastUpdated = new Date().toLocaleString();
         
+        // Immediately update top contributors gameweek display
+        const gwDisplay = document.getElementById('top-contributors-gw');
+        if (gwDisplay) {
+            gwDisplay.textContent = `GW ${dashboardData.currentGameweek}`;
+        }
+        
         console.log('📊 Data loaded from data manager');
         console.log('📅 Fixtures data:', currentData.fixtures);
         console.log('📊 Dashboard fixtures:', dashboardData.upcomingFixtures);
@@ -932,6 +938,12 @@ function updateCurrentGameweek() {
             gameweekElement.textContent = dashboardData.currentGameweek;
         }
     }
+    
+    // Update top contributors gameweek display
+    const gwDisplay = document.getElementById('top-contributors-gw');
+    if (gwDisplay) {
+        gwDisplay.textContent = `GW ${dashboardData.currentGameweek}`;
+    }
 }
 
 // Helper function to get season month number from month name
@@ -1348,11 +1360,99 @@ function displayTeamDetails(team) {
         if (teamRank) teamRank.textContent = `#${team.position}`;
     }
     
+    // Update top contributors
+    displayTeamTopContributors(team);
+    
     // Update current squad
     displayTeamCurrentSquad(team);
     
     // Update draft picks
     displayTeamDraftPicks(team);
+}
+
+// Display team top contributors for current gameweek
+function displayTeamTopContributors(team) {
+    const container = document.getElementById('team-top-contributors');
+    const emptyMessage = document.getElementById('team-top-contributors-empty');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    // Get current gameweek data
+    const currentData = dataManager.getCurrentGameweekData();
+    if (!currentData || !currentData.players || currentData.players.length === 0) {
+        container.classList.add('hidden');
+        if (emptyMessage) emptyMessage.classList.remove('hidden');
+        return;
+    }
+    
+    // Get the manager's current squad
+    const currentSquad = calculateCurrentTeam(team.manager);
+    if (!currentSquad || currentSquad.length === 0) {
+        container.classList.add('hidden');
+        if (emptyMessage) emptyMessage.classList.remove('hidden');
+        return;
+    }
+    
+    // Match current squad players to performance data
+    const managerPlayers = [];
+    currentSquad.forEach(currentPlayerName => {
+        const matchedPlayer = currentData.players.find(player => {
+            if (player.name === currentPlayerName) return true; // Exact match
+            const playerNameLower = player.name.toLowerCase();
+            const currentNameLower = currentPlayerName.toLowerCase();
+            return playerNameLower.includes(currentNameLower) || 
+                   currentNameLower.includes(playerNameLower) ||
+                   playerNameLower.split(' ').some(part => 
+                       currentNameLower.includes(part) && part.length > 2
+                   );
+        });
+        
+        if (matchedPlayer) {
+            managerPlayers.push({ ...matchedPlayer, currentSquadName: currentPlayerName });
+        }
+    });
+    
+    // Sort by round points (current gameweek performance) and take top 3
+    const topContributors = managerPlayers
+        .sort((a, b) => (b.roundPoints || 0) - (a.roundPoints || 0))
+        .slice(0, 3);
+    
+    if (topContributors.length === 0) {
+        container.classList.add('hidden');
+        if (emptyMessage) emptyMessage.classList.remove('hidden');
+        return;
+    }
+    
+    container.classList.remove('hidden');
+    if (emptyMessage) emptyMessage.classList.add('hidden');
+    
+    // Update the gameweek display in the title
+    const gwDisplay = document.getElementById('top-contributors-gw');
+    if (gwDisplay) {
+        gwDisplay.textContent = `GW ${dashboardData.currentGameweek}`;
+    }
+    
+    // Display top 3 contributors
+    topContributors.forEach((player, index) => {
+        const playerElement = document.createElement('div');
+        const rankClass = index === 0 ? 'from-yellow-400 to-yellow-600' : 
+                         index === 1 ? 'from-gray-300 to-gray-500' : 
+                         'from-amber-600 to-amber-800';
+        const rankIcon = index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉';
+        
+        playerElement.className = 'card bg-gradient-to-r ' + rankClass + ' border border-white/20 text-center p-4 shadow-2xl backdrop-blur-sm hover:shadow-lg transition-all duration-300';
+        
+        playerElement.innerHTML = `
+            <div class="text-2xl mb-2">${rankIcon}</div>
+            <div class="text-sm font-bold text-white mb-1">${player.currentSquadName}</div>
+            <div class="text-xs text-white/80 mb-2">${player.team} • ${player.position}</div>
+            <div class="text-lg font-bold text-white">${player.roundPoints || 0} pts</div>
+            <div class="text-xs text-white/70">GW ${dashboardData.currentGameweek}</div>
+        `;
+        
+        container.appendChild(playerElement);
+    });
 }
 
 // Display team current squad (draft picks + transfers)
@@ -1472,6 +1572,12 @@ function setCurrentGameweek(gameweek) {
     // Update the display
     updateCurrentGameweek();
     
+    // Update top contributors gameweek display
+    const gwDisplay = document.getElementById('top-contributors-gw');
+    if (gwDisplay) {
+        gwDisplay.textContent = `GW ${gameweek}`;
+    }
+    
     // Update gameweek-specific data
     updateGameweekSpecificData(gameweek);
 }
@@ -1491,6 +1597,12 @@ function handleGameweekChange(event) {
     
     // Update player movement for new gameweek
     populatePlayerMovement();
+    
+    // Update top contributors gameweek display
+    const gwDisplay = document.getElementById('top-contributors-gw');
+    if (gwDisplay) {
+        gwDisplay.textContent = `GW ${selectedGameweek}`;
+    }
     
     // Show success message
     showToast(`Switched to Gameweek ${selectedGameweek}`, 'success');
@@ -1537,6 +1649,12 @@ function updateGameweekSpecificData(gameweek) {
     const resultsHeader = document.querySelector('.results-section .gameweek-indicator');
     if (resultsHeader) {
         resultsHeader.textContent = `GW ${gameweek - 1}`;
+    }
+    
+    // Update top contributors gameweek display
+    const gwDisplay = document.getElementById('top-contributors-gw');
+    if (gwDisplay) {
+        gwDisplay.textContent = `GW ${gameweek}`;
     }
 }
 
