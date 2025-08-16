@@ -7,6 +7,8 @@ Creates a public web version of your dashboard
 import os
 import json
 import shutil
+import csv
+from io import StringIO
 
 def create_github_pages():
     """Convert dashboard for GitHub Pages deployment"""
@@ -40,12 +42,6 @@ def create_github_pages():
 
 def convert_data_to_json(docs_path):
     """Convert CSV files to JSON for web access"""
-    import csv
-    import sys
-    import os
-    
-    # Import the original data manager for proper CSV parsing
-    sys.path.append('.')
     
     data_path = os.path.join(docs_path, "data")
     os.makedirs(data_path, exist_ok=True)
@@ -97,7 +93,6 @@ def convert_data_to_json(docs_path):
 
 def parse_draft_csv(csv_path):
     """Parse starting_draft.csv with proper handling"""
-    import csv
     try:
         with open(csv_path, 'r', encoding='utf-8') as csvfile:
             reader = csv.DictReader(csvfile)
@@ -108,7 +103,6 @@ def parse_draft_csv(csv_path):
 
 def parse_standings_csv(csv_path):
     """Parse standings.csv with semicolon delimiter handling"""
-    import csv
     try:
         with open(csv_path, 'r', encoding='utf-8') as csvfile:
             content = csvfile.read()
@@ -164,7 +158,6 @@ def parse_standings_csv(csv_path):
 
 def parse_fixtures_csv(csv_path):
     """Parse fixture_list.csv with multi-line quoted team names"""
-    import csv
     try:
         fixtures = []
         current_gameweek = 1
@@ -325,17 +318,14 @@ def parse_partial_results_csv(csv_path):
             lines = lines[1:]
         
         # Parse the CSV content properly handling multi-line quoted fields
-        import csv
-        from io import StringIO
-        
-        # Create a CSV reader that can handle the multi-line format
         csv_reader = csv.reader(StringIO('\n'.join(lines)), quotechar='"', delimiter=',')
         
         for row in csv_reader:
             if len(row) >= 3:
-                home_info = row[0].strip()
+                # Extract team names and scores
+                home_info = row[0].strip('"')
                 score_info = row[1].strip()
-                away_info = row[2].strip()
+                away_info = row[2].strip('"')
                 
                 # Skip empty or invalid lines
                 if not home_info or not score_info or not away_info:
@@ -401,7 +391,6 @@ def parse_players_partial_csv(csv_path):
 
 def parse_players_gw_csv(csv_path):
     """Parse players_gw#.csv with concatenated name/team/position in the first column"""
-    import csv
     try:
         with open(csv_path, 'r', encoding='utf-8') as csvfile:
             reader = csv.reader(csvfile)
@@ -501,40 +490,8 @@ def extract_player_info(concatenated_string):
     # Fallback: return as-is
     return [concatenated_string, 'Unknown Team', 'Unknown Position']
 
-def parse_players_gw_csv(csv_path):
-    """Parse players_gw#.csv with concatenated name/team/position in the first column"""
-    try:
-        with open(csv_path, 'r', encoding='utf-8') as csvfile:
-            reader = csv.reader(csvfile)
-            players = []
-            for row in reader:
-                if row and row[0]:
-                    # Split the concatenated string by '|'
-                    parts = row[0].split('|')
-                    if len(parts) >= 3:
-                        player_name = parts[0].strip()
-                        player_team = parts[1].strip()
-                        player_position = parts[2].strip()
-                        player_points = int(parts[3].strip()) if parts[3].strip().isdigit() else 0
-                        players.append({
-                            'name': player_name,
-                            'team': player_team,
-                            'position': player_position,
-                            'points': player_points
-                        })
-        
-        print(f"⚽ Parsed {len(players)} player performances from {csv_path}")
-        return players
-    except Exception as e:
-        print(f"⚠️ Error parsing players GW CSV: {e}")
-        return []
-
 def update_data_manager_for_web(docs_path):
     """Update data manager to load from JSON instead of CSV"""
-    
-    # Read original data manager
-    with open('data_manager.js', 'r') as f:
-        content = f.read()
     
     # Create a simplified web version that loads JSON data
     web_content = '''
@@ -726,62 +683,6 @@ class FPLDataManager {
         return { teams };
     }
 
-    mergeStandingsWithDraft(standings, draftTeams) {
-        // Merge standings data (which has leaderboard info) with draft teams (which has draft picks)
-        const mergedTeams = standings.map(standing => {
-            // Find corresponding draft team by team name
-            const draftTeam = draftTeams.find(team => team.teamName === standing.teamName);
-            
-            return {
-                position: standing.position,
-                teamName: standing.teamName,
-                manager: standing.manager,
-                firstName: standing.manager.split(' ')[0], // Extract first name for dropdown
-                points: standing.points,
-                wins: standing.wins,
-                draws: standing.draws,
-                losses: standing.losses,
-                gwPoints: standing.gwPoints,
-                form: standing.form,
-                draftPicks: draftTeam ? draftTeam.draftPicks : []
-            };
-        });
-        
-        console.log('🔗 Merged standings with draft data:', mergedTeams.length, 'teams');
-        return mergedTeams;
-    }
-
-    getCurrentGameweek() {
-        return this.currentGameweek;
-    }
-
-    getCurrentGameweekData() {
-        const gameweek = `gw${this.currentGameweek}`;
-        return this.gameweekData.get(gameweek);
-    }
-
-    getDataSummary() {
-        const availableGameweeks = Array.from(this.gameweekData.keys())
-            .map(gw => parseInt(gw.replace('gw', '')))
-            .sort((a, b) => a - b);
-
-        return {
-            availableGameweeks: availableGameweeks,
-            currentGameweek: this.currentGameweek,
-            totalGameweeks: availableGameweeks.length
-        };
-    }
-
-    isDataLoaded() {
-        return this.gameweekData.size > 0;
-    }
-
-    getAvailableGameweekNumbers() {
-        return Array.from(this.gameweekData.keys())
-            .map(gw => parseInt(gw.replace('gw', '')))
-            .sort((a, b) => a - b);
-    }
-
     processPartialResultsData(partialResultsData) {
         // Process partial results data for live standings
         if (!Array.isArray(partialResultsData)) return [];
@@ -849,6 +750,31 @@ class FPLDataManager {
         return Object.values(allPlayers);
     }
 
+    mergeStandingsWithDraft(standings, draftTeams) {
+        // Merge standings data (which has leaderboard info) with draft teams (which has draft picks)
+        const mergedTeams = standings.map(standing => {
+            // Find corresponding draft team by team name
+            const draftTeam = draftTeams.find(team => team.teamName === standing.teamName);
+            
+            return {
+                position: standing.position,
+                teamName: standing.teamName,
+                manager: standing.manager,
+                firstName: standing.manager.split(' ')[0], // Extract first name for dropdown
+                points: standing.points,
+                wins: standing.wins,
+                draws: standing.draws,
+                losses: standing.losses,
+                gwPoints: standing.gwPoints,
+                form: standing.form,
+                draftPicks: draftTeam ? draftTeam.draftPicks : []
+            };
+        });
+        
+        console.log('🔗 Merged standings with draft data:', mergedTeams.length, 'teams');
+        return mergedTeams;
+    }
+
     // Methods for player data access
     getAllPlayers() {
         const allPlayers = [];
@@ -877,29 +803,43 @@ class FPLDataManager {
         return allPlayers.filter(player => player.position === position);
     }
 
-    mergeStandingsWithDraft(standings, draftTeams) {
-        // Merge standings data (which has leaderboard info) with draft teams (which has draft picks)
-        const mergedTeams = standings.map(standing => {
-            // Find corresponding draft team by team name
-            const draftTeam = draftTeams.find(team => team.teamName === standing.teamName);
-            
-            return {
-                position: standing.position,
-                teamName: standing.teamName,
-                manager: standing.manager,
-                firstName: standing.manager.split(' ')[0], // Extract first name for dropdown
-                points: standing.points,
-                wins: standing.wins,
-                draws: standing.draws,
-                losses: standing.losses,
-                gwPoints: standing.gwPoints,
-                form: standing.form,
-                draftPicks: draftTeam ? draftTeam.draftPicks : []
-            };
-        });
-        
-        console.log('🔗 Merged standings with draft data:', mergedTeams.length, 'teams');
-        return mergedTeams;
+    getCurrentGameweek() {
+        return this.currentGameweek;
+    }
+
+    getCurrentGameweekData() {
+        const gameweek = `gw${this.currentGameweek}`;
+        return this.gameweekData.get(gameweek);
+    }
+
+    getDataSummary() {
+        const availableGameweeks = Array.from(this.gameweekData.keys())
+            .map(gw => parseInt(gw.replace('gw', '')))
+            .sort((a, b) => a - b);
+
+        return {
+            availableGameweeks: availableGameweeks,
+            currentGameweek: this.currentGameweek,
+            totalGameweeks: availableGameweeks.length
+        };
+    }
+
+    isDataLoaded() {
+        return this.gameweekData.size > 0;
+    }
+
+    getAvailableGameweekNumbers() {
+        return Array.from(this.gameweekData.keys())
+            .map(gw => parseInt(gw.replace('gw', '')))
+            .sort((a, b) => a - b);
+    }
+
+    async loadGameweekDataIfNeeded(gameweek) {
+        const gwKey = `gw${gameweek}`;
+        if (!this.gameweekData.has(gwKey)) {
+            await this.loadGameweekData(gwKey);
+        }
+        return this.gameweekData.get(gwKey);
     }
 
     // Methods needed for partial results functionality
@@ -919,14 +859,6 @@ class FPLDataManager {
             return data ? data.partialResults : [];
         }
         return this.getAllPartialResults();
-    }
-
-    async loadGameweekDataIfNeeded(gameweek) {
-        const gwKey = `gw${gameweek}`;
-        if (!this.gameweekData.has(gwKey)) {
-            await this.loadGameweekData(gwKey);
-        }
-        return this.gameweekData.get(gwKey);
     }
 }
 '''

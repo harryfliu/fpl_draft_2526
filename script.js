@@ -182,6 +182,11 @@ function populateLeaderboard() {
                     ...team,
                     points: performance.points,
                     gwPoints: gwPoints,
+                    goalsFor: performance.goalsFor,
+                    goalsAgainst: performance.goalsAgainst,
+                    wins: performance.wins,
+                    draws: performance.draws,
+                    losses: performance.losses,
                     form: `${performance.wins > 0 ? 'W'.repeat(performance.wins) : ''}${performance.draws > 0 ? 'D'.repeat(performance.draws) : ''}${performance.losses > 0 ? 'L'.repeat(performance.losses) : ''}`.split('').join('-') || 'N/A'
                 };
             });
@@ -203,6 +208,13 @@ function populateLeaderboard() {
                 }
                 // If goal difference is equal, sort by goals for
                 return (b.goalsFor || 0) - (a.goalsFor || 0);
+            });
+            
+            // Debug: Log teams before position assignment
+            console.log('🔍 Live leaderboard after sorting:');
+            liveLeaderboard.forEach((team, index) => {
+                const goalDiff = (team.goalsFor || 0) - (team.goalsAgainst || 0);
+                console.log(`${index + 1}. ${team.teamName}: pts=${team.points}, gw=${team.gwPoints}, diff=${goalDiff}`);
             });
             
             // Update positions after sorting
@@ -340,6 +352,9 @@ function calculateTeamPerformanceFromResults(teamName) {
     const partialResults = dataManager.getAllPartialResults();
     let wins = 0, draws = 0, losses = 0, goalsFor = 0, goalsAgainst = 0;
     
+    console.log(`🔍 Calculating performance for: "${teamName}"`);
+    console.log(`🔍 Available partial results:`, partialResults);
+    
     partialResults.forEach(result => {
         if (result.homeTeam === teamName) {
             // Team is home
@@ -369,7 +384,10 @@ function calculateTeamPerformanceFromResults(teamName) {
     // Calculate points (3 for win, 1 for draw, 0 for loss)
     const points = (wins * 3) + draws;
     
-    return { wins, draws, losses, points, goalsFor, goalsAgainst };
+    const result = { wins, draws, losses, points, goalsFor, goalsAgainst };
+    console.log(`🔍 Final performance for "${teamName}":`, result);
+    
+    return result;
 }
 
 // Populate current fixtures for the current gameweek only
@@ -597,7 +615,7 @@ function populateFixtures() {
                         <div class="text-center">
                             <div class="font-semibold text-white">${fixture.awayTeam}</div>
                             <div class="text-xs text-white">${awayManager}</div>
-                        </div>
+                                                </div>
                         <div class="avatar placeholder">
                             <div class="bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-full w-10">
                                 <span class="text-sm font-bold">${fixture.awayTeam.charAt(0)}</span>
@@ -606,6 +624,7 @@ function populateFixtures() {
                     </div>
                 </div>
             </div>
+        </div>
         `;
         
         container.appendChild(fixtureElement);
@@ -1398,6 +1417,9 @@ function displayTeamDraftPicks(team) {
     }
 }
 
+
+
+
 // Hide team details
 function hideTeamDetails() {
     const teamDetailsContainer = document.getElementById('team-details-container');
@@ -1769,6 +1791,7 @@ function populateAnalytics() {
     analyzePlayerPopularity(); // New: Most transferred players
     analyzeManagerBehavior(); // New: Manager transfer patterns
     generateKeyInsights();
+    analyzePlayerPerformance(); // New: Player performance analytics
 }
 
 // Head-to-Head Analysis
@@ -2907,6 +2930,466 @@ function generateKeyInsights() {
             `).join('')}
         </div>
     `;
+}
+
+// Player Performance Analytics
+function analyzePlayerPerformance() {
+    const container = document.getElementById('player-analytics');
+    if (!container) return;
+    
+    if (!dataManager) {
+        container.innerHTML = '<p class="text-white">Data manager not available</p>';
+        return;
+    }
+    
+    const allPlayers = dataManager.getAllPlayers();
+    
+    if (!allPlayers || allPlayers.length === 0) {
+        container.innerHTML = '<p class="text-white">No player data available</p>';
+        return;
+    }
+    
+    // Get draft data to match players to managers
+    const currentData = dataManager.getCurrentGameweekData();
+    const draftData = {
+        teams: currentData?.draft?.teams || []
+    };
+    
+    console.log('🔍 Debug: Current gameweek data:', currentData);
+    console.log('🔍 Debug: Draft data structure:', draftData);
+    
+    // Create the HTML with the 3 cool analytics
+    const playerAnalyticsHTML = `
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- 1. Player Impact on Manager Success -->
+            <div class="space-y-4">
+                <h4 class="text-lg font-semibold text-white border-b border-gray-600 pb-2">
+                    <i class="fas fa-trophy text-yellow-400 mr-2"></i>
+                    Player Impact on Manager Success
+                </h4>
+                
+                <!-- Best Player Acquisition -->
+                <div class="bg-gray-700/50 rounded-lg p-4">
+                    <h5 class="text-md font-medium text-white mb-3">Best Value Pick</h5>
+                    <div class="space-y-2">
+                        ${getBestValuePick(allPlayers).map((player, index) => `
+                            <div class="flex items-center justify-between p-2 bg-gray-600/50 rounded">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-yellow-400 font-bold">${index + 1}</span>
+                                    <span class="text-white font-medium">${player.name}</span>
+                                    <span class="badge badge-sm ${
+                                        player.position === 'FWD' ? 'badge-error' :
+                                        player.position === 'MID' ? 'badge-warning' :
+                                        player.position === 'DEF' ? 'badge-info' :
+                                        'badge-secondary'
+                                    }">${player.position}</span>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-green-400 font-bold">${player.totalPoints || 0} pts</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <!-- Player Contribution Ratio -->
+                <div class="bg-gray-700/50 rounded-lg p-4">
+                    <h5 class="text-md font-medium text-white mb-3">Top Player Contributors</h5>
+                    <div class="space-y-2">
+                        ${getTopPlayerContributors(allPlayers, draftData).map((manager, index) => `
+                            <div class="flex items-center justify-between p-2 bg-gray-600/50 rounded">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-blue-400 font-bold">${index + 1}</span>
+                                    <span class="text-white font-medium">${manager.name}</span>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-green-400 font-bold">${manager.contributionRatio}%</div>
+                                    <div class="text-xs text-gray-400">from top 3 players</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 2. Transfer Market Genius & 3. Risk vs Reward -->
+            <div class="space-y-4">
+                <h4 class="text-lg font-semibold text-white border-b border-gray-600 pb-2">
+                    <i class="fas fa-chart-line text-blue-400 mr-2"></i>
+                    Transfer Market & Risk Analysis
+                </h4>
+                
+                <!-- Bargain Hunters -->
+                <div class="bg-gray-700/50 rounded-lg p-4">
+                    <h5 class="text-md font-medium text-white mb-3">Bargain Hunters</h5>
+                    <div class="space-y-2">
+                        ${getBargainHunters(allPlayers).map((player, index) => `
+                            <div class="flex items-center justify-between p-2 bg-gray-600/50 rounded">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-green-400 font-bold">${index + 1}</span>
+                                    <span class="text-white font-medium">${player.name}</span>
+                                    <span class="badge badge-sm ${
+                                        player.position === 'FWD' ? 'badge-error' :
+                                        player.position === 'MID' ? 'badge-warning' :
+                                        player.position === 'DEF' ? 'badge-info' :
+                                        'badge-secondary'
+                                    }">${player.position}</span>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-green-400 font-bold">${player.pointsPerCost} pts/£</div>
+                                    <div class="text-xs text-gray-400">${player.totalPoints || 0} pts</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <!-- High-Risk, High-Reward -->
+                <div class="bg-gray-700/50 rounded-lg p-4">
+                    <h5 class="text-md font-medium text-white mb-3">High-Risk, High-Reward</h5>
+                    <div class="space-y-2">
+                        ${getHighRiskHighReward(allPlayers).map((player, index) => `
+                            <div class="flex items-center justify-between p-2 bg-gray-600/50 rounded">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-red-400 font-bold">${index + 1}</span>
+                                    <span class="text-white font-medium">${player.name}</span>
+                                    <span class="badge badge-sm ${
+                                        player.position === 'FWD' ? 'badge-error' :
+                                        player.position === 'MID' ? 'badge-warning' :
+                                        player.position === 'DEF' ? 'badge-info' :
+                                        'badge-secondary'
+                                    }">${player.position}</span>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-red-400 font-bold">${player.totalPoints || 0} pts</div>
+                                    <div class="text-xs text-gray-400">High Risk</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 4. Form vs Consistency Analysis & 5. Position Strategy & 6. Value for Money -->
+            <div class="space-y-4">
+                <h4 class="text-lg font-semibold text-white border-b border-gray-600 pb-2">
+                    <i class="fas fa-chart-bar text-purple-400 mr-2"></i>
+                    Form, Strategy & Value Analysis
+                </h4>
+                
+                <!-- 4. Form vs Consistency Analysis -->
+                <div class="bg-gray-700/50 rounded-lg p-4">
+                    <h5 class="text-md font-medium text-white mb-3">Form vs Consistency</h5>
+                    <div class="space-y-2">
+                        ${getFormVsConsistency(allPlayers).map((player, index) => `
+                            <div class="flex items-center justify-between p-2 bg-gray-600/50 rounded">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-purple-400 font-bold">${index + 1}</span>
+                                    <span class="text-white font-medium">${player.name}</span>
+                                    <span class="badge badge-sm ${
+                                        player.position === 'FWD' ? 'badge-error' :
+                                        player.position === 'MID' ? 'badge-warning' :
+                                        player.position === 'DEF' ? 'badge-info' :
+                                        'badge-secondary'
+                                    }">${player.position}</span>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-purple-400 font-bold">${player.consistencyScore}</div>
+                                    <div class="text-xs text-gray-400">${player.consistencyType}</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <!-- 5. Position Strategy Analysis -->
+                <div class="bg-gray-700/50 rounded-lg p-4">
+                    <h5 class="text-md font-medium text-white mb-3">Position Strategy</h5>
+                    <div class="space-y-2">
+                        ${getPositionStrategy(allPlayers).map((position, index) => `
+                            <div class="flex items-center justify-between p-2 bg-gray-600/50 rounded">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-cyan-400 font-bold">${index + 1}</span>
+                                    <span class="text-white font-medium">${position.name}</span>
+                                    <span class="text-xs text-gray-400">${position.count} players</span>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-cyan-400 font-bold">${position.avgPoints}</div>
+                                    <div class="text-xs text-gray-400">avg pts</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <!-- 6. Value for Money Analysis -->
+                <div class="bg-gray-700/50 rounded-lg p-4">
+                    <h5 class="text-md font-medium text-white mb-3">Value for Money</h5>
+                    <div class="space-y-2">
+                        ${getValueForMoney(allPlayers).map((player, index) => `
+                            <div class="flex items-center justify-between p-2 bg-gray-600/50 rounded">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-emerald-400 font-bold">${index + 1}</span>
+                                    <span class="text-white font-medium">${player.name}</span>
+                                    <span class="badge badge-sm ${
+                                        player.position === 'FWD' ? 'badge-error' :
+                                        player.position === 'MID' ? 'badge-warning' :
+                                        player.position === 'DEF' ? 'badge-info' :
+                                        'badge-secondary'
+                                    }">${player.position}</span>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-emerald-400 font-bold">${player.valueScore}</div>
+                                    <div class="text-xs text-gray-400">value rating</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    container.innerHTML = playerAnalyticsHTML;
+}
+
+// Helper function: Get best value picks (points per cost)
+function getBestValuePick(players) {
+    return players
+        .filter(p => p.cost > 0 && p.totalPoints > 0)
+        .map(p => ({
+            ...p,
+            pointsPerCost: (p.totalPoints / p.cost).toFixed(2)
+        }))
+        .sort((a, b) => parseFloat(b.pointsPerCost) - parseFloat(a.pointsPerCost))
+        .slice(0, 3);
+}
+
+// Helper function: Get top player contributors by manager
+function getTopPlayerContributors(players, draftData) {
+    console.log('🏆 Calculating Top Player Contributors...');
+    console.log('📊 Players available:', players.length);
+    console.log('📊 Draft data:', draftData);
+    
+    if (!draftData || !draftData.teams || draftData.teams.length === 0) {
+        console.warn('❌ No draft data available for player-manager matching');
+        return [
+            { name: "No Draft Data", contributionRatio: "0%" },
+            { name: "Please Check Data", contributionRatio: "0%" }
+        ];
+    }
+    
+    const managerAnalysis = [];
+    
+    // For each manager (team), analyze their player contributions
+    draftData.teams.forEach(team => {
+        const managerName = team.manager || team.teamName;
+        
+        // Get current squad (draft + transfers applied) instead of just draft picks
+        const currentSquad = calculateCurrentTeam(managerName);
+        
+        if (!currentSquad || currentSquad.length === 0) {
+            console.warn(`❌ No current squad found for ${managerName}`);
+            return;
+        }
+        
+        console.log(`🔍 Analyzing ${managerName} with ${currentSquad.length} current squad players:`, currentSquad);
+        
+        // Find all players that belong to this manager
+        const managerPlayers = [];
+        
+        currentSquad.forEach(currentPlayerName => {
+            // Try to find this player in the performance data
+            // We need to match by name, handling potential variations
+            const matchedPlayer = players.find(player => {
+                // Try exact match first
+                if (player.name === currentPlayerName) return true;
+                
+                // Try partial matches (handling different name formats)
+                const playerNameLower = player.name.toLowerCase();
+                const currentNameLower = currentPlayerName.toLowerCase();
+                
+                // Check if player name is contained in current name or vice versa
+                return playerNameLower.includes(currentNameLower) || 
+                       currentNameLower.includes(playerNameLower) ||
+                       // Check last name matching (common in FPL)
+                       playerNameLower.split(' ').some(part => 
+                           currentNameLower.includes(part) && part.length > 2
+                       );
+            });
+            
+            if (matchedPlayer) {
+                console.log(`✅ Matched ${currentPlayerName} → ${matchedPlayer.name} (${matchedPlayer.totalPoints} pts)`);
+                managerPlayers.push({
+                    ...matchedPlayer,
+                    currentSquadName: currentPlayerName
+                });
+            } else {
+                console.log(`❌ Could not match ${currentPlayerName} to any performance data`);
+            }
+        });
+        
+        if (managerPlayers.length === 0) {
+            console.warn(`❌ No players matched for ${team.manager || team.teamName}`);
+            return;
+        }
+        
+        // Sort players by total points and get top 3
+        const sortedPlayers = managerPlayers.sort((a, b) => b.totalPoints - a.totalPoints);
+        const top3Players = sortedPlayers.slice(0, 3);
+        
+        // Calculate total points from top 3 players
+        const top3Points = top3Players.reduce((sum, player) => sum + player.totalPoints, 0);
+        
+        // Calculate total points from all players
+        const totalPlayerPoints = managerPlayers.reduce((sum, player) => sum + player.totalPoints, 0);
+        
+        // Calculate contribution ratio (what % of manager's player points come from top 3)
+        const contributionRatio = totalPlayerPoints > 0 ? 
+            Math.round((top3Points / totalPlayerPoints) * 100) : 0;
+        
+        // Get manager's current league points for context
+        const managerLeaguePoints = team.points || 0;
+        
+        console.log(`📊 ${team.manager || team.teamName}:`, {
+            totalPlayers: managerPlayers.length,
+            top3Points,
+            totalPlayerPoints,
+            contributionRatio: `${contributionRatio}%`,
+            leaguePoints: managerLeaguePoints
+        });
+        
+        managerAnalysis.push({
+            name: (team.manager || team.teamName).split(' ')[0], // First name only
+            fullName: team.manager || team.teamName,
+            contributionRatio: contributionRatio,
+            top3Points,
+            totalPlayerPoints,
+            playerCount: managerPlayers.length,
+            topPlayers: top3Players.slice(0, 3).map(p => ({
+                name: p.name,
+                points: p.totalPoints
+            }))
+        });
+    });
+    
+    // Sort managers by contribution ratio (higher = more dependent on top players)
+    // Secondary sort by top 3 points total for tiebreaker
+    const sortedAnalysis = managerAnalysis.sort((a, b) => {
+        if (b.contributionRatio === a.contributionRatio) {
+            return b.top3Points - a.top3Points; // Higher top 3 points as tiebreaker
+        }
+        return b.contributionRatio - a.contributionRatio; // Higher ratio first
+    });
+    
+    console.log('🏆 Final manager analysis ranking:', sortedAnalysis);
+    
+    // Return top 3 managers with formatted results
+    return sortedAnalysis.slice(0, 3).map(manager => ({
+        name: manager.name,
+        fullName: manager.fullName,
+        contributionRatio: `${manager.contributionRatio}%`,
+        contributionRatioNumeric: manager.contributionRatio,
+        top3Points: manager.top3Points,
+        playerCount: manager.playerCount,
+        topPlayers: manager.topPlayers
+    }));
+}
+
+// Helper function: Get bargain hunters (low cost, high points)
+function getBargainHunters(players) {
+    return players
+        .filter(p => p.cost <= 6 && p.totalPoints > 0) // Low cost players
+        .map(p => ({
+            ...p,
+            pointsPerCost: (p.totalPoints / p.cost).toFixed(2)
+        }))
+        .sort((a, b) => parseFloat(b.pointsPerCost) - parseFloat(a.pointsPerCost))
+        .slice(0, 3);
+}
+
+// Helper function: Get high-risk, high-reward players
+function getHighRiskHighReward(players) {
+    return players
+        .filter(p => p.cost >= 10 && p.totalPoints > 0) // Expensive players
+        .sort((a, b) => (b.totalPoints || 0) - (a.totalPoints || 0))
+        .slice(0, 3);
+}
+
+// Helper function: Get form vs consistency analysis
+function getFormVsConsistency(players) {
+    return players
+        .filter(p => p.totalPoints > 0)
+        .map(p => {
+            // Calculate consistency score based on points vs cost ratio
+            const pointsPerCost = p.totalPoints / (p.cost || 1);
+            let consistencyType, consistencyScore;
+            
+            if (pointsPerCost >= 2.0) {
+                consistencyType = "Steady Eddie";
+                consistencyScore = "A+";
+            } else if (pointsPerCost >= 1.5) {
+                consistencyType = "Reliable";
+                consistencyScore = "A";
+            } else if (pointsPerCost >= 1.0) {
+                consistencyType = "Solid";
+                consistencyScore = "B+";
+            } else if (pointsPerCost >= 0.5) {
+                consistencyType = "Inconsistent";
+                consistencyScore = "C";
+            } else {
+                consistencyType = "Streaky";
+                consistencyScore = "D";
+            }
+            
+            return {
+                ...p,
+                consistencyScore,
+                consistencyType
+            };
+        })
+        .sort((a, b) => {
+            // Sort by consistency score (A+ > A > B+ > C > D)
+            const scoreOrder = { 'A+': 5, 'A': 4, 'B+': 3, 'C': 2, 'D': 1 };
+            return scoreOrder[b.consistencyScore] - scoreOrder[a.consistencyScore];
+        })
+        .slice(0, 3);
+}
+
+// Helper function: Get position strategy analysis
+function getPositionStrategy(players) {
+    const positions = ['GKP', 'DEF', 'MID', 'FWD'];
+    
+    return positions.map(pos => {
+        const posPlayers = players.filter(p => p.position === pos);
+        const totalPoints = posPlayers.reduce((sum, p) => sum + (p.totalPoints || 0), 0);
+        const avgPoints = posPlayers.length > 0 ? (totalPoints / posPlayers.length).toFixed(1) : 0;
+        
+        return {
+            name: pos,
+            count: posPlayers.length,
+            avgPoints: avgPoints,
+            totalPoints: totalPoints
+        };
+    }).sort((a, b) => parseFloat(b.avgPoints) - parseFloat(a.avgPoints));
+}
+
+// Helper function: Get value for money analysis
+function getValueForMoney(players) {
+    return players
+        .filter(p => p.cost > 0 && p.totalPoints > 0)
+        .map(p => {
+            // Calculate value score: (points * 10) / cost
+            // This gives higher scores to players who deliver more points per pound
+            const valueScore = ((p.totalPoints * 10) / p.cost).toFixed(1);
+            
+            return {
+                ...p,
+                valueScore
+            };
+        })
+        .sort((a, b) => parseFloat(b.valueScore) - parseFloat(a.valueScore))
+        .slice(0, 3);
 }
 
 // Prize Pool & Earnings Management

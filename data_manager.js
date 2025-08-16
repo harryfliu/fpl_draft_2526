@@ -109,13 +109,14 @@ class FPLDataManager {
         try {
             // Load the main data files plus Premier League fixtures and transfer history
             // Note: loadCSVFile now handles base path automatically
-            const [fixtures, standings, draft, plFixtures, transferHistory, partialResults] = await Promise.all([
+            const [fixtures, standings, draft, plFixtures, transferHistory, partialResults, players] = await Promise.all([
                 this.loadCSVFile(`./${gameweek}/fixture_list.csv`),
                 this.loadCSVFile(`./${gameweek}/standings.csv`),
                 this.loadCSVFile(`./${gameweek}/starting_draft.csv`),
                 this.loadPLFixtures(gameweek.replace('gw', '')),
                 this.loadTransferHistory(gameweek),
-                this.loadCSVFile(`./${gameweek}/partial_results_gw1.csv`)
+                this.loadCSVFile(`./${gameweek}/partial_results_gw1.csv`),
+                this.loadCSVFile(`./${gameweek}/players_${gameweek}.csv`)
             ]);
             
             // Parse standings data first
@@ -130,6 +131,10 @@ class FPLDataManager {
             const parsedPartialResults = this.parsePartialResultsData(partialResults);
             console.log(`🏆 Parsed partial results for ${gameweek}:`, parsedPartialResults);
             
+            // Parse player performance data
+            const parsedPlayers = this.parsePlayerData(players);
+            console.log(`⚽ Parsed ${parsedPlayers.length} player performances for ${gameweek}`);
+            
             this.gameweekData.set(gameweek, {
                 fixtures: parsedFixtures,
                 standings: parsedStandings,
@@ -137,6 +142,7 @@ class FPLDataManager {
                 plFixtures: plFixtures,
                 transferHistory: transferHistory,
                 partialResults: parsedPartialResults,
+                players: parsedPlayers,
                 timestamp: new Date().toISOString()
             });
             
@@ -912,6 +918,161 @@ class FPLDataManager {
         
         console.log(`🏆 Final partial results array (${results.length} results):`, results);
         return results;
+    }
+
+    // Parse player performance data from CSV
+    parsePlayerData(csvData) {
+        console.log('⚽ Parsing player performance data...');
+        console.log('⚽ CSV data structure:', csvData);
+        
+        if (!csvData || !csvData.data || csvData.data.length === 0) {
+            console.log('❌ No player data to parse');
+            return [];
+        }
+        
+        const players = [];
+        
+        // The CSV data is already parsed as objects with column names as keys
+        // So we can access the data directly
+        const dataRows = csvData.data;
+        
+        console.log('⚽ Data rows:', dataRows.length);
+        
+        dataRows.forEach((row, index) => {
+            if (!row || !row.Player) return;
+            
+            console.log(`⚽ Processing row ${index}:`, row);
+            
+            // The Player column contains concatenated name|team|position
+            const playerString = row.Player || '';
+            
+            // Try to extract player info using team names and positions
+            const playerInfo = this.extractPlayerInfo(playerString);
+            console.log(`⚽ Extracted player info:`, playerInfo);
+            
+            if (playerInfo.name && playerInfo.team && playerInfo.position) {
+                const player = {
+                    name: playerInfo.name,
+                    team: playerInfo.team,
+                    position: playerInfo.position,
+                    // Map the correct columns to properties
+                    cost: parseFloat(row.Cost) || 0,           // Cost column
+                    ownership: row.Ownership || '',             // Ownership column
+                    form: parseFloat(row.Form) || 0,           // Form column
+                    totalPoints: parseFloat(row.Pts) || 0,     // Pts column (total points)
+                    roundPoints: parseFloat(row['Round Pts']) || 0  // Round Pts column (gameweek points)
+                };
+                
+                // Also add the original properties for compatibility
+                player.points = player.totalPoints;
+                player.roundPts = player.roundPoints;
+                
+                console.log(`⚽ Created player object:`, player);
+                players.push(player);
+            } else {
+                console.log(`⚠️ Skipping row ${index} - invalid player info:`, playerInfo);
+            }
+        });
+        
+        console.log('⚽ Final parsed player data:', players);
+        return players;
+    }
+
+    // Extract player info from concatenated string
+    extractPlayerInfo(concatenatedString) {
+        console.log(`🔍 Extracting player info from: "${concatenatedString}"`);
+        
+        // List of Premier League teams for reference
+        const premierLeagueTeams = [
+            'Arsenal', 'Aston Villa', 'Bournemouth', 'Brentford', 'Brighton & Hove Albion',
+            'Burnley', 'Chelsea', 'Crystal Palace', 'Everton', 'Fulham', 'Leeds United',
+            'Liverpool', 'Manchester City', 'Manchester United', 'Newcastle United',
+            'Nottingham Forest', 'Sunderland', 'Tottenham Hotspur', 'West Ham United',
+            'Wolverhampton Wanderers'
+        ];
+        
+        // List of positions (note: CSV uses GKP instead of GK)
+        const positions = ['FWD', 'MID', 'DEF', 'GKP'];
+        
+        // Try to find team name in the string
+        let foundTeam = null;
+        for (const team of premierLeagueTeams) {
+            if (concatenatedString.includes(team)) {
+                foundTeam = team;
+                break;
+            }
+        }
+        
+        // Try to find position in the string
+        let foundPosition = null;
+        for (const pos of positions) {
+            if (concatenatedString.includes(pos)) {
+                foundPosition = pos;
+                break;
+            }
+        }
+        
+        console.log(`🔍 Found team: ${foundTeam}, position: ${foundPosition}`);
+        
+        if (foundTeam && foundPosition) {
+            // Extract player name (everything before the team name)
+            const teamStart = concatenatedString.indexOf(foundTeam);
+            const playerName = concatenatedString.substring(0, teamStart).trim();
+            
+            const result = {
+                name: playerName,
+                team: foundTeam,
+                position: foundPosition
+            };
+            
+            console.log(`🔍 Extracted result:`, result);
+            return result;
+        }
+        
+        // Fallback: return as-is
+        const fallback = {
+            name: concatenatedString,
+            team: 'Unknown Team',
+            position: 'Unknown Position'
+        };
+        
+        console.log(`🔍 Using fallback:`, fallback);
+        return fallback;
+    }
+
+    // Methods for player data access
+    getAllPlayers() {
+        console.log('🔍 DEBUG: getAllPlayers called');
+        const allPlayers = [];
+        for (const [gameweek, data] of this.gameweekData) {
+            console.log('🔍 DEBUG: Checking gameweek:', gameweek, 'has players:', !!data.players, 'count:', data.players ? data.players.length : 0);
+            if (data.players) {
+                allPlayers.push(...data.players);
+            }
+        }
+        console.log('🔍 DEBUG: Total players found:', allPlayers.length);
+        return allPlayers;
+    }
+
+    getPlayersByTeam(teamName) {
+        console.log('🔍 DEBUG: getPlayersByTeam called for team:', teamName);
+        const allPlayers = this.getAllPlayers();
+        console.log('🔍 DEBUG: All players found:', allPlayers.length, allPlayers);
+        const teamPlayers = allPlayers.filter(player => player.team === teamName);
+        console.log('🔍 DEBUG: Filtered players for team:', teamName, ':', teamPlayers.length, teamPlayers);
+        return teamPlayers;
+    }
+
+    getTopPerformers(limit = 10) {
+        const allPlayers = this.getAllPlayers();
+        return allPlayers
+            .sort((a, b) => (b.points || 0) - (a.points || 0))
+            .slice(0, limit);
+    }
+
+    getPlayersByPosition(position) {
+        const allPlayers = this.getAllPlayers();
+        return allPlayers.filter(player => player.position === position);
     }
 }
 

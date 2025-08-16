@@ -68,6 +68,9 @@ class FPLDataManager {
         // Process partial results for live data
         const partialResults = this.processPartialResultsData(gwData.partial_results_gw1 || []);
         
+        // Process player performance data
+        const playerData = this.processPlayerData(gwData);
+        
         // Merge standings data with draft teams for complete leaderboard info
         const leaderboardTeams = this.mergeStandingsWithDraft(standings, draft.teams);
         
@@ -81,6 +84,7 @@ class FPLDataManager {
             plFixtures: this.parsePLFixtures(gwData.pl_gw1 || gwData.pl_gw2 || []),
             transferHistory: gwData.transfer_history || { waivers: [], freeAgents: [], trades: [] },
             partialResults: partialResults,
+            playerData: playerData,
             timestamp: new Date().toISOString()
         };
 
@@ -183,6 +187,73 @@ class FPLDataManager {
         return { teams };
     }
 
+    processPartialResultsData(partialResultsData) {
+        // Process partial results data for live standings
+        if (!Array.isArray(partialResultsData)) return [];
+        
+        return partialResultsData.map(result => ({
+            gameweek: result.gameweek || 1,
+            day: result.day || 1,
+            homeTeam: result.homeTeam || '',
+            homeManager: result.homeManager || '',
+            homeScore: result.homeScore || 0,
+            awayTeam: result.awayTeam || '',
+            awayManager: result.awayManager || '',
+            awayScore: result.awayScore || 0
+        }));
+    }
+
+    processPlayerData(gwData) {
+        // Process all player performance data from different gameweeks
+        const allPlayers = {};
+        
+        // Look for player data files (players_gw1, players_gw2, etc.)
+        Object.keys(gwData).forEach(key => {
+            if (key.startsWith('players_gw')) {
+                const gameweek = key.replace('players_gw', '');
+                const players = gwData[key] || [];
+                
+                players.forEach(player => {
+                    const playerKey = `${player.name}_${player.team}`;
+                    if (!allPlayers[playerKey]) {
+                        allPlayers[playerKey] = {
+                            name: player.name,
+                            team: player.team,
+                            position: player.position,
+                            gameweeks: {},
+                            totalPoints: 0,
+                            bestGameweek: null,
+                            worstGameweek: null
+                        };
+                    }
+                    
+                    // Add gameweek data
+                    allPlayers[playerKey].gameweeks[gameweek] = {
+                        points: player.points || 0,
+                        roundPts: player.roundPts || player.points || 0,
+                        otherStats: player
+                    };
+                    
+                    // Update totals
+                    allPlayers[playerKey].totalPoints += (player.points || 0);
+                    
+                    // Track best/worst gameweeks
+                    if (!allPlayers[playerKey].bestGameweek || 
+                        (player.points || 0) > allPlayers[playerKey].gameweeks[allPlayers[playerKey].bestGameweek].points) {
+                        allPlayers[playerKey].bestGameweek = gameweek;
+                    }
+                    
+                    if (!allPlayers[playerKey].worstGameweek || 
+                        (player.points || 0) < allPlayers[playerKey].gameweeks[allPlayers[playerKey].worstGameweek].points) {
+                        allPlayers[playerKey].worstGameweek = gameweek;
+                    }
+                });
+            }
+        });
+        
+        return Object.values(allPlayers);
+    }
+
     mergeStandingsWithDraft(standings, draftTeams) {
         // Merge standings data (which has leaderboard info) with draft teams (which has draft picks)
         const mergedTeams = standings.map(standing => {
@@ -206,6 +277,34 @@ class FPLDataManager {
         
         console.log('🔗 Merged standings with draft data:', mergedTeams.length, 'teams');
         return mergedTeams;
+    }
+
+    // Methods for player data access
+    getAllPlayers() {
+        const allPlayers = [];
+        for (const [gameweek, data] of this.gameweekData) {
+            if (data.playerData) {
+                allPlayers.push(...data.playerData);
+            }
+        }
+        return allPlayers;
+    }
+
+    getPlayersByTeam(teamName) {
+        const allPlayers = this.getAllPlayers();
+        return allPlayers.filter(player => player.team === teamName);
+    }
+
+    getTopPerformers(limit = 10) {
+        const allPlayers = this.getAllPlayers();
+        return allPlayers
+            .sort((a, b) => b.totalPoints - a.totalPoints)
+            .slice(0, limit);
+    }
+
+    getPlayersByPosition(position) {
+        const allPlayers = this.getAllPlayers();
+        return allPlayers.filter(player => player.position === position);
     }
 
     getCurrentGameweek() {
@@ -239,45 +338,12 @@ class FPLDataManager {
             .sort((a, b) => a - b);
     }
 
-    processPartialResultsData(partialResultsData) {
-        // Process partial results data for live standings
-        if (!Array.isArray(partialResultsData)) return [];
-        
-        return partialResultsData.map(result => ({
-            gameweek: result.gameweek || 1,
-            day: result.day || 1,
-            homeTeam: result.homeTeam || '',
-            homeManager: result.homeManager || '',
-            homeScore: result.homeScore || 0,
-            awayTeam: result.awayTeam || '',
-            awayManager: result.awayManager || '',
-            awayScore: result.awayScore || 0
-        }));
-    }
-
-    mergeStandingsWithDraft(standings, draftTeams) {
-        // Merge standings data (which has leaderboard info) with draft teams (which has draft picks)
-        const mergedTeams = standings.map(standing => {
-            // Find corresponding draft team by team name
-            const draftTeam = draftTeams.find(team => team.teamName === standing.teamName);
-            
-            return {
-                position: standing.position,
-                teamName: standing.teamName,
-                manager: standing.manager,
-                firstName: standing.manager.split(' ')[0], // Extract first name for dropdown
-                points: standing.points,
-                wins: standing.wins,
-                draws: standing.draws,
-                losses: standing.losses,
-                gwPoints: standing.gwPoints,
-                form: standing.form,
-                draftPicks: draftTeam ? draftTeam.draftPicks : []
-            };
-        });
-        
-        console.log('🔗 Merged standings with draft data:', mergedTeams.length, 'teams');
-        return mergedTeams;
+    async loadGameweekDataIfNeeded(gameweek) {
+        const gwKey = `gw${gameweek}`;
+        if (!this.gameweekData.has(gwKey)) {
+            await this.loadGameweekData(gwKey);
+        }
+        return this.gameweekData.get(gwKey);
     }
 
     // Methods needed for partial results functionality
@@ -297,13 +363,5 @@ class FPLDataManager {
             return data ? data.partialResults : [];
         }
         return this.getAllPartialResults();
-    }
-
-    async loadGameweekDataIfNeeded(gameweek) {
-        const gwKey = `gw${gameweek}`;
-        if (!this.gameweekData.has(gwKey)) {
-            await this.loadGameweekData(gwKey);
-        }
-        return this.gameweekData.get(gwKey);
     }
 }
