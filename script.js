@@ -1372,15 +1372,38 @@ function displayTeamDetails(team) {
 
 // Display team top contributors for current gameweek
 function displayTeamTopContributors(team) {
+    console.log('🏆 DEBUG: displayTeamTopContributors called for team:', team);
+    
     const container = document.getElementById('team-top-contributors');
     const emptyMessage = document.getElementById('team-top-contributors-empty');
-    if (!container) return;
+    
+    console.log('🏆 DEBUG: Container found:', !!container);
+    console.log('🏆 DEBUG: Empty message found:', !!emptyMessage);
+    
+    if (!container) {
+        console.error('❌ Top contributors container not found!');
+        return;
+    }
     
     container.innerHTML = '';
     
     // Get current gameweek data
     const currentData = dataManager.getCurrentGameweekData();
-    if (!currentData || !currentData.playerData || currentData.playerData.length === 0) {
+    console.log('🏆 DEBUG: currentData from dataManager:', currentData);
+    console.log('🏆 DEBUG: dataManager exists:', !!dataManager);
+    
+    if (!currentData) {
+        console.error('❌ No current data available');
+        container.classList.add('hidden');
+        if (emptyMessage) emptyMessage.classList.remove('hidden');
+        return;
+    }
+    
+    console.log('🏆 DEBUG: currentData.playerData:', currentData.playerData);
+    console.log('🏆 DEBUG: playerData length:', currentData.playerData?.length);
+    
+    if (!currentData.playerData || currentData.playerData.length === 0) {
+        console.error('❌ No player data available');
         container.classList.add('hidden');
         if (emptyMessage) emptyMessage.classList.remove('hidden');
         return;
@@ -1388,7 +1411,11 @@ function displayTeamTopContributors(team) {
     
     // Get the manager's current squad
     const currentSquad = calculateCurrentTeam(team.manager);
+    console.log('🏆 DEBUG: currentSquad for', team.manager, ':', currentSquad);
+    console.log('🏆 DEBUG: currentSquad length:', currentSquad?.length);
+    
     if (!currentSquad || currentSquad.length === 0) {
+        console.error('❌ No current squad available for', team.manager);
         container.classList.add('hidden');
         if (emptyMessage) emptyMessage.classList.remove('hidden');
         return;
@@ -1396,29 +1423,55 @@ function displayTeamTopContributors(team) {
     
     // Match current squad players to performance data
     const managerPlayers = [];
-    currentSquad.forEach(currentPlayerName => {
+    console.log('🏆 DEBUG: Starting player matching process...');
+    
+    currentSquad.forEach((currentPlayerName, index) => {
+        console.log(`🏆 DEBUG: Processing player ${index + 1}/${currentSquad.length}: "${currentPlayerName}"`);
+        
         const matchedPlayer = currentData.playerData.find(player => {
-            if (player.name === currentPlayerName) return true; // Exact match
+            if (player.name === currentPlayerName) {
+                console.log(`🏆 DEBUG: Exact match found for "${currentPlayerName}"`);
+                return true;
+            }
+            
             const playerNameLower = player.name.toLowerCase();
             const currentNameLower = currentPlayerName.toLowerCase();
-            return playerNameLower.includes(currentNameLower) || 
+            const partialMatch = playerNameLower.includes(currentNameLower) || 
                    currentNameLower.includes(playerNameLower) ||
                    playerNameLower.split(' ').some(part => 
                        currentNameLower.includes(part) && part.length > 2
                    );
+            
+            if (partialMatch) {
+                console.log(`🏆 DEBUG: Partial match found: "${currentPlayerName}" → "${player.name}"`);
+            }
+            
+            return partialMatch;
         });
         
         if (matchedPlayer) {
+            console.log(`🏆 DEBUG: Adding matched player:`, matchedPlayer);
             managerPlayers.push({ ...matchedPlayer, currentSquadName: currentPlayerName });
+        } else {
+            console.warn(`⚠️ No match found for "${currentPlayerName}"`);
         }
     });
     
+    console.log('🏆 DEBUG: Total matched players:', managerPlayers.length);
+    console.log('🏆 DEBUG: Matched players:', managerPlayers);
+    
     // Sort by round points (current gameweek performance) and take top 3
+    console.log('🏆 DEBUG: Sorting players by round points...');
+    console.log('🏆 DEBUG: Manager players before sorting:', managerPlayers.map(p => ({ name: p.currentSquadName, roundPoints: p.roundPoints })));
+    
     const topContributors = managerPlayers
         .sort((a, b) => (b.roundPoints || 0) - (a.roundPoints || 0))
         .slice(0, 3);
     
+    console.log('🏆 DEBUG: Top 3 contributors after sorting:', topContributors.map(p => ({ name: p.currentSquadName, roundPoints: p.roundPoints })));
+    
     if (topContributors.length === 0) {
+        console.error('❌ No top contributors found after sorting');
         container.classList.add('hidden');
         if (emptyMessage) emptyMessage.classList.remove('hidden');
         return;
