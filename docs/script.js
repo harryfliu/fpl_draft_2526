@@ -1272,9 +1272,6 @@ function displayTeamDetails(team) {
     const teamLosses = document.getElementById('team-losses');
     const teamRank = document.getElementById('team-rank');
     
-    // Add player performance information
-    displayTeamPlayerPerformance(team);
-    
     if (teamWins) teamWins.textContent = teamPerformance.wins;
     if (teamDraws) teamDraws.textContent = teamPerformance.draws;
     if (teamLosses) teamLosses.textContent = teamPerformance.losses;
@@ -1335,114 +1332,6 @@ function displayTeamDetails(team) {
     
     // Update draft picks
     displayTeamDraftPicks(team);
-}
-
-// Display team player performance based on partial results
-function displayTeamPlayerPerformance(team) {
-    if (!dataManager) return;
-    
-    const players = dataManager.getAllPlayers();
-    if (players.length === 0) return;
-    
-    // Get the team's draft picks to know which players they own
-    const teamDraftPicks = team.draftPicks || [];
-    
-    // Filter players that belong to this team
-    const teamPlayers = players.filter(player => {
-        return teamDraftPicks.some(draftPick => {
-            // Check if the draft pick contains the player name
-            return draftPick.toLowerCase().includes(player.name.toLowerCase());
-        });
-    });
-    
-    if (teamPlayers.length === 0) return;
-    
-    // Sort players by points (highest first)
-    teamPlayers.sort((a, b) => b.points - a.points);
-    
-    // Find the container for player performance
-    const container = document.getElementById('team-player-performance');
-    if (!container) return;
-    
-    container.innerHTML = '';
-    container.classList.remove('hidden');
-    
-    // Create header
-    const header = document.createElement('div');
-    header.className = 'text-lg font-bold text-white mb-3 flex items-center gap-2';
-    header.innerHTML = `
-        <i class="fas fa-star text-yellow-400"></i>
-        Player Performance (${teamPlayers.length} players)
-    `;
-    container.appendChild(header);
-    
-    // Create player cards
-    teamPlayers.forEach(player => {
-        const playerCard = document.createElement('div');
-        playerCard.className = 'card bg-gray-800/80 border border-gray-600/50 p-3 mb-2 hover:bg-gray-700/80 transition-colors';
-        
-        // Color code based on position
-        let positionColor = 'text-gray-400';
-        let positionIcon = '⚽';
-        
-        switch (player.position) {
-            case 'GKP':
-                positionColor = 'text-blue-400';
-                positionIcon = '🥅';
-                break;
-            case 'DEF':
-                positionColor = 'text-green-400';
-                positionIcon = '🛡️';
-                break;
-            case 'MID':
-                positionColor = 'text-yellow-400';
-                positionIcon = '⚡';
-                break;
-            case 'FWD':
-                positionColor = 'text-red-400';
-                positionIcon = '🔥';
-                break;
-        }
-        
-        playerCard.innerHTML = `
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                    <span class="text-lg">${positionIcon}</span>
-                    <div>
-                        <div class="font-medium text-white">${player.name}</div>
-                        <div class="text-xs ${positionColor}">${player.team} ${player.position}</div>
-                    </div>
-                </div>
-                <div class="text-right">
-                    <div class="text-lg font-bold text-green-400">${player.points}</div>
-                    <div class="text-xs text-gray-400">pts</div>
-                </div>
-            </div>
-        `;
-        
-        container.appendChild(playerCard);
-    });
-    
-    // Add summary stats
-    const totalPoints = teamPlayers.reduce((sum, player) => sum + player.points, 0);
-    const avgPoints = Math.round(totalPoints / teamPlayers.length);
-    
-    const summaryCard = document.createElement('div');
-    summaryCard.className = 'card bg-gradient-to-r from-purple-600/20 to-blue-600/20 border border-purple-500/50 p-3 mt-3';
-    summaryCard.innerHTML = `
-        <div class="flex items-center justify-between text-white">
-            <div>
-                <div class="text-sm text-purple-300">Total Squad Points</div>
-                <div class="text-lg font-bold">${totalPoints}</div>
-            </div>
-            <div class="text-right">
-                <div class="text-sm text-blue-300">Average per Player</div>
-                <div class="text-lg font-bold">${avgPoints}</div>
-            </div>
-        </div>
-    `;
-    
-    container.appendChild(summaryCard);
 }
 
 // Display team current squad (draft picks + transfers)

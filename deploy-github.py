@@ -23,11 +23,12 @@ def create_github_pages():
         if os.path.exists(file):
             shutil.copy2(file, docs_path)
     
-    # Convert CSV data to JSON for web compatibility
-    convert_data_to_json(docs_path)
-    
-    # Update data_manager.js for GitHub Pages
-    update_data_manager_for_web(docs_path)
+    # Copy gw1 folder with all CSV files (including partial results)
+    gw1_source = "./gw1"
+    gw1_dest = os.path.join(docs_path, "gw1")
+    if os.path.exists(gw1_source):
+        shutil.copytree(gw1_source, gw1_dest)
+        print("✅ Copied gw1 folder with all CSV files")
     
     print("🌐 GitHub Pages version created in /docs")
     print("\n📋 Next steps:")
