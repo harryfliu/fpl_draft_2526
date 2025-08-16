@@ -310,9 +310,9 @@ function populateDraftPicks() {
 // Get position badge for top 3
 function getPositionBadge(position) {
     const badges = {
-        1: '<div class="badge badge-warning badge-sm">🥇</div>',
-        2: '<div class="badge badge-secondary badge-sm">🥈</div>',
-        3: '<div class="badge badge-accent badge-sm">🥉</div>'
+        1: '<div class="badge badge-sm bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 text-white border-0 shadow-lg" style="background: linear-gradient(135deg, #fbbf24, #f59e0b, #ea580c);">🥇</div>',
+        2: '<div class="badge badge-sm bg-gradient-to-r from-slate-300 via-slate-400 to-slate-500 text-white border-0 shadow-lg" style="background: linear-gradient(135deg, #cbd5e1, #94a3b8, #64748b);">🥈</div>',
+        3: '<div class="badge badge-sm bg-gradient-to-r from-amber-600 via-orange-600 to-red-600 text-white border-0 shadow-lg" style="background: linear-gradient(135deg, #d97706, #ea580c, #dc2626);">🥉</div>'
     };
     return badges[position] || '';
 }
