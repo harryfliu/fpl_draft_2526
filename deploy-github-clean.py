@@ -457,8 +457,8 @@ def extract_player_info(concatenated_string):
         'Wolverhampton Wanderers'
     ]
     
-    # List of positions
-    positions = ['FWD', 'MID', 'DEF', 'GK']
+    # List of positions - handle both GK and GKP
+    positions = ['FWD', 'MID', 'DEF', 'GKP', 'GK']
     
     # Try to find team name in the string
     found_team = None
@@ -473,6 +473,10 @@ def extract_player_info(concatenated_string):
         if pos in concatenated_string:
             found_position = pos
             break
+    
+    # Normalize GK to GKP for consistency
+    if found_position == 'GK':
+        found_position = 'GKP'
     
     if found_team and found_position:
         # Extract player name (everything before the team name)
