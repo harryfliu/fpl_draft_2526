@@ -23,12 +23,11 @@ def create_github_pages():
         if os.path.exists(file):
             shutil.copy2(file, docs_path)
     
-    # Copy gw1 folder with all CSV files (including partial results)
-    gw1_source = "./gw1"
-    gw1_dest = os.path.join(docs_path, "gw1")
-    if os.path.exists(gw1_source):
-        shutil.copytree(gw1_source, gw1_dest)
-        print("✅ Copied gw1 folder with all CSV files")
+    # Convert CSV data to JSON for web compatibility
+    convert_data_to_json(docs_path)
+    
+    # Update data_manager.js for GitHub Pages
+    update_data_manager_for_web(docs_path)
     
     print("🌐 GitHub Pages version created in /docs")
     print("\n📋 Next steps:")
@@ -73,6 +72,10 @@ def convert_data_to_json(docs_path):
                         gw_data[file_key] = parse_transfer_history_csv(csv_path)
                     elif file_key.startswith('pl_gw'):
                         gw_data[file_key] = parse_pl_fixtures_csv(csv_path)
+                    elif file_key == 'partial_results_gw1':
+                        gw_data[file_key] = parse_partial_results_csv(csv_path)
+                    elif file_key == 'players_partial_gw1':
+                        gw_data[file_key] = parse_players_partial_csv(csv_path)
                     else:
                         # Default CSV parsing
                         try:
@@ -306,6 +309,94 @@ def parse_pl_fixtures_csv(csv_path):
         print(f"⚠️ Error parsing PL fixtures CSV: {e}")
         return []
 
+def parse_partial_results_csv(csv_path):
+    """Parse partial_results_gw1.csv with the specific format"""
+    try:
+        with open(csv_path, 'r', encoding='utf-8') as csvfile:
+            content = csvfile.read()
+            
+        results = []
+        
+        # Skip the first line (Gameweek header)
+        lines = content.strip().split('\n')
+        if lines and 'Gameweek' in lines[0]:
+            lines = lines[1:]
+        
+        # Parse the CSV content properly handling multi-line quoted fields
+        import csv
+        from io import StringIO
+        
+        # Create a CSV reader that can handle the multi-line format
+        csv_reader = csv.reader(StringIO('\n'.join(lines)), quotechar='"', delimiter=',')
+        
+        for row in csv_reader:
+            if len(row) >= 3:
+                home_info = row[0].strip()
+                score_info = row[1].strip()
+                away_info = row[2].strip()
+                
+                # Skip empty or invalid lines
+                if not home_info or not score_info or not away_info:
+                    continue
+                
+                # Parse score (format: "X - Y")
+                if ' - ' in score_info:
+                    score_parts = score_info.split(' - ')
+                    if len(score_parts) == 2:
+                        try:
+                            home_score = int(score_parts[0].strip())
+                            away_score = int(score_parts[1].strip())
+                        except ValueError:
+                            continue  # Skip if scores aren't valid numbers
+                        
+                        # Extract team names (first line before newline)
+                        home_team = home_info.split('\n')[0].strip()
+                        away_team = away_info.split('\n')[0].strip()
+                        
+                        # Extract manager names (second line after newline)
+                        home_manager = home_info.split('\n')[1].strip() if '\n' in home_info else home_team
+                        away_manager = away_info.split('\n')[1].strip() if '\n' in away_info else away_team
+                        
+                        results.append({
+                            'gameweek': 1,
+                            'day': 1,  # Default to day 1
+                            'homeTeam': home_team,
+                            'homeManager': home_manager,
+                            'homeScore': home_score,
+                            'awayTeam': away_team,
+                            'awayManager': away_manager,
+                            'awayScore': away_score
+                        })
+        
+        print(f"🏆 Parsed {len(results)} partial results from {csv_path}")
+        return results
+    except Exception as e:
+        print(f"⚠️ Error parsing partial results CSV: {e}")
+        return []
+
+def parse_players_partial_csv(csv_path):
+    """Parse players_partial_gw1.csv with player performance data"""
+    try:
+        with open(csv_path, 'r', encoding='utf-8') as csvfile:
+            reader = csv.DictReader(csvfile)
+            players = list(reader)
+        
+        # Convert to expected format
+        formatted_players = []
+        for player in players:
+            formatted_players.append({
+                'name': player.get('Name', ''),
+                'team': player.get('Team', ''),
+                'position': player.get('Position', ''),
+                'points': int(player.get('Points', 0)) if player.get('Points', '').isdigit() else 0
+            })
+        
+        print(f"⚽ Parsed {len(formatted_players)} player performances from {csv_path}")
+        return formatted_players
+    except Exception as e:
+        print(f"⚠️ Error parsing players partial CSV: {e}")
+        return []
+
 def update_data_manager_for_web(docs_path):
     """Update data manager to load from JSON instead of CSV"""
     
@@ -381,6 +472,9 @@ class FPLDataManager {
         const standings = this.processStandingsData(gwData.standings || []);
         const draft = this.processDraftData(gwData.starting_draft || [], gwData.standings || []);
         
+        // Process partial results for live data
+        const partialResults = this.processPartialResultsData(gwData.partial_results_gw1 || []);
+        
         // Merge standings data with draft teams for complete leaderboard info
         const leaderboardTeams = this.mergeStandingsWithDraft(standings, draft.teams);
         
@@ -393,6 +487,7 @@ class FPLDataManager {
             },
             plFixtures: this.parsePLFixtures(gwData.pl_gw1 || gwData.pl_gw2 || []),
             transferHistory: gwData.transfer_history || { waivers: [], freeAgents: [], trades: [] },
+            partialResults: partialResults,
             timestamp: new Date().toISOString()
         };
 
@@ -551,6 +646,22 @@ class FPLDataManager {
             .sort((a, b) => a - b);
     }
 
+    processPartialResultsData(partialResultsData) {
+        // Process partial results data for live standings
+        if (!Array.isArray(partialResultsData)) return [];
+        
+        return partialResultsData.map(result => ({
+            gameweek: result.gameweek || 1,
+            day: result.day || 1,
+            homeTeam: result.homeTeam || '',
+            homeManager: result.homeManager || '',
+            homeScore: result.homeScore || 0,
+            awayTeam: result.awayTeam || '',
+            awayManager: result.awayManager || '',
+            awayScore: result.awayScore || 0
+        }));
+    }
+
     mergeStandingsWithDraft(standings, draftTeams) {
         // Merge standings data (which has leaderboard info) with draft teams (which has draft picks)
         const mergedTeams = standings.map(standing => {
@@ -574,6 +685,25 @@ class FPLDataManager {
         
         console.log('🔗 Merged standings with draft data:', mergedTeams.length, 'teams');
         return mergedTeams;
+    }
+
+    // Methods needed for partial results functionality
+    getAllPartialResults() {
+        const allResults = [];
+        for (const [gameweek, data] of this.gameweekData) {
+            if (data.partialResults) {
+                allResults.push(...data.partialResults);
+            }
+        }
+        return allResults;
+    }
+
+    getPartialResults(gameweek = null) {
+        if (gameweek) {
+            const data = this.gameweekData.get(gameweek);
+            return data ? data.partialResults : [];
+        }
+        return this.getAllPartialResults();
     }
 
     async loadGameweekDataIfNeeded(gameweek) {
