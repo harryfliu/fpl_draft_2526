@@ -716,6 +716,7 @@ class FPLDataManager {
                             name: player.name,
                             team: player.team,
                             position: player.position,
+                            cost: player.Cost || 0,  // Add cost property for analytics
                             gameweeks: {},
                             totalPoints: 0,
                             bestGameweek: null,
@@ -723,24 +724,27 @@ class FPLDataManager {
                         };
                     }
                     
-                    // Add gameweek data
+                    // Add gameweek data - handle JSON property names
+                    const playerPoints = player.Pts || player.points || 0;
+                    const roundPts = player['Round Pts'] || player.roundPts || playerPoints;
+                    
                     allPlayers[playerKey].gameweeks[gameweek] = {
-                        points: player.points || 0,
-                        roundPts: player.roundPts || player.points || 0,
+                        points: playerPoints,
+                        roundPts: roundPts,
                         otherStats: player
                     };
                     
                     // Update totals
-                    allPlayers[playerKey].totalPoints += (player.points || 0);
+                    allPlayers[playerKey].totalPoints += playerPoints;
                     
                     // Track best/worst gameweeks
                     if (!allPlayers[playerKey].bestGameweek || 
-                        (player.points || 0) > allPlayers[playerKey].gameweeks[allPlayers[playerKey].bestGameweek].points) {
+                        playerPoints > allPlayers[playerKey].gameweeks[allPlayers[playerKey].bestGameweek].points) {
                         allPlayers[playerKey].bestGameweek = gameweek;
                     }
                     
                     if (!allPlayers[playerKey].worstGameweek || 
-                        (player.points || 0) < allPlayers[playerKey].gameweeks[allPlayers[playerKey].worstGameweek].points) {
+                        playerPoints < allPlayers[playerKey].gameweeks[allPlayers[playerKey].worstGameweek].points) {
                         allPlayers[playerKey].worstGameweek = gameweek;
                     }
                 });
