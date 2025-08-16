@@ -17,8 +17,8 @@ def create_github_pages():
         shutil.rmtree(docs_path)
     os.makedirs(docs_path)
     
-    # Copy main files
-    files_to_copy = ['index.html', 'script.js', 'data_manager.js']
+    # Copy main files (EXCEPT data_manager.js - we'll create a web version)
+    files_to_copy = ['index.html', 'script.js']
     for file in files_to_copy:
         if os.path.exists(file):
             shutil.copy2(file, docs_path)
@@ -26,7 +26,7 @@ def create_github_pages():
     # Convert CSV data to JSON for web compatibility
     convert_data_to_json(docs_path)
     
-    # Update data_manager.js for GitHub Pages
+    # Create web-optimized data_manager.js for GitHub Pages
     update_data_manager_for_web(docs_path)
     
     print("🌐 GitHub Pages version created in /docs")
