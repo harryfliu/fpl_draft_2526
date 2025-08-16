@@ -1451,7 +1451,21 @@ function displayTeamTopContributors(team) {
         
         if (matchedPlayer) {
             console.log(`🏆 DEBUG: Adding matched player:`, matchedPlayer);
-            managerPlayers.push({ ...matchedPlayer, currentSquadName: currentPlayerName });
+            
+            // Extract round points from the deployed data structure
+            let roundPoints = 0;
+            if (matchedPlayer.gameweeks && matchedPlayer.gameweeks["1"]) {
+                roundPoints = matchedPlayer.gameweeks["1"].roundPts || 0;
+                console.log(`🏆 DEBUG: Found round points for ${currentPlayerName}:`, roundPoints);
+            } else {
+                console.warn(`⚠️ No gameweek data found for ${currentPlayerName}`);
+            }
+            
+            managerPlayers.push({ 
+                ...matchedPlayer, 
+                currentSquadName: currentPlayerName,
+                roundPoints: roundPoints  // Add the extracted round points
+            });
         } else {
             console.warn(`⚠️ No match found for "${currentPlayerName}"`);
         }
