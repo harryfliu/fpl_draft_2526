@@ -1380,7 +1380,7 @@ function displayTeamTopContributors(team) {
     
     // Get current gameweek data
     const currentData = dataManager.getCurrentGameweekData();
-    if (!currentData || !currentData.players || currentData.players.length === 0) {
+    if (!currentData || !currentData.playerData || currentData.playerData.length === 0) {
         container.classList.add('hidden');
         if (emptyMessage) emptyMessage.classList.remove('hidden');
         return;
@@ -1397,7 +1397,7 @@ function displayTeamTopContributors(team) {
     // Match current squad players to performance data
     const managerPlayers = [];
     currentSquad.forEach(currentPlayerName => {
-        const matchedPlayer = currentData.players.find(player => {
+        const matchedPlayer = currentData.playerData.find(player => {
             if (player.name === currentPlayerName) return true; // Exact match
             const playerNameLower = player.name.toLowerCase();
             const currentNameLower = currentPlayerName.toLowerCase();
