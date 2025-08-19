@@ -504,11 +504,17 @@ class FPLDataManager {
     }
 
     getFinalResults(gameweek = null) {
+        console.log('🏆 getFinalResults called with gameweek:', gameweek);
         if (gameweek) {
             // Convert gameweek number to string key (e.g., 1 -> "gw1")
             const gameweekKey = typeof gameweek === 'number' ? `gw${gameweek}` : gameweek;
+            console.log('🏆 Looking for gameweek key:', gameweekKey);
+            console.log('🏆 Available gameweek keys:', Array.from(this.gameweekData.keys()));
             const data = this.gameweekData.get(gameweekKey);
-            return data ? data.finalResults : [];
+            console.log('🏆 Found data for key', gameweekKey, ':', data);
+            const finalResults = data ? data.finalResults : [];
+            console.log('🏆 Returning final results:', finalResults);
+            return finalResults;
         }
         return this.getAllFinalResults();
     }

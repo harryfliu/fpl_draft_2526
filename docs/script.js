@@ -1953,10 +1953,16 @@ function parseMarkdown(markdown) {
 
 // Compute Weekly Winner for a given gameweek using results (final preferred)
 function computeAndDisplayWeeklyWinner(gameweek) {
-    if (!dataManager) return;
+    console.log('🏆 computeAndDisplayWeeklyWinner called with gameweek:', gameweek);
+    if (!dataManager) {
+        console.log('❌ No data manager available');
+        return;
+    }
     // Only calculate weekly winner if final results exist
     const finalResults = dataManager.getFinalResults(gameweek);
+    console.log('🏆 Final results for gameweek', gameweek, ':', finalResults);
     if (!finalResults || finalResults.length === 0) {
+        console.log('❌ No final results found, setting weekly winner to TBD');
         dashboardData.weeklyWinner = 'TBD';
         updateOverviewStats();
         return;
