@@ -74,6 +74,8 @@ def convert_data_to_json(docs_path):
                         gw_data[file_key] = parse_players_partial_csv(csv_path)
                     elif file_key.startswith('players_gw'):
                         gw_data[file_key] = parse_players_gw_csv(csv_path)
+                    elif file_key.startswith('final_results_gw'):
+                        gw_data[file_key] = parse_final_results_csv(csv_path)
                     else:
                         # Default CSV parsing
                         try:
@@ -446,13 +448,60 @@ def parse_players_gw_csv(csv_path):
         print(f"⚠️ Error parsing players GW CSV: {e}")
         return []
 
+def parse_final_results_csv(csv_path):
+    """Parse final_results_gw#.csv with clean final scores"""
+    try:
+        with open(csv_path, 'r', encoding='utf-8') as csvfile:
+            reader = csv.reader(csvfile)
+            results = []
+            
+            for i, row in enumerate(reader):
+                if i == 0:
+                    # Skip header row (Gameweek X - Day Y)
+                    continue
+                    
+                if row and len(row) >= 3:
+                    # Extract team names and scores
+                    home_team = row[0].strip().strip('"')
+                    score = row[1].strip()
+                    away_team = row[2].strip().strip('"')
+                    
+                    # Parse score (format: "31 - 39")
+                    if ' - ' in score:
+                        home_score, away_score = score.split(' - ')
+                        home_score = int(home_score.strip())
+                        away_score = int(away_score.strip())
+                        
+                        # Parse team names (multi-line format: "Team Name\nManager Name")
+                        home_team_name, home_manager = home_team.split('\n') if '\n' in home_team else (home_team, '')
+                        away_team_name, away_manager = away_team.split('\n') if '\n' in away_team else (away_team, '')
+                        
+                        result = {
+                            'homeTeam': home_team_name.strip(),
+                            'homeManager': home_manager.strip(),
+                            'awayTeam': away_team_name.strip(),
+                            'awayManager': away_manager.strip(),
+                            'homeScore': home_score,
+                            'awayScore': away_score,
+                            'gameweek': int(csv_path.split('gw')[1].split('/')[0]),
+                            'isFinal': True
+                        }
+                        
+                        results.append(result)
+            
+            print(f"🏆 Parsed {len(results)} final results from {csv_path}")
+            return results
+    except Exception as e:
+        print(f"⚠️ Error parsing final results CSV: {e}")
+        return []
+
 def extract_player_info(concatenated_string):
     """Extract player name, team, and position from concatenated string"""
     # List of Premier League teams for reference (including common abbreviations)
     premier_league_teams = [
         'Arsenal', 'Aston Villa', 'Bournemouth', 'Brentford', 'Brighton & Hove Albion',
         'Brighton', 'Burnley', 'Chelsea', 'Crystal Palace', 'Everton', 'Fulham', 'Leeds United',
-        'Liverpool', 'Manchester City', 'Man City', 'Manchester United', 'Man United', 
+        'Liverpool', 'Manchester City', 'Man City', 'Manchester United', 'Man United', 'Man Utd',
         'Newcastle United', 'Newcastle', 'Nottingham Forest', 'Nott\'m Forest',
         'Sunderland', 'Tottenham Hotspur', 'Tottenham', 'Spurs', 'West Ham United', 
         'West Ham', 'Wolverhampton Wanderers', 'Wolves'
@@ -461,7 +510,8 @@ def extract_player_info(concatenated_string):
     # Team name normalization mapping
     team_mapping = {
         'Man City': 'Manchester City',
-        'Man United': 'Manchester United', 
+        'Man United': 'Manchester United',
+        'Man Utd': 'Manchester United',
         'Newcastle': 'Newcastle United',
         'Nott\'m Forest': 'Nottingham Forest',
         'Tottenham': 'Tottenham Hotspur',
@@ -579,7 +629,10 @@ class FPLDataManager {
         const standings = this.processStandingsData(gwData.standings || []);
         const draft = this.processDraftData(gwData.starting_draft || [], gwData.standings || []);
         
-        // Process partial results for live data
+        // Process final results (prioritize over partial results)
+        const finalResults = this.processFinalResultsData(gwData.final_results_gw1 || []);
+        
+        // Process partial results for live data (fallback if no final results)
         const partialResults = this.processPartialResultsData(gwData.partial_results_gw1 || []);
         
         // Process player performance data
@@ -597,6 +650,7 @@ class FPLDataManager {
             },
             plFixtures: this.parsePLFixtures(gwData.pl_gw1 || gwData.pl_gw2 || []),
             transferHistory: gwData.transfer_history || { waivers: [], freeAgents: [], trades: [] },
+            finalResults: finalResults,
             partialResults: partialResults,
             playerData: playerData,
             timestamp: new Date().toISOString()
@@ -714,6 +768,22 @@ class FPLDataManager {
             awayTeam: result.awayTeam || '',
             awayManager: result.awayManager || '',
             awayScore: result.awayScore || 0
+        }));
+    }
+
+    processFinalResultsData(finalResultsData) {
+        // Process final results data for locked-in standings
+        if (!Array.isArray(finalResultsData)) return [];
+        
+        return finalResultsData.map(result => ({
+            gameweek: result.gameweek || 1,
+            homeTeam: result.homeTeam || '',
+            homeManager: result.homeManager || '',
+            homeScore: result.homeScore || 0,
+            awayTeam: result.awayTeam || '',
+            awayManager: result.awayManager || '',
+            awayScore: result.awayScore || 0,
+            isFinal: true
         }));
     }
 
@@ -881,6 +951,34 @@ class FPLDataManager {
             return data ? data.partialResults : [];
         }
         return this.getAllPartialResults();
+    }
+
+    // Methods for final results functionality
+    getAllFinalResults() {
+        const allResults = [];
+        for (const [gameweek, data] of this.gameweekData) {
+            if (data.finalResults) {
+                allResults.push(...data.finalResults);
+            }
+        }
+        return allResults;
+    }
+
+    getFinalResults(gameweek = null) {
+        if (gameweek) {
+            const data = this.gameweekData.get(gameweek);
+            return data ? data.finalResults : [];
+        }
+        return this.getAllFinalResults();
+    }
+
+    // Get results with final results taking priority over partial results
+    getResults(gameweek = null) {
+        const finalResults = this.getFinalResults(gameweek);
+        if (finalResults.length > 0) {
+            return finalResults; // Use final results if available
+        }
+        return this.getPartialResults(gameweek); // Fallback to partial results
     }
 }
 '''

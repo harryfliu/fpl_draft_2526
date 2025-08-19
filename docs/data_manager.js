@@ -65,7 +65,10 @@ class FPLDataManager {
         const standings = this.processStandingsData(gwData.standings || []);
         const draft = this.processDraftData(gwData.starting_draft || [], gwData.standings || []);
         
-        // Process partial results for live data
+        // Process final results (prioritize over partial results)
+        const finalResults = this.processFinalResultsData(gwData.final_results_gw1 || []);
+        
+        // Process partial results for live data (fallback if no final results)
         const partialResults = this.processPartialResultsData(gwData.partial_results_gw1 || []);
         
         // Process player performance data
@@ -83,6 +86,7 @@ class FPLDataManager {
             },
             plFixtures: this.parsePLFixtures(gwData.pl_gw1 || gwData.pl_gw2 || []),
             transferHistory: gwData.transfer_history || { waivers: [], freeAgents: [], trades: [] },
+            finalResults: finalResults,
             partialResults: partialResults,
             playerData: playerData,
             timestamp: new Date().toISOString()
@@ -200,6 +204,22 @@ class FPLDataManager {
             awayTeam: result.awayTeam || '',
             awayManager: result.awayManager || '',
             awayScore: result.awayScore || 0
+        }));
+    }
+
+    processFinalResultsData(finalResultsData) {
+        // Process final results data for locked-in standings
+        if (!Array.isArray(finalResultsData)) return [];
+        
+        return finalResultsData.map(result => ({
+            gameweek: result.gameweek || 1,
+            homeTeam: result.homeTeam || '',
+            homeManager: result.homeManager || '',
+            homeScore: result.homeScore || 0,
+            awayTeam: result.awayTeam || '',
+            awayManager: result.awayManager || '',
+            awayScore: result.awayScore || 0,
+            isFinal: true
         }));
     }
 
@@ -367,5 +387,33 @@ class FPLDataManager {
             return data ? data.partialResults : [];
         }
         return this.getAllPartialResults();
+    }
+
+    // Methods for final results functionality
+    getAllFinalResults() {
+        const allResults = [];
+        for (const [gameweek, data] of this.gameweekData) {
+            if (data.finalResults) {
+                allResults.push(...data.finalResults);
+            }
+        }
+        return allResults;
+    }
+
+    getFinalResults(gameweek = null) {
+        if (gameweek) {
+            const data = this.gameweekData.get(gameweek);
+            return data ? data.finalResults : [];
+        }
+        return this.getAllFinalResults();
+    }
+
+    // Get results with final results taking priority over partial results
+    getResults(gameweek = null) {
+        const finalResults = this.getFinalResults(gameweek);
+        if (finalResults.length > 0) {
+            return finalResults; // Use final results if available
+        }
+        return this.getPartialResults(gameweek); // Fallback to partial results
     }
 }

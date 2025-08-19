@@ -612,7 +612,7 @@
                             </div>
                             <div class="text-gray-400 text-sm font-medium uppercase tracking-wider mb-2">Prize Pool</div>
                             <div class="text-3xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent mb-2" id="overview-prize-pool">$420</div>
-                            <div class="text-gray-500 text-xs">Total pot</div>
+                            <div class="text-gray-500 text-xs">League pot</div>
                         </div>
                     </div>
                     
@@ -655,8 +655,8 @@
                         </h2>
                         
                         <!-- Summary Content -->
-                        <div id="weekly-summary-content" class="prose prose-invert max-w-none">
-                            <div class="bg-gray-800/50 border border-gray-600/50 rounded-lg p-6 text-center">
+                        <div id="weekly-summary-content" class="prose prose-invert max-w-none h-64 overflow-y-auto bg-gray-800/50 border border-gray-600/50 rounded-lg p-4">
+                            <div class="text-center">
                                 <div class="text-gray-400 mb-4">
                                     <i class="fas fa-magic text-4xl mb-3"></i>
                                 </div>
@@ -1190,30 +1190,7 @@
                             </h2>
                         </div>
                         
-                        <!-- Overall Prize Pool Stats -->
-                        <div class="grid grid-cols-1 gap-3 md:gap-4 md:grid-cols-3 mb-6">
-                            <div class="card bg-gray-900/90 border border-gray-700/50 shadow-2xl backdrop-blur-sm">
-                                <div class="card-body text-center">
-                                    <div class="text-3xl font-bold text-green-400" id="total-pool-amount">$0</div>
-                                    <div class="text-sm text-white">Total Prize Pool</div>
-                                    <div class="text-xs text-white mt-1" id="pool-breakdown">Through GW1</div>
-                                </div>
-                            </div>
-                            <div class="card bg-gray-900/90 border border-gray-700/50 shadow-2xl backdrop-blur-sm">
-                                <div class="card-body text-center">
-                                    <div class="text-3xl font-bold text-blue-400" id="weekly-pool-amount">$0</div>
-                                    <div class="text-sm text-white">Weekly Winnings</div>
-                                    <div class="text-xs text-white mt-1" id="weekly-breakdown">0 weeks</div>
-                                </div>
-                            </div>
-                            <div class="card bg-gray-900/90 border border-gray-700/50 shadow-2xl backdrop-blur-sm">
-                                <div class="card-body text-center">
-                                    <div class="text-3xl font-bold text-purple-400" id="monthly-pool-amount">$0</div>
-                                    <div class="text-sm text-white">Monthly Winnings</div>
-                                    <div class="text-xs text-white mt-1" id="monthly-breakdown">0 months</div>
-                                </div>
-                            </div>
-                        </div>
+                        
 
                         <!-- Total Paid Out Section -->
                         <div class="mb-6">
@@ -1221,21 +1198,25 @@
                                 <div class="card-body text-center">
                                     <div class="flex justify-center mb-4">
                                         <div class="bg-gradient-to-r from-emerald-600 to-green-600 p-4 rounded-full shadow-lg">
-                                            <i class="fas fa-hand-holding-dollar text-2xl text-white"></i>
+                                            <i class="fas fa-coins text-2xl text-white"></i>
                                         </div>
                                     </div>
-                                    <h3 class="text-xl font-bold text-white mb-2">Total Paid Out To Date</h3>
-                                    <div class="text-4xl font-bold bg-gradient-to-r from-emerald-400 to-green-400 bg-clip-text text-transparent mb-2" id="total-paid-out">$0</div>
-                                    <div class="text-sm text-emerald-300">Running total of all payments</div>
+                                    <h3 class="text-xl font-bold text-white mb-2">Total Winnings (So Far)</h3>
+                                    <div class="text-4xl font-bold bg-gradient-to-r from-emerald-400 to-green-400 bg-clip-text text-transparent mb-2" id="total-winnings">$0</div>
+                                    <div class="text-sm text-emerald-300">Total Weekly + Monthly + League Pot</div>
                                     <div class="divider divider-success opacity-30"></div>
-                                    <div class="grid grid-cols-2 gap-3 mt-4">
+                                    <div class="grid grid-cols-3 gap-3 mt-4">
                                         <div class="text-center">
-                                            <div class="text-lg font-bold text-emerald-400" id="total-weekly-paid">$0</div>
-                                            <div class="text-xs text-white">Weekly Payouts</div>
+                                            <div class="text-lg font-bold text-emerald-400" id="total-weekly-winnings">$0</div>
+                                            <div class="text-xs text-white">Weekly Winnings</div>
                                         </div>
                                         <div class="text-center">
-                                            <div class="text-lg font-bold text-emerald-400" id="total-monthly-paid">$0</div>
-                                            <div class="text-xs text-white">Monthly Payouts</div>
+                                            <div class="text-lg font-bold text-emerald-400" id="total-monthly-winnings">$0</div>
+                                            <div class="text-xs text-white">Monthly Winnings</div>
+                                        </div>
+                                        <div class="text-center">
+                                            <div class="text-lg font-bold text-emerald-400" id="league-pot">$0</div>
+                                            <div class="text-xs text-white">League Pot</div>
                                         </div>
                                     </div>
                                 </div>
@@ -1292,7 +1273,7 @@
                         <div class="mb-6">
                             <h3 class="text-lg font-semibold text-white mb-4">
                                 <i class="fas fa-medal text-purple-400 mr-2"></i>
-                                Final Season Payouts (Current Standings)
+                                League Pot Payout (Current Standings)
                             </h3>
                             <div class="grid grid-cols-1 gap-3 md:gap-4 md:grid-cols-3">
                                 <!-- 1st Place -->
@@ -1339,10 +1320,21 @@
                                     <div class="card-body">
                                         <h4 class="font-semibold text-white mb-3">
                                             <i class="fas fa-trophy text-green-400 mr-2"></i>
-                                            Top Earners (Weekly/Monthly)
+                                            Top Earners Leaderboard
                                         </h4>
-                                        <div id="top-earners-list">
-                                            <!-- Top earners will be populated here -->
+                                        <div class="overflow-x-auto">
+                                            <table class="table table-zebra bg-gray-800/50 min-w-max">
+                                                <thead>
+                                                    <tr class="bg-gray-800/90 border-b border-gray-700/50">
+                                                        <th class="text-white text-xs">Rank</th>
+                                                        <th class="text-white text-xs">Manager</th>
+                                                        <th class="text-white text-xs">Total Winnings</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="top-earners-leaderboard">
+                                                    <!-- Top 3 earners will be populated here -->
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
@@ -1354,8 +1346,8 @@
                                             <i class="fas fa-credit-card text-red-400 mr-2"></i>
                                             Outstanding Payments
                                         </h4>
-                                        <div id="payment-debts-list">
-                                            <!-- Payment calculations will be populated here -->
+                                        <div id="outstanding-payments-container">
+                                            <!-- Monthly payment breakdowns will be populated here -->
                                         </div>
                                     </div>
                                 </div>
