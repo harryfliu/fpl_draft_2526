@@ -5268,6 +5268,7 @@ function calculateFormFromResults(teamName) {
 
 // Track weekly winners with dates for outstanding payments
 function trackWeeklyWinnerWithDate(gameweek, winnerManager, winnerGwPoints, date) {
+    console.log('🔍 trackWeeklyWinnerWithDate called with:', { gameweek, winnerManager, winnerGwPoints, date });
     if (!dashboardData.weeklyWinnersWithDates) {
         dashboardData.weeklyWinnersWithDates = [];
     }
@@ -5309,7 +5310,10 @@ function getMonthFromDate(dateString) {
 
 // Calculate outstanding payments by month
 function calculateOutstandingPayments() {
+    console.log('🔍 calculateOutstandingPayments called');
+    console.log('🔍 dashboardData.weeklyWinnersWithDates:', dashboardData.weeklyWinnersWithDates);
     if (!dashboardData.weeklyWinnersWithDates || dashboardData.weeklyWinnersWithDates.length === 0) {
+        console.log('❌ No weeklyWinnersWithDates data, returning empty object');
         return {};
     }
     
