@@ -104,6 +104,38 @@ async function loadDataFromManager() {
             if (weeklyWinner && (parseInt(weeklyWinner.gwPoints) || 0) > 0) {
                 dashboardData.weeklyWinner = `${weeklyWinner.manager} (${weeklyWinner.gwPoints} pts)`;
                 console.log(`🏆 Weekly winner: ${dashboardData.weeklyWinner}`);
+                
+                // Calculate weekly winnings for this winner
+                const totalManagers = dashboardData.leaderboard.length;
+                const weeklyWinnings = totalManagers - 1; // $1 from each other manager
+                
+                // Update dashboard data with winnings
+                if (!dashboardData.weeklyWinnings) {
+                    dashboardData.weeklyWinnings = [];
+                }
+                
+                // Check if this gameweek already has winnings calculated
+                const existingWeek = dashboardData.weeklyWinnings.find(w => w.gameweek === dashboardData.currentGameweek);
+                if (!existingWeek) {
+                    dashboardData.weeklyWinnings.push({
+                        gameweek: dashboardData.currentGameweek,
+                        winner: weeklyWinner.manager,
+                        amount: weeklyWinnings,
+                        gwPoints: weeklyWinner.gwPoints || 0,
+                        date: new Date().toISOString()
+                    });
+                    
+                    // Update manager totals
+                    if (!dashboardData.managerWinnings) {
+                        dashboardData.managerWinnings = {};
+                    }
+                    if (!dashboardData.managerWinnings[weeklyWinner.manager]) {
+                        dashboardData.managerWinnings[weeklyWinner.manager] = 0;
+                    }
+                    dashboardData.managerWinnings[weeklyWinner.manager] += weeklyWinnings;
+                    
+                    console.log(`💰 GW${dashboardData.currentGameweek} winnings: ${weeklyWinner.manager} won $${weeklyWinnings}`);
+                }
             } else {
                 dashboardData.weeklyWinner = "TBD";
                 console.log(`🏆 No weekly winner yet (no GW points recorded)`);
