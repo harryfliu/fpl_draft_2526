@@ -111,7 +111,3 @@ Let’s add salt to the wound: everyone now owes Josiah **$1 each**. Watching 11
 - **Harry/Andrew/Noah**: Mid with benefits.  
 - **Don/Ronangel/Zryan**: Lower-table mascots.  
 - **Peter/Sean/Kyle**: Weekly punching bags. Just uninstall.  
-
----
-
-🔥 Next week, do you want me to write fake **“press conferences”** for each manager with post-match quotes (like Kyle sobbing, Josiah bragging, Sean apologizing to fans)?  
