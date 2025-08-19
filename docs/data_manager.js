@@ -78,7 +78,12 @@ class FPLDataManager {
         let calculatedStandings = standings;
         if (finalResults.length > 0 && standings.length === 0) {
             calculatedStandings = this.calculateStandingsFromResults(finalResults);
+            console.log('📊 Calculated standings from results:', calculatedStandings.length, 'teams');
         }
+        
+        console.log('📊 Original standings:', standings.length, 'teams');
+        console.log('📊 Calculated standings:', calculatedStandings.length, 'teams');
+        console.log('📊 Draft teams:', draft.teams.length, 'teams');
         
         // Merge standings data with draft teams for complete leaderboard info
         const leaderboardTeams = this.mergeStandingsWithDraft(calculatedStandings, draft.teams);
@@ -373,6 +378,8 @@ class FPLDataManager {
     }
 
     mergeStandingsWithDraft(standings, draftTeams) {
+        console.log('🔗 mergeStandingsWithDraft called with:', standings.length, 'standings,', draftTeams.length, 'draft teams');
+        
         // Merge standings data (which has leaderboard info) with draft teams (which has draft picks)
         const mergedTeams = standings.map(standing => {
             // Find corresponding draft team by team name
