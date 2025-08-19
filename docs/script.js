@@ -134,6 +134,9 @@ async function loadDataFromManager() {
                     }
                     dashboardData.managerWinnings[weeklyWinner.manager] += weeklyWinnings;
                     
+                    // Track for outstanding payments
+                    trackWeeklyWinnerWithDate(dashboardData.currentGameweek, weeklyWinner.manager, weeklyWinner.gwPoints || 0, `Gameweek ${dashboardData.currentGameweek}`);
+                    
                     console.log(`💰 GW${dashboardData.currentGameweek} winnings: ${weeklyWinner.manager} won $${weeklyWinnings}`);
                 }
             } else {
