@@ -94,7 +94,9 @@ async function loadDataFromManager() {
         }
         
         // Calculate weekly winner based on highest GW points
+        console.log('🔍 Weekly winner calculation - leaderboard length:', dashboardData.leaderboard ? dashboardData.leaderboard.length : 0);
         if (dashboardData.leaderboard && dashboardData.leaderboard.length > 0) {
+            console.log('🔍 Weekly winner calculation - leaderboard data:', dashboardData.leaderboard.map(t => ({ team: t.teamName, manager: t.manager, gwPoints: t.gwPoints })));
             const weeklyWinner = dashboardData.leaderboard.reduce((max, team) => {
                 const maxGwPoints = parseInt(max.gwPoints) || 0;
                 const teamGwPoints = parseInt(team.gwPoints) || 0;
@@ -115,7 +117,10 @@ async function loadDataFromManager() {
                 }
                 
                 // Check if this gameweek already has winnings calculated
+                console.log('🔍 Checking for existing week:', dashboardData.currentGameweek);
+                console.log('🔍 Existing weekly winnings:', dashboardData.weeklyWinnings);
                 const existingWeek = dashboardData.weeklyWinnings.find(w => w.gameweek === dashboardData.currentGameweek);
+                console.log('🔍 Existing week found:', existingWeek);
                 if (!existingWeek) {
                     dashboardData.weeklyWinnings.push({
                         gameweek: dashboardData.currentGameweek,
