@@ -133,8 +133,8 @@ async function loadDataFromManager() {
         console.warn('Weekly summary not loaded:', e);
     }
 
-    // Compute and display Weekly Winner based on results (final > partial)
-    computeAndDisplayWeeklyWinner(dashboardData.currentGameweek || 1);
+    // Weekly winner is already calculated in the data loading process above
+    // No need to call computeAndDisplayWeeklyWinner again
 }
 
 // Populate dashboard with data
