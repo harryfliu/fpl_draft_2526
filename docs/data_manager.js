@@ -484,7 +484,9 @@ class FPLDataManager {
 
     getPartialResults(gameweek = null) {
         if (gameweek) {
-            const data = this.gameweekData.get(gameweek);
+            // Convert gameweek number to string key (e.g., 1 -> "gw1")
+            const gameweekKey = typeof gameweek === 'number' ? `gw${gameweek}` : gameweek;
+            const data = this.gameweekData.get(gameweekKey);
             return data ? data.partialResults : [];
         }
         return this.getAllPartialResults();
@@ -503,7 +505,9 @@ class FPLDataManager {
 
     getFinalResults(gameweek = null) {
         if (gameweek) {
-            const data = this.gameweekData.get(gameweek);
+            // Convert gameweek number to string key (e.g., 1 -> "gw1")
+            const gameweekKey = typeof gameweek === 'number' ? `gw${gameweek}` : gameweek;
+            const data = this.gameweekData.get(gameweekKey);
             return data ? data.finalResults : [];
         }
         return this.getAllFinalResults();
