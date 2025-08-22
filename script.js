@@ -692,13 +692,13 @@ function populateCurrentFixtures() {
         const awayManager = getManagerFromTeamName(fixture.awayTeam);
         
         // Check if we have results for this fixture (final results take priority)
-        const partialResult = dataManager?.getResults()?.find(result => 
+        const partialResult = dataManager?.getResults(dashboardData.currentGameweek)?.find(result => 
             (result.homeTeam === fixture.homeTeam && result.awayTeam === fixture.awayTeam) ||
             (result.homeTeam === fixture.awayTeam && result.awayTeam === fixture.homeTeam)
         );
         
         // Determine if this is a final result or partial result
-        const isFinalResult = partialResult && partialResult.homeManager && partialResult.awayManager;
+        const isFinalResult = partialResult && partialResult.isFinal === true;
         
         // Determine which team is home/away in the fixture vs partial result
         let homeScore, awayScore;
