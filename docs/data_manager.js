@@ -251,20 +251,34 @@ class FPLDataManager {
             return { teams: [] };
         }
         
+        console.log('📝 processDraftData called with:');
+        console.log('📝 draftData length:', draftData.length);
+        console.log('📝 standingsData length:', standingsData ? standingsData.length : 'undefined');
+        console.log('📝 standingsData sample:', standingsData ? standingsData[0] : 'undefined');
+        
         const teamMap = {};
         
         // First, get manager names from standings if available
         const managerLookup = {};
         if (Array.isArray(standingsData)) {
             standingsData.forEach(standing => {
+                console.log('📝 Processing standing:', standing);
                 if (standing.Manager && standing['Team Name']) {
                     managerLookup[standing.Manager] = standing['Team Name'];
+                    console.log(`📝 Added manager lookup: ${standing.Manager} -> ${standing['Team Name']}`);
+                } else if (standing.manager && standing.teamName) {
+                    // Handle lowercase property names
+                    managerLookup[standing.manager] = standing.teamName;
+                    console.log(`📝 Added manager lookup (lowercase): ${standing.manager} -> ${standing.teamName}`);
                 }
             });
         }
         
+        console.log('📝 Final managerLookup:', managerLookup);
+        
         // Process draft data - handle different formats
         draftData.forEach(pick => {
+            console.log('📝 Processing draft pick:', pick);
             // Extract manager and player info from various possible formats
             const possibleManagers = Object.keys(pick).filter(key => 
                 key !== 'Round' && key !== 'Pick' && key !== 'Player' && pick[key]
@@ -290,12 +304,14 @@ class FPLDataManager {
                         };
                     }
                     teamMap[teamName].draftPicks.push(player.trim());
+                    console.log(`📝 Added player ${player.trim()} to team ${teamName} (manager: ${managerName})`);
                 }
             });
         });
 
         const teams = Object.values(teamMap);
         console.log('📝 Processed draft teams:', teams.length);
+        console.log('📝 Final teams:', teams);
         return { teams };
     }
 
