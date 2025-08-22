@@ -1203,68 +1203,6 @@
       "awayTeam": "Extended Foreplay"
     }
   ],
-  "partial_results_gw1": [
-    {
-      "gameweek": 1,
-      "day": 1,
-      "homeTeam": "Peattle Pounders",
-      "homeManager": "Peter Henze",
-      "homeScore": 29,
-      "awayTeam": "cunha believe it",
-      "awayManager": "Harry Liu",
-      "awayScore": 39
-    },
-    {
-      "gameweek": 1,
-      "day": 1,
-      "homeTeam": "FootAndBallFetish",
-      "homeManager": "Zryan Bhao",
-      "homeScore": 21,
-      "awayTeam": "This Year FC",
-      "awayManager": "Roy Boateng",
-      "awayScore": 50
-    },
-    {
-      "gameweek": 1,
-      "day": 1,
-      "homeTeam": "Schr\u00f6dongers",
-      "homeManager": "chris duncam",
-      "homeScore": 58,
-      "awayTeam": "Atl\u00e9tico SeaSlug",
-      "awayManager": "Ronangel Rojas",
-      "awayScore": 22
-    },
-    {
-      "gameweek": 1,
-      "day": 1,
-      "homeTeam": "Trophies Matter FC",
-      "homeManager": "Noah Wilson",
-      "homeScore": 26,
-      "awayTeam": "Extended Foreplay",
-      "awayManager": "Kyle Herrera",
-      "awayScore": 26
-    },
-    {
-      "gameweek": 1,
-      "day": 1,
-      "homeTeam": "son4lyfe",
-      "homeManager": "Don Kim",
-      "homeScore": 38,
-      "awayTeam": "Cunha Get Me Points",
-      "awayManager": "Andrew Smith",
-      "awayScore": 42
-    },
-    {
-      "gameweek": 1,
-      "day": 1,
-      "homeTeam": "Gweepy",
-      "homeManager": "Sean Dunn",
-      "homeScore": 20,
-      "awayTeam": "thenotsospecialone",
-      "awayManager": "Josiah Loh",
-      "awayScore": 63
-    }
-  ],
   "starting_draft": [
     {
       "Round": "1",
