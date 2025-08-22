@@ -3707,8 +3707,8 @@ function analyzePlayerPerformance() {
         return;
     }
     
-    // Get draft data to match players to managers
-    const currentData = dataManager.getCurrentGameweekData();
+    // Get draft data to match players to managers (respects user's gameweek selection)
+    const currentData = dataManager.getGameweekData(dashboardData.currentGameweek);
     const draftData = {
         teams: currentData?.draft?.teams || []
     };
