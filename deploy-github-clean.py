@@ -68,8 +68,8 @@ def convert_data_to_json(docs_path):
                         gw_data[file_key] = parse_transfer_history_csv(csv_path)
                     elif file_key.startswith('pl_gw'):
                         gw_data[file_key] = parse_pl_fixtures_csv(csv_path)
-                    elif file_key == 'partial_results_gw1':
-                        gw_data[file_key] = parse_partial_results_csv(csv_path)
+                    elif file_key.startswith('partial_results_gw'):
+                        gw_data[file_key] = parse_partial_results_csv(csv_path, file_key)
                     elif file_key == 'players_partial_gw1':
                         gw_data[file_key] = parse_players_partial_csv(csv_path)
                     elif file_key.startswith('players_gw'):
@@ -318,8 +318,8 @@ def parse_pl_fixtures_csv(csv_path):
         print(f"⚠️ Error parsing PL fixtures CSV: {e}")
         return []
 
-def parse_partial_results_csv(csv_path):
-    """Parse partial_results_gw1.csv with the specific format"""
+def parse_partial_results_csv(csv_path, file_key):
+    """Parse partial_results_gw#.csv with the specific format"""
     try:
         with open(csv_path, 'r', encoding='utf-8') as csvfile:
             content = csvfile.read()
@@ -363,8 +363,11 @@ def parse_partial_results_csv(csv_path):
                         home_manager = home_info.split('\n')[1].strip() if '\n' in home_info else home_team
                         away_manager = away_info.split('\n')[1].strip() if '\n' in away_info else away_team
                         
+                        # Extract gameweek number from file key (e.g., "partial_results_gw2" -> 2)
+                        gameweek_num = int(file_key.replace('partial_results_gw', ''))
+                        
                         results.append({
-                            'gameweek': 1,
+                            'gameweek': gameweek_num,
                             'day': 1,  # Default to day 1
                             'homeTeam': home_team,
                             'homeManager': home_manager,
