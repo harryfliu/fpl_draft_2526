@@ -1203,6 +1203,32 @@
       "awayTeam": "Extended Foreplay"
     }
   ],
+  "partial_results_gw2": [
+    {
+      "Gameweek 2 - Day 1": "cunha believe it\nHarry Liu",
+      "": "Gweepy\nSean Dunn"
+    },
+    {
+      "Gameweek 2 - Day 1": "thenotsospecialone\nJosiah Loh",
+      "": "son4lyfe\nDon Kim"
+    },
+    {
+      "Gameweek 2 - Day 1": "Cunha Get Me Points\nAndrew Smith",
+      "": "Trophies Matter FC\nNoah Wilson"
+    },
+    {
+      "Gameweek 2 - Day 1": "Extended Foreplay\nKyle Herrera",
+      "": "Schr\u00f6dongers\nchris duncam"
+    },
+    {
+      "Gameweek 2 - Day 1": "Atl\u00e9tico SeaSlug\nRonangel Rojas",
+      "": "FootAndBallFetish\nZryan Bhao"
+    },
+    {
+      "Gameweek 2 - Day 1": "This Year FC\nRoy Boateng",
+      "": "Peattle Pounders\nPeter Henze"
+    }
+  ],
   "starting_draft": [
     {
       "Round": "1",
@@ -1428,6 +1454,258 @@
       "Atl\u00e9tico SeaSlug": "Ramsdale",
       "Gweepy": "Nketiah",
       "FootAndBallFetish": "Kilman"
+    }
+  ],
+  "players_gw2": [
+    {
+      "name": "Jo\u00e3o Pedro",
+      "team": "Chelsea",
+      "position": "FWD",
+      "Cost": 7.5,
+      "Sel.%": "52.10%",
+      "Form": 7,
+      "Pts.": 14,
+      "RP": 12
+    },
+    {
+      "name": "Enzo",
+      "team": "Chelsea",
+      "position": "MID",
+      "Cost": 6.5,
+      "Sel.%": "3.40%",
+      "Form": 6.5,
+      "Pts.": 13,
+      "RP": 10
+    },
+    {
+      "name": "Chalobah",
+      "team": "Chelsea",
+      "position": "DEF",
+      "Cost": 5,
+      "Sel.%": "1.40%",
+      "Form": 7,
+      "Pts.": 14,
+      "RP": 8
+    },
+    {
+      "name": "Neto",
+      "team": "Chelsea",
+      "position": "MID",
+      "Cost": 7,
+      "Sel.%": "3.70%",
+      "Form": 5,
+      "Pts.": 10,
+      "RP": 7
+    },
+    {
+      "name": "Caicedo",
+      "team": "Chelsea",
+      "position": "MID",
+      "Cost": 5.5,
+      "Sel.%": "5.50%",
+      "Form": 6,
+      "Pts.": 12,
+      "RP": 7
+    },
+    {
+      "name": "L.Paquet\u00e1",
+      "team": "West Ham United",
+      "position": "MID",
+      "Cost": 5.9,
+      "Sel.%": "0.90%",
+      "Form": 4.5,
+      "Pts.": 9,
+      "RP": 7
+    },
+    {
+      "name": "Cucurella",
+      "team": "Chelsea",
+      "position": "DEF",
+      "Cost": 6,
+      "Sel.%": "22.30%",
+      "Form": 6.5,
+      "Pts.": 13,
+      "RP": 5
+    },
+    {
+      "name": "Est\u00eav\u00e3o",
+      "team": "Chelsea",
+      "position": "MID",
+      "Cost": 6.5,
+      "Sel.%": "1.50%",
+      "Form": 2.5,
+      "Pts.": 5,
+      "RP": 5
+    },
+    {
+      "name": "S\u00e1nchez",
+      "team": "Chelsea",
+      "position": "GKP",
+      "Cost": 5,
+      "Sel.%": "25.50%",
+      "Form": 5.5,
+      "Pts.": 11,
+      "RP": 3
+    },
+    {
+      "name": "Diouf",
+      "team": "West Ham United",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "6.60%",
+      "Form": 2,
+      "Pts.": 4,
+      "RP": 3
+    },
+    {
+      "name": "Gusto",
+      "team": "Chelsea",
+      "position": "DEF",
+      "Cost": 5,
+      "Sel.%": "1.60%",
+      "Form": 1.5,
+      "Pts.": 3,
+      "RP": 2
+    },
+    {
+      "name": "Tosin",
+      "team": "Chelsea",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "1.10%",
+      "Form": 1,
+      "Pts.": 2,
+      "RP": 2
+    },
+    {
+      "name": "Delap",
+      "team": "Chelsea",
+      "position": "FWD",
+      "Cost": 6.5,
+      "Sel.%": "3.60%",
+      "Form": 1.5,
+      "Pts.": 3,
+      "RP": 2
+    },
+    {
+      "name": "N.Aguerd",
+      "team": "West Ham United",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "0.10%",
+      "Form": 1.5,
+      "Pts.": 3,
+      "RP": 2
+    },
+    {
+      "name": "Sou\u010dek",
+      "team": "West Ham United",
+      "position": "MID",
+      "Cost": 5.9,
+      "Sel.%": "0.70%",
+      "Form": 1.5,
+      "Pts.": 3,
+      "RP": 2
+    },
+    {
+      "name": "Ward-Prowse",
+      "team": "West Ham United",
+      "position": "MID",
+      "Cost": 6,
+      "Sel.%": "0.30%",
+      "Form": 2,
+      "Pts.": 4,
+      "RP": 2
+    },
+    {
+      "name": "Bowen",
+      "team": "West Ham United",
+      "position": "FWD",
+      "Cost": 7.9,
+      "Sel.%": "12.40%",
+      "Form": 2,
+      "Pts.": 4,
+      "RP": 2
+    },
+    {
+      "name": "James",
+      "team": "Chelsea",
+      "position": "DEF",
+      "Cost": 5.5,
+      "Sel.%": "6.00%",
+      "Form": 3,
+      "Pts.": 6,
+      "RP": 1
+    },
+    {
+      "name": "Fofana",
+      "team": "Chelsea",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "0.20%",
+      "Form": 0.5,
+      "Pts.": 1,
+      "RP": 1
+    },
+    {
+      "name": "Gittens",
+      "team": "Chelsea",
+      "position": "MID",
+      "Cost": 6.5,
+      "Sel.%": "0.30%",
+      "Form": 1,
+      "Pts.": 2,
+      "RP": 1
+    },
+    {
+      "name": "Andrey Santos",
+      "team": "Chelsea",
+      "position": "MID",
+      "Cost": 4.5,
+      "Sel.%": "0.30%",
+      "Form": 1,
+      "Pts.": 2,
+      "RP": 1
+    },
+    {
+      "name": "Walker-Peters",
+      "team": "West Ham United",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "0.40%",
+      "Form": 0.5,
+      "Pts.": 1,
+      "RP": 1
+    },
+    {
+      "name": "Potts",
+      "team": "West Ham United",
+      "position": "MID",
+      "Cost": 4.5,
+      "Sel.%": "0.70%",
+      "Form": 0.5,
+      "Pts.": 1,
+      "RP": 1
+    },
+    {
+      "name": "F\u00fcllkrug",
+      "team": "West Ham United",
+      "position": "FWD",
+      "Cost": 6,
+      "Sel.%": "3.10%",
+      "Form": 1.5,
+      "Pts.": 3,
+      "RP": 1
+    },
+    {
+      "name": "Wilson",
+      "team": "West Ham United",
+      "position": "FWD",
+      "Cost": 6,
+      "Sel.%": "0.40%",
+      "Form": 1,
+      "Pts.": 2,
+      "RP": 1
     }
   ],
   "transfer_history": {

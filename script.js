@@ -381,8 +381,16 @@ function populateLeaderboard() {
             // Calculate current gameweek points (points from selected gameweek only)
             let currentGWPoints = 0;
             const gwData = dataManager.getGameweekData(currentGameweek);
-            if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
-                const result = gwData.finalResults.find(r => r.homeTeam === team.teamName || r.awayTeam === team.teamName);
+            if (gwData) {
+                // Check final results first (take priority over partial results)
+                let result = null;
+                if (gwData.finalResults && gwData.finalResults.length > 0) {
+                    result = gwData.finalResults.find(r => r.homeTeam === team.teamName || r.awayTeam === team.teamName);
+                }
+                // If no final results, check partial results
+                if (!result && gwData.partialResults && gwData.partialResults.length > 0) {
+                    result = gwData.partialResults.find(r => r.homeTeam === team.teamName || r.awayTeam === team.teamName);
+                }
                 if (result) {
                     currentGWPoints = (result.homeTeam === team.teamName) ? result.homeScore || 0 : result.awayScore || 0;
                 }
@@ -4447,12 +4455,12 @@ class PrizePoolManager {
             // Only include months that are complete (have all 4 gameweeks or reach target gameweek)
             // This prevents calculating monthly winners for incomplete months
             if (endGW - currentGW + 1 >= 4 || endGW === targetGameweek) {
-                months.push({
-                    name: monthNames[monthIndex],
-                    startGW: currentGW,
+            months.push({
+                name: monthNames[monthIndex],
+                startGW: currentGW,
                     endGW: endGW,
                     isComplete: endGW - currentGW + 1 >= 4
-                });
+            });
             }
             
             currentGW = endGW + 1;
