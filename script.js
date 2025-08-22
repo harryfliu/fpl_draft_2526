@@ -69,9 +69,10 @@ async function loadDataFromManager() {
         return;
     }
     
-    // Get current gameweek data
-    const currentData = dataManager.getCurrentGameweekData();
-    console.log('🔧 DEBUG: currentData from data manager:', currentData);
+    // Get data for the selected gameweek (respects user's gameweek selection)
+    const selectedGameweek = dataManager.currentGameweek;
+    const currentData = dataManager.getGameweekData(selectedGameweek);
+    console.log('🔧 DEBUG: currentData from data manager for GW', selectedGameweek, ':', currentData);
     if (currentData) {
         // Update dashboard data
         dashboardData.leaderboard = currentData.draft?.teams || [];
