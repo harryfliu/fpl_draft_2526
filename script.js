@@ -1693,8 +1693,24 @@ function displayTeamTopContributors(team) {
     console.log('🏆 DEBUG: Using playerData:', playerData);
     console.log('🏆 DEBUG: playerData length:', playerData?.length);
     
-    if (!playerData || playerData.length === 0) {
-        console.error('❌ No player data available');
+    // Check if this gameweek has its own player performance data (not carried over from previous gameweek)
+    // For deployed version: check if the current gameweek has its own players_gwX data
+    const currentGW = dashboardData.currentGameweek;
+    
+    // Check if any player has performance data specifically for the current gameweek
+    // This prevents showing GW1 data when viewing GW2
+    const hasOwnPlayerData = currentData.playerData && currentData.playerData.length > 0 && 
+                            currentData.playerData.some(player => {
+                                // Look for gameweek-specific data in the nested structure
+                                return player.gameweeks && player.gameweeks[currentGW] && 
+                                       player.gameweeks[currentGW].points !== undefined;
+                            });
+    
+    console.log('🏆 DEBUG: Has own player data for GW', currentGW, ':', hasOwnPlayerData);
+    console.log('🏆 DEBUG: Player data structure sample:', currentData.playerData?.[0]);
+    
+    if (!playerData || playerData.length === 0 || !hasOwnPlayerData) {
+        console.log('🏆 DEBUG: No player data available OR no own player data for this gameweek');
         container.classList.add('hidden');
         if (emptyMessage) emptyMessage.classList.remove('hidden');
         return;
