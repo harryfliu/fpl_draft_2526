@@ -92,6 +92,18 @@ def convert_data_to_json(docs_path):
                 json.dump(gw_data, jsonfile, indent=2)
             
             print(f"✓ Converted {folder}/ to JSON")
+            
+            # Copy ai_summary markdown files to docs folder for web access
+            ai_summary_file = os.path.join(folder, f"ai_summary_{folder}.md")
+            if os.path.exists(ai_summary_file):
+                # Create gameweek folder in docs
+                gw_docs_path = os.path.join(docs_path, folder)
+                os.makedirs(gw_docs_path, exist_ok=True)
+                
+                # Copy the ai_summary file
+                docs_ai_summary_path = os.path.join(gw_docs_path, f"ai_summary_{folder}.md")
+                shutil.copy2(ai_summary_file, docs_ai_summary_path)
+                print(f"✓ Copied {ai_summary_file} to docs")
 
 def parse_draft_csv(csv_path):
     """Parse starting_draft.csv with proper handling"""
