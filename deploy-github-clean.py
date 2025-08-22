@@ -721,6 +721,78 @@ class FPLDataManager {
         }));
     }
 
+    createStandingsFromResults(finalResults, partialResults) {
+        // Create standings data from final results (prioritize) or partial results
+        const results = finalResults.length > 0 ? finalResults : partialResults;
+        if (results.length === 0) return [];
+        
+        // Get unique teams from results
+        const teams = new Set();
+        results.forEach(result => {
+            teams.add(result.homeTeam);
+            teams.add(result.awayTeam);
+        });
+        
+        // Create standings for each team
+        const standings = Array.from(teams).map(teamName => {
+            // Find manager name from results
+            const result = results.find(r => r.homeTeam === teamName || r.awayTeam === teamName);
+            const manager = result ? (result.homeTeam === teamName ? result.homeManager : result.awayManager) : teamName;
+            
+            // Calculate points, wins, draws, losses from results
+            let points = 0, wins = 0, draws = 0, losses = 0;
+            let gwPoints = 0;
+            
+            results.forEach(result => {
+                if (result.homeTeam === teamName || result.awayTeam === teamName) {
+                    const isHome = result.homeTeam === teamName;
+                    const teamScore = isHome ? result.homeScore : result.awayScore;
+                    const opponentScore = isHome ? result.awayScore : result.homeScore;
+                    
+                    // Add GW points
+                    gwPoints += teamScore || 0;
+                    
+                    // Calculate league points (3 for win, 1 for draw, 0 for loss)
+                    if (teamScore > opponentScore) {
+                        points += 3;
+                        wins += 1;
+                    } else if (teamScore === opponentScore) {
+                        points += 1;
+                        draws += 1;
+                    } else {
+                        losses += 1;
+                    }
+                }
+            });
+            
+            return {
+                position: 0, // Will be set by sorting
+                teamName: teamName,
+                manager: manager,
+                points: points,
+                wins: wins,
+                draws: draws,
+                losses: losses,
+                gwPoints: gwPoints,
+                form: 'N/A' // Will be updated when we have form data
+            };
+        });
+        
+        // Sort by points (highest first), then by goal difference
+        standings.sort((a, b) => {
+            if (b.points !== a.points) return b.points - a.points;
+            return b.gwPoints - a.gwPoints;
+        });
+        
+        // Set positions
+        standings.forEach((standing, index) => {
+            standing.position = index + 1;
+        });
+        
+        console.log('📊 Created standings from results:', standings.length, 'teams');
+        return standings;
+    }
+
     processDraftData(draftData, standingsData) {
         // Convert draft data to the expected format
         if (!Array.isArray(draftData) || draftData.length === 0) {
@@ -933,16 +1005,21 @@ class FPLDataManager {
             return null;
         }
         
+        // Create standings from results if no standings data exists
+        const finalResults = this.processFinalResultsData(rawData.final_results_gw1 || rawData.final_results_gw2 || []);
+        const partialResults = this.processPartialResultsData(rawData.partial_results_gw1 || rawData.partial_results_gw2 || []);
+        const standings = this.createStandingsFromResults(finalResults, partialResults);
+        
         // Return the processed data structure that the dashboard expects
         return {
             fixtures: this.parseFixturesData(rawData.fixture_list || []),
-            standings: this.processStandingsData(rawData.standings || []),
+            standings: standings,
             draft: {
                 teams: this.mergeStandingsWithDraft(
-                    this.processStandingsData(rawData.standings || []),
-                    this.processDraftData(rawData.starting_draft || [], rawData.standings || []).teams
+                    standings,
+                    this.processDraftData(rawData.starting_draft || [], standings).teams
                 ),
-                originalDraftTeams: this.processDraftData(rawData.starting_draft || [], rawData.standings || []).teams
+                originalDraftTeams: this.processDraftData(rawData.starting_draft || [], standings).teams
             },
             plFixtures: this.parsePLFixtures(rawData[`pl_gw${gameweek.replace('gw', '')}`] || []),
             transferHistory: rawData.transfer_history || { waivers: [], freeAgents: [], trades: [] },
