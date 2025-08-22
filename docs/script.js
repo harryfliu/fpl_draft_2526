@@ -2022,6 +2022,8 @@ async function loadDataForGameweek(gameweek) {
     if (gameweekData) {
         // Update dashboard data
         dashboardData.leaderboard = gameweekData.draft?.teams || [];
+        dashboardData.draft = gameweekData.draft || null; // Fix: Add draft data to global state
+        dashboardData.transferHistory = gameweekData.transferHistory || { waivers: [], freeAgents: [], trades: [] }; // Fix: Add transfer history
         dashboardData.upcomingFixtures = gameweekData.fixtures || [];
         dashboardData.recentStandings = gameweekData.standings || [];
         
