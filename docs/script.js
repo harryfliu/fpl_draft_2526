@@ -4378,6 +4378,12 @@ class PrizePoolManager {
         const monthlyWinners = [];
 
         monthlyGroups.forEach(monthData => {
+            // Only calculate monthly winners for complete months
+            if (!monthData.isComplete) {
+                console.log(`📅 Skipping incomplete month: ${monthData.name} (GW${monthData.startGW}-${monthData.endGW})`);
+                return;
+            }
+            
             const monthlyPointsMap = new Map();
             
             // Sum points for each manager in this month
@@ -4409,6 +4415,8 @@ class PrizePoolManager {
                     // Monthly winner gets $2 from each of the other 11 managers
                     const monthlyWinnings = (this.leagueSize - 1) * this.monthlyWinnerAmount;
                     
+                    console.log(`🏆 Monthly winner for ${monthData.name}: ${monthlyWinner} with ${maxPoints} points, winning $${monthlyWinnings}`);
+                    
                     monthlyWinners.push({
                         month: monthData.name,
                         manager: monthlyWinner,
@@ -4435,11 +4443,16 @@ class PrizePoolManager {
         while (currentGW <= targetGameweek && monthIndex < monthNames.length) {
             const endGW = Math.min(currentGW + 3, targetGameweek); // 4 gameweeks per month
             
-            months.push({
-                name: monthNames[monthIndex],
-                startGW: currentGW,
-                endGW: endGW
-            });
+            // Only include months that are complete (have all 4 gameweeks or reach target gameweek)
+            // This prevents calculating monthly winners for incomplete months
+            if (endGW - currentGW + 1 >= 4 || endGW === targetGameweek) {
+                months.push({
+                    name: monthNames[monthIndex],
+                    startGW: currentGW,
+                    endGW: endGW,
+                    isComplete: endGW - currentGW + 1 >= 4
+                });
+            }
             
             currentGW = endGW + 1;
             monthIndex++;
