@@ -19,17 +19,14 @@ def create_github_pages():
         shutil.rmtree(docs_path)
     os.makedirs(docs_path)
     
-    # Copy main files (EXCEPT data_manager.js - we'll create a web version)
-    files_to_copy = ['index.html', 'script.js']
+    # Copy main files (including data_manager.js for full functionality)
+    files_to_copy = ['index.html', 'script.js', 'data_manager.js']
     for file in files_to_copy:
         if os.path.exists(file):
             shutil.copy2(file, docs_path)
     
     # Convert CSV data to JSON for web compatibility
     convert_data_to_json(docs_path)
-    
-    # Create web-optimized data_manager.js for GitHub Pages
-    update_data_manager_for_web(docs_path)
     
     print("🌐 GitHub Pages version created in /docs")
     print("\n📋 Next steps:")
@@ -607,11 +604,20 @@ class FPLDataManager {
         // For GitHub Pages, we'll manually check for known gameweeks
         const availableGameweeks = [];
         
-        // Only check for gw1 initially to reduce 404 errors
-        const gw1Data = await this.loadJSONFile(`./data/gw1.json`);
-        if (gw1Data) {
-            availableGameweeks.push(`gw1`);
-            console.log(`✓ Found gameweek 1`);
+        // Check for available gameweeks
+        for (let gw = 1; gw <= 38; gw++) {
+            const gwData = await this.loadJSONFile(`./data/gw${gw}.json`);
+            if (gwData) {
+                availableGameweeks.push(`gw${gw}`);
+                console.log(`✓ Found gameweek ${gw}`);
+            }
+        }
+        
+        // Set current gameweek to the highest available
+        if (availableGameweeks.length > 0) {
+            const highestGW = Math.max(...availableGameweeks.map(gw => parseInt(gw.replace('gw', ''))));
+            this.currentGameweek = highestGW;
+            console.log(`🏆 Set current gameweek to ${highestGW}`);
         }
         
         return availableGameweeks;
@@ -630,10 +636,10 @@ class FPLDataManager {
         const draft = this.processDraftData(gwData.starting_draft || [], gwData.standings || []);
         
         // Process final results (prioritize over partial results)
-        const finalResults = this.processFinalResultsData(gwData.final_results_gw1 || []);
+        const finalResults = this.processFinalResultsData(gwData.final_results_gw1 || gwData.final_results_gw2 || []);
         
         // Process partial results for live data (fallback if no final results)
-        const partialResults = this.processPartialResultsData(gwData.partial_results_gw1 || []);
+        const partialResults = this.processPartialResultsData(gwData.partial_results_gw1 || gwData.partial_results_gw2 || []);
         
         // Process player performance data
         const playerData = this.processPlayerData(gwData);
@@ -648,7 +654,7 @@ class FPLDataManager {
                 teams: leaderboardTeams,
                 originalDraftTeams: draft.teams  // Keep original draft teams for draft picks display
             },
-            plFixtures: this.parsePLFixtures(gwData.pl_gw1 || gwData.pl_gw2 || []),
+            plFixtures: this.parsePLFixtures(gwData[`pl_gw${gameweek.replace('gw', '')}`] || []),
             transferHistory: gwData.transfer_history || { waivers: [], freeAgents: [], trades: [] },
             finalResults: finalResults,
             partialResults: partialResults,
@@ -899,9 +905,18 @@ class FPLDataManager {
         return this.currentGameweek;
     }
 
+    setCurrentGameweek(gameweek) {
+        this.currentGameweek = gameweek;
+    }
+
     getCurrentGameweekData() {
         const gameweek = `gw${this.currentGameweek}`;
         return this.gameweekData.get(gameweek);
+    }
+
+    getGameweekData(gameweek) {
+        const gwKey = `gw${gameweek}`;
+        return this.gameweekData.get(gwKey);
     }
 
     getDataSummary() {
