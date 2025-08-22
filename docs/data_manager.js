@@ -89,9 +89,22 @@ class FPLDataManager {
         const partialResults = this.processPartialResultsData(gwData.partial_results_gw1 || gwData.partial_results_gw2 || []);
         
         // Create standings from results if no standings data exists
-        const standings = this.createStandingsFromResults(finalResults, partialResults);
+        let standings = this.createStandingsFromResults(finalResults, partialResults);
         
-        // Process draft data with the created standings
+        // If no standings created (no results yet), try to get standings from previous gameweek
+        if (standings.length === 0) {
+            const gameweekNum = parseInt(gameweek.replace('gw', ''));
+            if (gameweekNum > 1) {
+                const previousGameweek = `gw${gameweekNum - 1}`;
+                const previousData = this.gameweekData.get(previousGameweek);
+                if (previousData && previousData.standings && previousData.standings.length > 0) {
+                    console.log(`📊 Using standings from ${previousGameweek} for ${gameweek} (no results yet)`);
+                    standings = previousData.standings;
+                }
+            }
+        }
+        
+        // Process draft data with the standings (either from results or previous gameweek)
         const draft = this.processDraftData(gwData.starting_draft || [], standings);
         
         // Process player performance data
