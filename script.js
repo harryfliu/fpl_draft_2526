@@ -193,63 +193,68 @@ function calculateCumulativeTeamPerformance(teamName, targetGameweek) {
         console.log(`   GW${gw} data exists: ${!!gwData}`);
         console.log(`   GW${gw} finalResults: ${gwData?.finalResults?.length || 0} results`);
         
+        // Check for results (final results take priority over partial results)
+        let result = null;
         if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
-            // Find this team's result for this gameweek
-            const result = gwData.finalResults.find(r => 
+            // Find this team's result from final results
+            result = gwData.finalResults.find(r => 
                 r.homeTeam === teamName || r.awayTeam === teamName
             );
+        } else if (gwData && gwData.partialResults && gwData.partialResults.length > 0) {
+            // If no final results, check partial results
+            result = gwData.partialResults.find(r => 
+                r.homeTeam === teamName || r.awayTeam === teamName
+            );
+        }
+        
+        if (result) {
+            console.log(`   ✅ Found result: ${result.homeTeam} ${result.homeScore} - ${result.awayScore} ${result.awayTeam}`);
+            console.log(`   Manager: ${result.homeManager || 'N/A'} vs ${result.awayManager || 'N/A'}`);
             
-            if (result) {
-                console.log(`   ✅ Found result: ${result.homeTeam} ${result.homeScore} - ${result.awayScore} ${result.awayTeam}`);
-                console.log(`   Manager: ${result.homeManager || 'N/A'} vs ${result.awayManager || 'N/A'}`);
-                
-                // Update manager name from results
-                if (result.homeTeam === teamName) {
-                    manager = result.homeManager || manager;
-                    totalGWPoints += result.homeScore || 0;
-                    console.log(`   📊 Added ${result.homeScore} GW points (home team)`);
+            // Update manager name from results
+            if (result.homeTeam === teamName) {
+                manager = result.homeManager || manager;
+                totalGWPoints += result.homeScore || 0;
+                console.log(`   📊 Added ${result.homeScore} GW points (home team)`);
+            } else {
+                manager = result.awayManager || manager;
+                totalGWPoints += result.awayScore || 0;
+                console.log(`   📊 Added ${result.awayScore} GW points (away team)`);
+            }
+            
+            // Calculate league points (3 for win, 1 for draw, 0 for loss)
+            const homeScore = result.homeScore || 0;
+            const awayScore = result.awayScore || 0;
+            
+            if (result.homeTeam === teamName) {
+                if (homeScore > awayScore) {
+                    totalWins++;
+                    totalPoints += 3;
+                    console.log(`   🏆 WIN: +3 points (${homeScore} > ${awayScore})`);
+                } else if (homeScore === awayScore) {
+                    totalDraws++;
+                    totalPoints += 1;
+                    console.log(`   🤝 DRAW: +1 point (${homeScore} = ${awayScore})`);
                 } else {
-                    manager = result.awayManager || manager;
-                    totalGWPoints += result.awayScore || 0;
-                    console.log(`   📊 Added ${result.awayScore} GW points (away team)`);
-                }
-                
-                // Calculate league points (3 for win, 1 for draw, 0 for loss)
-                const homeScore = result.homeScore || 0;
-                const awayScore = result.awayScore || 0;
-                
-                if (result.homeTeam === teamName) {
-                    if (homeScore > awayScore) {
-                        totalWins++;
-                        totalPoints += 3;
-                        console.log(`   🏆 WIN: +3 points (${homeScore} > ${awayScore})`);
-                    } else if (homeScore === awayScore) {
-                        totalDraws++;
-                        totalPoints += 1;
-                        console.log(`   🤝 DRAW: +1 point (${homeScore} = ${awayScore})`);
-                    } else {
-                        totalLosses++;
-                        console.log(`   ❌ LOSS: +0 points (${homeScore} < ${awayScore})`);
-                    }
-                } else {
-                    if (awayScore > homeScore) {
-                        totalWins++;
-                        totalPoints += 3;
-                        console.log(`   🏆 WIN: +3 points (${awayScore} > ${homeScore})`);
-                    } else if (awayScore === homeScore) {
-                        totalDraws++;
-                        totalPoints += 1;
-                        console.log(`   🤝 DRAW: +1 point (${awayScore} = ${homeScore})`);
-                    } else {
-                        totalLosses++;
-                        console.log(`   ❌ LOSS: +0 points (${awayScore} < ${homeScore})`);
-                    }
+                    totalLosses++;
+                    console.log(`   ❌ LOSS: +0 points (${homeScore} < ${awayScore})`);
                 }
             } else {
-                console.log(`   ❌ No result found for ${teamName} in GW${gw}`);
+                if (awayScore > homeScore) {
+                    totalWins++;
+                    totalPoints += 3;
+                    console.log(`   🏆 WIN: +3 points (${awayScore} > ${homeScore})`);
+                } else if (awayScore === homeScore) {
+                    totalDraws++;
+                    totalPoints += 1;
+                    console.log(`   🤝 DRAW: +1 point (${awayScore} = ${homeScore})`);
+                } else {
+                    totalLosses++;
+                    console.log(`   ❌ LOSS: +0 points (${awayScore} < ${homeScore})`);
+                }
             }
         } else {
-            console.log(`   ⚠️ No final results data for GW${gw}`);
+            console.log(`   ❌ No result found for ${teamName} in GW${gw}`);
         }
     }
     
