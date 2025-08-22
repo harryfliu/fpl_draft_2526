@@ -1090,8 +1090,8 @@ function populatePLFixtures() {
         return;
     }
 
-    // Get current gameweek's Premier League fixtures
-    const currentData = dataManager?.getCurrentGameweekData();
+    // Get selected gameweek's Premier League fixtures (respects user's gameweek selection)
+    const currentData = dataManager?.getGameweekData(dashboardData.currentGameweek);
     const plFixtures = currentData?.plFixtures || [];
 
     // Update the gameweek indicator
@@ -1108,7 +1108,7 @@ function populatePLFixtures() {
                 <div class="text-white">
                     <i class="fas fa-futbol text-4xl mb-2"></i>
                     <p>No Premier League fixtures available</p>
-                    <p class="text-sm text-white">Add pl_gw${dashboardData.currentGameweek}.csv to display fixtures</p>
+                    <p class="text-sm text-white">No fixtures data available for GW${dashboardData.currentGameweek}</p>
                 </div>
             </div>
         `;
@@ -1694,10 +1694,20 @@ function displayTeamTopContributors(team) {
     console.log('🏆 DEBUG: playerData length:', playerData?.length);
     
     // Check if this gameweek has its own player performance data (not carried over from previous gameweek)
-    const hasOwnPlayerData = currentData.playerData && currentData.playerData.length > 0 && 
-                            currentData.playerData.some(player => player.gameweeks && player.gameweeks[dashboardData.currentGameweek]);
+    // For deployed version: check if the current gameweek has its own players_gwX data
+    const currentGW = dashboardData.currentGameweek;
     
-    console.log('🏆 DEBUG: Has own player data for GW', dashboardData.currentGameweek, ':', hasOwnPlayerData);
+    // Check if any player has performance data specifically for the current gameweek
+    // This prevents showing GW1 data when viewing GW2
+    const hasOwnPlayerData = currentData.playerData && currentData.playerData.length > 0 && 
+                            currentData.playerData.some(player => {
+                                // Look for gameweek-specific data in the nested structure
+                                return player.gameweeks && player.gameweeks[currentGW] && 
+                                       player.gameweeks[currentGW].points !== undefined;
+                            });
+    
+    console.log('🏆 DEBUG: Has own player data for GW', currentGW, ':', hasOwnPlayerData);
+    console.log('🏆 DEBUG: Player data structure sample:', currentData.playerData?.[0]);
     
     if (!playerData || playerData.length === 0 || !hasOwnPlayerData) {
         console.log('🏆 DEBUG: No player data available OR no own player data for this gameweek');

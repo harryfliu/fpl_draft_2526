@@ -1090,8 +1090,8 @@ function populatePLFixtures() {
         return;
     }
 
-    // Get current gameweek's Premier League fixtures
-    const currentData = dataManager?.getCurrentGameweekData();
+    // Get selected gameweek's Premier League fixtures (respects user's gameweek selection)
+    const currentData = dataManager?.getGameweekData(dashboardData.currentGameweek);
     const plFixtures = currentData?.plFixtures || [];
 
     // Update the gameweek indicator
@@ -1108,7 +1108,7 @@ function populatePLFixtures() {
                 <div class="text-white">
                     <i class="fas fa-futbol text-4xl mb-2"></i>
                     <p>No Premier League fixtures available</p>
-                    <p class="text-sm text-white">Add pl_gw${dashboardData.currentGameweek}.csv to display fixtures</p>
+                    <p class="text-sm text-white">No fixtures data available for GW${dashboardData.currentGameweek}</p>
                 </div>
             </div>
         `;
