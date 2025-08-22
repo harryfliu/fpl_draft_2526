@@ -74,19 +74,8 @@ class FPLDataManager {
         // Process player performance data
         const playerData = this.processPlayerData(gwData);
         
-        // Calculate standings from final results if no standings exist
-        let calculatedStandings = standings;
-        if (finalResults.length > 0 && standings.length === 0) {
-            calculatedStandings = this.calculateStandingsFromResults(finalResults);
-            console.log('📊 Calculated standings from results:', calculatedStandings.length, 'teams');
-        }
-        
-        console.log('📊 Original standings:', standings.length, 'teams');
-        console.log('📊 Calculated standings:', calculatedStandings.length, 'teams');
-        console.log('📊 Draft teams:', draft.teams.length, 'teams');
-        
         // Merge standings data with draft teams for complete leaderboard info
-        const leaderboardTeams = this.mergeStandingsWithDraft(calculatedStandings, draft.teams);
+        const leaderboardTeams = this.mergeStandingsWithDraft(standings, draft.teams);
         
         const processedData = {
             fixtures: this.parseFixturesData(gwData.fixture_list || []),
@@ -289,97 +278,7 @@ class FPLDataManager {
         return Object.values(allPlayers);
     }
 
-    calculateStandingsFromResults(results) {
-        // Calculate standings from final/partial results
-        const standings = {};
-        
-        // Initialize standings for each team
-        results.forEach(result => {
-            for (const [teamKey, managerKey, scoreKey] of [
-                ['homeTeam', 'homeManager', 'homeScore'],
-                ['awayTeam', 'awayManager', 'awayScore']
-            ]) {
-                const team = result[teamKey];
-                const manager = result[managerKey];
-                
-                if (team && !standings[team]) {
-                    standings[team] = {
-                        teamName: team,
-                        manager: manager || '',
-                        points: 0,
-                        gwPoints: 0,
-                        played: 0,
-                        wins: 0,
-                        draws: 0,
-                        losses: 0,
-                        goalsFor: 0,
-                        goalsAgainst: 0,
-                        goalDifference: 0
-                    };
-                }
-            }
-        });
-        
-        // Calculate stats from results
-        results.forEach(result => {
-            const homeTeam = result.homeTeam;
-            const awayTeam = result.awayTeam;
-            const homeScore = result.homeScore || 0;
-            const awayScore = result.awayScore || 0;
-            
-            if (standings[homeTeam] && standings[awayTeam]) {
-                // Update stats
-                standings[homeTeam].played += 1;
-                standings[awayTeam].played += 1;
-                standings[homeTeam].goalsFor += homeScore;
-                standings[homeTeam].goalsAgainst += awayScore;
-                standings[awayTeam].goalsFor += awayScore;
-                standings[awayTeam].goalsAgainst += homeScore;
-                standings[homeTeam].gwPoints += homeScore;
-                standings[awayTeam].gwPoints += awayScore;
-                
-                // Determine result
-                if (homeScore > awayScore) {
-                    standings[homeTeam].wins += 1;
-                    standings[homeTeam].points += 3;
-                    standings[awayTeam].losses += 1;
-                } else if (awayScore > homeScore) {
-                    standings[awayTeam].wins += 1;
-                    standings[awayTeam].points += 3;
-                    standings[homeTeam].losses += 1;
-                } else {
-                    standings[homeTeam].draws += 1;
-                    standings[homeTeam].points += 1;
-                    standings[awayTeam].draws += 1;
-                    standings[awayTeam].points += 1;
-                }
-            }
-        });
-        
-        // Calculate goal difference
-        Object.values(standings).forEach(team => {
-            team.goalDifference = team.goalsFor - team.goalsAgainst;
-        });
-        
-        // Sort standings
-        const sortedStandings = Object.values(standings).sort((a, b) => {
-            if (b.points !== a.points) return b.points - a.points;
-            if (b.gwPoints !== a.gwPoints) return b.gwPoints - a.gwPoints;
-            if (b.goalDifference !== a.goalDifference) return b.goalDifference - a.goalDifference;
-            return b.goalsFor - a.goalsFor;
-        });
-        
-        // Add positions
-        sortedStandings.forEach((team, index) => {
-            team.position = index + 1;
-        });
-        
-        return sortedStandings;
-    }
-
     mergeStandingsWithDraft(standings, draftTeams) {
-        console.log('🔗 mergeStandingsWithDraft called with:', standings.length, 'standings,', draftTeams.length, 'draft teams');
-        
         // Merge standings data (which has leaderboard info) with draft teams (which has draft picks)
         const mergedTeams = standings.map(standing => {
             // Find corresponding draft team by team name
@@ -484,9 +383,7 @@ class FPLDataManager {
 
     getPartialResults(gameweek = null) {
         if (gameweek) {
-            // Convert gameweek number to string key (e.g., 1 -> "gw1")
-            const gameweekKey = typeof gameweek === 'number' ? `gw${gameweek}` : gameweek;
-            const data = this.gameweekData.get(gameweekKey);
+            const data = this.gameweekData.get(gameweek);
             return data ? data.partialResults : [];
         }
         return this.getAllPartialResults();
@@ -504,17 +401,9 @@ class FPLDataManager {
     }
 
     getFinalResults(gameweek = null) {
-        console.log('🏆 getFinalResults called with gameweek:', gameweek);
         if (gameweek) {
-            // Convert gameweek number to string key (e.g., 1 -> "gw1")
-            const gameweekKey = typeof gameweek === 'number' ? `gw${gameweek}` : gameweek;
-            console.log('🏆 Looking for gameweek key:', gameweekKey);
-            console.log('🏆 Available gameweek keys:', Array.from(this.gameweekData.keys()));
-            const data = this.gameweekData.get(gameweekKey);
-            console.log('🏆 Found data for key', gameweekKey, ':', data);
-            const finalResults = data ? data.finalResults : [];
-            console.log('🏆 Returning final results:', finalResults);
-            return finalResults;
+            const data = this.gameweekData.get(gameweek);
+            return data ? data.finalResults : [];
         }
         return this.getAllFinalResults();
     }

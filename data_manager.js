@@ -75,6 +75,13 @@ class FPLDataManager {
         
         console.log(`📊 Available gameweeks: ${this.availableGameweeks.join(', ')}`);
         
+        // Set current gameweek to the highest available
+        if (this.availableGameweeks.length > 0) {
+            const highestGW = Math.max(...this.availableGameweeks.map(gw => parseInt(gw.replace('gw', ''))));
+            this.setCurrentGameweek(highestGW);
+            console.log(`🎯 Set current gameweek to highest available: ${highestGW}`);
+        }
+        
         // If no gameweeks were found, but we know gw1 should exist, add it manually
         if (this.availableGameweeks.length === 0) {
             console.log('⚠️ No gameweeks detected via fetch, but gw1 should exist. Adding manually.');

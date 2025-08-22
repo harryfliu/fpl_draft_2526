@@ -470,7 +470,7 @@
                             <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-2 py-1 md:px-4 md:py-2 rounded-full font-semibold shadow-lg text-xs md:text-sm">
                                 GW <span id="currentGameweek">1</span>
                             </div>
-                            <div class="text-xs text-white mt-1 hidden md:block">Current</div>
+                            <div class="text-xs text-white mt-1 hidden md:block" id="current-label">Current</div>
                         </div>
                     </div>
                 </div>
@@ -701,8 +701,9 @@
                                         <th class="text-white font-semibold sticky-col">Pos</th>
                                         <th class="text-white font-semibold">Manager</th>
                                         <th class="text-white font-semibold hidden sm:table-cell">Team Name</th>
-                                        <th class="text-white font-semibold">Points</th>
-                                        <th class="text-white font-semibold">GW Pts</th>
+                                        <th class="text-white font-semibold">Total League Points</th>
+                                        <th class="text-white font-semibold">Current GW Pts</th>
+                                        <th class="text-white font-semibold">Total GW Pts</th>
                                         <th class="text-white font-semibold hidden md:table-cell">Form</th>
                                         <th class="text-white font-semibold hidden lg:table-cell">Winnings</th>
                                     </tr>
@@ -766,7 +767,7 @@
                                     <div class="stat-value text-lg" id="team-total-points">0</div>
                                 </div>
                                 <div class="stat bg-base-200 rounded-lg">
-                                    <div class="stat-title text-xs">GW Points</div>
+                                    <div class="stat-title text-xs">Weekly GW Points</div>
                                     <div class="stat-value text-lg" id="team-gw-points">0</div>
                                 </div>
                                 <div class="stat bg-base-200 rounded-lg">
@@ -774,7 +775,7 @@
                                     <div class="stat-value text-lg" id="team-form">L-L-L-L-L</div>
                                 </div>
                                 <div class="stat bg-base-200 rounded-lg">
-                                    <div class="stat-title text-xs">Winnings</div>
+                                    <div class="stat-title text-xs">Weekly Winnings</div>
                                     <div class="stat-value text-lg" id="team-winnings">$0</div>
                                 </div>
                             </div>

@@ -155,6 +155,197 @@ function populateDashboard() {
     updateFixturesHeaders(); // Update both current and upcoming fixtures headers
 }
 
+// Calculate cumulative team performance up to a specific gameweek
+function calculateCumulativeTeamPerformance(teamName, targetGameweek) {
+    if (!dataManager) {
+        return {
+            manager: '',
+            totalPoints: 0,
+            totalGWPoints: 0,
+            totalGoalsFor: 0,
+            totalGoalsAgainst: 0,
+            totalWins: 0,
+            totalDraws: 0,
+            totalLosses: 0,
+            form: 'N/A',
+            totalWinnings: 0
+        };
+    }
+    
+    console.log(`\n🏆 === CUMULATIVE CALCULATION FOR ${teamName} UP TO GW${targetGameweek} ===`);
+    
+    let totalPoints = 0;
+    let totalGWPoints = 0;
+    let totalGoalsFor = 0;
+    let totalGoalsAgainst = 0;
+    let totalWins = 0;
+    let totalDraws = 0;
+    let totalLosses = 0;
+    let manager = '';
+    let totalWinnings = 0;
+    
+    // Calculate cumulative totals from GW1 to target gameweek
+    for (let gw = 1; gw <= targetGameweek; gw++) {
+        console.log(`\n📅 Processing GW${gw} for ${teamName}...`);
+        
+        const gwData = dataManager.getGameweekData(gw);
+        console.log(`   GW${gw} data exists: ${!!gwData}`);
+        console.log(`   GW${gw} finalResults: ${gwData?.finalResults?.length || 0} results`);
+        
+        if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
+            // Find this team's result for this gameweek
+            const result = gwData.finalResults.find(r => 
+                r.homeTeam === teamName || r.awayTeam === teamName
+            );
+            
+            if (result) {
+                console.log(`   ✅ Found result: ${result.homeTeam} ${result.homeScore} - ${result.awayScore} ${result.awayTeam}`);
+                console.log(`   Manager: ${result.homeManager || 'N/A'} vs ${result.awayManager || 'N/A'}`);
+                
+                // Update manager name from results
+                if (result.homeTeam === teamName) {
+                    manager = result.homeManager || manager;
+                    totalGWPoints += result.homeScore || 0;
+                    console.log(`   📊 Added ${result.homeScore} GW points (home team)`);
+                } else {
+                    manager = result.awayManager || manager;
+                    totalGWPoints += result.awayScore || 0;
+                    console.log(`   📊 Added ${result.awayScore} GW points (away team)`);
+                }
+                
+                // Calculate league points (3 for win, 1 for draw, 0 for loss)
+                const homeScore = result.homeScore || 0;
+                const awayScore = result.awayScore || 0;
+                
+                if (result.homeTeam === teamName) {
+                    if (homeScore > awayScore) {
+                        totalWins++;
+                        totalPoints += 3;
+                        console.log(`   🏆 WIN: +3 points (${homeScore} > ${awayScore})`);
+                    } else if (homeScore === awayScore) {
+                        totalDraws++;
+                        totalPoints += 1;
+                        console.log(`   🤝 DRAW: +1 point (${homeScore} = ${awayScore})`);
+                    } else {
+                        totalLosses++;
+                        console.log(`   ❌ LOSS: +0 points (${homeScore} < ${awayScore})`);
+                    }
+                } else {
+                    if (awayScore > homeScore) {
+                        totalWins++;
+                        totalPoints += 3;
+                        console.log(`   🏆 WIN: +3 points (${awayScore} > ${homeScore})`);
+                    } else if (awayScore === homeScore) {
+                        totalDraws++;
+                        totalPoints += 1;
+                        console.log(`   🤝 DRAW: +1 point (${awayScore} = ${homeScore})`);
+                    } else {
+                        totalLosses++;
+                        console.log(`   ❌ LOSS: +0 points (${awayScore} < ${homeScore})`);
+                    }
+                }
+            } else {
+                console.log(`   ❌ No result found for ${teamName} in GW${gw}`);
+            }
+        } else {
+            console.log(`   ⚠️ No final results data for GW${gw}`);
+        }
+    }
+    
+    console.log(`\n📊 === ${teamName} CUMULATIVE TOTALS ===`);
+    console.log(`   League Points: ${totalPoints} (W:${totalWins}, D:${totalDraws}, L:${totalLosses})`);
+    console.log(`   GW Points (FPL): ${totalGWPoints}`);
+    console.log(`   Manager: ${manager}`);
+    
+    // Calculate cumulative winnings up to target gameweek
+    totalWinnings = calculateCumulativeWinnings(teamName, targetGameweek);
+    
+    // Calculate form from recent results (last 5 gameweeks)
+    const form = calculateFormFromResults(teamName);
+    console.log(`   Form: ${form}`);
+    console.log(`   Total Winnings: $${totalWinnings}`);
+    console.log(`========================================\n`);
+    
+    return {
+        manager,
+        totalPoints,
+        totalGWPoints,
+        totalGoalsFor,
+        totalGoalsAgainst,
+        totalWins,
+        totalDraws,
+        totalLosses,
+        form,
+        totalWinnings
+    };
+}
+
+// Calculate cumulative winnings for a team up to a specific gameweek
+function calculateCumulativeWinnings(teamName, targetGameweek) {
+    if (!dataManager) return 0;
+    
+    console.log(`\n💰 === WINNINGS CALCULATION FOR ${teamName} UP TO GW${targetGameweek} ===`);
+    
+    let totalWinnings = 0;
+    
+    // Calculate weekly winnings
+    for (let gw = 1; gw <= targetGameweek; gw++) {
+        console.log(`\n📅 Checking GW${gw} for weekly winner...`);
+        
+        const gwData = dataManager.getGameweekData(gw);
+        console.log(`   GW${gw} data exists: ${!!gwData}`);
+        console.log(`   GW${gw} finalResults: ${gwData?.finalResults?.length || 0} results`);
+        
+        if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
+            console.log(`   📊 All GW${gw} results:`);
+            gwData.finalResults.forEach((result, index) => {
+                console.log(`     ${index + 1}. ${result.homeTeam} ${result.homeScore} - ${result.awayScore} ${result.awayTeam}`);
+            });
+            
+            // Find the weekly winner (highest score across all results)
+            let highestScore = 0;
+            let weeklyWinner = null;
+            
+            gwData.finalResults.forEach(result => {
+                const homeScore = result.homeScore || 0;
+                const awayScore = result.awayScore || 0;
+                const maxScore = Math.max(homeScore, awayScore);
+                
+                if (maxScore > highestScore) {
+                    highestScore = maxScore;
+                    weeklyWinner = result;
+                }
+            });
+            
+            if (weeklyWinner) {
+                const winnerTeam = weeklyWinner.homeScore > weeklyWinner.awayScore ? 
+                    weeklyWinner.homeTeam : weeklyWinner.awayTeam;
+                const winnerScore = Math.max(weeklyWinner.homeScore || 0, weeklyWinner.awayScore || 0);
+                
+                console.log(`   🏆 Weekly winner: ${winnerTeam} with ${winnerScore} points`);
+                console.log(`   🏆 Winner result: ${weeklyWinner.homeTeam} ${weeklyWinner.homeScore} - ${weeklyWinner.awayScore} ${weeklyWinner.awayTeam}`);
+                
+                // Check if this team won this gameweek
+                if (teamName === winnerTeam) {
+                    const totalManagers = dashboardData.leaderboard.length;
+                    const weeklyWinnings = totalManagers - 1; // $1 from each other manager
+                    totalWinnings += weeklyWinnings;
+                    console.log(`   💰 ${teamName} won GW${gw}: +$${weeklyWinnings} (from ${totalManagers} total managers)`);
+                } else {
+                    console.log(`   ❌ ${teamName} did NOT win GW${gw} (winner was ${winnerTeam})`);
+                }
+            } else {
+                console.log(`   ⚠️ No weekly winner found for GW${gw}`);
+            }
+        } else {
+            console.log(`   ⚠️ No final results data for GW${gw}`);
+        }
+    }
+    
+    console.log(`\n💰 === ${teamName} TOTAL WINNINGS: $${totalWinnings} ===\n`);
+    return totalWinnings;
+}
+
 // Populate leaderboard with DaisyUI styling
 function populateLeaderboard() {
     const tbody = document.getElementById('leaderboardBody');
@@ -163,7 +354,7 @@ function populateLeaderboard() {
     if (dashboardData.leaderboard.length === 0) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="7" class="text-center py-8">
+                <td colspan="8" class="text-center py-8">
                     <div class="text-white">
                         <i class="fas fa-database text-4xl mb-2"></i>
                         <p>No team data loaded</p>
@@ -175,87 +366,76 @@ function populateLeaderboard() {
         return;
     }
     
-            // Get results to calculate live standings (final results take priority)
-        let liveLeaderboard = [];
+            // Calculate cumulative totals for all teams up to the current gameweek
+    const currentGameweek = dashboardData.currentGameweek || 1;
+    console.log(`🏆 Calculating cumulative totals up to GW${currentGameweek}`);
+    
+    let liveLeaderboard = [];
+    
+    if (dataManager) {
+        // Calculate cumulative performance for each team
+        liveLeaderboard = dashboardData.leaderboard.map(team => {
+            const cumulativeData = calculateCumulativeTeamPerformance(team.teamName, currentGameweek);
+            
+            // Calculate current gameweek points (points from selected gameweek only)
+            let currentGWPoints = 0;
+            const gwData = dataManager.getGameweekData(currentGameweek);
+            if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
+                const result = gwData.finalResults.find(r => r.homeTeam === team.teamName || r.awayTeam === team.teamName);
+                if (result) {
+                    currentGWPoints = (result.homeTeam === team.teamName) ? result.homeScore || 0 : result.awayScore || 0;
+                }
+            }
+            
+            return {
+                ...team,
+                manager: cumulativeData.manager,
+                points: cumulativeData.totalPoints,
+                currentGWPoints: currentGWPoints,
+                gwPoints: cumulativeData.totalGWPoints,
+                goalsFor: cumulativeData.totalGoalsFor,
+                goalsAgainst: cumulativeData.totalGoalsAgainst,
+                wins: cumulativeData.totalWins,
+                draws: cumulativeData.totalDraws,
+                losses: cumulativeData.totalLosses,
+                form: cumulativeData.form,
+                totalWinnings: cumulativeData.totalWinnings
+            };
+        });
         
-        if (dataManager) {
-            const partialResults = dataManager.getResults();
+        // Sort by cumulative points (highest first), then by cumulative GW points as tiebreaker
+        liveLeaderboard.sort((a, b) => {
+            if (b.points !== a.points) {
+                return b.points - a.points;
+            }
+            // If points are equal, sort by cumulative GW points (FPL points) as tiebreaker
+            if (b.gwPoints !== a.gwPoints) {
+                return b.gwPoints - a.gwPoints;
+            }
+            // If GW points are equal, sort by goal difference
+            const aGoalDiff = (a.goalsFor || 0) - (a.goalsAgainst || 0);
+            const bGoalDiff = (b.goalsFor || 0) - (b.goalsAgainst || 0);
+            if (bGoalDiff !== aGoalDiff) {
+                return bGoalDiff - aGoalDiff;
+            }
+            // If goal difference is equal, sort by goals for
+            return (b.goalsFor || 0) - (a.goalsFor || 0);
+        });
         
-        if (partialResults.length > 0) {
-            // Calculate live standings from final/partial results
-            liveLeaderboard = dashboardData.leaderboard.map(team => {
-                const performance = calculateTeamPerformanceFromResults(team.teamName);
-                
-                // Get GW points and manager name from results
-                let gwPoints = 0;
-                let managerName = team.manager || ''; // Default to existing manager
-                
-                partialResults.forEach(result => {
-                    if (result.homeTeam === team.teamName) {
-                        gwPoints = result.homeScore;
-                        // Use manager name from final results if available
-                        if (result.homeManager) {
-                            managerName = result.homeManager;
-                        }
-                    } else if (result.awayTeam === team.teamName) {
-                        gwPoints = result.awayScore;
-                        // Use manager name from final results if available
-                        if (result.awayManager) {
-                            managerName = result.awayManager;
-                        }
-                    }
-                });
-                
-                return {
-                    ...team,
-                    manager: managerName, // Update with manager name from results
-                    points: performance.points,
-                    gwPoints: gwPoints,
-                    goalsFor: performance.goalsFor,
-                    goalsAgainst: performance.goalsAgainst,
-                    wins: performance.wins,
-                    draws: performance.draws,
-                    losses: performance.losses,
-                    form: calculateFormFromResults(team.teamName)
-                };
-            });
-            
-            // Sort by points (highest first), then by GW points (FPL points) as tiebreaker, then by goal difference, then by goals for
-            liveLeaderboard.sort((a, b) => {
-                if (b.points !== a.points) {
-                    return b.points - a.points;
-                }
-                // If points are equal, sort by GW points (FPL points) as tiebreaker
-                if (b.gwPoints !== a.gwPoints) {
-                    return b.gwPoints - a.gwPoints;
-                }
-                // If GW points are equal, sort by goal difference
-                const aGoalDiff = (a.goalsFor || 0) - (a.goalsAgainst || 0);
-                const bGoalDiff = (b.goalsFor || 0) - (b.goalsAgainst || 0);
-                if (bGoalDiff !== aGoalDiff) {
-                    return bGoalDiff - aGoalDiff;
-                }
-                // If goal difference is equal, sort by goals for
-                return (b.goalsFor || 0) - (a.goalsFor || 0);
-            });
-            
-            // Debug: Log teams before position assignment
-            console.log('🔍 Live leaderboard after sorting:');
-            liveLeaderboard.forEach((team, index) => {
-                const goalDiff = (team.goalsFor || 0) - (team.goalsAgainst || 0);
-                console.log(`${index + 1}. ${team.teamName}: pts=${team.points}, gw=${team.gwPoints}, diff=${goalDiff}`);
-            });
-            
-            // Update positions after sorting
-            liveLeaderboard.forEach((team, index) => {
-                team.position = index + 1;
-            });
-            
-            // Update the main leaderboard data with the live data (including manager names)
-            dashboardData.leaderboard = liveLeaderboard;
-        } else {
-            liveLeaderboard = dashboardData.leaderboard;
-        }
+        // Debug: Log teams with cumulative totals
+        console.log('🔍 Live leaderboard with cumulative totals:');
+        liveLeaderboard.forEach((team, index) => {
+            const goalDiff = (team.goalsFor || 0) - (team.goalsAgainst || 0);
+            console.log(`${index + 1}. ${team.teamName}: pts=${team.points}, gw=${team.gwPoints}, winnings=$${team.totalWinnings}, diff=${goalDiff}`);
+        });
+        
+        // Update positions after sorting
+        liveLeaderboard.forEach((team, index) => {
+            team.position = index + 1;
+        });
+        
+        // Update the main leaderboard data with cumulative data
+        dashboardData.leaderboard = liveLeaderboard;
     } else {
         liveLeaderboard = dashboardData.leaderboard;
     }
@@ -292,6 +472,9 @@ function populateLeaderboard() {
                 <div class="font-bold text-lg text-white">${team.points || 0}</div>
             </td>
             <td>
+                <div class="badge badge-primary badge-sm">${team.currentGWPoints || 0}</div>
+            </td>
+            <td>
                 <div class="badge badge-outline badge-sm">${team.gwPoints || 0}</div>
             </td>
             <td>
@@ -302,8 +485,8 @@ function populateLeaderboard() {
                 </div>
             </td>
             <td>
-                <div class="badge ${(getManagerWinnings(getManagerFromTeamName(team.teamName)) || 0) > 0 ? 'badge-success' : 'badge-ghost'}">
-                    $${getManagerWinnings(getManagerFromTeamName(team.teamName)) || 0}
+                <div class="badge ${(team.totalWinnings || 0) > 0 ? 'badge-success' : 'badge-ghost'}">
+                    $${team.totalWinnings || 0}
                 </div>
             </td>
         `;
@@ -992,6 +1175,23 @@ function updateCurrentGameweek() {
     if (gwDisplay) {
         gwDisplay.textContent = `GW ${dashboardData.currentGameweek}`;
     }
+    
+    // Update the "Current" label visibility
+    const currentLabel = document.getElementById('current-label');
+    if (currentLabel) {
+        // Only show "Current" if the selected gameweek is the actual current gameweek
+        const selectedGameweek = dashboardData.currentGameweek;
+        const actualCurrentGameweek = dataManager ? dataManager.getCurrentGameweek() : 1;
+        
+        if (selectedGameweek === actualCurrentGameweek) {
+            currentLabel.style.display = 'block';
+            currentLabel.textContent = 'Current';
+        } else {
+            currentLabel.style.display = 'none';
+        }
+        
+        console.log(`🎯 updateCurrentGameweek: selected=${selectedGameweek}, actual=${actualCurrentGameweek}, showing label: ${selectedGameweek === actualCurrentGameweek}`);
+    }
 }
 
 // Helper function to get season month number from month name
@@ -1299,24 +1499,37 @@ function displayTeamDetails(team) {
     }
     
     // Calculate GW Points from partial results (actual FPL points earned)
-    if (teamPerformance.points > 0) {
-        // Get the actual FPL points from the results (final results take priority)
-        const partialResults = dataManager.getResults();
-        let gwPoints = 0;
-        
-        // Find the result where this team played and get their score
-        partialResults.forEach(result => {
-            if (result.homeTeam === team.teamName) {
-                gwPoints = result.homeScore; // Home team's FPL points
-            } else if (result.awayTeam === team.teamName) {
-                gwPoints = result.awayScore; // Away team's FPL points
+    // For Teams section: only show current gameweek points, not cumulative
+    const currentGameweek = dashboardData.currentGameweek || 1;
+    let currentGameweekPoints = 0;
+    
+    if (dataManager) {
+        // Check if there are results for the current gameweek
+        const gwData = dataManager.getGameweekData(currentGameweek);
+        if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
+            // Find this team's result for the current gameweek
+            const result = gwData.finalResults.find(r => 
+                r.homeTeam === team.teamName || r.awayTeam === team.teamName
+            );
+            
+            if (result) {
+                if (result.homeTeam === team.teamName) {
+                    currentGameweekPoints = result.homeScore || 0;
+                } else {
+                    currentGameweekPoints = result.awayScore || 0;
+                }
+                console.log(`📊 ${team.teamName} GW${currentGameweek} points: ${currentGameweekPoints} (from current gameweek results)`);
+            } else {
+                console.log(`📊 ${team.teamName} GW${currentGameweek} points: 0 (no result found for current gameweek)`);
             }
-        });
-        
-        if (teamGWPoints) teamGWPoints.textContent = gwPoints;
+        } else {
+            console.log(`📊 ${team.teamName} GW${currentGameweek} points: 0 (no results data for current gameweek)`);
+        }
     } else {
-    if (teamGWPoints) teamGWPoints.textContent = team.gwPoints || 0;
+        console.log(`📊 ${team.teamName} GW${currentGameweek} points: 0 (no data manager)`);
     }
+    
+    if (teamGWPoints) teamGWPoints.textContent = currentGameweekPoints;
     
     // Use the new form calculation function for accurate form display
     if (teamForm) {
@@ -1324,9 +1537,50 @@ function displayTeamDetails(team) {
         teamForm.textContent = calculatedForm;
     }
     
-    // Resolve manager name robustly for winnings lookup
-    const resolvedManagerForWinnings = team.manager && team.manager.trim() ? team.manager : getManagerFromTeamName(team.teamName);
-    if (teamWinnings) teamWinnings.textContent = `$${getManagerWinnings(resolvedManagerForWinnings) || 0}`;
+    // For Teams section: only show current gameweek winnings, not cumulative
+    // Check if there are results for the current gameweek
+    let currentGameweekWinnings = 0;
+    
+    if (dataManager) {
+        const partialResults = dataManager.getResults();
+        if (partialResults.length > 0) {
+            // Check if this team won the current gameweek
+            const currentGameweek = dashboardData.currentGameweek || 1;
+            const gwData = dataManager.getGameweekData(currentGameweek);
+            
+            if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
+                // Find the weekly winner for current gameweek
+                let highestScore = 0;
+                let weeklyWinner = null;
+                
+                gwData.finalResults.forEach(result => {
+                    const homeScore = result.homeScore || 0;
+                    const awayScore = result.awayScore || 0;
+                    const maxScore = Math.max(homeScore, awayScore);
+                    
+                    if (maxScore > highestScore) {
+                        highestScore = maxScore;
+                        weeklyWinner = result;
+                    }
+                });
+                
+                if (weeklyWinner) {
+                    const winnerTeam = weeklyWinner.homeScore > weeklyWinner.awayScore ? 
+                        weeklyWinner.homeTeam : weeklyWinner.awayTeam;
+                    
+                    // Check if this team won the current gameweek
+                    if (team.teamName === winnerTeam) {
+                        const totalManagers = dashboardData.leaderboard.length;
+                        currentGameweekWinnings = totalManagers - 1; // $1 from each other manager
+                        console.log(`💰 ${team.teamName} won current gameweek (GW${currentGameweek}): +$${currentGameweekWinnings}`);
+                    }
+                }
+            }
+        }
+    }
+    
+    if (teamWinnings) teamWinnings.textContent = `$${currentGameweekWinnings}`;
+    console.log(`💰 ${team.teamName} current gameweek winnings: $${currentGameweekWinnings}`);
     
     // Update team performance (get from partial results data)
     const teamWins = document.getElementById('team-wins');
@@ -1416,10 +1670,14 @@ function displayTeamTopContributors(team) {
     
     container.innerHTML = '';
     
-    // Get current gameweek data
-    const currentData = dataManager.getCurrentGameweekData();
-    console.log('🏆 DEBUG: currentData from dataManager:', currentData);
+    // Get data for the selected gameweek (not necessarily the actual current gameweek)
+    const currentData = dataManager.getGameweekData(dashboardData.currentGameweek);
+    console.log('🏆 DEBUG: currentData from dataManager for GW', dashboardData.currentGameweek, ':', currentData);
     console.log('🏆 DEBUG: dataManager exists:', !!dataManager);
+    console.log('🏆 DEBUG: currentData.transferHistory:', currentData?.transferHistory);
+    console.log('🏆 DEBUG: currentData.transferHistory.waivers:', currentData?.transferHistory?.waivers);
+    console.log('🏆 DEBUG: currentData.transferHistory.freeAgents:', currentData?.transferHistory?.freeAgents);
+    console.log('🏆 DEBUG: currentData.transferHistory.trades:', currentData?.transferHistory?.trades);
     
     if (!currentData) {
         console.error('❌ No current data available');
@@ -1442,8 +1700,8 @@ function displayTeamTopContributors(team) {
         return;
     }
     
-    // Get the manager's current squad using team name (since draft data has empty manager fields)
-    const currentSquad = calculateCurrentTeam(team.teamName);
+            // Get the manager's current squad using team name (since draft data uses team names)
+        const currentSquad = calculateCurrentTeam(team.teamName, null, team.manager);
     console.log('🏆 DEBUG: currentSquad for', team.teamName, ':', currentSquad);
     console.log('🏆 DEBUG: currentSquad length:', currentSquad?.length);
     
@@ -1590,8 +1848,8 @@ function displayTeamCurrentSquad(team) {
     
     container.innerHTML = '';
     
-    // Calculate current squad using team name (since draft data has empty manager fields)
-    const currentSquad = calculateCurrentTeam(team.teamName);
+    // Calculate current squad using team name (since draft data uses team names)
+    const currentSquad = calculateCurrentTeam(team.teamName, null, team.manager);
     
     if (!currentSquad || currentSquad.length === 0) {
         container.classList.add('hidden');
@@ -3702,7 +3960,7 @@ function getTopPlayerContributors(players, draftData) {
         
         // Get current squad using team name instead of manager name
         // since draft data has empty manager fields
-        const currentSquad = calculateCurrentTeam(team.teamName);
+        const currentSquad = calculateCurrentTeam(team.teamName, null, team.manager);
         
         if (!currentSquad || currentSquad.length === 0) {
             console.warn(`❌ No current squad found for ${managerName}`);
@@ -3848,7 +4106,7 @@ function getBestAndWorstPlayers(players, draftData) {
         }
         
         // Get current squad using team name
-        const currentSquad = calculateCurrentTeam(team.teamName);
+        const currentSquad = calculateCurrentTeam(team.teamName, null, team.manager);
         
         if (!currentSquad || currentSquad.length === 0) {
             return;
@@ -4378,15 +4636,77 @@ function updatePrizePoolStats(earnings, targetGameweek) {
 
     if (totalPoolElement) totalPoolElement.textContent = `$${earnings.totalPool}`;
     if (weeklyPoolElement) {
-        const totalWeeklyWinnings = dashboardData.weeklyWinnings ? dashboardData.weeklyWinnings.reduce((sum, week) => sum + week.amount, 0) : 0;
+        // Calculate cumulative weekly winnings up to selected gameweek
+        const currentGameweek = dashboardData.currentGameweek || 1;
+        let totalWeeklyWinnings = 0;
+        
+        if (dataManager) {
+            for (let gw = 1; gw <= currentGameweek; gw++) {
+                const gwData = dataManager.getGameweekData(gw);
+                if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
+                    // Find weekly winner for this gameweek
+                    let highestScore = 0;
+                    let weeklyWinner = null;
+                    
+                    gwData.finalResults.forEach(result => {
+                        const homeScore = result.homeScore || 0;
+                        const awayScore = result.awayScore || 0;
+                        const maxScore = Math.max(homeScore, awayScore);
+                        
+                        if (maxScore > highestScore) {
+                            highestScore = maxScore;
+                            weeklyWinner = result;
+                        }
+                    });
+                    
+                    if (weeklyWinner) {
+                        const totalManagers = dashboardData.leaderboard.length;
+                        const weeklyWinnings = totalManagers - 1; // $1 from each other manager
+                        totalWeeklyWinnings += weeklyWinnings;
+                    }
+                }
+            }
+        }
+        
         weeklyPoolElement.textContent = `$${totalWeeklyWinnings}`;
     }
     if (monthlyPoolElement) monthlyPoolElement.textContent = `$${earnings.totalMonthlyPayout}`;
     // Keep badge label static as "$MONEY"
     if (totalIndicator) totalIndicator.textContent = '$MONEY';
 
-    // Calculate total winnings (so far)
-    const totalWeeklyWinnings = dashboardData.weeklyWinnings ? dashboardData.weeklyWinnings.reduce((sum, week) => sum + week.amount, 0) : 0;
+    // Calculate total winnings (so far) - cumulative up to selected gameweek
+    const currentGameweek = dashboardData.currentGameweek || 1;
+    let totalWeeklyWinnings = 0;
+    
+    if (dataManager) {
+        // Loop through all gameweeks from GW1 to selected gameweek
+        for (let gw = 1; gw <= currentGameweek; gw++) {
+            const gwData = dataManager.getGameweekData(gw);
+            if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
+                // Find the weekly winner for this gameweek
+                let highestScore = 0;
+                let weeklyWinner = null;
+                
+                gwData.finalResults.forEach(result => {
+                    const homeScore = result.homeScore || 0;
+                    const awayScore = result.awayScore || 0;
+                    const maxScore = Math.max(homeScore, awayScore);
+                    
+                    if (maxScore > highestScore) {
+                        highestScore = maxScore;
+                        weeklyWinner = result;
+                    }
+                });
+                
+                if (weeklyWinner) {
+                    const totalManagers = dashboardData.leaderboard.length;
+                    const weeklyWinnings = totalManagers - 1; // $1 from each other manager
+                    totalWeeklyWinnings += weeklyWinnings;
+                }
+            }
+        }
+    }
+    
     const totalMonthlyWinnings = earnings.monthlyWinners.reduce((sum, winner) => sum + (winner.winnings || 0), 0);
     const leaguePotWinnings = 0; // $0 during season, $420 at end ($35 entry fee * 12 managers)
     const totalWinnings = totalWeeklyWinnings + totalMonthlyWinnings + leaguePotWinnings;
@@ -4423,10 +4743,60 @@ function populateWeeklyWinnersTable(weeklyWinners) {
     const tbody = document.getElementById('weekly-winners-table');
     if (!tbody) return;
 
-    // Use our new winnings data if available
-    const winningsData = dashboardData.weeklyWinnings || weeklyWinners;
+    // Calculate cumulative weekly winners up to the selected gameweek
+    const currentGameweek = dashboardData.currentGameweek || 1;
+    let cumulativeWeeklyWinners = [];
     
-    if (winningsData.length === 0) {
+    if (dataManager) {
+        // Loop through all gameweeks from GW1 to selected gameweek
+        for (let gw = 1; gw <= currentGameweek; gw++) {
+            const gwData = dataManager.getGameweekData(gw);
+            if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
+                // Find the weekly winner for this gameweek
+                let highestScore = 0;
+                let weeklyWinner = null;
+                
+                gwData.finalResults.forEach(result => {
+                    const homeScore = result.homeScore || 0;
+                    const awayScore = result.awayScore || 0;
+                    const maxScore = Math.max(homeScore, awayScore);
+                    
+                    if (maxScore > highestScore) {
+                        highestScore = maxScore;
+                        weeklyWinner = result;
+                    }
+                });
+                
+                if (weeklyWinner) {
+                    const winnerTeam = weeklyWinner.homeScore > weeklyWinner.awayScore ? 
+                        weeklyWinner.homeTeam : weeklyWinner.awayTeam;
+                    const winnerScore = Math.max(weeklyWinner.homeScore || 0, weeklyWinner.awayScore || 0);
+                    
+                    // Find manager name for the winning team
+                    let managerName = '';
+                    if (weeklyWinner.homeTeam === winnerTeam) {
+                        managerName = weeklyWinner.homeManager || winnerTeam;
+                    } else {
+                        managerName = weeklyWinner.awayManager || winnerTeam;
+                    }
+                    
+                    const totalManagers = dashboardData.leaderboard.length;
+                    const weeklyWinnings = totalManagers - 1; // $1 from each other manager
+                    
+                    cumulativeWeeklyWinners.push({
+                        gameweek: gw,
+                        manager: managerName,
+                        winner: winnerTeam,
+                        gwPoints: winnerScore,
+                        winnings: weeklyWinnings,
+                        amount: weeklyWinnings
+                    });
+                }
+            }
+        }
+    }
+    
+    if (cumulativeWeeklyWinners.length === 0) {
         tbody.innerHTML = `
             <tr>
                 <td colspan="4" class="text-center py-4 text-white">
@@ -4438,14 +4808,16 @@ function populateWeeklyWinnersTable(weeklyWinners) {
         return;
     }
 
-    tbody.innerHTML = winningsData.map(winner => `
+    tbody.innerHTML = cumulativeWeeklyWinners.map(winner => `
         <tr class="hover:bg-gray-700/30">
             <td class="text-white font-medium">GW${winner.gameweek}</td>
-            <td class="text-white">${winner.winner || winner.manager}</td>
-            <td class="text-purple-300 font-semibold">${winner.gwPoints || winner.points || 0} pts</td>
-            <td class="text-green-400 font-bold">$${winner.amount || winner.winnings || 0}</td>
+            <td class="text-white">${winner.manager}</td>
+            <td class="text-purple-300 font-semibold">${winner.gwPoints} pts</td>
+            <td class="text-green-400 font-bold">$${winner.winnings}</td>
         </tr>
     `).join('');
+    
+    console.log(`💰 Populated ${cumulativeWeeklyWinners.length} cumulative weekly winners up to GW${currentGameweek}`);
 }
 
 // Populate monthly winners table
@@ -4486,7 +4858,54 @@ function populateTopEarners(managerEarnings) {
     const container = document.getElementById('top-earners-list');
     if (!container) return;
 
-    const sortedEarners = Array.from(managerEarnings.entries())
+    // Calculate cumulative earnings up to the selected gameweek
+    const currentGameweek = dashboardData.currentGameweek || 1;
+    let cumulativeEarnings = new Map();
+    
+    if (dataManager) {
+        // Loop through all gameweeks from GW1 to selected gameweek
+        for (let gw = 1; gw <= currentGameweek; gw++) {
+            const gwData = dataManager.getGameweekData(gw);
+            if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
+                // Find the weekly winner for this gameweek
+                let highestScore = 0;
+                let weeklyWinner = null;
+                
+                gwData.finalResults.forEach(result => {
+                    const homeScore = result.homeScore || 0;
+                    const awayScore = result.awayScore || 0;
+                    const maxScore = Math.max(homeScore, awayScore);
+                    
+                    if (maxScore > highestScore) {
+                        highestScore = maxScore;
+                        weeklyWinner = result;
+                    }
+                });
+                
+                if (weeklyWinner) {
+                    const winnerTeam = weeklyWinner.homeScore > weeklyWinner.awayScore ? 
+                        weeklyWinner.homeTeam : weeklyWinner.awayTeam;
+                    
+                    // Find manager name for the winning team
+                    let managerName = '';
+                    if (weeklyWinner.homeTeam === winnerTeam) {
+                        managerName = weeklyWinner.homeManager || winnerTeam;
+                    } else {
+                        managerName = weeklyWinner.awayManager || winnerTeam;
+                    }
+                    
+                    const totalManagers = dashboardData.leaderboard.length;
+                    const weeklyWinnings = totalManagers - 1; // $1 from each other manager
+                    
+                    // Add to cumulative earnings
+                    const currentEarnings = cumulativeEarnings.get(managerName) || 0;
+                    cumulativeEarnings.set(managerName, currentEarnings + weeklyWinnings);
+                }
+            }
+        }
+    }
+    
+    const sortedEarners = Array.from(cumulativeEarnings.entries())
         .sort((a, b) => b[1] - a[1])
         .slice(0, 5);
 
@@ -4498,7 +4917,7 @@ function populateTopEarners(managerEarnings) {
     container.innerHTML = sortedEarners.map(([manager, earnings], index) => `
         <div class="flex justify-between items-center py-2 ${index < sortedEarners.length - 1 ? 'border-b border-gray-600/30' : ''}">
             <div class="flex items-center">
-                <span class="text-${index === 0 ? 'yellow' : index === 1 ? 'gray' : 'orange'}-400 mr-2">
+                <span class="text-${index === 0 ? 'yellow' : index === 1 ? 'gray' : index === 2 ? 'orange' : 'gray'}-400 mr-2">
                     ${index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : '🏅'}
                 </span>
                 <span class="text-white text-sm">${manager}</span>
@@ -4506,6 +4925,8 @@ function populateTopEarners(managerEarnings) {
             <span class="text-green-400 font-semibold">$${earnings}</span>
         </div>
     `).join('');
+    
+    console.log(`💰 Populated top earners with cumulative earnings up to GW${currentGameweek}`);
 }
 
 // Populate top earners leaderboard
@@ -4513,7 +4934,54 @@ function populateTopEarnersLeaderboard() {
     const tbody = document.getElementById('top-earners-leaderboard');
     if (!tbody) return;
 
-    if (!dashboardData.managerWinnings || Object.keys(dashboardData.managerWinnings).length === 0) {
+    // Calculate cumulative earnings up to the selected gameweek
+    const currentGameweek = dashboardData.currentGameweek || 1;
+    let cumulativeEarnings = new Map();
+    
+    if (dataManager) {
+        // Loop through all gameweeks from GW1 to selected gameweek
+        for (let gw = 1; gw <= currentGameweek; gw++) {
+            const gwData = dataManager.getGameweekData(gw);
+            if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
+                // Find the weekly winner for this gameweek
+                let highestScore = 0;
+                let weeklyWinner = null;
+                
+                gwData.finalResults.forEach(result => {
+                    const homeScore = result.homeScore || 0;
+                    const awayScore = result.awayScore || 0;
+                    const maxScore = Math.max(homeScore, awayScore);
+                    
+                    if (maxScore > highestScore) {
+                        highestScore = maxScore;
+                        weeklyWinner = result;
+                    }
+                });
+                
+                if (weeklyWinner) {
+                    const winnerTeam = weeklyWinner.homeScore > weeklyWinner.awayScore ? 
+                        weeklyWinner.homeTeam : weeklyWinner.awayTeam;
+                    
+                    // Find manager name for the winning team
+                    let managerName = '';
+                    if (weeklyWinner.homeTeam === winnerTeam) {
+                        managerName = weeklyWinner.homeManager || winnerTeam;
+                    } else {
+                        managerName = weeklyWinner.awayManager || winnerTeam;
+                    }
+                    
+                    const totalManagers = dashboardData.leaderboard.length;
+                    const weeklyWinnings = totalManagers - 1; // $1 from each other manager
+                    
+                    // Add to cumulative earnings
+                    const currentEarnings = cumulativeEarnings.get(managerName) || 0;
+                    cumulativeEarnings.set(managerName, currentEarnings + weeklyWinnings);
+                }
+            }
+        }
+    }
+    
+    if (cumulativeEarnings.size === 0) {
         tbody.innerHTML = `
             <tr>
                 <td colspan="3" class="text-center py-4 text-white">
@@ -4525,8 +4993,8 @@ function populateTopEarnersLeaderboard() {
         return;
     }
 
-    // Sort managers by total winnings (highest first) and take top 3
-    const sortedManagers = Object.entries(dashboardData.managerWinnings)
+    // Sort managers by cumulative earnings (highest first) and take top 3
+    const sortedManagers = Array.from(cumulativeEarnings.entries())
         .sort((a, b) => b[1] - a[1])
         .slice(0, 3);
 
@@ -4541,6 +5009,8 @@ function populateTopEarnersLeaderboard() {
             <td class="text-green-400 font-bold">$${winnings}</td>
         </tr>
     `).join('');
+    
+    console.log(`💰 Populated top earners leaderboard with cumulative earnings up to GW${currentGameweek}`);
 }
 
 // Populate payment debts
@@ -4598,20 +5068,26 @@ function populatePlayerMovement() {
     console.log('🔄 Populating player movement...');
     
     const transferHistory = dashboardData.transferHistory || { waivers: [], freeAgents: [], trades: [] };
+    const selectedGameweek = dashboardData.currentGameweek || 1;
     
-    // Populate each section
-    populateFreeAgentsTable(transferHistory.freeAgents);
-    populateWaiversTable(transferHistory.waivers);
-    populateTradesTable(transferHistory.trades);
+    // Filter transfers by selected gameweek
+    const filteredFreeAgents = transferHistory.freeAgents.filter(move => parseInt(move.GW) === selectedGameweek);
+    const filteredWaivers = transferHistory.waivers.filter(move => parseInt(move.GW) === selectedGameweek);
+    const filteredTrades = transferHistory.trades.filter(trade => parseInt(trade.GW) === selectedGameweek);
     
-    // Show/hide empty message
-    const totalMovements = transferHistory.freeAgents.length + transferHistory.waivers.length + transferHistory.trades.length;
+    // Populate each section with filtered data
+    populateFreeAgentsTable(filteredFreeAgents);
+    populateWaiversTable(filteredWaivers);
+    populateTradesTable(filteredTrades);
+    
+    // Show/hide empty message based on filtered data
+    const totalMovements = filteredFreeAgents.length + filteredWaivers.length + filteredTrades.length;
     const emptyMessage = document.getElementById('no-movements-message');
     if (emptyMessage) {
         emptyMessage.classList.toggle('hidden', totalMovements > 0);
     }
     
-    console.log(`✅ Populated ${totalMovements} total player movements`);
+    console.log(`✅ Populated ${totalMovements} player movements for GW${selectedGameweek}`);
 }
 
 // Populate free agents table
@@ -4695,7 +5171,7 @@ function populateWaiversTable(waivers) {
             </td>
             <td>
                 <span class="badge ${move.Result === 'Success' ? 'badge-success' : 'badge-error'} badge-sm">
-                    ${move.Result}
+                    ${move.Result.includes('Denied') ? 'Denied' : move.Result}
                 </span>
             </td>
         `;
@@ -4753,25 +5229,30 @@ function populateTradesTable(trades) {
     });
 }
 
-// Calculate current team composition for a manager
-function calculateCurrentTeam(managerName) {
+// Calculate current team composition for a manager at a specific gameweek
+function calculateCurrentTeam(teamNameOrManager, targetGameweek = null, managerName = null) {
     const draft = dashboardData.draft || null;
     const transferHistory = dashboardData.transferHistory || { waivers: [], freeAgents: [], trades: [] };
     
+    // If no target gameweek specified, use the current selected gameweek
+    if (!targetGameweek) {
+        targetGameweek = dashboardData.currentGameweek || 1;
+    }
+    
     if (!draft || !draft.teams || !Array.isArray(draft.teams)) {
-        console.log(`❌ No draft data available for ${managerName}`);
+        console.log(`❌ No draft data available for ${teamNameOrManager}`);
         return [];
     }
     
     // Find manager's team by exact team name match first, then fallbacks
     const managerTeam = draft.teams.find(team => 
-        team.teamName === managerName ||  // Exact team name match (priority)
-        team.manager === managerName ||   // Exact manager name match
-        (team.manager && team.manager.includes(managerName.split(' ')[0])) ||  // Partial manager match
-        (team.teamName && team.teamName.toLowerCase() === managerName.toLowerCase())  // Case-insensitive exact match
+        team.teamName === teamNameOrManager ||  // Exact team name match (priority)
+        team.manager === teamNameOrManager ||   // Exact manager name match
+        (team.manager && team.manager.includes(teamNameOrManager.split(' ')[0])) ||  // Partial manager match
+        (team.teamName && team.teamName.toLowerCase() === teamNameOrManager.toLowerCase())  // Case-insensitive exact match
     );
     if (!managerTeam || !managerTeam.draftPicks) {
-        console.log(`❌ No team found for manager ${managerName}`);
+        console.log(`❌ No team found for ${teamNameOrManager}`);
         console.log(`📋 Available managers:`, draft.teams.map(team => team.manager));
         console.log(`📋 Available team names:`, draft.teams.map(team => team.teamName));
         return [];
@@ -4780,7 +5261,7 @@ function calculateCurrentTeam(managerName) {
     // Start with initial draft picks
     let currentSquad = [...managerTeam.draftPicks];
     
-    console.log(`📝 Initial squad for ${managerName}:`, currentSquad);
+    console.log(`📝 Initial squad for ${teamNameOrManager}:`, currentSquad);
     
     // Helper function to check if manager names match
     // Handles both "Harry" and "Harry Liu" formats
@@ -4795,85 +5276,130 @@ function calculateCurrentTeam(managerName) {
         return shortName.trim().toLowerCase() === firstNameFromFull.toLowerCase();
     }
     
-    // Apply free agent transactions
-    transferHistory.freeAgents.forEach(move => {
-        if (managerMatches(managerName, move.Manager)) {
-            // Remove player out
-            const outIndex = currentSquad.indexOf(move.Out);
-            if (outIndex > -1) {
-                currentSquad.splice(outIndex, 1);
-                console.log(`➖ Removed ${move.Out} for ${managerName} (matched with ${move.Manager})`);
-            }
-            // Add player in
-            currentSquad.push(move.In);
-            console.log(`➕ Added ${move.In} for ${managerName} (matched with ${move.Manager})`);
-        }
-    });
+    // Apply transfers in the correct order: Trades → Waivers → Free Agents
+    // Use the provided manager name or extract it from the team data
+    const teamManagerName = managerName || managerTeam.manager || teamNameOrManager;
+    console.log(`🏆 DEBUG: teamManagerName set to: "${teamManagerName}" (from managerName: "${managerName}" or managerTeam.manager: "${managerTeam.manager}" or fallback: "${teamNameOrManager}")`);
     
-    // Apply successful waiver transactions
-    transferHistory.waivers.forEach(move => {
-        if (managerMatches(managerName, move.Manager) && move.Result === 'Success') {
-            // Remove player out
-            const outIndex = currentSquad.indexOf(move.Out);
-            if (outIndex > -1) {
-                currentSquad.splice(outIndex, 1);
-                console.log(`➖ Removed ${move.Out} via waiver for ${managerName} (matched with ${move.Manager})`);
-            }
-            // Add player in
-            currentSquad.push(move.In);
-            console.log(`➕ Added ${move.In} via waiver for ${managerName} (matched with ${move.Manager})`);
-        }
-    });
-    
-    // Apply accepted trades
+    // 1. Apply accepted trades FIRST (only up to target gameweek)
+    console.log(`🏆 DEBUG: Processing ${transferHistory.trades.length} trade transactions for ${teamManagerName} at GW${targetGameweek}`);
     transferHistory.trades.forEach(trade => {
-        if (trade.Result === 'Accepted') {
-            if (managerMatches(managerName, trade['Offered By'])) {
+        const tradeGameweek = parseInt(trade.GW) || 1;
+        if ((trade.Result === 'Accepted' || trade.Result === 'Processed') && tradeGameweek <= targetGameweek) {
+            if (managerMatches(teamManagerName, trade['Offered By'])) {
                 // This manager gave away 'Offered' and received 'Requested'
                 const outIndex = currentSquad.indexOf(trade.Offered);
-                if (outIndex > -1) {
-                    currentSquad.splice(outIndex, 1);
-                    console.log(`➖ Traded away ${trade.Offered} for ${managerName} (matched with ${trade['Offered By']})`);
+            if (outIndex > -1) {
+                currentSquad.splice(outIndex, 1);
+                    console.log(`➖ Traded away ${trade.Offered} via trade for ${teamManagerName} in GW${tradeGameweek} (matched with ${trade['Offered By']})`);
+                } else {
+                    console.log(`⚠️ Could not find ${trade.Offered} to remove via trade for ${teamManagerName} in GW${tradeGameweek}`);
                 }
                 currentSquad.push(trade.Requested);
-                console.log(`➕ Received ${trade.Requested} via trade for ${managerName} (matched with ${trade['Offered By']})`);
-            } else if (managerMatches(managerName, trade['Offered To'])) {
+                console.log(`➕ Received ${trade.Requested} via trade for ${teamManagerName} in GW${tradeGameweek} (matched with ${trade['Offered By']})`);
+                console.log(`📊 Squad size after trade: ${currentSquad.length}`);
+            } else if (managerMatches(teamManagerName, trade['Offered To'])) {
                 // This manager gave away 'Requested' and received 'Offered'
                 const outIndex = currentSquad.indexOf(trade.Requested);
                 if (outIndex > -1) {
                     currentSquad.splice(outIndex, 1);
-                    console.log(`➖ Traded away ${trade.Requested} for ${managerName} (matched with ${trade['Offered To']})`);
+                    console.log(`➖ Traded away ${trade.Requested} via trade for ${teamManagerName} in GW${tradeGameweek} (matched with ${trade['Offered To']})`);
+                } else {
+                    console.log(`⚠️ Could not find ${trade.Requested} to remove via trade for ${teamManagerName} in GW${tradeGameweek}`);
                 }
                 currentSquad.push(trade.Offered);
-                console.log(`➕ Received ${trade.Offered} via trade for ${managerName} (matched with ${trade['Offered To']})`);
+                console.log(`➕ Received ${trade.Offered} via trade for ${teamManagerName} in GW${tradeGameweek} (matched with ${trade['Offered To']})`);
+                console.log(`📊 Squad size after trade: ${currentSquad.length}`);
             }
         }
     });
     
-    console.log(`✅ Final squad for ${managerName}:`, currentSquad);
+    // 2. Apply successful waiver transactions SECOND (only up to target gameweek)
+    // Note: Denied waivers (Result !== 'Accepted') are never applied to team composition
+    console.log(`🏆 DEBUG: Processing ${transferHistory.waivers.length} waiver transactions for ${teamManagerName} at GW${targetGameweek}`);
+    transferHistory.waivers.forEach((move, index) => {
+        const moveGameweek = parseInt(move.GW) || 1;
+        
+        
+        if (managerMatches(teamManagerName, move.Manager) && move.Result === 'Accepted' && moveGameweek <= targetGameweek) {
+            // Remove player out
+            const outIndex = currentSquad.indexOf(move.Out);
+            if (outIndex > -1) {
+                currentSquad.splice(outIndex, 1);
+                console.log(`➖ Removed ${move.Out} via waiver for ${teamManagerName} in GW${moveGameweek} (matched with ${move.Manager})`);
+            } else {
+                console.log(`⚠️ Could not find ${move.Out} to remove via waiver for ${teamManagerName} in GW${moveGameweek}`);
+            }
+            // Add player in
+            currentSquad.push(move.In);
+            console.log(`➕ Added ${move.In} via waiver for ${teamManagerName} in GW${moveGameweek} (matched with ${move.Manager})`);
+            console.log(`📊 Squad size after waiver move: ${currentSquad.length}`);
+        }
+    });
+    
+    // 3. Apply free agent transactions LAST (only up to target gameweek)
+    console.log(`🏆 DEBUG: Processing ${transferHistory.freeAgents.length} free agent transactions for ${teamManagerName} at GW${targetGameweek}`);
+    transferHistory.freeAgents.forEach(move => {
+        const moveGameweek = parseInt(move.GW) || 1;
+        if (managerMatches(teamManagerName, move.Manager) && moveGameweek <= targetGameweek) {
+            // Remove player out
+            const outIndex = currentSquad.indexOf(move.Out);
+                if (outIndex > -1) {
+                    currentSquad.splice(outIndex, 1);
+                console.log(`➖ Removed ${move.Out} for ${teamManagerName} in GW${moveGameweek} (matched with ${move.Manager})`);
+            } else {
+                console.log(`⚠️ Could not find ${move.Out} to remove for ${teamManagerName} in GW${moveGameweek}`);
+            }
+            // Add player in
+            currentSquad.push(move.In);
+            console.log(`➕ Added ${move.In} for ${teamManagerName} in GW${moveGameweek} (matched with ${move.Manager})`);
+            console.log(`📊 Squad size after free agent move: ${currentSquad.length}`);
+        }
+    });
+    
+    console.log(`✅ Final squad for ${teamManagerName} at GW${targetGameweek}:`, currentSquad);
     return currentSquad;
 }
 
 // Show/hide movement type sections
 function showMovementType(type) {
-    const allSection = document.getElementById('free-agents-section');
+    // Get section elements
     const freeAgentsSection = document.getElementById('free-agents-section');
     const waiversSection = document.getElementById('waivers-section');
     const tradesSection = document.getElementById('trades-section');
     
-    // Update tab states
-    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('tab-active'));
-    document.getElementById(`${type === 'all' ? 'all-movements' : type}-tab`).classList.add('tab-active');
+    // Get tab elements
+    const allMovementsTab = document.getElementById('all-movements-tab');
+    const freeAgentsTab = document.getElementById('free-agents-tab');
+    const waiversTab = document.getElementById('waivers-tab');
+    const tradesTab = document.getElementById('trades-tab');
     
-    // Show/hide sections
+    // Update tab states (with null checks)
+    if (allMovementsTab) allMovementsTab.classList.remove('tab-active');
+    if (freeAgentsTab) freeAgentsTab.classList.remove('tab-active');
+    if (waiversTab) waiversTab.classList.remove('tab-active');
+    if (tradesTab) tradesTab.classList.remove('tab-active');
+    
+    // Activate the correct tab
+    if (type === 'all' && allMovementsTab) {
+        allMovementsTab.classList.add('tab-active');
+    } else if (type === 'freeAgents' && freeAgentsTab) {
+        freeAgentsTab.classList.add('tab-active');
+    } else if (type === 'waivers' && waiversTab) {
+        waiversTab.classList.add('tab-active');
+    } else if (type === 'trades' && tradesTab) {
+        tradesTab.classList.add('tab-active');
+    }
+    
+    // Show/hide sections (with null checks)
     if (type === 'all') {
-        freeAgentsSection.classList.remove('hidden');
-        waiversSection.classList.remove('hidden');
-        tradesSection.classList.remove('hidden');
+        if (freeAgentsSection) freeAgentsSection.classList.remove('hidden');
+        if (waiversSection) waiversSection.classList.remove('hidden');
+        if (tradesSection) tradesSection.classList.remove('hidden');
     } else {
-        freeAgentsSection.classList.toggle('hidden', type !== 'freeAgents');
-        waiversSection.classList.toggle('hidden', type !== 'waivers');
-        tradesSection.classList.toggle('hidden', type !== 'trades');
+        if (freeAgentsSection) freeAgentsSection.classList.toggle('hidden', type !== 'freeAgents');
+        if (waiversSection) waiversSection.classList.toggle('hidden', type !== 'waivers');
+        if (tradesSection) tradesSection.classList.toggle('hidden', type !== 'trades');
     }
 }
 
@@ -5266,38 +5792,90 @@ function getMonthFromDate(dateString) {
     return 'Unknown Month';
 }
 
-// Calculate outstanding payments by month
+// Calculate outstanding payments by month - cumulative up to selected gameweek
 function calculateOutstandingPayments() {
-    if (!dashboardData.weeklyWinnersWithDates || dashboardData.weeklyWinnersWithDates.length === 0) {
-        return {};
-    }
-    
+    const currentGameweek = dashboardData.currentGameweek || 1;
     const monthlyPayments = {};
     const allManagers = getUniqueManagers();
     
-    // Initialize monthly structure
-    dashboardData.weeklyWinnersWithDates.forEach(winner => {
-        if (!monthlyPayments[winner.month]) {
-            monthlyPayments[winner.month] = {
-                winners: [],
-                debts: {}
-            };
-            // Initialize debt tracking for all managers
-            allManagers.forEach(manager => {
-                monthlyPayments[winner.month].debts[manager] = 0;
+    if (!dataManager) {
+        return {};
+    }
+    
+    // Loop through all gameweeks from GW1 to selected gameweek
+    for (let gw = 1; gw <= currentGameweek; gw++) {
+        const gwData = dataManager.getGameweekData(gw);
+        if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
+            // Find the weekly winner for this gameweek
+            let highestScore = 0;
+            let weeklyWinner = null;
+            
+            gwData.finalResults.forEach(result => {
+                const homeScore = result.homeScore || 0;
+                const awayScore = result.awayScore || 0;
+                const maxScore = Math.max(homeScore, awayScore);
+                
+                if (maxScore > highestScore) {
+                    highestScore = maxScore;
+                    weeklyWinner = result;
+                }
             });
-        }
-        
-        // Add winner to month
-        monthlyPayments[winner.month].winners.push(winner);
-        
-        // Calculate debts: all other managers owe $1 to the winner
-        allManagers.forEach(manager => {
-            if (manager !== winner.winner) {
-                monthlyPayments[winner.month].debts[manager] += 1;
+            
+            if (weeklyWinner) {
+                const winnerTeam = weeklyWinner.homeScore > weeklyWinner.awayScore ? 
+                    weeklyWinner.homeTeam : weeklyWinner.awayTeam;
+                const winnerScore = Math.max(weeklyWinner.homeScore || 0, weeklyWinner.awayScore || 0);
+                
+                // Find manager name for the winning team
+                let managerName = '';
+                if (weeklyWinner.homeTeam === winnerTeam) {
+                    managerName = weeklyWinner.homeManager || winnerTeam;
+                } else {
+                    managerName = weeklyWinner.awayManager || winnerTeam;
+                }
+                
+                // Determine month from gameweek (simplified logic)
+                let month = 'August'; // Default
+                if (gw <= 4) month = 'August';
+                else if (gw <= 8) month = 'September';
+                else if (gw <= 12) month = 'October';
+                else if (gw <= 16) month = 'November';
+                else if (gw <= 20) month = 'December';
+                else if (gw <= 24) month = 'January';
+                else if (gw <= 28) month = 'February';
+                else if (gw <= 32) month = 'March';
+                else if (gw <= 36) month = 'April';
+                else month = 'May';
+                
+                // Initialize month structure if not exists
+                if (!monthlyPayments[month]) {
+                    monthlyPayments[month] = {
+                        winners: [],
+                        debts: {}
+                    };
+                    // Initialize debt tracking for all managers
+                    allManagers.forEach(manager => {
+                        monthlyPayments[month].debts[manager] = 0;
+                    });
+                }
+                
+                // Add winner to month
+                monthlyPayments[month].winners.push({
+                    gameweek: gw,
+                    winner: managerName,
+                    gwPoints: winnerScore,
+                    month: month
+                });
+                
+                // Calculate debts: all other managers owe $1 to the winner
+                allManagers.forEach(manager => {
+                    if (manager !== managerName) {
+                        monthlyPayments[month].debts[manager] += 1;
+                    }
+                });
             }
-        });
-    });
+        }
+    }
     
     return monthlyPayments;
 }
