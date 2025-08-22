@@ -108,7 +108,20 @@ class FPLDataManager {
         const draft = this.processDraftData(gwData.starting_draft || [], standings);
         
         // Process player performance data
-        const playerData = this.processPlayerData(gwData);
+        let playerData = this.processPlayerData(gwData);
+        
+        // If no player data for current gameweek, try to get it from previous gameweek
+        if (playerData.length === 0) {
+            const gameweekNum = parseInt(gameweek.replace('gw', ''));
+            if (gameweekNum > 1) {
+                const previousGameweek = `gw${gameweekNum - 1}`;
+                const previousData = this.gameweekData.get(previousGameweek);
+                if (previousData && previousData.playerData && previousData.playerData.length > 0) {
+                    console.log(`⚽ Using player data from ${previousGameweek} for ${gameweek} (no player data yet)`);
+                    playerData = previousData.playerData;
+                }
+            }
+        }
         
         // Merge standings data with draft teams for complete leaderboard info
         const leaderboardTeams = this.mergeStandingsWithDraft(standings, draft.teams);
@@ -437,7 +450,7 @@ class FPLDataManager {
     getAllPlayers() {
         const allPlayers = [];
         for (const [gameweek, data] of this.gameweekData) {
-            if (data.playerData) {
+            if (data.playerData && data.playerData.length > 0) {
                 allPlayers.push(...data.playerData);
             }
         }
