@@ -1205,28 +1205,64 @@
   ],
   "partial_results_gw2": [
     {
-      "Gameweek 2 - Day 1": "cunha believe it\nHarry Liu",
-      "": "Gweepy\nSean Dunn"
+      "gameweek": 2,
+      "day": 1,
+      "homeTeam": "cunha believe it",
+      "homeManager": "Harry Liu",
+      "homeScore": 0,
+      "awayTeam": "Gweepy",
+      "awayManager": "Sean Dunn",
+      "awayScore": 1
     },
     {
-      "Gameweek 2 - Day 1": "thenotsospecialone\nJosiah Loh",
-      "": "son4lyfe\nDon Kim"
+      "gameweek": 2,
+      "day": 1,
+      "homeTeam": "thenotsospecialone",
+      "homeManager": "Josiah Loh",
+      "homeScore": 17,
+      "awayTeam": "son4lyfe",
+      "awayManager": "Don Kim",
+      "awayScore": 0
     },
     {
-      "Gameweek 2 - Day 1": "Cunha Get Me Points\nAndrew Smith",
-      "": "Trophies Matter FC\nNoah Wilson"
+      "gameweek": 2,
+      "day": 1,
+      "homeTeam": "Cunha Get Me Points",
+      "homeManager": "Andrew Smith",
+      "homeScore": 0,
+      "awayTeam": "Trophies Matter FC",
+      "awayManager": "Noah Wilson",
+      "awayScore": 7
     },
     {
-      "Gameweek 2 - Day 1": "Extended Foreplay\nKyle Herrera",
-      "": "Schr\u00f6dongers\nchris duncam"
+      "gameweek": 2,
+      "day": 1,
+      "homeTeam": "Extended Foreplay",
+      "homeManager": "Kyle Herrera",
+      "homeScore": 7,
+      "awayTeam": "Schr\u00f6dongers",
+      "awayManager": "chris duncam",
+      "awayScore": 8
     },
     {
-      "Gameweek 2 - Day 1": "Atl\u00e9tico SeaSlug\nRonangel Rojas",
-      "": "FootAndBallFetish\nZryan Bhao"
+      "gameweek": 2,
+      "day": 1,
+      "homeTeam": "Atl\u00e9tico SeaSlug",
+      "homeManager": "Ronangel Rojas",
+      "homeScore": 1,
+      "awayTeam": "FootAndBallFetish",
+      "awayManager": "Zryan Bhao",
+      "awayScore": 0
     },
     {
-      "Gameweek 2 - Day 1": "This Year FC\nRoy Boateng",
-      "": "Peattle Pounders\nPeter Henze"
+      "gameweek": 2,
+      "day": 1,
+      "homeTeam": "This Year FC",
+      "homeManager": "Roy Boateng",
+      "homeScore": 10,
+      "awayTeam": "Peattle Pounders",
+      "awayManager": "Peter Henze",
+      "awayScore": 7
     }
   ],
   "starting_draft": [
