@@ -1,4 +1,3 @@
-
 // GitHub Pages Data Manager - Loads from JSON instead of CSV
 class FPLDataManager {
     constructor() {
@@ -40,16 +39,19 @@ class FPLDataManager {
     }
 
     async detectGameweekFolders() {
-        // For GitHub Pages, we'll manually check for known gameweeks
+        // For GitHub Pages, only check for gameweeks that actually exist
         const availableGameweeks = [];
         
-        // Check for available gameweeks
-        for (let gw = 1; gw <= 38; gw++) {
-            const gwData = await this.loadJSONFile(`./data/gw${gw}.json`);
+        // Check for available gameweeks (only check what exists)
+        // Since we're generating this from local data, we know what exists
+        const gameweekList = ['gw1', 'gw2']; // Only check for gameweeks that actually exist
+        
+        for (const gw of gameweekList) {
+            const gwData = await this.loadJSONFile(`./data/${gw}.json`);
             if (gwData) {
-                availableGameweeks.push(`gw${gw}`);
+                availableGameweeks.push(gw);
                 // Store the raw JSON data in gameweekData for processing
-                this.gameweekData.set(`gw${gw}`, gwData);
+                this.gameweekData.set(gw, gwData);
                 console.log(`✓ Found gameweek ${gw}`);
             }
         }
@@ -135,8 +137,8 @@ class FPLDataManager {
             },
             plFixtures: this.parsePLFixtures(gwData[`pl_gw${gameweek.replace('gw', '')}`] || []),
             transferHistory: gwData.transfer_history || { waivers: [], freeAgents: [], trades: [] },
-            finalResults: finalResults,
-            partialResults: partialResults,
+            finalResults: this.processFinalResultsData(gwData.final_results_gw1 || gwData.final_results_gw2 || []),
+            partialResults: this.processPartialResultsData(gwData.partial_results_gw1 || gwData.partial_results_gw2 || []),
             playerData: playerData,
             timestamp: new Date().toISOString()
         };
@@ -176,6 +178,7 @@ class FPLDataManager {
             position: standing.Rank !== '-' ? parseInt(standing.Rank) : index + 1,
             teamName: standing['Team Name'] || '',
             manager: standing.Manager || '',
+            firstName: (standing.Manager || '').split(' ')[0],
             points: parseInt(standing.Pts) || 0,
             wins: parseInt(standing.W) || 0,
             draws: parseInt(standing.D) || 0,
@@ -188,7 +191,11 @@ class FPLDataManager {
     createStandingsFromResults(finalResults, partialResults) {
         // Create standings data from final results (prioritize) or partial results
         const results = finalResults.length > 0 ? finalResults : partialResults;
-        if (results.length === 0) return [];
+        
+        if (results.length === 0) {
+            console.log('📊 No results data available for standings');
+            return [];
+        }
         
         // Get unique teams from results
         const teams = new Set();
@@ -201,10 +208,12 @@ class FPLDataManager {
         const standings = Array.from(teams).map(teamName => {
             // Find manager name from results
             const result = results.find(r => r.homeTeam === teamName || r.awayTeam === teamName);
-            const manager = result ? (result.homeTeam === teamName ? result.homeManager : result.awayManager) : teamName;
+            const managerName = result ? (result.homeTeam === teamName ? result.homeManager : result.awayManager) : '';
             
-            // Calculate points, wins, draws, losses from results
-            let points = 0, wins = 0, draws = 0, losses = 0;
+            let points = 0;
+            let wins = 0;
+            let draws = 0;
+            let losses = 0;
             let gwPoints = 0;
             
             results.forEach(result => {
@@ -213,8 +222,8 @@ class FPLDataManager {
                     const teamScore = isHome ? result.homeScore : result.awayScore;
                     const opponentScore = isHome ? result.awayScore : result.homeScore;
                     
-                    // Add GW points
-                    gwPoints += teamScore || 0;
+                    // Add to gameweek points
+                    gwPoints += teamScore;
                     
                     // Calculate league points (3 for win, 1 for draw, 0 for loss)
                     if (teamScore > opponentScore) {
@@ -232,7 +241,8 @@ class FPLDataManager {
             return {
                 position: 0, // Will be set by sorting
                 teamName: teamName,
-                manager: manager,
+                manager: managerName,
+                firstName: managerName.split(' ')[0],
                 points: points,
                 wins: wins,
                 draws: draws,
@@ -265,10 +275,10 @@ class FPLDataManager {
         }
         
         console.log('📝 processDraftData called with:');
-        console.log('📝 draftData length:', draftData.length);
-        console.log('📝 standingsData length:', standingsData ? standingsData.length : 'undefined');
-        console.log('📝 standingsData sample:', standingsData ? standingsData[0] : 'undefined');
+        console.log('  - draftData:', draftData);
+        console.log('  - standingsData:', standingsData);
         
+        // Create a map of team names to their data
         const teamMap = {};
         
         // First, get manager names from standings if available
@@ -294,7 +304,16 @@ class FPLDataManager {
             console.log('📝 Processing draft pick:', pick);
             // Extract manager and player info from various possible formats
             const possibleManagers = Object.keys(pick).filter(key => 
-                key !== 'Round' && key !== 'Pick' && key !== 'Player' && pick[key]
+                key !== 'Round' && 
+                key !== 'Round Pts' && 
+                key !== 'gameweek' && 
+                key !== 'day' && 
+                key !== 'homeTeam' && 
+                key !== 'awayTeam' && 
+                key !== 'homeScore' && 
+                key !== 'awayScore' && 
+                key !== 'homeManager' && 
+                key !== 'awayManager'
             );
             
             possibleManagers.forEach(teamName => {
@@ -303,9 +322,8 @@ class FPLDataManager {
                     // Find the manager for this team name
                     const managerName = Object.keys(managerLookup).find(manager => 
                         managerLookup[manager] === teamName
-                    ) || teamName;
+                    ) || teamName; // Fallback to team name if no manager found
                     
-                    // Extract first name for display (for team dropdown)
                     const firstName = managerName.split(' ')[0];
                     
                     if (!teamMap[teamName]) {
@@ -321,7 +339,7 @@ class FPLDataManager {
                 }
             });
         });
-
+        
         const teams = Object.values(teamMap);
         console.log('📝 Processed draft teams:', teams.length);
         console.log('📝 Final teams:', teams);
@@ -336,11 +354,11 @@ class FPLDataManager {
             gameweek: result.gameweek || 1,
             day: result.day || 1,
             homeTeam: result.homeTeam || '',
-            homeManager: result.homeManager || '',
-            homeScore: result.homeScore || 0,
+            homeScore: parseInt(result.homeScore) || 0,
             awayTeam: result.awayTeam || '',
-            awayManager: result.awayManager || '',
-            awayScore: result.awayScore || 0
+            awayScore: parseInt(result.awayScore) || 0,
+            homeManager: result.homeManager || '',
+            awayManager: result.awayManager || ''
         }));
     }
 
@@ -351,11 +369,11 @@ class FPLDataManager {
         return finalResultsData.map(result => ({
             gameweek: result.gameweek || 1,
             homeTeam: result.homeTeam || '',
-            homeManager: result.homeManager || '',
-            homeScore: result.homeScore || 0,
+            homeScore: parseInt(result.homeScore) || 0,
             awayTeam: result.awayTeam || '',
+            awayScore: parseInt(result.awayScore) || 0,
+            homeManager: result.homeManager || '',
             awayManager: result.awayManager || '',
-            awayScore: result.awayScore || 0,
             isFinal: true
         }));
     }
@@ -431,7 +449,7 @@ class FPLDataManager {
                 position: standing.position,
                 teamName: standing.teamName,
                 manager: standing.manager,
-                firstName: standing.manager.split(' ')[0], // Extract first name for dropdown
+                firstName: standing.firstName,
                 points: standing.points,
                 wins: standing.wins,
                 draws: standing.draws,
