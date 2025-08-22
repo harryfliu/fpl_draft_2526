@@ -82,15 +82,17 @@ class FPLDataManager {
             return;
         }
 
-        // Process the data similar to the original CSV version
-        const standings = this.processStandingsData(gwData.standings || []);
-        const draft = this.processDraftData(gwData.starting_draft || [], gwData.standings || []);
-        
         // Process final results (prioritize over partial results)
         const finalResults = this.processFinalResultsData(gwData.final_results_gw1 || gwData.final_results_gw2 || []);
         
         // Process partial results for live data (fallback if no final results)
         const partialResults = this.processPartialResultsData(gwData.partial_results_gw1 || gwData.partial_results_gw2 || []);
+        
+        // Create standings from results if no standings data exists
+        const standings = this.createStandingsFromResults(finalResults, partialResults);
+        
+        // Process draft data with the created standings
+        const draft = this.processDraftData(gwData.starting_draft || [], standings);
         
         // Process player performance data
         const playerData = this.processPlayerData(gwData);
