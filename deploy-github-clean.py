@@ -899,11 +899,15 @@ class FPLDataManager {
         // Process all player performance data from different gameweeks
         const allPlayers = {};
         
+        console.log('⚽ processPlayerData called with:', Object.keys(gwData));
+        
         // Look for player data files (players_gw1, players_gw2, etc.)
         Object.keys(gwData).forEach(key => {
             if (key.startsWith('players_gw')) {
                 const gameweek = key.replace('players_gw', '');
                 const players = gwData[key] || [];
+                
+                console.log(`⚽ Found ${players.length} players for ${key}`);
                 
                 players.forEach(player => {
                     const playerKey = `${player.name}_${player.team}`;
@@ -947,7 +951,9 @@ class FPLDataManager {
             }
         });
         
-        return Object.values(allPlayers);
+        const result = Object.values(allPlayers);
+        console.log(`⚽ processPlayerData returning ${result.length} players`);
+        return result;
     }
 
     mergeStandingsWithDraft(standings, draftTeams) {
