@@ -674,11 +674,12 @@ class FPLDataManager {{
             return;
         }}
 
-        // Process final results (prioritize over partial results)
-        const finalResults = this.processFinalResultsData(gwData.final_results_gw1 || gwData.final_results_gw2 || []);
+        // Process final results (prioritize over partial results) - dynamically for the specific gameweek
+        const gameweekNum = gameweek.replace('gw', '');
+        const finalResults = this.processFinalResultsData(gwData[`final_results_gw${{gameweekNum}}`] || []);
         
-        // Process partial results for live data (fallback if no final results)
-        const partialResults = this.processPartialResultsData(gwData.partial_results_gw1 || gwData.partial_results_gw2 || []);
+        // Process partial results for live data (fallback if no final results) - dynamically for the specific gameweek
+        const partialResults = this.processPartialResultsData(gwData[`partial_results_gw${{gameweekNum}}`] || []);
         
         // Create standings from results if no standings data exists
         let standings = this.createStandingsFromResults(finalResults, partialResults);
@@ -725,10 +726,10 @@ class FPLDataManager {{
                 teams: leaderboardTeams,
                 originalDraftTeams: draft.teams  // Keep original draft teams for draft picks display
             }},
-            plFixtures: this.parsePLFixtures(gwData[`pl_gw${{gameweek.replace('gw', '')}}`] || []),
+            plFixtures: this.parsePLFixtures(gwData[`pl_gw${{gameweekNum}}`] || []),
             transferHistory: gwData.transfer_history || {{ waivers: [], freeAgents: [], trades: [] }},
-            finalResults: this.processFinalResultsData(gwData.final_results_gw1 || gwData.final_results_gw2 || []),
-            partialResults: this.processPartialResultsData(gwData.partial_results_gw1 || gwData.partial_results_gw2 || []),
+            finalResults: finalResults,
+            partialResults: partialResults,
             playerData: playerData,
             timestamp: new Date().toISOString()
         }};
@@ -1100,8 +1101,9 @@ class FPLDataManager {{
         }}
         
         // Create standings from results if no standings data exists
-        const finalResults = this.processFinalResultsData(rawData.final_results_gw1 || rawData.final_results_gw2 || []);
-        const partialResults = this.processPartialResultsData(rawData.partial_results_gw1 || rawData.partial_results_gw2 || []);
+        const gameweekNum = this.currentGameweek;
+        const finalResults = this.processFinalResultsData(rawData[`final_results_gw${{gameweekNum}}`] || []);
+        const partialResults = this.processPartialResultsData(rawData[`partial_results_gw${{gameweekNum}}`] || []);
         const standings = this.createStandingsFromResults(finalResults, partialResults);
         
         // Return the processed data structure that the dashboard expects
@@ -1115,10 +1117,10 @@ class FPLDataManager {{
                 ),
                 originalDraftTeams: this.processDraftData(rawData.starting_draft || [], standings).teams
             }},
-            plFixtures: this.parsePLFixtures(rawData[`pl_gw${{gameweek.replace('gw', '')}}`] || []),
+            plFixtures: this.parsePLFixtures(rawData[`pl_gw${{gameweekNum}}`] || []),
             transferHistory: rawData.transfer_history || {{ waivers: [], freeAgents: [], trades: [] }},
-            finalResults: this.processFinalResultsData(rawData.final_results_gw1 || rawData.final_results_gw2 || []),
-            partialResults: this.processPartialResultsData(rawData.partial_results_gw1 || rawData.partial_results_gw2 || []),
+            finalResults: finalResults,
+            partialResults: partialResults,
             playerData: this.processPlayerData(rawData),
             timestamp: new Date().toISOString()
         }};
