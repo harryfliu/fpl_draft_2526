@@ -584,7 +584,8 @@ class FPLDataManager {
 
     getPartialResults(gameweek = null) {
         if (gameweek) {
-            const data = this.gameweekData.get(gameweek);
+            const gwKey = `gw${gameweek}`;
+            const data = this.gameweekData.get(gwKey);
             return data ? data.partialResults : [];
         }
         return this.getAllPartialResults();
@@ -603,7 +604,8 @@ class FPLDataManager {
 
     getFinalResults(gameweek = null) {
         if (gameweek) {
-            const data = this.gameweekData.get(gameweek);
+            const gwKey = `gw${gameweek}`;
+            const data = this.gameweekData.get(gwKey);
             return data ? data.finalResults : [];
         }
         return this.getAllFinalResults();

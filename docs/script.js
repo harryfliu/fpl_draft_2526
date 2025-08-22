@@ -2233,9 +2233,7 @@ function computeAndDisplayWeeklyWinner(gameweek) {
     if (!dataManager) return;
     // Only calculate weekly winner if final results exist
     const finalResults = dataManager.getFinalResults(gameweek);
-    console.log(`🏆 DEBUG computeAndDisplayWeeklyWinner: gameweek=${gameweek}, finalResults=`, finalResults);
     if (!finalResults || finalResults.length === 0) {
-        console.log(`🏆 DEBUG: No final results found for GW${gameweek}, setting TBD`);
         dashboardData.weeklyWinner = 'TBD';
         updateOverviewStats();
         return;
