@@ -14,8 +14,8 @@ class FPLDataManager {
             console.log('📁 Available gameweeks:', availableGameweeks);
             
             if (availableGameweeks.length > 0) {
-                // Load the first available gameweek
-                await this.loadGameweekData(availableGameweeks[0]);
+                // Load data from all available gameweeks (like local version)
+                await this.loadAllGameweekData();
                 console.log('✅ Data manager initialized successfully');
                 return true; // Return success
             } else {
@@ -48,6 +48,8 @@ class FPLDataManager {
             const gwData = await this.loadJSONFile(`./data/gw${gw}.json`);
             if (gwData) {
                 availableGameweeks.push(`gw${gw}`);
+                // Store the raw JSON data in gameweekData for processing
+                this.gameweekData.set(`gw${gw}`, gwData);
                 console.log(`✓ Found gameweek ${gw}`);
             }
         }
@@ -60,6 +62,16 @@ class FPLDataManager {
         }
         
         return availableGameweeks;
+    }
+
+    async loadAllGameweekData() {
+        console.log('📥 Loading data from all gameweeks...');
+        const availableGameweeks = Array.from(this.gameweekData.keys());
+        
+        for (const gameweek of availableGameweeks) {
+            await this.loadGameweekData(gameweek);
+        }
+        console.log('✅ Loaded data from all gameweeks');
     }
 
     async loadGameweekData(gameweek) {
@@ -350,7 +362,31 @@ class FPLDataManager {
 
     getCurrentGameweekData() {
         const gameweek = `gw${this.currentGameweek}`;
-        return this.gameweekData.get(gameweek);
+        const rawData = this.gameweekData.get(gameweek);
+        
+        if (!rawData) {
+            console.warn(`No raw data found for ${gameweek}`);
+            return null;
+        }
+        
+        // Return the processed data structure that the dashboard expects
+        return {
+            fixtures: this.parseFixturesData(rawData.fixture_list || []),
+            standings: this.processStandingsData(rawData.standings || []),
+            draft: {
+                teams: this.mergeStandingsWithDraft(
+                    this.processStandingsData(rawData.standings || []),
+                    this.processDraftData(rawData.starting_draft || [], rawData.standings || []).teams
+                ),
+                originalDraftTeams: this.processDraftData(rawData.starting_draft || [], rawData.standings || []).teams
+            },
+            plFixtures: this.parsePLFixtures(rawData[`pl_gw${gameweek.replace('gw', '')}`] || []),
+            transferHistory: rawData.transfer_history || { waivers: [], freeAgents: [], trades: [] },
+            finalResults: this.processFinalResultsData(rawData.final_results_gw1 || rawData.final_results_gw2 || []),
+            partialResults: this.processPartialResultsData(rawData.partial_results_gw1 || rawData.partial_results_gw2 || []),
+            playerData: this.processPlayerData(rawData),
+            timestamp: new Date().toISOString()
+        };
     }
 
     getGameweekData(gameweek) {
