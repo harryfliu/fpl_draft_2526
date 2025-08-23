@@ -1520,11 +1520,20 @@ function displayTeamDetails(team) {
     if (dataManager) {
         // Check if there are results for the current gameweek
         const gwData = dataManager.getGameweekData(currentGameweek);
-        if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
-            // Find this team's result for the current gameweek
-            const result = gwData.finalResults.find(r => 
-                r.homeTeam === team.teamName || r.awayTeam === team.teamName
-            );
+        if (gwData) {
+            // Check final results first (take priority over partial results)
+            let result = null;
+            if (gwData.finalResults && gwData.finalResults.length > 0) {
+                result = gwData.finalResults.find(r => 
+                    r.homeTeam === team.teamName || r.awayTeam === team.teamName
+                );
+            }
+            // If no final results, check partial results
+            if (!result && gwData.partialResults && gwData.partialResults.length > 0) {
+                result = gwData.partialResults.find(r => 
+                    r.homeTeam === team.teamName || r.awayTeam === team.teamName
+                );
+            }
             
             if (result) {
                 if (result.homeTeam === team.teamName) {
