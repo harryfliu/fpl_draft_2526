@@ -1722,15 +1722,23 @@ function displayTeamTopContributors(team) {
     
     // Check if any player has performance data specifically for the current gameweek
     // This prevents showing GW1 data when viewing GW2
-    const hasOwnPlayerData = currentData.playerData && currentData.playerData.length > 0 && 
-                            currentData.playerData.some(player => {
-                                // Look for gameweek-specific data in the nested structure
-                                return player.gameweeks && player.gameweeks[currentGW] && 
-                                       player.gameweeks[currentGW].points !== undefined;
-                            });
+    let hasOwnPlayerData = false;
+    
+    if (currentData.playerData && currentData.playerData.length > 0) {
+        // Check deployed JSON structure (nested gameweeks)
+        hasOwnPlayerData = currentData.playerData.some(player => {
+            return player.gameweeks && player.gameweeks[currentGW] && 
+                   player.gameweeks[currentGW].points !== undefined;
+        });
+    } else if (currentData.players && currentData.players.length > 0) {
+        // Check local CSV structure (direct roundPoints)
+        hasOwnPlayerData = currentData.players.some(player => {
+            return player.roundPoints !== undefined;
+        });
+    }
     
     console.log('🏆 DEBUG: Has own player data for GW', currentGW, ':', hasOwnPlayerData);
-    console.log('🏆 DEBUG: Player data structure sample:', currentData.playerData?.[0]);
+    console.log('🏆 DEBUG: Player data structure sample:', currentData.playerData?.[0] || currentData.players?.[0]);
     
     if (!playerData || playerData.length === 0 || !hasOwnPlayerData) {
         console.log('🏆 DEBUG: No player data available OR no own player data for this gameweek');
@@ -1810,10 +1818,10 @@ function displayTeamTopContributors(team) {
                 // Local CSV version: roundPoints is directly available
                 roundPoints = matchedPlayer.roundPoints;
                 console.log(`🏆 DEBUG: Found round points (local) for ${currentPlayerName}:`, roundPoints);
-            } else if (matchedPlayer.gameweeks && matchedPlayer.gameweeks["1"]) {
+            } else if (matchedPlayer.gameweeks && matchedPlayer.gameweeks[currentGW]) {
                 // Deployed JSON version: round points in nested structure
-                roundPoints = matchedPlayer.gameweeks["1"].roundPts || 0;
-                console.log(`🏆 DEBUG: Found round points (deployed) for ${currentPlayerName}:`, roundPoints);
+                roundPoints = matchedPlayer.gameweeks[currentGW].roundPts || 0;
+                console.log(`🏆 DEBUG: Found round points (deployed) for ${currentPlayerName} in GW${currentGW}:`, roundPoints);
             } else {
                 console.warn(`⚠️ No round points found for ${currentPlayerName}`);
             }

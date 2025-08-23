@@ -1115,7 +1115,7 @@ class FPLDataManager {
                     ownership: row.Ownership || '',             // Ownership column
                     form: parseFloat(row.Form) || 0,           // Form column
                     totalPoints: parseFloat(row.Pts) || 0,     // Pts column (total points)
-                    roundPoints: parseFloat(row['Round Pts']) || 0  // Round Pts column (gameweek points)
+                    roundPoints: parseFloat(row['RP']) || 0  // RP column (gameweek points)
                 };
                 
                 // Also add the original properties for compatibility
