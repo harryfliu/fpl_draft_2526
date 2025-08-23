@@ -55,16 +55,42 @@ git checkout main
 # Pull latest production changes
 git pull origin main
 
-# Merge staging into main
+# Merge staging into main (brings over all tested changes + docs)
 git merge staging
 
-# Deploy to production
-python3 deploy-github-clean.py
-
-# Commit and push to production
-git add .
-git commit -m "Release: [describe your changes]"
+# Push to production (NO re-committing needed!)
 git push origin main
+```
+
+**🚀 KEY OPTIMIZATION: No re-committing needed for production!**
+- Staging already has: All fixes committed and tested
+- Deployment script already ran: Docs were regenerated on staging  
+- Merge brings everything over: Including the updated `docs/` folder
+- Production gets: All the same fixes that were tested on staging
+
+### **💡 Why This Workflow is More Efficient:**
+
+#### **✅ Benefits:**
+- **No duplicate commits**: Same changes aren't committed twice
+- **Faster deployment**: Skip the re-deployment step on production
+- **Consistent docs**: Production gets exactly the same docs that were tested on staging
+- **Cleaner git history**: One commit per fix, not two
+- **Reduced risk**: No chance of deployment script errors on production
+
+#### **🔄 The Complete Flow:**
+```bash
+# 1. Develop on staging (with deployment script)
+git checkout staging
+# ... make changes ...
+python3 deploy-github-clean.py  # Generate docs ONCE
+git add . && git commit -m "Fix: [description]"
+git push origin staging
+
+# 2. Deploy to production (NO re-deployment needed)
+git checkout main
+git pull origin main
+git merge staging  # Brings over changes + docs
+git push origin main  # Production is live!
 ```
 
 ## 🖥️ **Local Development Best Practices**
@@ -176,9 +202,8 @@ git add . && git commit -m "..." && git push origin staging
 # Production release
 git checkout main            # Switch to production
 git pull origin main        # Get latest production
-git merge staging           # Merge tested changes
-python3 deploy-github-clean.py  # Deploy to production
-git add . && git commit -m "..." && git push origin main
+git merge staging           # Merge tested changes + docs
+git push origin main        # Production is live! (NO re-deployment needed)
 ```
 
 ## 🧹 **Code Quality Best Practices**
