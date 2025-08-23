@@ -494,7 +494,7 @@ function populateLeaderboard() {
             <td>
                 <div class="flex gap-1">
                     ${(team.form || 'N/A').split('-').map(result => 
-                        `<div class="w-2 h-2 rounded-full ${result === 'W' ? 'bg-success' : result === 'D' ? 'bg-warning' : result === 'L' ? 'bg-error' : 'bg-gray-500'}"></div>`
+                        `<div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white ${result === 'W' ? 'bg-success' : result === 'D' ? 'bg-neutral' : result === 'L' ? 'bg-error' : 'bg-gray-500'}">${result}</div>`
                     ).join('')}
                 </div>
             </td>
@@ -1557,7 +1557,14 @@ function displayTeamDetails(team) {
     // Use the new form calculation function for accurate form display
     if (teamForm) {
         const calculatedForm = calculateFormFromResults(team.teamName);
-        teamForm.textContent = calculatedForm;
+        if (calculatedForm !== 'N/A') {
+            // Display form as badges (most recent on the right)
+            teamForm.innerHTML = calculatedForm.split('-').map(result => 
+                `<div class="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white inline-block mr-1 ${result === 'W' ? 'bg-success' : result === 'D' ? 'bg-neutral' : result === 'L' ? 'bg-error' : 'bg-gray-500'}">${result}</div>`
+            ).join('');
+        } else {
+            teamForm.textContent = calculatedForm;
+        }
     }
     
     // For Teams section: only show current gameweek winnings, not cumulative
@@ -5782,6 +5789,22 @@ function calculateFormFromResults(teamName) {
         result.homeTeam === teamName || result.awayTeam === teamName
     );
     
+    // Also check for current gameweek partial results if we're in the middle of a gameweek
+    const currentGameweek = dashboardData.currentGameweek || 1;
+    const currentGwData = dataManager.getGameweekData(currentGameweek);
+    
+    if (currentGwData && currentGwData.partialResults && currentGwData.partialResults.length > 0) {
+        // Find current gameweek partial result for this team
+        const currentResult = currentGwData.partialResults.find(result => 
+            result.homeTeam === teamName || result.awayTeam === teamName
+        );
+        
+        if (currentResult) {
+            // Add current gameweek result to the list (it will be the most recent)
+            teamResults.push(currentResult);
+        }
+    }
+    
     if (teamResults.length === 0) return 'N/A';
     
     // Build form string from actual results (most recent last)
@@ -5808,7 +5831,7 @@ function calculateFormFromResults(teamName) {
         }
     });
     
-    // Take the last 5 results (most recent form) and join with dashes
+    // Take the last 5 results (most recent form) - most recent will be on the right
     const recentForm = formResults.slice(-5);
     return recentForm.length > 0 ? recentForm.join('-') : 'N/A';
 }
