@@ -984,34 +984,89 @@ function populateMonthlyStandings() {
         return;
     }
     
-    // Create monthly standings from leaderboard with partial results data
+    // Create monthly standings from leaderboard with correct monthly FPL points calculation
     dashboardData.monthlyStandings = dashboardData.leaderboard.map(team => {
-        const performance = calculateTeamPerformanceFromResults(team.teamName);
-        
-        // Calculate total GW points (FPL points) for this month
-        const partialResults = dataManager.getAllPartialResults();
+        // Calculate total GW points (FPL points) for the current month
         let totalGWPoints = 0;
         
-        // Sum up all FPL points this team earned
-        partialResults.forEach(result => {
-            if (result.homeTeam === team.teamName) {
-                totalGWPoints += result.homeScore; // Home team's FPL points
-            } else if (result.awayTeam === team.teamName) {
-                totalGWPoints += result.awayScore; // Away team's FPL points
-            }
-        });
+        // Get the current month based on selected gameweek
+        const currentGameweek = dashboardData.currentGameweek || 1;
+        const currentMonth = getMonthFromGameweek(currentGameweek);
         
+        // Sum up FPL points from all gameweeks in the current month
+        for (let gw = 1; gw <= currentGameweek; gw++) {
+            const monthForGW = getMonthFromGameweek(gw);
+            if (monthForGW === currentMonth) {
+                const gwData = dataManager.getGameweekData(gw);
+                if (gwData) {
+                    // Check final results first (take priority over partial results)
+                    let result = null;
+                    if (gwData.finalResults && gwData.finalResults.length > 0) {
+                        result = gwData.finalResults.find(r => 
+                            r.homeTeam === team.teamName || r.awayTeam === team.teamName
+                        );
+                    }
+                    // If no final results, check partial results
+                    if (!result && gwData.partialResults && gwData.partialResults.length > 0) {
+                        result = gwData.partialResults.find(r => 
+                            r.homeTeam === team.teamName || r.awayTeam === team.teamName
+                        );
+                    }
+                    
+                    if (result) {
+                        if (result.homeTeam === team.teamName) {
+                            totalGWPoints += result.homeScore || 0;
+                        } else {
+                            totalGWPoints += result.awayScore || 0;
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Calculate monthly-only winnings (not cumulative)
+        let monthlyWinnings = 0;
+        for (let gw = 1; gw <= currentGameweek; gw++) {
+            const monthForGW = getMonthFromGameweek(gw);
+            if (monthForGW === currentMonth) {
+                const gwData = dataManager.getGameweekData(gw);
+                if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
+                    // Find the weekly winner for this gameweek
+                    let highestScore = 0;
+                    let weeklyWinner = null;
+                    
+                    gwData.finalResults.forEach(result => {
+                        const homeScore = result.homeScore || 0;
+                        const awayScore = result.awayScore || 0;
+                        const maxScore = Math.max(homeScore, awayScore);
+                        
+                        if (maxScore > highestScore) {
+                            highestScore = maxScore;
+                            weeklyWinner = result;
+                        }
+                    });
+                    
+                    if (weeklyWinner) {
+                        const winnerTeam = weeklyWinner.homeScore > weeklyWinner.awayScore ? 
+                            weeklyWinner.homeTeam : weeklyWinner.awayTeam;
+                        
+                        // Check if this team won this gameweek
+                        if (team.teamName === winnerTeam) {
+                            const totalManagers = dashboardData.leaderboard.length;
+                            const weeklyWinnings = totalManagers - 1; // $1 from each other manager
+                            monthlyWinnings += weeklyWinnings;
+                        }
+                    }
+                }
+            }
+        }
+
         return {
-        position: team.position,
+            position: team.position,
             manager: getManagerFromTeamName(team.teamName), // Use function to get manager name
             teamName: team.teamName,
             totalGWPoints: totalGWPoints, // Total FPL points earned this month
-            winnings: team.totalWinnings || 0,
-            wins: performance.wins,
-            draws: performance.draws,
-            losses: performance.losses,
-            goalsFor: performance.goalsFor,
-            goalsAgainst: performance.goalsAgainst
+            winnings: monthlyWinnings // Monthly-only winnings
         };
     });
     
@@ -1040,30 +1095,6 @@ function populateMonthlyStandings() {
                 <div class="font-semibold text-white mb-2">${standing.manager}</div>
                 <div class="text-sm text-gray-300 mb-1">${standing.teamName}</div>
                 <div class="text-lg font-bold text-white mb-2">${standing.totalGWPoints} FPL pts</div>
-                
-                <!-- Performance stats from partial results -->
-                <div class="grid grid-cols-3 gap-2 mb-3 text-xs">
-                    <div class="text-center">
-                        <div class="text-green-400 font-bold">${standing.wins || 0}</div>
-                        <div class="text-gray-400">W</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-yellow-400 font-bold">${standing.draws || 0}</div>
-                        <div class="text-gray-400">D</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-red-400 font-bold">${standing.losses || 0}</div>
-                        <div class="text-gray-400">L</div>
-                    </div>
-                </div>
-                
-                <!-- Goal difference -->
-                ${standing.goalsFor !== undefined ? `
-                <div class="text-xs text-gray-400 mb-3">
-                    <i class="fas fa-futbol mr-1"></i>
-                    ${standing.goalsFor} - ${standing.goalsAgainst} (${standing.goalsFor - standing.goalsAgainst > 0 ? '+' : ''}${standing.goalsFor - standing.goalsAgainst})
-                </div>
-                ` : ''}
                 
                 ${standing.winnings > 0 ? 
                     `<div class="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-3 py-2 rounded-full text-sm font-semibold shadow-lg gap-1 inline-flex items-center">
@@ -5873,6 +5904,23 @@ function getMonthFromDate(dateString) {
         if (gw <= 34) return 'April';        // GW31-34: Mar 21-Apr 25
         if (gw <= 38) return 'May';          // GW35-38: May 2-24
     }
+    
+    return 'Unknown Month';
+}
+
+// Get month from gameweek number
+function getMonthFromGameweek(gameweek) {
+    // Correct Premier League 2025/26 season mapping
+    if (gameweek <= 3) return 'August';        // GW1-3: Aug 15-31
+    if (gameweek <= 6) return 'September';     // GW4-6: Sep 13-28
+    if (gameweek <= 10) return 'October';      // GW7-10: Oct 4-25
+    if (gameweek <= 14) return 'November';     // GW11-14: Nov 8-29
+    if (gameweek <= 18) return 'December';     // GW15-18: Dec 3-27
+    if (gameweek <= 22) return 'January';      // GW19-22: Dec 30-Jan 17
+    if (gameweek <= 26) return 'February';     // GW23-26: Jan 24-Feb 11
+    if (gameweek <= 30) return 'March';        // GW27-30: Feb 21-Mar 14
+    if (gameweek <= 34) return 'April';        // GW31-34: Mar 21-Apr 25
+    if (gameweek <= 38) return 'May';          // GW35-38: May 2-24
     
     return 'Unknown Month';
 }
