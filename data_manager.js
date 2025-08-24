@@ -1136,7 +1136,7 @@ class FPLDataManager {
         const premier_league_teams = [
             'Arsenal', 'Aston Villa', 'Bournemouth', 'Brentford', 'Brighton & Hove Albion',
             'Brighton', 'Burnley', 'Chelsea', 'Crystal Palace', 'Everton', 'Fulham', 'Leeds United',
-            'Liverpool', 'Manchester City', 'Man City', 'Manchester United', 'Man United', 'Man Utd',
+            'Leeds', 'Liverpool', 'Manchester City', 'Man City', 'Manchester United', 'Man United', 'Man Utd',
             'Newcastle United', 'Newcastle', 'Nottingham Forest', 'Nott\'m Forest',
             'Sunderland', 'Tottenham Hotspur', 'Tottenham', 'Spurs', 'West Ham United', 
             'West Ham', 'Wolverhampton Wanderers', 'Wolves'
@@ -1153,7 +1153,8 @@ class FPLDataManager {
             'Spurs': 'Tottenham Hotspur',
             'West Ham': 'West Ham United',
             'Wolves': 'Wolverhampton Wanderers',
-            'Brighton': 'Brighton & Hove Albion'
+            'Brighton': 'Brighton & Hove Albion',
+            'Leeds': 'Leeds United'
         };
         
         // List of positions (note: CSV uses GKP instead of GK)

@@ -1706,9 +1706,9 @@
       "Round Pts": 9
     },
     {
-      "name": "GudmundssonLeedsDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Gudmundsson",
+      "team": "Leeds United",
+      "position": "DEF",
       "Cost": 4,
       "Ownership": "2.80%",
       "Form ": 9,
@@ -1816,9 +1816,9 @@
       "Round Pts": 8
     },
     {
-      "name": "StruijkLeedsDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Struijk",
+      "team": "Leeds United",
+      "position": "DEF",
       "Cost": 4.5,
       "Ownership": "0.30%",
       "Form ": 8,
@@ -1826,9 +1826,9 @@
       "Round Pts": 8
     },
     {
-      "name": "StachLeedsMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Stach",
+      "team": "Leeds United",
+      "position": "MID",
       "Cost": 5,
       "Ownership": "0.30%",
       "Form ": 8,
@@ -1906,9 +1906,9 @@
       "Round Pts": 7
     },
     {
-      "name": "RodonLeedsDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Rodon",
+      "team": "Leeds United",
+      "position": "DEF",
       "Cost": 4,
       "Ownership": "2.20%",
       "Form ": 7,
@@ -2046,9 +2046,9 @@
       "Round Pts": 6
     },
     {
-      "name": "PerriLeedsGKP",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Perri",
+      "team": "Leeds United",
+      "position": "GKP",
       "Cost": 4.5,
       "Ownership": "0.40%",
       "Form ": 6,
@@ -2056,9 +2056,9 @@
       "Round Pts": 6
     },
     {
-      "name": "BogleLeedsDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Bogle",
+      "team": "Leeds United",
+      "position": "DEF",
       "Cost": 4.5,
       "Ownership": "0.20%",
       "Form ": 6,
@@ -2296,9 +2296,9 @@
       "Round Pts": 5
     },
     {
-      "name": "NmechaLeedsFWD",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Nmecha",
+      "team": "Leeds United",
+      "position": "FWD",
       "Cost": 5,
       "Ownership": "0.40%",
       "Form ": 5,
@@ -2636,9 +2636,9 @@
       "Round Pts": 3
     },
     {
-      "name": "GnontoLeedsMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Gnonto",
+      "team": "Leeds United",
+      "position": "MID",
       "Cost": 5.5,
       "Ownership": "0.30%",
       "Form ": 3,
@@ -2646,9 +2646,9 @@
       "Round Pts": 3
     },
     {
-      "name": "JamesLeedsMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "James",
+      "team": "Leeds United",
+      "position": "MID",
       "Cost": 5.5,
       "Ownership": "0.50%",
       "Form ": 3,
@@ -2656,9 +2656,9 @@
       "Round Pts": 3
     },
     {
-      "name": "AmpaduLeedsMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Ampadu",
+      "team": "Leeds United",
+      "position": "MID",
       "Cost": 5,
       "Ownership": "0.10%",
       "Form ": 3,
@@ -2666,9 +2666,9 @@
       "Round Pts": 3
     },
     {
-      "name": "TanakaLeedsMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Tanaka",
+      "team": "Leeds United",
+      "position": "MID",
       "Cost": 5,
       "Ownership": "0.20%",
       "Form ": 3,
@@ -3186,9 +3186,9 @@
       "Round Pts": 2
     },
     {
-      "name": "PiroeLeedsFWD",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Piroe",
+      "team": "Leeds United",
+      "position": "FWD",
       "Cost": 5.5,
       "Ownership": "2.00%",
       "Form ": 2,
@@ -3886,9 +3886,9 @@
       "Round Pts": 1
     },
     {
-      "name": "AaronsonLeedsMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Aaronson",
+      "team": "Leeds United",
+      "position": "MID",
       "Cost": 5.5,
       "Ownership": "0.10%",
       "Form ": 1,
@@ -3896,9 +3896,9 @@
       "Round Pts": 1
     },
     {
-      "name": "HarrisonLeedsMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Harrison",
+      "team": "Leeds United",
+      "position": "MID",
       "Cost": 5.5,
       "Ownership": "0.10%",
       "Form ": 1,
@@ -3906,9 +3906,9 @@
       "Round Pts": 1
     },
     {
-      "name": "GruevLeedsMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Gruev",
+      "team": "Leeds United",
+      "position": "MID",
       "Cost": 5,
       "Ownership": "0.00%",
       "Form ": 1,
@@ -3916,9 +3916,9 @@
       "Round Pts": 1
     },
     {
-      "name": "LongstaffLeedsMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Longstaff",
+      "team": "Leeds United",
+      "position": "MID",
       "Cost": 5,
       "Ownership": "0.20%",
       "Form ": 1,

@@ -2304,9 +2304,9 @@
       "RP": 2
     },
     {
-      "name": "RodonLeedsDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Rodon",
+      "team": "Leeds United",
+      "position": "DEF",
       "Cost": 4,
       "Sel.%": "2.30%",
       "Form": 4.5,
@@ -2314,9 +2314,9 @@
       "RP": 2
     },
     {
-      "name": "GnontoLeedsMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Gnonto",
+      "team": "Leeds United",
+      "position": "MID",
       "Cost": 5.5,
       "Sel.%": "0.30%",
       "Form": 2.5,
@@ -2324,9 +2324,9 @@
       "RP": 2
     },
     {
-      "name": "JamesLeedsMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "James",
+      "team": "Leeds United",
+      "position": "MID",
       "Cost": 5.5,
       "Sel.%": "0.40%",
       "Form": 2.5,
@@ -2334,9 +2334,9 @@
       "RP": 2
     },
     {
-      "name": "GruevLeedsMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Gruev",
+      "team": "Leeds United",
+      "position": "MID",
       "Cost": 5,
       "Sel.%": "0.00%",
       "Form": 1.5,
@@ -2344,9 +2344,9 @@
       "RP": 2
     },
     {
-      "name": "StachLeedsMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Stach",
+      "team": "Leeds United",
+      "position": "MID",
       "Cost": 5,
       "Sel.%": "0.50%",
       "Form": 5,
@@ -2794,9 +2794,9 @@
       "RP": 1
     },
     {
-      "name": "ByramLeedsDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Byram",
+      "team": "Leeds United",
+      "position": "DEF",
       "Cost": 4,
       "Sel.%": "0.20%",
       "Form": 0.5,
@@ -2804,9 +2804,9 @@
       "RP": 1
     },
     {
-      "name": "AaronsonLeedsMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Aaronson",
+      "team": "Leeds United",
+      "position": "MID",
       "Cost": 5.5,
       "Sel.%": "0.10%",
       "Form": 1,
@@ -2814,9 +2814,9 @@
       "RP": 1
     },
     {
-      "name": "TanakaLeedsMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Tanaka",
+      "team": "Leeds United",
+      "position": "MID",
       "Cost": 5,
       "Sel.%": "0.30%",
       "Form": 2,
@@ -2824,9 +2824,9 @@
       "RP": 1
     },
     {
-      "name": "LongstaffLeedsMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Longstaff",
+      "team": "Leeds United",
+      "position": "MID",
       "Cost": 5,
       "Sel.%": "0.20%",
       "Form": 1,
@@ -2834,9 +2834,9 @@
       "RP": 1
     },
     {
-      "name": "OkaforLeedsMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Okafor",
+      "team": "Leeds United",
+      "position": "MID",
       "Cost": 5.5,
       "Sel.%": "0.00%",
       "Form": 1,
@@ -2844,9 +2844,9 @@
       "RP": 1
     },
     {
-      "name": "PiroeLeedsFWD",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Piroe",
+      "team": "Leeds United",
+      "position": "FWD",
       "Cost": 5.5,
       "Sel.%": "1.80%",
       "Form": 1.5,
@@ -2854,9 +2854,9 @@
       "RP": 1
     },
     {
-      "name": "NmechaLeedsFWD",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
+      "name": "Nmecha",
+      "team": "Leeds United",
+      "position": "FWD",
       "Cost": 5,
       "Sel.%": "0.70%",
       "Form": 3,

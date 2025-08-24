@@ -4594,20 +4594,23 @@ function analyzePlayerPerformance() {
         return;
     }
     
-    const allPlayers = dataManager.getAllPlayers();
+    // Get current gameweek's player data only (not cumulative from all gameweeks)
+    const currentData = dataManager.getGameweekData(dashboardData.currentGameweek);
+    const currentPlayers = currentData?.playerData || currentData?.players || [];
     
-    if (!allPlayers || allPlayers.length === 0) {
-        container.innerHTML = '<p class="text-white">No player data available</p>';
+    if (!currentPlayers || currentPlayers.length === 0) {
+        container.innerHTML = `<p class="text-white">No player data available for GW${dashboardData.currentGameweek}</p>`;
         return;
     }
     
     // Get draft data to match players to managers (respects user's gameweek selection)
-    const currentData = dataManager.getGameweekData(dashboardData.currentGameweek);
     const draftData = {
         teams: currentData?.draft?.teams || []
     };
     
     console.log('🔍 Debug: Current gameweek data:', currentData);
+    console.log('🔍 Debug: Current players (GW-specific):', currentPlayers);
+    console.log('🔍 Debug: Current players sample:', currentPlayers[0]);
     console.log('🔍 Debug: Draft data structure:', draftData);
     
     // Create the HTML with the 3 cool analytics
@@ -4624,7 +4627,7 @@ function analyzePlayerPerformance() {
                 <div class="bg-gray-700/50 rounded-lg p-4">
                     <h5 class="text-md font-medium text-white mb-3">Best Value Pick</h5>
                     <div class="space-y-2">
-                        ${getBestValuePick(allPlayers).map((player, index) => `
+                        ${getBestValuePick(currentPlayers).map((player, index) => `
                             <div class="flex items-center justify-between p-2 bg-gray-600/50 rounded">
                                 <div class="flex items-center gap-2">
                                     <span class="text-yellow-400 font-bold">${index + 1}</span>
@@ -4637,7 +4640,7 @@ function analyzePlayerPerformance() {
                                     }">${player.position}</span>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-green-400 font-bold">${player.totalPoints || 0} pts</div>
+                                    <div class="text-green-400 font-bold">${player.roundPoints || player.totalPoints || 0} pts</div>
                                 </div>
                             </div>
                         `).join('')}
@@ -4648,7 +4651,7 @@ function analyzePlayerPerformance() {
                 <div class="bg-gray-700/50 rounded-lg p-4">
                     <h5 class="text-md font-medium text-white mb-3">Best & Worst Players by Manager</h5>
                     <div class="space-y-3">
-                        ${getBestAndWorstPlayers(allPlayers, draftData).map((manager, index) => `
+                        ${getBestAndWorstPlayers(currentPlayers, draftData).map((manager, index) => `
                             <div class="bg-gray-600/50 rounded p-3">
                                 <div class="flex items-center gap-2 mb-2">
                                     <span class="text-blue-400 font-bold">${index + 1}</span>
@@ -4681,7 +4684,7 @@ function analyzePlayerPerformance() {
                 <div class="bg-gray-700/50 rounded-lg p-4">
                     <h5 class="text-md font-medium text-white mb-3">Bargain Hunters</h5>
                     <div class="space-y-2">
-                        ${getBargainHunters(allPlayers).map((player, index) => `
+                        ${getBargainHunters(currentPlayers).map((player, index) => `
                             <div class="flex items-center justify-between p-2 bg-gray-600/50 rounded">
                                 <div class="flex items-center gap-2">
                                     <span class="text-green-400 font-bold">${index + 1}</span>
@@ -4695,7 +4698,7 @@ function analyzePlayerPerformance() {
                                 </div>
                                 <div class="text-right">
                                     <div class="text-green-400 font-bold">${player.pointsPerCost} pts/£</div>
-                                    <div class="text-xs text-gray-400">${player.totalPoints || 0} pts</div>
+                                    <div class="text-xs text-gray-400">${player.roundPoints || player.totalPoints || 0} pts</div>
                                 </div>
                             </div>
                         `).join('')}
@@ -4706,7 +4709,7 @@ function analyzePlayerPerformance() {
                 <div class="bg-gray-700/50 rounded-lg p-4">
                     <h5 class="text-md font-medium text-white mb-3">High-Risk, High-Reward</h5>
                     <div class="space-y-2">
-                        ${getHighRiskHighReward(allPlayers).map((player, index) => `
+                        ${getHighRiskHighReward(currentPlayers).map((player, index) => `
                             <div class="flex items-center justify-between p-2 bg-gray-600/50 rounded">
                                 <div class="flex items-center gap-2">
                                     <span class="text-red-400 font-bold">${index + 1}</span>
@@ -4719,7 +4722,7 @@ function analyzePlayerPerformance() {
                                     }">${player.position}</span>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-red-400 font-bold">${player.totalPoints || 0} pts</div>
+                                    <div class="text-red-400 font-bold">${player.roundPoints || player.totalPoints || 0} pts</div>
                                     <div class="text-xs text-gray-400">High Risk</div>
                                 </div>
                             </div>
@@ -4735,36 +4738,12 @@ function analyzePlayerPerformance() {
                     Form, Strategy & Value Analysis
                 </h4>
                 
-                <!-- 4. Form vs Consistency Analysis -->
-                <div class="bg-gray-700/50 rounded-lg p-4">
-                    <h5 class="text-md font-medium text-white mb-3">Form vs Consistency</h5>
-                    <div class="space-y-2">
-                        ${getFormVsConsistency(allPlayers).map((player, index) => `
-                            <div class="flex items-center justify-between p-2 bg-gray-600/50 rounded">
-                                <div class="flex items-center gap-2">
-                                    <span class="text-purple-400 font-bold">${index + 1}</span>
-                                    <span class="text-white font-medium">${player.name}</span>
-                                    <span class="badge badge-sm ${
-                                        player.position === 'FWD' ? 'badge-error' :
-                                        player.position === 'MID' ? 'badge-warning' :
-                                        player.position === 'DEF' ? 'badge-info' :
-                                        'badge-secondary'
-                                    }">${player.position}</span>
-                                </div>
-                                <div class="text-right">
-                                    <div class="text-purple-400 font-bold">${player.consistencyScore}</div>
-                                    <div class="text-xs text-gray-400">${player.consistencyType}</div>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-                
+
                 <!-- 5. Position Strategy Analysis -->
                 <div class="bg-gray-700/50 rounded-lg p-4">
                     <h5 class="text-md font-medium text-white mb-3">Position Strategy</h5>
                     <div class="space-y-2">
-                        ${getPositionStrategy(allPlayers).map((position, index) => `
+                        ${getPositionStrategy(currentPlayers).map((position, index) => `
                             <div class="flex items-center justify-between p-2 bg-gray-600/50 rounded">
                                 <div class="flex items-center gap-2">
                                     <span class="text-cyan-400 font-bold">${index + 1}</span>
@@ -4784,7 +4763,7 @@ function analyzePlayerPerformance() {
                 <div class="bg-gray-700/50 rounded-lg p-4">
                     <h5 class="text-md font-medium text-white mb-3">Value for Money</h5>
                     <div class="space-y-2">
-                        ${getValueForMoney(allPlayers).map((player, index) => `
+                        ${getValueForMoney(currentPlayers).map((player, index) => `
                             <div class="flex items-center justify-between p-2 bg-gray-600/50 rounded">
                                 <div class="flex items-center gap-2">
                                     <span class="text-emerald-400 font-bold">${index + 1}</span>
@@ -4814,11 +4793,14 @@ function analyzePlayerPerformance() {
 // Helper function: Get best value picks (points per cost)
 function getBestValuePick(players) {
     return players
-        .filter(p => p.cost > 0 && p.totalPoints > 0)
-        .map(p => ({
-            ...p,
-            pointsPerCost: (p.totalPoints / p.cost).toFixed(2)
-        }))
+        .filter(p => p.cost > 0 && (p.roundPoints > 0 || p.totalPoints > 0))
+        .map(p => {
+            const points = p.roundPoints || p.totalPoints || 0;
+            return {
+                ...p,
+                pointsPerCost: points > 0 ? (points / p.cost).toFixed(2) : '0.00'
+            };
+        })
         .sort((a, b) => parseFloat(b.pointsPerCost) - parseFloat(a.pointsPerCost))
         .slice(0, 3);
 }
@@ -5017,8 +4999,8 @@ function getBestAndWorstPlayers(players, draftData) {
             managerName = team.teamName;
         }
         
-        // Get current squad using team name
-        const currentSquad = calculateCurrentTeam(team.teamName, null, team.manager);
+        // Get current squad using team name and the correct manager name
+        const currentSquad = calculateCurrentTeam(team.teamName, null, managerName);
         
         if (!currentSquad || currentSquad.length === 0) {
             return;
@@ -5054,7 +5036,11 @@ function getBestAndWorstPlayers(players, draftData) {
         }
         
         // Sort players by points to find best and worst
-        const sortedPlayers = managerPlayers.sort((a, b) => (b.totalPoints || 0) - (a.totalPoints || 0));
+        const sortedPlayers = managerPlayers.sort((a, b) => {
+            const aPoints = a.roundPoints || a.totalPoints || 0;
+            const bPoints = b.roundPoints || b.totalPoints || 0;
+            return bPoints - aPoints;
+        });
         const bestPlayer = sortedPlayers[0];
         const worstPlayer = sortedPlayers[sortedPlayers.length - 1];
         
@@ -5063,11 +5049,11 @@ function getBestAndWorstPlayers(players, draftData) {
             fullName: managerName || team.teamName,
             bestPlayer: {
                 name: bestPlayer.name,
-                points: bestPlayer.totalPoints || 0
+                points: bestPlayer.roundPoints || bestPlayer.totalPoints || 0
             },
             worstPlayer: {
                 name: worstPlayer.name,
-                points: worstPlayer.totalPoints || 0
+                points: worstPlayer.roundPoints || worstPlayer.totalPoints || 0
             }
         });
     });
@@ -5075,18 +5061,21 @@ function getBestAndWorstPlayers(players, draftData) {
     // Sort managers by best player points (higher = better)
     const sortedAnalysis = managerAnalysis.sort((a, b) => b.bestPlayer.points - a.bestPlayer.points);
     
-    // Return top 3 managers
-    return sortedAnalysis.slice(0, 3);
+    // Return all managers
+    return sortedAnalysis;
 }
 
 // Helper function: Get bargain hunters (low cost, high points)
 function getBargainHunters(players) {
     return players
-        .filter(p => p.cost <= 6 && p.totalPoints > 0) // Low cost players
-        .map(p => ({
-            ...p,
-            pointsPerCost: (p.totalPoints / p.cost).toFixed(2)
-        }))
+        .filter(p => p.cost <= 6 && (p.roundPoints > 0 || p.totalPoints > 0)) // Low cost players
+        .map(p => {
+            const points = p.roundPoints || p.totalPoints || 0;
+            return {
+                ...p,
+                pointsPerCost: points > 0 ? (points / p.cost).toFixed(2) : '0.00'
+            };
+        })
         .sort((a, b) => parseFloat(b.pointsPerCost) - parseFloat(a.pointsPerCost))
         .slice(0, 3);
 }
@@ -5094,50 +5083,16 @@ function getBargainHunters(players) {
 // Helper function: Get high-risk, high-reward players
 function getHighRiskHighReward(players) {
     return players
-        .filter(p => p.cost >= 10 && p.totalPoints > 0) // Expensive players
-        .sort((a, b) => (b.totalPoints || 0) - (a.totalPoints || 0))
+        .filter(p => p.cost >= 10 && (p.roundPoints > 0 || p.totalPoints > 0)) // Expensive players
+        .sort((a, b) => {
+            const aPoints = a.roundPoints || a.totalPoints || 0;
+            const bPoints = b.roundPoints || b.totalPoints || 0;
+            return bPoints - aPoints;
+        })
         .slice(0, 3);
 }
 
-// Helper function: Get form vs consistency analysis
-function getFormVsConsistency(players) {
-    return players
-        .filter(p => p.totalPoints > 0)
-        .map(p => {
-            // Calculate consistency score based on points vs cost ratio
-            const pointsPerCost = p.totalPoints / (p.cost || 1);
-            let consistencyType, consistencyScore;
-            
-            if (pointsPerCost >= 2.0) {
-                consistencyType = "Steady Eddie";
-                consistencyScore = "A+";
-            } else if (pointsPerCost >= 1.5) {
-                consistencyType = "Reliable";
-                consistencyScore = "A";
-            } else if (pointsPerCost >= 1.0) {
-                consistencyType = "Solid";
-                consistencyScore = "B+";
-            } else if (pointsPerCost >= 0.5) {
-                consistencyType = "Inconsistent";
-                consistencyScore = "C";
-            } else {
-                consistencyType = "Streaky";
-                consistencyScore = "D";
-            }
-            
-            return {
-                ...p,
-                consistencyScore,
-                consistencyType
-            };
-        })
-        .sort((a, b) => {
-            // Sort by consistency score (A+ > A > B+ > C > D)
-            const scoreOrder = { 'A+': 5, 'A': 4, 'B+': 3, 'C': 2, 'D': 1 };
-            return scoreOrder[b.consistencyScore] - scoreOrder[a.consistencyScore];
-        })
-        .slice(0, 3);
-}
+
 
 // Helper function: Get position strategy analysis
 function getPositionStrategy(players) {
@@ -5145,7 +5100,7 @@ function getPositionStrategy(players) {
     
     return positions.map(pos => {
         const posPlayers = players.filter(p => p.position === pos);
-        const totalPoints = posPlayers.reduce((sum, p) => sum + (p.totalPoints || 0), 0);
+        const totalPoints = posPlayers.reduce((sum, p) => sum + (p.roundPoints || p.totalPoints || 0), 0);
         const avgPoints = posPlayers.length > 0 ? (totalPoints / posPlayers.length).toFixed(1) : 0;
         
         return {
@@ -5160,11 +5115,12 @@ function getPositionStrategy(players) {
 // Helper function: Get value for money analysis
 function getValueForMoney(players) {
     return players
-        .filter(p => p.cost > 0 && p.totalPoints > 0)
+        .filter(p => p.cost > 0 && (p.roundPoints > 0 || p.totalPoints > 0))
         .map(p => {
             // Calculate value score: (points * 10) / cost
             // This gives higher scores to players who deliver more points per pound
-            const valueScore = ((p.totalPoints * 10) / p.cost).toFixed(1);
+            const points = p.roundPoints || p.totalPoints || 0;
+            const valueScore = ((points * 10) / p.cost).toFixed(1);
             
             return {
                 ...p,
