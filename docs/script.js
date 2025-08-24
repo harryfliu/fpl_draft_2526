@@ -4641,59 +4641,48 @@ function populatePrizePool() {
 
     const targetGameweek = dashboardData.currentGameweek || 1;
     
-    // Get live standings from results for final payouts (final results take priority)
+    // Use the current live leaderboard for final payouts (already sorted and up-to-date)
     let liveLeaderboard = dashboardData.leaderboard || [];
-    if (dataManager) {
-        const partialResults = dataManager.getResults();
+    
+    // Ensure we have the most current data by refreshing from the data manager
+    if (dataManager && liveLeaderboard.length > 0) {
+        // Map the current leaderboard to include all necessary fields for final payouts
+        liveLeaderboard = liveLeaderboard.map(leaderboardTeam => {
+            // Get the current team data from the data manager
+            const currentTeamData = dataManager.getCurrentGameweekData()?.draft?.teams?.find(
+                team => team.teamName === leaderboardTeam.teamName
+            );
+            
+            return {
+                ...leaderboardTeam,
+                manager: leaderboardTeam.manager || getManagerFromTeamName(leaderboardTeam.teamName),
+                teamName: leaderboardTeam.teamName,
+                points: leaderboardTeam.totalLeaguePoints || 0,
+                gwPoints: leaderboardTeam.totalGWPoints || 0
+            };
+        });
         
-        if (partialResults.length > 0) {
-            // Calculate live standings from results (final results take priority)
-            liveLeaderboard = dashboardData.leaderboard.map(leaderboardTeam => {
-                const performance = calculateTeamPerformanceFromResults(leaderboardTeam.teamName);
-                
-                // Get GW points from partial results
-                let gwPoints = 0;
-                partialResults.forEach(result => {
-                    if (result.homeTeam === leaderboardTeam.teamName) {
-                        gwPoints = result.homeScore;
-                    } else if (result.awayTeam === leaderboardTeam.teamName) {
-                        gwPoints = result.awayScore;
-                    }
-                });
-                
-                return {
-                    ...leaderboardTeam,
-                    points: performance.points,
-                    gwPoints: gwPoints,
-                    goalsFor: performance.goalsFor,
-                    goalsAgainst: performance.goalsAgainst
-                };
-            });
-            
-            // Sort by points (highest first), then by GW points (FPL points) as tiebreaker, then by goal difference, then by goals for
-            liveLeaderboard.sort((a, b) => {
-                if (b.points !== a.points) {
-                    return b.points - a.points;
-                }
-                // If points are equal, sort by GW points (FPL points) as tiebreaker
-                if (b.gwPoints !== a.gwPoints) {
-                    return b.gwPoints - a.gwPoints;
-                }
-                // If GW points are equal, sort by goal difference
-                const aGoalDiff = (a.goalsFor || 0) - (a.goalsAgainst || 0);
-                const bGoalDiff = (b.goalsFor || 0) - (b.goalsAgainst || 0);
-                if (bGoalDiff !== aGoalDiff) {
-                    return bGoalDiff - aGoalDiff;
-                }
-                // If goal difference is equal, sort by goals for
-                return (b.goalsFor || 0) - (a.goalsFor || 0);
-            });
-            
-            // Update positions after sorting
-            liveLeaderboard.forEach((leaderboardTeam, index) => {
-                leaderboardTeam.position = index + 1;
-            });
-        }
+        // Sort by total league points (highest first), then by total GW points as tiebreaker
+        liveLeaderboard.sort((a, b) => {
+            if (b.points !== a.points) {
+                return b.points - a.points;
+            }
+            // If league points are equal, sort by total GW points (FPL points) as tiebreaker
+            if (b.gwPoints !== a.gwPoints) {
+                return b.gwPoints - a.gwPoints;
+            }
+            // If both are equal, maintain current order
+            return 0;
+        });
+        
+        // Update positions after sorting
+        liveLeaderboard.forEach((leaderboardTeam, index) => {
+            leaderboardTeam.position = index + 1;
+        });
+        
+        console.log('🏆 Live leaderboard for final payouts:', liveLeaderboard.map(team => 
+            `${team.position}. ${team.manager} (${team.teamName}) - ${team.points} LP, ${team.gwPoints} GW pts`
+        ));
     }
     
     // Calculate earnings with live leaderboard for final payouts
