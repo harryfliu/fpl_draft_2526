@@ -2667,19 +2667,25 @@ function analyzeHeadToHead() {
         return;
     }
     
-    const partialResults = dataManager.getAllPartialResults();
+    const currentGameweek = dashboardData.currentGameweek || 1;
     const teams = dashboardData.leaderboard || [];
     
+    // Use the SAME data source that Current Fixtures uses (which works!)
+    const partialResults = dataManager?.getResults(currentGameweek) || [];
+    
     if (teams.length === 0 || partialResults.length === 0) {
-        container.innerHTML = '<p class="text-white">No match data available</p>';
+        container.innerHTML = '<p class="text-white">No match data available for GW' + currentGameweek + '</p>';
         return;
     }
     
-    // Calculate team performance from partial results
+    console.log('🔍 Debug: Using working data source - getResults(' + currentGameweek + ')');
+    console.log('🔍 Debug: Current gameweek:', currentGameweek);
+    console.log('🔍 Debug: Results from working source:', partialResults.length);
+    console.log('🔍 Debug: Results:', partialResults);
+    
+    // Use the live leaderboard data directly instead of recalculating from results
     const teamPerformance = teams.map(team => {
-        const performance = calculateTeamPerformanceFromResults(team.teamName);
-        
-        // Get GW points from partial results
+        // Get GW points from partial results for current gameweek display
         let gwPoints = 0;
         partialResults.forEach(result => {
             if (result.homeTeam === team.teamName) {
@@ -2691,7 +2697,13 @@ function analyzeHeadToHead() {
         
         return {
             ...team,
-            ...performance,
+            // Use the live leaderboard data that already has correct cumulative totals
+            points: team.points || 0,
+            wins: team.wins || 0,
+            draws: team.draws || 0,
+            losses: team.losses || 0,
+            goalsFor: team.goalsFor || 0,
+            goalsAgainst: team.goalsAgainst || 0,
             gwPoints: gwPoints
         };
     });
@@ -2718,74 +2730,218 @@ function analyzeHeadToHead() {
     const topTeam = teamPerformance[0];
     const bottomTeam = teamPerformance[teamPerformance.length - 1];
     
-    // Find biggest upset (team with lower points beating team with higher points)
+    // Find biggest upset (manager with fewer total league points beating manager with more total league points)
     let biggestUpset = null;
     let upsetMargin = 0;
+    
+
+    
+    console.log('🔍 Debug: Starting upset calculation with', partialResults.length, 'results');
     
     partialResults.forEach(result => {
         const homeTeam = teamPerformance.find(t => t.teamName === result.homeTeam);
         const awayTeam = teamPerformance.find(t => t.teamName === result.awayTeam);
         
+        console.log('🔍 Debug: Processing result:', result.homeTeam, result.homeScore, 'vs', result.awayTeam, result.awayScore);
+        console.log('🔍 Debug: Home team found:', homeTeam ? `${homeTeam.teamName} (${homeTeam.points} pts)` : 'NOT FOUND');
+        console.log('🔍 Debug: Away team found:', awayTeam ? `${awayTeam.teamName} (${awayTeam.points} pts)` : 'NOT FOUND');
+        
         if (homeTeam && awayTeam) {
-            if (homeTeam.points < awayTeam.points && result.homeScore > result.awayScore) {
-                const margin = awayTeam.points - homeTeam.points;
-                if (margin > upsetMargin) {
-                    upsetMargin = margin;
-                    biggestUpset = { winner: homeTeam, loser: awayTeam, score: `${result.homeScore}-${result.awayScore}` };
+            const homeScore = result.homeScore || 0;
+            const awayScore = result.awayScore || 0;
+            
+            // Check if home team won (upset potential)
+            if (homeScore > awayScore) {
+                // Home team won - check if it's an upset (home team has fewer total league points)
+                if (homeTeam.points < awayTeam.points) {
+                    const margin = awayTeam.points - homeTeam.points;
+                    console.log('🔍 Debug: UPSET FOUND! Home team with fewer points won. Margin:', margin);
+                    if (margin > upsetMargin) {
+                        upsetMargin = margin;
+                        biggestUpset = { 
+                            winner: homeTeam, 
+                            loser: awayTeam, 
+                            score: `${homeScore}-${awayScore}`,
+                            type: 'home_upset'
+                        };
+                        console.log('🔍 Debug: New biggest upset:', biggestUpset);
+                    }
+                } else {
+                    console.log('🔍 Debug: Not an upset - home team has more or equal points');
                 }
-            } else if (awayTeam.points < homeTeam.points && result.awayScore > result.homeScore) {
-                const margin = homeTeam.points - awayTeam.points;
-                if (margin > upsetMargin) {
-                    upsetMargin = margin;
-                    biggestUpset = { winner: awayTeam, loser: homeTeam, score: `${result.awayScore}-${result.homeScore}` };
+            } else if (awayScore > homeScore) {
+                // Away team won - check if it's an upset (away team has fewer total league points)
+                if (awayTeam.points < homeTeam.points) {
+                    const margin = homeTeam.points - awayTeam.points;
+                    console.log('🔍 Debug: UPSET FOUND! Away team with fewer points won. Margin:', margin);
+                    if (margin > upsetMargin) {
+                        upsetMargin = margin;
+                        biggestUpset = { 
+                            winner: awayTeam, 
+                            loser: homeTeam, 
+                            score: `${awayScore}-${homeScore}`,
+                            type: 'away_upset'
+                        };
+                        console.log('🔍 Debug: New biggest upset:', biggestUpset);
+                    }
+                } else {
+                    console.log('🔍 Debug: Not an upset - away team has more or equal points');
                 }
             }
         }
     });
     
+    console.log('🔍 Debug: Final biggest upset:', biggestUpset, 'with margin:', upsetMargin);
+    
+    // Build head-to-head records
+    const h2hRecords = buildHeadToHeadRecords(partialResults, teamPerformance);
+    
     container.innerHTML = `
+        <div class="space-y-4">
+            <!-- League Leaders Section -->
         <div class="space-y-3">
-            <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg border border-green-200">
+                <div class="flex items-center justify-between p-3 bg-gradient-to-r from-green-600/20 to-green-800/20 rounded-lg border border-green-500/50">
                 <div>
-                    <div class="font-semibold text-green-800">👑 League Leader</div>
-                    <div class="text-sm text-green-800">${getManagerFromTeamName(topTeam.teamName)} (${topTeam.teamName})</div>
+                        <div class="font-semibold text-green-300">👑 League Leader</div>
+                        <div class="text-sm text-green-200">${getManagerFromTeamName(topTeam.teamName)} (${topTeam.teamName})</div>
                 </div>
                 <div class="text-right">
-                    <div class="font-bold text-green-800">${topTeam.points} pts</div>
-                    <div class="text-xs text-green-800">${topTeam.wins}W ${topTeam.draws}D ${topTeam.losses}L</div>
+                        <div class="font-bold text-green-300">${topTeam.points} pts</div>
+                        <div class="text-xs text-green-200">${topTeam.wins}W ${topTeam.draws}D ${topTeam.losses}L</div>
                 </div>
             </div>
             
-            <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg border border-red-200">
+                <div class="flex items-center justify-between p-3 bg-gradient-to-r from-red-600/20 to-red-800/20 rounded-lg border border-red-500/50">
                 <div>
-                    <div class="font-semibold text-red-800">📉 Last Place</div>
-                    <div class="text-sm text-red-800">${getManagerFromTeamName(bottomTeam.teamName)} (${bottomTeam.teamName})</div>
+                        <div class="font-semibold text-red-300">📉 Last Place</div>
+                        <div class="text-sm text-red-200">${getManagerFromTeamName(bottomTeam.teamName)} (${bottomTeam.teamName})</div>
                 </div>
                 <div class="text-right">
-                    <div class="font-bold text-red-800">${bottomTeam.points} pts</div>
-                    <div class="text-xs text-red-800">${bottomTeam.wins}W ${bottomTeam.draws}D ${bottomTeam.losses}L</div>
+                        <div class="font-bold text-red-300">${bottomTeam.points} pts</div>
+                        <div class="text-xs text-red-200">${bottomTeam.wins}W ${bottomTeam.draws}D ${bottomTeam.losses}L</div>
                 </div>
             </div>
             
-            ${biggestUpset ? `
-            <div class="flex items-center justify-between p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-                <div>
-                    <div class="font-semibold text-yellow-800">🎯 Biggest Upset</div>
-                    <div class="text-sm text-yellow-800">${biggestUpset.winner.teamName} beats ${biggestUpset.loser.teamName}</div>
+                ${biggestUpset ? `
+                <div class="flex items-center justify-between p-3 bg-gradient-to-r from-yellow-600/20 to-yellow-800/20 rounded-lg border border-yellow-500/50">
+                    <div>
+                        <div class="font-semibold text-yellow-300">🎯 Biggest Upset</div>
+                        <div class="text-sm text-yellow-200">${getManagerFromTeamName(biggestUpset.winner.teamName)} (${biggestUpset.winner.points} pts) beats ${getManagerFromTeamName(biggestUpset.loser.teamName)} (${biggestUpset.loser.points} pts)</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-bold text-yellow-300">${biggestUpset.score}</div>
+                        <div class="text-xs text-yellow-200">${upsetMargin} pt gap</div>
+                    </div>
                 </div>
-                <div class="text-right">
-                    <div class="font-bold text-yellow-800">${biggestUpset.score}</div>
-                    <div class="text-xs text-yellow-800">${upsetMargin} pt gap</div>
+                ` : ''}
+            </div>
+            
+            <!-- Head-to-Head Records Section -->
+            <div class="bg-gray-800/50 border border-gray-600/50 rounded-lg p-3">
+                <h4 class="font-semibold text-white mb-3 flex items-center">
+                    <i class="fas fa-handshake text-blue-400 mr-2"></i>
+                    🔥 Head-to-Head Records
+                </h4>
+                <div class="space-y-2 max-h-32 overflow-y-auto">
+                    ${h2hRecords}
                 </div>
             </div>
-            ` : ''}
             
-            <div class="text-xs text-white mt-2">
+
+            
+            <!-- Summary Stats -->
+            <div class="text-xs text-gray-300 text-center bg-gray-800/30 rounded-lg p-2">
                 ${teams.length} managers • ${partialResults.length} matches played • Point gap: ${topTeam.points - bottomTeam.points} points
             </div>
         </div>
     `;
 }
+
+// Build head-to-head records from match results
+function buildHeadToHeadRecords(results, teamPerformance) {
+    if (!results || results.length === 0) {
+        return '<p class="text-gray-400 text-sm">No head-to-head data available yet</p>';
+    }
+    
+    const h2hMap = new Map(); // teamName -> { opponent -> { wins, losses, draws, goalsFor, goalsAgainst } }
+    
+    // Initialize h2h map for all teams
+    teamPerformance.forEach(team => {
+        h2hMap.set(team.teamName, new Map());
+    });
+    
+    // Process all results
+    results.forEach(result => {
+        const homeTeam = result.homeTeam;
+        const awayTeam = result.awayTeam;
+        const homeScore = result.homeScore || 0;
+        const awayScore = result.awayScore || 0;
+        
+        // Initialize opponent records if they don't exist
+        if (!h2hMap.get(homeTeam).has(awayTeam)) {
+            h2hMap.get(homeTeam).set(awayTeam, { wins: 0, losses: 0, draws: 0, goalsFor: 0, goalsAgainst: 0 });
+        }
+        if (!h2hMap.get(awayTeam).has(homeTeam)) {
+            h2hMap.get(awayTeam).set(homeTeam, { wins: 0, losses: 0, draws: 0, goalsFor: 0, goalsAgainst: 0 });
+        }
+        
+        // Update records
+        if (homeScore > awayScore) {
+            h2hMap.get(homeTeam).get(awayTeam).wins++;
+            h2hMap.get(awayTeam).get(homeTeam).losses++;
+        } else if (awayScore > homeScore) {
+            h2hMap.get(awayTeam).get(homeTeam).wins++;
+            h2hMap.get(homeTeam).get(awayTeam).losses++;
+        } else {
+            h2hMap.get(homeTeam).get(awayTeam).draws++;
+            h2hMap.get(awayTeam).get(homeTeam).draws++;
+        }
+        
+        h2hMap.get(homeTeam).get(awayTeam).goalsFor += homeScore;
+        h2hMap.get(homeTeam).get(awayTeam).goalsAgainst += awayScore;
+        h2hMap.get(awayTeam).get(homeTeam).goalsFor += awayScore;
+        h2hMap.get(awayTeam).get(homeTeam).goalsAgainst += homeScore;
+    });
+    
+    // Build display HTML
+    let h2hHTML = '';
+    let matchCount = 0;
+    const maxMatches = 8; // Limit to prevent overflow
+    
+    for (const [teamName, opponents] of h2hMap) {
+        for (const [opponent, record] of opponents) {
+            if (matchCount >= maxMatches) break;
+            
+            if (record.wins > 0 || record.losses > 0 || record.draws > 0) {
+                const manager1 = getManagerFromTeamName(teamName);
+                const manager2 = getManagerFromTeamName(opponent);
+                const totalGoals = record.goalsFor + record.goalsAgainst;
+                
+                h2hHTML += `
+                    <div class="flex items-center justify-between text-sm bg-gray-700/30 rounded p-2">
+                        <div class="flex-1">
+                            <div class="text-white font-medium">${manager1} vs ${manager2}</div>
+                            <div class="text-gray-400 text-xs">${record.wins}W ${record.draws}D ${record.losses}L</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-blue-300 font-semibold">${record.goalsFor}-${record.goalsAgainst}</div>
+                            <div class="text-gray-400 text-xs">${totalGoals} total</div>
+                        </div>
+                    </div>
+                `;
+                matchCount++;
+            }
+        }
+        if (matchCount >= maxMatches) break;
+    }
+    
+    if (h2hHTML === '') {
+        return '<p class="text-gray-400 text-sm">No completed matches yet</p>';
+    }
+    
+    return h2hHTML;
+}
+
 
 // Draft Analysis
 function analyzeDraftInsights() {
