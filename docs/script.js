@@ -1860,6 +1860,10 @@ function displayTeamTopContributors(team) {
                 // Local CSV version: roundPoints is directly available
                 roundPoints = matchedPlayer.roundPoints;
                 console.log(`🏆 DEBUG: Found round points (local) for ${currentPlayerName}:`, roundPoints);
+            } else if (matchedPlayer.RP !== undefined) {
+                // Deployed JSON version: flat structure with RP field (check this FIRST)
+                roundPoints = matchedPlayer.RP || 0;
+                console.log(`🏆 DEBUG: Found round points (deployed flat RP) for ${currentPlayerName} in GW${currentGW}:`, roundPoints);
             } else if (matchedPlayer.gameweeks && matchedPlayer.gameweeks[currentGW]) {
                 // Deployed JSON version: round points in nested structure
                 roundPoints = matchedPlayer.gameweeks[currentGW].roundPts || 0;
@@ -1868,10 +1872,6 @@ function displayTeamTopContributors(team) {
                 // Deployed JSON version: round points in nested structure (string key)
                 roundPoints = matchedPlayer.gameweeks[currentGW.toString()].roundPts || 0;
                 console.log(`🏆 DEBUG: Found round points (deployed string key) for ${currentPlayerName} in GW${currentGW}:`, roundPoints);
-            } else if (matchedPlayer.RP !== undefined) {
-                // Deployed JSON version: flat structure with RP field
-                roundPoints = matchedPlayer.RP || 0;
-                console.log(`🏆 DEBUG: Found round points (deployed flat RP) for ${currentPlayerName} in GW${currentGW}:`, roundPoints);
             } else {
                 console.warn(`⚠️ No round points found for ${currentPlayerName}`);
             }
