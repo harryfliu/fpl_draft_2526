@@ -197,7 +197,7 @@
                 min-height: 2.25rem !important; 
                 padding: 0.5rem 0.75rem !important; 
             }
-        }
+                }
         
         .btn-purple:hover {
             background: linear-gradient(135deg, var(--secondary-purple), var(--primary-purple));
@@ -532,7 +532,7 @@
         
         <!-- Mobile menu button -->
         <div class="drawer-content flex flex-col">
-            <div class="navbar bg-gray-900/90 backdrop-blur-xl border-b border-gray-700/50 sticky top-0 z-50 shadow-2xl mobile-p-3">
+            <div class="navbar bg-gray-900/90 backdrop-blur-xl border-b border-gray-700/50 sticky top-0 z-50 shadow-2xl">
                 <div class="flex-none lg:hidden">
                     <label for="my-drawer-2" class="btn btn-square btn-ghost text-white hover:bg-purple-600/20">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -548,8 +548,8 @@
                             </div>
                         </div>
                         <div>
-                            <h1 class="text-xl font-bold text-white mobile-text-lg">FPL Draft Dashboard</h1>
-                            <p class="text-sm text-secondary-light mobile-text-xs">2025-26 Season</p>
+                            <h1 class="text-xl font-bold text-white">FPL Draft Dashboard</h1>
+                            <p class="text-sm text-secondary-light">2025-26 Season</p>
                         </div>
                     </div>
                 </div>
@@ -560,7 +560,7 @@
                                 <span class="label-text text-xs text-white">Select Gameweek</span>
                             </label>
                             <div class="flex gap-1 md:gap-2">
-                                <select class="select bg-gray-800/90 border-gray-600/50 text-white select-sm w-16 md:w-28 focus:border-purple-400 text-xs md:text-sm mobile-select" id="gameweekSelector">
+                                <select class="select bg-gray-800/90 border-gray-600/50 text-white select-sm w-16 md:w-28 focus:border-purple-400 text-xs md:text-sm" id="gameweekSelector">
                                     <!-- Gameweek options will be populated by JavaScript -->
                                 </select>
                                 <button class="btn bg-purple-600 hover:bg-purple-700 border-purple-600 text-white btn-sm w-8 md:w-auto" onclick="jumpToCurrentGameweek()" title="Jump to Current Gameweek">
@@ -569,7 +569,7 @@
                             </div>
                         </div>
                         <div class="text-center">
-                            <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-2 py-1 md:px-4 md:py-2 rounded-full font-semibold shadow-lg text-xs md:text-sm mobile-badge">
+                            <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-2 py-1 md:px-4 md:py-2 rounded-full font-semibold shadow-lg text-xs md:text-sm">
                                 GW <span id="currentGameweek">1</span>
                             </div>
                             <div class="text-xs text-white mt-1 hidden md:block" id="current-label">Current</div>
@@ -579,7 +579,7 @@
             </div>
 
             <!-- Main Content -->
-            <main class="flex-1 p-6 mobile-p-4">
+            <main class="flex-1 p-6">
                 <!-- Import Section - Hidden for public deployment -->
                 <div class="dark-card mb-8 hidden">
                     <div class="card-body">
