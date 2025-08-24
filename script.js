@@ -4588,6 +4588,8 @@ function generateKeyInsights() {
 
 // Player Performance Analytics
 function analyzePlayerPerformance() {
+    console.log('🔍 DEBUG: analyzePlayerPerformance() called');
+    
     const container = document.getElementById('player-analytics');
     if (!container) return;
     
@@ -4600,8 +4602,14 @@ function analyzePlayerPerformance() {
     const currentData = dataManager.getGameweekData(dashboardData.currentGameweek);
     const currentPlayers = currentData?.playerData || currentData?.players || [];
     
+    console.log('🔍 DEBUG: Current gameweek:', dashboardData.currentGameweek);
+    console.log('🔍 DEBUG: Current data:', currentData);
+    console.log('🔍 DEBUG: Current players:', currentPlayers);
+    
     if (!currentPlayers || currentPlayers.length === 0) {
-        container.innerHTML = `<p class="text-white">No player data available for GW${dashboardData.currentGameweek}</p>`;
+        console.warn('⚠️ DEBUG: No player data found for current gameweek');
+        container.innerHTML = `<p class="text-white">No player data available for GW${dashboardData.currentGameweek}</p>
+                              <p class="text-white">DEBUG: currentData = ${JSON.stringify(currentData)}</p>`;
         return;
     }
     
@@ -4614,6 +4622,24 @@ function analyzePlayerPerformance() {
     console.log('🔍 Debug: Current players (GW-specific):', currentPlayers);
     console.log('🔍 Debug: Current players sample:', currentPlayers[0]);
     console.log('🔍 Debug: Draft data structure:', draftData);
+    
+    // DEBUG: Check what fields are available in player data
+    if (currentPlayers.length > 0) {
+        const samplePlayer = currentPlayers[0];
+        console.log('🔍 DEBUG: Sample player fields:', Object.keys(samplePlayer));
+        console.log('🔍 DEBUG: Sample player data:', {
+            name: samplePlayer.name,
+            team: samplePlayer.team,
+            position: samplePlayer.position,
+            cost: samplePlayer.cost,
+            roundPoints: samplePlayer.roundPoints,
+            roundPts: samplePlayer.roundPts,
+            totalPoints: samplePlayer.totalPoints,
+            points: samplePlayer.points,
+            'Pts.': samplePlayer['Pts.'],
+            RP: samplePlayer.RP
+        });
+    }
     
     // Create the HTML with the 3 cool analytics
     const playerAnalyticsHTML = `
@@ -4794,10 +4820,23 @@ function analyzePlayerPerformance() {
 
 // Helper function: Get best value picks (points per cost)
 function getBestValuePick(players) {
-    return players
-        .filter(p => p.cost > 0 && (p.roundPoints > 0 || p.totalPoints > 0))
-        .map(p => {
-            const points = p.roundPoints || p.totalPoints || 0;
+    console.log('🔍 DEBUG: getBestValuePick called with', players.length, 'players');
+    if (players.length > 0) {
+        console.log('🔍 DEBUG: First player in getBestValuePick:', {
+            name: players[0].name,
+            cost: players[0].cost,
+            roundPoints: players[0].roundPoints,
+            roundPts: players[0].roundPts,
+            totalPoints: players[0].totalPoints,
+            points: players[0].points
+        });
+    }
+    
+    const filtered = players.filter(p => p.cost > 0 && (p.roundPoints > 0 || p.totalPoints > 0));
+    console.log('🔍 DEBUG: Filtered players count:', filtered.length);
+    
+    return filtered.map(p => {
+        const points = p.roundPoints || p.totalPoints || 0;
             return {
                 ...p,
                 pointsPerCost: points > 0 ? (points / p.cost).toFixed(2) : '0.00'
