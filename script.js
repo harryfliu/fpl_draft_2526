@@ -1062,7 +1062,7 @@ function populateMonthlyStandings() {
         }
 
         return {
-            position: team.position,
+        position: team.position,
             manager: getManagerFromTeamName(team.teamName), // Use function to get manager name
             teamName: team.teamName,
             totalGWPoints: totalGWPoints, // Total FPL points earned this month
@@ -3320,60 +3320,8 @@ function generateKeyInsights() {
         return;
     }
     
-    // Get live standings from results (final results take priority)
+    // Use the existing leaderboard data directly - it already has the correct league points
     let liveTeams = teams;
-    if (dataManager) {
-        const partialResults = dataManager.getResults();
-        
-        if (partialResults.length > 0) {
-            // Calculate live standings from results (final results take priority)
-            liveTeams = teams.map(leaderboardTeam => {
-                const performance = calculateTeamPerformanceFromResults(leaderboardTeam.teamName);
-                
-                // Get GW points from partial results
-                let gwPoints = 0;
-                partialResults.forEach(result => {
-                    if (result.homeTeam === leaderboardTeam.teamName) {
-                        gwPoints = result.homeScore;
-                    } else if (result.awayTeam === leaderboardTeam.teamName) {
-                        gwPoints = result.awayScore;
-                    }
-                });
-                
-                return {
-                    ...leaderboardTeam,
-                    points: performance.points,
-                    gwPoints: gwPoints,
-                    goalsFor: performance.goalsFor,
-                    goalsAgainst: performance.goalsAgainst
-                };
-            });
-            
-            // Sort by points (highest first), then by GW points (FPL points) as tiebreaker, then by goal difference, then by goals for
-            liveTeams.sort((a, b) => {
-                if (b.points !== a.points) {
-                    return b.points - a.points;
-                }
-                // If points are equal, sort by GW points (FPL points) as tiebreaker
-                if (b.gwPoints !== a.gwPoints) {
-                    return b.gwPoints - a.gwPoints;
-                }
-                // If GW points are equal, sort by goal difference
-                const aGoalDiff = (a.goalsFor || 0) - (a.goalsAgainst || 0);
-                const bGoalDiff = (b.goalsFor || 0) - (b.goalsAgainst || 0);
-                if (bGoalDiff !== aGoalDiff) {
-                    return bGoalDiff - aGoalDiff;
-                }
-                // If goal difference is equal, sort by goals for
-                return (b.goalsFor || 0) - (a.goalsFor || 0);
-            });
-            
-            // Update positions after sorting
-            liveTeams.forEach((leaderboardTeam, index) => {
-                leaderboardTeam.position = index + 1;
-            });
-        }
-    }
     
     const insights = [];
     
@@ -3391,38 +3339,68 @@ function generateKeyInsights() {
             text: 'Perfect tie! All managers have identical points - anyone can win!',
             type: 'extreme'
         });
-    } else if (pointsGap < 20) {
+    } else if (pointsGap <= 3) {
         insights.push({
             icon: '🔥',
-            text: `Incredibly tight! Only ${pointsGap} points separate 1st and last place.`,
-            type: 'competitive'
+            text: `Ultra-tight race! Only ${pointsGap} points separate 1st and last place.`,
+            type: 'ultra_competitive'
         });
-    } else if (pointsGap < 50) {
+    } else if (pointsGap <= 6) {
+        insights.push({
+            icon: '⚡',
+            text: `Very competitive! Just ${pointsGap} points between top and bottom.`,
+            type: 'very_competitive'
+        });
+    } else if (pointsGap <= 9) {
         insights.push({
             icon: '⚔️',
-            text: `Competitive league with ${pointsGap} point gap between top and bottom.`,
+            text: `Tight competition with ${pointsGap} point gap between 1st and last.`,
             type: 'competitive'
         });
-    } else if (pointsGap > 200) {
+    } else if (pointsGap <= 15) {
         insights.push({
-            icon: '👑',
-            text: `${getManagerFromTeamName(liveTeams[0]?.teamName || '')} is absolutely dominating with a ${pointsGap} point lead!`,
-            type: 'dominant'
+            icon: '🎯',
+            text: `Moderate gap of ${pointsGap} points - still anyone's game!`,
+            type: 'moderate'
         });
-    } else if (pointsGap > 100) {
+    } else if (pointsGap <= 24) {
+        insights.push({
+            icon: '🌊',
+            text: `${pointsGap} point spread - some managers are pulling ahead.`,
+            type: 'spreading'
+        });
+    } else if (pointsGap <= 36) {
         insights.push({
             icon: '🏆',
-            text: `${getManagerFromTeamName(liveTeams[0]?.teamName || '')} has built a commanding ${pointsGap} point advantage.`,
+            text: `${getManagerFromTeamName(liveTeams[0]?.teamName || '')} has built a solid ${pointsGap} point lead.`,
             type: 'leading'
+        });
+    } else if (pointsGap <= 48) {
+        insights.push({
+            icon: '👑',
+            text: `${getManagerFromTeamName(liveTeams[0]?.teamName || '')} is commanding with a ${pointsGap} point advantage.`,
+            type: 'commanding'
+        });
+    } else if (pointsGap > 48) {
+        insights.push({
+            icon: '🚀',
+            text: `${getManagerFromTeamName(liveTeams[0]?.teamName || '')} is absolutely dominating with a ${pointsGap} point lead!`,
+            type: 'dominant'
         });
     }
     
     // Top 3 analysis
     const topThreeGap = (liveTeams[0]?.points || 0) - (liveTeams[2]?.points || 0);
-    if (liveTeams.length >= 3 && topThreeGap < 10) {
+    if (liveTeams.length >= 3 && topThreeGap <= 3) {
         insights.push({
             icon: '🥇',
-            text: 'Three-way title race! Top 3 managers separated by less than 10 points.',
+            text: 'Three-way title race! Top 3 managers separated by just ' + topThreeGap + ' points.',
+            type: 'title_race'
+        });
+    } else if (liveTeams.length >= 3 && topThreeGap <= 6) {
+        insights.push({
+            icon: '🥈',
+            text: 'Tight top 3! Leaders within ' + topThreeGap + ' points of each other.',
             type: 'title_race'
         });
     }
@@ -3430,10 +3408,16 @@ function generateKeyInsights() {
     // Bottom 3 analysis
     if (liveTeams.length >= 3) {
         const bottomThreeGap = (liveTeams[liveTeams.length - 3]?.points || 0) - (liveTeams[liveTeams.length - 1]?.points || 0);
-        if (bottomThreeGap < 15) {
+        if (bottomThreeGap <= 3) {
             insights.push({
                 icon: '⚠️',
-                text: 'Relegation battle! Bottom 3 managers within 15 points of each other.',
+                text: 'Intense relegation battle! Bottom 3 managers within ' + bottomThreeGap + ' points.',
+                type: 'danger'
+            });
+        } else if (bottomThreeGap <= 6) {
+            insights.push({
+                icon: '🔻',
+                text: 'Relegation zone tight! Bottom 3 within ' + bottomThreeGap + ' points.',
                 type: 'danger'
             });
         }
@@ -3444,11 +3428,23 @@ function generateKeyInsights() {
         const midStart = Math.floor(liveTeams.length * 0.3);
         const midEnd = Math.floor(liveTeams.length * 0.7);
         const midPackGap = (liveTeams[midStart]?.points || 0) - (liveTeams[midEnd]?.points || 0);
-        if (midPackGap < 25) {
+        if (midPackGap <= 3) {
             insights.push({
                 icon: '🌊',
-                text: 'Crowded midfield! Several managers battling in a tight points cluster.',
+                text: 'Ultra-crowded midfield! Middle pack separated by just ' + midPackGap + ' points.',
+                type: 'ultra_competitive'
+            });
+        } else if (midPackGap <= 6) {
+            insights.push({
+                icon: '⚔️',
+                text: 'Tight midfield battle! Several managers within ' + midPackGap + ' points.',
                 type: 'competitive'
+            });
+        } else if (midPackGap <= 9) {
+            insights.push({
+                icon: '🎯',
+                text: 'Moderate midfield spread of ' + midPackGap + ' points.',
+                type: 'moderate'
             });
         }
     }
@@ -3476,32 +3472,32 @@ function generateKeyInsights() {
         });
     }
     
-    // GW Points analysis
-    const highestGWPoints = Math.max(...liveTeams.map(team => parseInt(team.gwPoints) || 0));
-    const lowestGWPoints = Math.min(...liveTeams.filter(team => (team.gwPoints || 0) > 0).map(team => parseInt(team.gwPoints) || 0));
+    // GW Points analysis - use currentGWPoints (Current GW Pts) not total GW Pts
+    const highestGWPoints = Math.max(...liveTeams.map(team => parseInt(team.currentGWPoints) || 0));
+    const lowestGWPoints = Math.min(...liveTeams.filter(team => (team.currentGWPoints || 0) > 0).map(team => parseInt(team.currentGWPoints) || 0));
     const gwPointsGap = highestGWPoints - lowestGWPoints;
     
     if (highestGWPoints > 100) {
-        const topGWManager = liveTeams.find(team => parseInt(team.gwPoints) === highestGWPoints);
+        const topGWManager = liveTeams.find(team => parseInt(team.currentGWPoints) === highestGWPoints);
         insights.push({
             icon: '💥',
-            text: `${topGWManager?.manager} had an explosive gameweek with ${highestGWPoints} points!`,
+            text: topGWManager?.manager + ' had an explosive gameweek with ' + highestGWPoints + ' points!',
             type: 'performance'
         });
     } else if (highestGWPoints > 80) {
-        const topGWManager = liveTeams.find(team => parseInt(team.gwPoints) === highestGWPoints);
+        const topGWManager = liveTeams.find(team => parseInt(team.currentGWPoints) === highestGWPoints);
         insights.push({
             icon: '⭐',
-            text: `${topGWManager?.manager} dominated the gameweek with ${highestGWPoints} points.`,
+            text: topGWManager?.manager + ' dominated the gameweek with ' + highestGWPoints + ' points.',
             type: 'performance'
         });
     }
     
     if (lowestGWPoints < 20 && lowestGWPoints > 0) {
-        const lowGWManager = liveTeams.find(team => parseInt(team.gwPoints) === lowestGWPoints);
+        const lowGWManager = liveTeams.find(team => parseInt(team.currentGWPoints) === lowestGWPoints);
         insights.push({
             icon: '📉',
-            text: `Tough gameweek for ${lowGWManager?.manager} with only ${lowestGWPoints} points.`,
+            text: 'Tough gameweek for ' + lowGWManager?.manager + ' with only ' + lowestGWPoints + ' points.',
             type: 'struggle'
         });
     }
@@ -3714,11 +3710,151 @@ function generateKeyInsights() {
     // === SEASONAL INSIGHTS === //
     
     if (fixtures.length > 0) {
+        // Calculate remaining fixtures based on current gameweek
+        const totalSeasonFixtures = 228; // Total fixtures in a season
+        const fixturesPlayed = (currentGW - 1) * 6; // 6 matches per gameweek
+        const remainingFixtures = totalSeasonFixtures - fixturesPlayed;
+        
         insights.push({
             icon: '📅',
-            text: `${fixtures.length} fixtures still to be played this season.`,
+            text: `${remainingFixtures} fixtures still to be played this season.`,
             type: 'schedule'
         });
+    }
+    
+    // === CRAZY HYPE INSIGHTS === //
+    
+    // Player performance trends and anomalies
+    if (dataManager) {
+        const currentData = dataManager.getGameweekData(dashboardData.currentGameweek);
+        const previousData = dataManager.getGameweekData(dashboardData.currentGameweek - 1);
+        
+        if (currentData && previousData) {
+            // Find players who exploded this gameweek vs last
+            const currentPlayers = currentData.players || [];
+            const previousPlayers = previousData.players || [];
+            
+            // Find biggest point jumpers
+            const pointJumpers = currentPlayers
+                .filter(current => {
+                    const previous = previousPlayers.find(p => p.Player === current.Player);
+                    return previous && (current.RP || 0) > (previous.RP || 0);
+                })
+                .map(current => {
+                    const previous = previousPlayers.find(p => p.Player === current.Player);
+                    const jump = (current.RP || 0) - (previous.RP || 0);
+                    return { player: current.Player, jump, current: current.RP || 0, previous: previous.RP || 0 };
+                })
+                .sort((a, b) => b.jump - a.jump)
+                .slice(0, 3);
+            
+            if (pointJumpers.length > 0 && pointJumpers[0].jump >= 5) {
+                insights.push({
+                    icon: '🚀',
+                    text: pointJumpers[0].player + ' just EXPLODED with a ' + pointJumpers[0].jump + ' point jump! (' + pointJumpers[0].previous + ' → ' + pointJumpers[0].current + ' pts)',
+                    type: 'explosion'
+                });
+            }
+            
+            // Find players who went from hero to zero
+            const pointDroppers = currentPlayers
+                .filter(current => {
+                    const previous = previousPlayers.find(p => p.Player === current.Player);
+                    return previous && (current.RP || 0) < (previous.RP || 0) && (previous.RP || 0) >= 8;
+                })
+                .map(current => {
+                    const previous = previousPlayers.find(p => p.Player === current.Player);
+                    const drop = (previous.RP || 0) - (current.RP || 0);
+                    return { player: current.Player, drop, current: current.RP || 0, previous: previous.RP || 0 };
+                })
+                .sort((a, b) => b.drop - a.drop)
+                .slice(0, 2);
+            
+            if (pointDroppers.length > 0 && pointDroppers[0].drop >= 6) {
+                insights.push({
+                    icon: '📉',
+                    text: pointDroppers[0].player + ' went from ' + pointDroppers[0].previous + ' to ' + pointDroppers[0].current + ' pts - what happened?!',
+                    type: 'collapse'
+                });
+            }
+        }
+        
+        // Transfer market chaos analysis
+        const transferHistory = currentData?.transferHistory || {};
+        const waivers = transferHistory.waivers || [];
+        const freeAgents = transferHistory.freeAgents || [];
+        
+        // Most contested players
+        const playerAcquisitions = {};
+        [...waivers, ...freeAgents].forEach(move => {
+            if (move.In) {
+                playerAcquisitions[move.In] = (playerAcquisitions[move.In] || 0) + 1;
+            }
+        });
+        
+        const mostContested = Object.entries(playerAcquisitions)
+            .sort(([,a], [,b]) => b - a)
+            .slice(0, 3);
+        
+        if (mostContested.length > 0 && mostContested[0][1] >= 3) {
+            insights.push({
+                icon: '🔥',
+                text: mostContested[0][0] + ' is the HOTTEST property with ' + mostContested[0][1] + ' managers fighting for them!',
+                type: 'hot_property'
+            });
+        }
+        
+        // Waiver war analysis
+        const deniedWaivers = waivers.filter(w => w.Result !== 'Success').length;
+        const acceptedWaivers = waivers.filter(w => w.Result === 'Success').length;
+        
+        if (deniedWaivers > acceptedWaivers && deniedWaivers >= 5) {
+            insights.push({
+                icon: '⚔️',
+                text: 'WAIVER WAR ZONE! ' + deniedWaivers + ' denied claims vs ' + acceptedWaivers + ' accepted - managers are DESPERATE!',
+                type: 'waiver_war'
+            });
+        }
+        
+        // Manager transfer patterns
+        const managerTransferCounts = {};
+        [...waivers, ...freeAgents].forEach(move => {
+            if (move.Manager) {
+                managerTransferCounts[move.Manager] = (managerTransferCounts[move.Manager] || 0) + 1;
+            }
+        });
+        
+        const mostActiveManager = Object.entries(managerTransferCounts)
+            .sort(([,a], [,b]) => b - a)[0];
+        
+        if (mostActiveManager && mostActiveManager[1] >= 4) {
+            insights.push({
+                icon: '🌪️',
+                text: mostActiveManager[0] + ' is in FULL PANIC MODE with ' + mostActiveManager[1] + ' transfers this gameweek!',
+                type: 'panic_mode'
+            });
+        }
+        
+        // Performance vs Transfer correlation
+        const highTransferManagers = Object.entries(managerTransferCounts)
+            .filter(([,count]) => count >= 3)
+            .map(([manager]) => manager);
+        
+        if (highTransferManagers.length > 0) {
+            const highTransferTeam = liveTeams.find(team => 
+                highTransferManagers.some(manager => 
+                    team.manager?.includes(manager) || team.teamName?.includes(manager)
+                )
+            );
+            
+            if (highTransferTeam && (highTransferTeam.currentGWPoints || 0) < 20) {
+                insights.push({
+                    icon: '🤡',
+                    text: highTransferTeam.manager + ' made ' + (managerTransferCounts[highTransferTeam.manager] || 0) + ' transfers but still only got ' + (highTransferTeam.currentGWPoints || 0) + ' points - classic!',
+                    type: 'transfer_fail'
+                });
+            }
+        }
     }
     
     // === RANDOMIZED MOTIVATIONAL INSIGHTS === //
