@@ -3147,10 +3147,13 @@ function analyzeWeeklyWinners() {
         return;
     }
     
-    const partialResults = dataManager.getAllPartialResults();
+    const currentGameweek = dashboardData.currentGameweek || 1;
+    
+    // Use the SAME working data source that Current Fixtures uses (which works!)
+    const partialResults = dataManager?.getResults(currentGameweek) || [];
     
     if (partialResults.length === 0) {
-        container.innerHTML = '<p class="text-white">No match results available</p>';
+        container.innerHTML = `<p class="text-white">No match results available for GW${currentGameweek}</p>`;
         return;
     }
     
@@ -3204,27 +3207,140 @@ function analyzeWeeklyWinners() {
     const totalScores = partialResults.reduce((sum, result) => sum + result.homeScore + result.awayScore, 0);
     const averageScore = Math.round(totalScores / (partialResults.length * 2));
     
+    // Calculate score range and gap
+    const scoreRange = highestScore - lowestScore;
+    const scoreGap = `${scoreRange} pts`;
+    
+    // Check if this is a final result gameweek (has weekly winner)
+    const hasFinalResults = dataManager?.getFinalResults?.(currentGameweek)?.length > 0;
+    
+    // Get weekly winner if final results exist
+    let weeklyWinner = null;
+    if (hasFinalResults) {
+        const finalResults = dataManager.getFinalResults(currentGameweek);
+        // Find the highest scoring team from final results
+        const finalTeamScores = [];
+        finalResults.forEach(result => {
+            finalTeamScores.push({
+                name: result.homeTeam,
+                score: result.homeScore,
+                manager: result.homeManager
+            });
+            finalTeamScores.push({
+                name: result.awayTeam,
+                score: result.awayScore,
+                manager: result.awayManager
+            });
+        });
+        finalTeamScores.sort((a, b) => b.score - a.score);
+        weeklyWinner = finalTeamScores[0];
+    }
+    
+    // Get previous gameweek data for comparison
+    const previousGameweek = currentGameweek > 1 ? currentGameweek - 1 : null;
+    let previousAverage = null;
+    let previousHighest = null;
+    
+    if (previousGameweek) {
+        const prevResults = dataManager?.getResults(previousGameweek) || [];
+        if (prevResults.length > 0) {
+            const prevTotalScores = prevResults.reduce((sum, result) => sum + result.homeScore + result.awayScore, 0);
+            previousAverage = Math.round(prevTotalScores / (prevResults.length * 2));
+            
+            const prevTeamScores = [];
+            prevResults.forEach(result => {
+                prevTeamScores.push({ score: result.homeScore });
+                prevTeamScores.push({ score: result.awayScore });
+            });
+            prevTeamScores.sort((a, b) => b.score - a.score);
+            previousHighest = prevTeamScores[0].score;
+        }
+    }
+    
     container.innerHTML = `
         <div class="space-y-4">
-            <div class="text-center p-3 bg-green-50 rounded-lg border border-green-200">
-                <div class="font-semibold text-green-800">🏆 Highest Scorer</div>
-                <div class="text-lg font-bold text-green-800">${highestScoringTeam?.name}</div>
-                <div class="text-sm text-green-600">${highestScoringTeam?.manager} • ${highestScoringTeam?.score} pts</div>
+            <!-- Weekly Winner Section -->
+            ${weeklyWinner ? `
+            <div class="text-center p-4 bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 rounded-lg border border-yellow-500/50">
+                <div class="font-semibold text-yellow-300 text-lg">👑 Weekly Winner</div>
+                <div class="text-2xl font-bold text-yellow-300 mb-2">${weeklyWinner.name}</div>
+                <div class="text-yellow-200 mb-2">${weeklyWinner.manager} • ${weeklyWinner.score} pts</div>
+                <div class="text-sm text-yellow-300">Earns $1 from every other manager</div>
             </div>
+            ` : `
+            <div class="text-center p-4 bg-gradient-to-r from-blue-500/20 to-blue-600/20 rounded-lg border border-blue-500/50">
+                <div class="font-semibold text-blue-300 text-lg">⏳ Weekly Winner</div>
+                <div class="text-lg font-bold text-blue-300 mb-2">TBD</div>
+                <div class="text-sm text-blue-300">Current leader: ${highestScoringTeam?.manager} (${highestScore} pts)</div>
+            </div>
+            `}
             
-            <div class="text-center p-3 bg-red-50 rounded-lg border border-red-200">
-                <div class="font-semibold text-red-800">📉 Lowest Scorer</div>
-                <div class="text-sm text-red-600">${lowestScoringTeam?.manager} • ${lowestScoringTeam?.score} pts</div>
+            <!-- Performance Stats -->
+            <div class="grid grid-cols-2 gap-3">
+                <div class="text-center p-3 bg-green-600/20 rounded-lg border border-green-500/50">
+                    <div class="font-semibold text-green-300">🏆 Highest Scorer</div>
+                    <div class="text-lg font-bold text-green-300">${highestScoringTeam?.name}</div>
+                    <div class="text-sm text-green-200">${highestScoringTeam?.manager} • ${highestScore} pts</div>
                 </div>
-            
-            <div class="text-center p-3 bg-blue-50 rounded-lg border border-blue-200">
-                <div class="font-semibold text-blue-800">📊 League Average</div>
-                <div class="text-lg font-bold text-blue-800">${averageScore} pts</div>
-                <div class="text-sm text-blue-600">${partialResults.length * 2} teams</div>
+                
+                <div class="text-center p-3 bg-red-600/20 rounded-lg border border-red-500/50">
+                    <div class="font-semibold text-red-300">📉 Lowest Scorer</div>
+                    <div class="text-lg font-bold text-red-300">${lowestScoringTeam?.name}</div>
+                    <div class="text-sm text-red-200">${lowestScoringTeam?.manager} • ${lowestScore} pts</div>
+                </div>
             </div>
             
-            <div class="text-xs text-white text-center">
-                Based on ${partialResults.length} matches played
+            <!-- Score Analysis -->
+            <div class="grid grid-cols-3 gap-3">
+                <div class="text-center p-3 bg-blue-600/20 rounded-lg border border-blue-500/50">
+                    <div class="font-semibold text-blue-300">📊 League Average</div>
+                    <div class="text-lg font-bold text-blue-300">${averageScore} pts</div>
+                    <div class="text-sm text-blue-200">${partialResults.length * 2} teams</div>
+                </div>
+                
+                <div class="text-center p-3 bg-purple-600/20 rounded-lg border border-purple-500/50">
+                    <div class="font-semibold text-purple-300">📏 Score Range</div>
+                    <div class="text-lg font-bold text-purple-300">${scoreGap}</div>
+                    <div class="text-sm text-purple-200">${highestScore} to ${lowestScore}</div>
+                </div>
+                
+                <div class="text-center p-3 bg-orange-600/20 rounded-lg border border-orange-500/50">
+                    <div class="font-semibold text-orange-300">🎯 Score Gap</div>
+                    <div class="text-lg font-bold text-orange-300">${scoreGap}</div>
+                    <div class="text-sm text-orange-200">${highestScoringTeam?.manager} vs ${lowestScoringTeam?.manager}</div>
+                </div>
+            </div>
+            
+            <!-- Performance Trends -->
+            ${previousGameweek && previousAverage ? `
+            <div class="bg-gray-800/50 border border-gray-600/50 rounded-lg p-3">
+                <h4 class="font-semibold text-white mb-2 flex items-center">
+                    <i class="fas fa-chart-line text-blue-400 mr-2"></i>
+                    📈 Performance Trends
+                </h4>
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                    <div class="text-center">
+                        <div class="text-gray-300">GW${previousGameweek} → GW${currentGameweek}</div>
+                        <div class="text-2xl font-bold ${previousAverage > averageScore ? 'text-red-400' : 'text-green-400'}">
+                            ${previousAverage > averageScore ? '↓' : '↑'} ${Math.abs(previousAverage - averageScore)} pts
+                        </div>
+                        <div class="text-gray-400">Average change</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-gray-300">Highest Score</div>
+                        <div class="text-2xl font-bold ${previousHighest > highestScore ? 'text-red-400' : 'text-green-400'}">
+                            ${previousHighest > highestScore ? '↓' : '↑'} ${Math.abs(previousHighest - highestScore)} pts
+                        </div>
+                        <div class="text-gray-400">Top performance</div>
+                    </div>
+                </div>
+            </div>
+            ` : ''}
+            
+            <!-- Summary -->
+            <div class="text-xs text-gray-300 text-center bg-gray-800/30 rounded-lg p-2">
+                Based on ${partialResults.length} matches played in GW${currentGameweek}
+                ${previousGameweek ? `• Previous: GW${previousGameweek}` : ''}
             </div>
         </div>
     `;
