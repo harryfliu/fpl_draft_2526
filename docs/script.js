@@ -4642,7 +4642,7 @@ function analyzePlayerPerformance() {
                                     }">${player.position}</span>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-green-400 font-bold">${player.roundPts || player.totalPoints || 0} pts</div>
+                                    <div class="text-green-400 font-bold">${player.roundPoints || player.totalPoints || 0} pts</div>
                                 </div>
                             </div>
                         `).join('')}
@@ -4700,7 +4700,7 @@ function analyzePlayerPerformance() {
                                 </div>
                                 <div class="text-right">
                                     <div class="text-green-400 font-bold">${player.pointsPerCost} pts/£</div>
-                                    <div class="text-xs text-gray-400">${player.roundPts || player.totalPoints || 0} pts</div>
+                                    <div class="text-xs text-gray-400">${player.roundPoints || player.totalPoints || 0} pts</div>
                                 </div>
                             </div>
                         `).join('')}
@@ -4724,7 +4724,7 @@ function analyzePlayerPerformance() {
                                     }">${player.position}</span>
                                 </div>
                                 <div class="text-right">
-                                    <div class="text-red-400 font-bold">${player.roundPts || player.totalPoints || 0} pts</div>
+                                    <div class="text-red-400 font-bold">${player.roundPoints || player.totalPoints || 0} pts</div>
                                     <div class="text-xs text-gray-400">High Risk</div>
                                 </div>
                             </div>
@@ -4795,9 +4795,9 @@ function analyzePlayerPerformance() {
 // Helper function: Get best value picks (points per cost)
 function getBestValuePick(players) {
     return players
-        .filter(p => p.cost > 0 && (p.roundPts > 0 || p.totalPoints > 0))
+        .filter(p => p.cost > 0 && (p.roundPoints > 0 || p.totalPoints > 0))
         .map(p => {
-            const points = p.roundPts || p.totalPoints || 0;
+            const points = p.roundPoints || p.totalPoints || 0;
             return {
                 ...p,
                 pointsPerCost: points > 0 ? (points / p.cost).toFixed(2) : '0.00'
@@ -5039,8 +5039,8 @@ function getBestAndWorstPlayers(players, draftData) {
         
         // Sort players by points to find best and worst
         const sortedPlayers = managerPlayers.sort((a, b) => {
-            const aPoints = a.roundPts || a.totalPoints || 0;
-            const bPoints = b.roundPts || b.totalPoints || 0;
+            const aPoints = a.roundPoints || a.totalPoints || 0;
+            const bPoints = b.roundPoints || b.totalPoints || 0;
             return bPoints - aPoints;
         });
         const bestPlayer = sortedPlayers[0];
@@ -5051,11 +5051,11 @@ function getBestAndWorstPlayers(players, draftData) {
             fullName: managerName || team.teamName,
             bestPlayer: {
                 name: bestPlayer.name,
-                points: bestPlayer.roundPts || bestPlayer.totalPoints || 0
+                points: bestPlayer.roundPoints || bestPlayer.totalPoints || 0
             },
             worstPlayer: {
                 name: worstPlayer.name,
-                points: worstPlayer.roundPts || bestPlayer.totalPoints || 0
+                points: worstPlayer.roundPoints || worstPlayer.totalPoints || 0
             }
         });
     });
@@ -5070,9 +5070,9 @@ function getBestAndWorstPlayers(players, draftData) {
 // Helper function: Get bargain hunters (low cost, high points)
 function getBargainHunters(players) {
     return players
-        .filter(p => p.cost <= 6 && (p.roundPts > 0 || p.totalPoints > 0)) // Low cost players
+        .filter(p => p.cost <= 6 && (p.roundPoints > 0 || p.totalPoints > 0)) // Low cost players
         .map(p => {
-            const points = p.roundPts || p.totalPoints || 0;
+            const points = p.roundPoints || p.totalPoints || 0;
             return {
                 ...p,
                 pointsPerCost: points > 0 ? (points / p.cost).toFixed(2) : '0.00'
@@ -5085,10 +5085,10 @@ function getBargainHunters(players) {
 // Helper function: Get high-risk, high-reward players
 function getHighRiskHighReward(players) {
     return players
-        .filter(p => p.cost >= 10 && (p.roundPts > 0 || p.totalPoints > 0)) // Expensive players
+        .filter(p => p.cost >= 10 && (p.roundPoints > 0 || p.totalPoints > 0)) // Expensive players
         .sort((a, b) => {
-            const aPoints = a.roundPts || a.totalPoints || 0;
-            const bPoints = b.roundPts || b.totalPoints || 0;
+            const aPoints = a.roundPoints || a.totalPoints || 0;
+            const bPoints = b.roundPoints || b.totalPoints || 0;
             return bPoints - aPoints;
         })
         .slice(0, 3);
@@ -5102,7 +5102,7 @@ function getPositionStrategy(players) {
     
     return positions.map(pos => {
         const posPlayers = players.filter(p => p.position === pos);
-        const totalPoints = posPlayers.reduce((sum, p) => sum + (p.roundPts || p.totalPoints || 0), 0);
+        const totalPoints = posPlayers.reduce((sum, p) => sum + (p.roundPoints || p.totalPoints || 0), 0);
         const avgPoints = posPlayers.length > 0 ? (totalPoints / posPlayers.length).toFixed(1) : 0;
         
         return {
@@ -5117,11 +5117,11 @@ function getPositionStrategy(players) {
 // Helper function: Get value for money analysis
 function getValueForMoney(players) {
     return players
-        .filter(p => p.cost > 0 && (p.roundPts > 0 || p.totalPoints > 0))
+        .filter(p => p.cost > 0 && (p.roundPoints > 0 || p.totalPoints > 0))
         .map(p => {
             // Calculate value score: (points * 10) / cost
             // This gives higher scores to players who deliver more points per pound
-            const points = p.roundPts || p.totalPoints || 0;
+            const points = p.roundPoints || p.totalPoints || 0;
             const valueScore = ((points * 10) / p.cost).toFixed(1);
             
             return {
