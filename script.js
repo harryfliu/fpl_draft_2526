@@ -461,9 +461,11 @@ function populateLeaderboard() {
     liveLeaderboard.forEach(team => {
         const row = document.createElement('tr');
         
-        // Add special styling for top 3 positions
+        // Add special styling for top 3 positions and mobile optimization
         if (team.position <= 3) {
-            row.className = 'top-3-row';
+            row.className = 'top-3-row mobile-leaderboard-row';
+        } else {
+            row.className = 'mobile-leaderboard-row';
         }
         
         row.innerHTML = `
@@ -694,7 +696,7 @@ function populateCurrentFixtures() {
     
     currentFixtures.forEach(fixture => {
         const fixtureElement = document.createElement('div');
-        fixtureElement.className = 'card bg-gray-900/90 border border-gray-700/50 mb-4 shadow-2xl backdrop-blur-sm hover:shadow-purple-500/20 transition-all duration-300';
+        fixtureElement.className = 'card bg-gray-900/90 border border-gray-700/50 mb-4 shadow-2xl backdrop-blur-sm hover:shadow-purple-500/20 transition-all duration-300 mobile-fixture-card';
         
         // Get manager names for both teams
         const homeManager = getManagerFromTeamName(fixture.homeTeam);
@@ -847,7 +849,7 @@ function populateFixtures() {
     // Add fixtures for this gameweek
     fixtures.forEach(fixture => {
         const fixtureElement = document.createElement('div');
-        fixtureElement.className = 'card bg-gray-900/90 border border-gray-700/50 mb-4 shadow-2xl backdrop-blur-sm hover:shadow-purple-500/20 transition-all duration-300';
+        fixtureElement.className = 'card bg-gray-900/90 border border-gray-700/50 mb-4 shadow-2xl backdrop-blur-sm hover:shadow-purple-500/20 transition-all duration-300 mobile-fixture-card';
         
         // Get manager names for both teams
         const homeManager = getManagerFromTeamName(fixture.homeTeam);

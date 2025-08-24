@@ -99,6 +99,108 @@
         
         .btn-purple:hover {
             background: linear-gradient(135deg, var(--secondary-purple), var(--primary-purple));
+        }
+        
+        /* Mobile-First Optimizations */
+        @media (max-width: 768px) {
+            /* Better spacing for mobile */
+            .mobile-p-4 { padding: 1.5rem !important; }
+            .mobile-p-3 { padding: 1rem !important; }
+            .mobile-p-2 { padding: 0.75rem !important; }
+            .mobile-p-1 { padding: 0.5rem !important; }
+            
+            /* Mobile-optimized text sizes */
+            .mobile-text-lg { font-size: 1.125rem !important; line-height: 1.75rem !important; }
+            .mobile-text-base { font-size: 1rem !important; line-height: 1.5rem !important; }
+            .mobile-text-sm { font-size: 0.875rem !important; line-height: 1.25rem !important; }
+            .mobile-text-xs { font-size: 0.75rem !important; line-height: 1rem !important; }
+            
+            /* Touch-friendly button sizes */
+            .mobile-btn-lg { 
+                min-height: 3rem !important; 
+                padding: 0.75rem 1.5rem !important; 
+                font-size: 1rem !important; 
+            }
+            .mobile-btn-md { 
+                min-height: 2.5rem !important; 
+                padding: 0.5rem 1rem !important; 
+                font-size: 0.875rem !important; 
+            }
+            
+            /* Mobile card spacing */
+            .mobile-card { 
+                margin: 0.75rem 0 !important; 
+                padding: 1rem !important; 
+                border-radius: 12px !important; 
+            }
+            
+            /* Mobile fixture cards */
+            .mobile-fixture-card {
+                padding: 1rem !important;
+                margin: 0.75rem 0 !important;
+                border-radius: 16px !important;
+                background: var(--card-bg) !important;
+                border: 1px solid var(--border-color) !important;
+            }
+            
+            /* Mobile leaderboard */
+            .mobile-leaderboard-row {
+                padding: 0.75rem 0.5rem !important;
+                margin: 0.25rem 0 !important;
+                border-radius: 8px !important;
+            }
+            
+            /* Mobile navigation */
+            .mobile-nav-item {
+                padding: 0.75rem 1rem !important;
+                margin: 0.25rem 0 !important;
+                border-radius: 8px !important;
+                font-size: 0.875rem !important;
+            }
+            
+            /* Mobile form elements */
+            .mobile-select {
+                padding: 0.75rem !important;
+                font-size: 1rem !important;
+                border-radius: 8px !important;
+                min-height: 3rem !important;
+            }
+            
+            /* Mobile spacing utilities */
+            .mobile-space-y-4 > * + * { margin-top: 1.5rem !important; }
+            .mobile-space-y-3 > * + * { margin-top: 1rem !important; }
+            .mobile-space-y-2 > * + * { margin-top: 0.75rem !important; }
+            
+            /* Mobile grid adjustments */
+            .mobile-grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
+            .mobile-grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+            
+            /* Mobile avatar sizes */
+            .mobile-avatar-lg { width: 3rem !important; height: 3rem !important; }
+            .mobile-avatar-md { width: 2.5rem !important; height: 2.5rem !important; }
+            .mobile-avatar-sm { width: 2rem !important; height: 2rem !important; }
+            
+            /* Mobile badge improvements */
+            .mobile-badge {
+                padding: 0.5rem 0.75rem !important;
+                font-size: 0.75rem !important;
+                border-radius: 6px !important;
+                min-height: 2rem !important;
+            }
+        }
+        
+        /* Extra small mobile devices */
+        @media (max-width: 480px) {
+            .xs-mobile-p-2 { padding: 0.5rem !important; }
+            .xs-mobile-text-sm { font-size: 0.75rem !important; }
+            .xs-mobile-btn-sm { 
+                min-height: 2.25rem !important; 
+                padding: 0.5rem 0.75rem !important; 
+            }
+        }
+        
+        .btn-purple:hover {
+            background: linear-gradient(135deg, var(--secondary-purple), var(--primary-purple));
             transform: translateY(-1px);
         }
         
@@ -430,7 +532,7 @@
         
         <!-- Mobile menu button -->
         <div class="drawer-content flex flex-col">
-            <div class="navbar bg-gray-900/90 backdrop-blur-xl border-b border-gray-700/50 sticky top-0 z-50 shadow-2xl">
+            <div class="navbar bg-gray-900/90 backdrop-blur-xl border-b border-gray-700/50 sticky top-0 z-50 shadow-2xl mobile-p-3">
                 <div class="flex-none lg:hidden">
                     <label for="my-drawer-2" class="btn btn-square btn-ghost text-white hover:bg-purple-600/20">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -446,8 +548,8 @@
                             </div>
                         </div>
                         <div>
-                            <h1 class="text-xl font-bold text-white">FPL Draft Dashboard</h1>
-                            <p class="text-sm text-secondary-light">2025-26 Season</p>
+                            <h1 class="text-xl font-bold text-white mobile-text-lg">FPL Draft Dashboard</h1>
+                            <p class="text-sm text-secondary-light mobile-text-xs">2025-26 Season</p>
                         </div>
                     </div>
                 </div>
@@ -458,7 +560,7 @@
                                 <span class="label-text text-xs text-white">Select Gameweek</span>
                             </label>
                             <div class="flex gap-1 md:gap-2">
-                                <select class="select bg-gray-800/90 border-gray-600/50 text-white select-sm w-16 md:w-28 focus:border-purple-400 text-xs md:text-sm" id="gameweekSelector">
+                                <select class="select bg-gray-800/90 border-gray-600/50 text-white select-sm w-16 md:w-28 focus:border-purple-400 text-xs md:text-sm mobile-select" id="gameweekSelector">
                                     <!-- Gameweek options will be populated by JavaScript -->
                                 </select>
                                 <button class="btn bg-purple-600 hover:bg-purple-700 border-purple-600 text-white btn-sm w-8 md:w-auto" onclick="jumpToCurrentGameweek()" title="Jump to Current Gameweek">
@@ -467,7 +569,7 @@
                             </div>
                         </div>
                         <div class="text-center">
-                            <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-2 py-1 md:px-4 md:py-2 rounded-full font-semibold shadow-lg text-xs md:text-sm">
+                            <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-2 py-1 md:px-4 md:py-2 rounded-full font-semibold shadow-lg text-xs md:text-sm mobile-badge">
                                 GW <span id="currentGameweek">1</span>
                             </div>
                             <div class="text-xs text-white mt-1 hidden md:block" id="current-label">Current</div>
@@ -477,7 +579,7 @@
             </div>
 
             <!-- Main Content -->
-            <main class="flex-1 p-6">
+            <main class="flex-1 p-6 mobile-p-4">
                 <!-- Import Section - Hidden for public deployment -->
                 <div class="dark-card mb-8 hidden">
                     <div class="card-body">
