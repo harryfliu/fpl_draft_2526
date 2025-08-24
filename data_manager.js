@@ -56,8 +56,11 @@ class FPLDataManager {
             console.log('❌ Error accessing gw1:', error);
         }
         
-        // Also check for other potential gameweeks
-        const possibleGameweeks = ['gw2', 'gw3', 'gw4', 'gw5'];
+        // Also check for other potential gameweeks (dynamic detection)
+        const possibleGameweeks = [];
+        for (let i = 2; i <= 38; i++) { // Premier League has up to 38 gameweeks
+            possibleGameweeks.push(`gw${i}`);
+        }
         
         for (const gw of possibleGameweeks) {
             try {
@@ -599,8 +602,7 @@ class FPLDataManager {
             return 1;
         }
         
-        // If we have gw1 and gw2, we're at GW2
-        // If we have gw1, gw2, gw3, we're at GW3
+        // Dynamically determine current gameweek based on available data
         // etc.
         return Math.max(...availableNumbers);
     }

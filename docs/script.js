@@ -1765,7 +1765,7 @@ function displayTeamTopContributors(team) {
     const currentGW = dashboardData.currentGameweek;
     
     // Check if any player has performance data specifically for the current gameweek
-    // This prevents showing GW1 data when viewing GW2
+    // This prevents showing previous gameweek data when viewing current gameweek
     let hasOwnPlayerData = false;
     
     if (currentData.playerData && currentData.playerData.length > 0) {
