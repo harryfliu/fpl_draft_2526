@@ -412,9 +412,12 @@ class FPLDataManager {
                     const playerPoints = player.Pts || player.points || 0;
                     const roundPts = player['Round Pts'] || player.roundPts || playerPoints;
                     
+                    // Copy RP to roundPts for deployed version compatibility
+                    const finalRoundPts = player.RP || roundPts;
+                    
                     allPlayers[playerKey].gameweeks[gameweek] = {
                         points: playerPoints,
-                        roundPts: roundPts,
+                        roundPts: finalRoundPts,
                         otherStats: player
                     };
                     
