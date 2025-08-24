@@ -97,6 +97,19 @@ git push origin main  # Production is live!
 
 ### **🔄 When to Sync Local vs Deployed:**
 
+#### **🚨 CRUCIAL WORKFLOW STEP - ALWAYS UPDATE LOCAL FIRST:**
+```bash
+# 1. ALWAYS make changes to LOCAL source files first:
+#    - ./script.js (NOT docs/script.js)
+#    - ./index.html (NOT docs/index.html)  
+#    - ./data_manager.js (NOT docs/data_manager.js)
+#    - ./deploy-github-clean.py
+
+# 2. Test changes LOCALLY with python3 serve_dashboard.py
+# 3. Only when ready to deploy, run: python3 deploy-github-clean.py
+# 4. This regenerates docs/ folder with your local changes
+```
+
 #### **✅ Sync After EVERY Significant Change:**
 - **Bug fixes** - Test locally, then sync to verify deployed version works
 - **New features** - Sync to test deployment process
@@ -151,6 +164,20 @@ python3 serve_dashboard.py
 
 ### **📁 File Management Best Practices:**
 
+#### **🚨 CRITICAL: Source vs Generated Files**
+```bash
+# SOURCE FILES (Edit these):
+./script.js          ← Edit this for dashboard logic
+./index.html         ← Edit this for HTML structure  
+./data_manager.js    ← Edit this for data processing
+./deploy-github-clean.py ← Edit this for deployment logic
+
+# GENERATED FILES (Don't edit these directly):
+./docs/script.js     ← Auto-generated from ./script.js
+./docs/index.html    ← Auto-generated from ./index.html
+./docs/data_manager.js ← Auto-generated from ./data_manager.js
+```
+
 #### **Keep These Files in Sync:**
 - `script.js` - Core dashboard logic
 - `index.html` - Dashboard structure
@@ -177,6 +204,8 @@ python3 serve_dashboard.py
 - ❌ Skip staging testing
 - ❌ Sync broken code to deployed version
 - ❌ Forget to test after deployment
+- ❌ Edit files in `./docs/` folder directly (they get overwritten!)
+- ❌ Make changes to deployed files without updating local source first
 
 ### **ALWAYS:**
 - ✅ Develop on `staging`
@@ -393,6 +422,33 @@ git push origin staging
 # Verify staging works
 # Plan next day's work
 ```
+
+## 🚨 **Troubleshooting Common Issues**
+
+### **❌ "My changes disappeared after running deploy script!"**
+**Cause**: You edited files in `./docs/` folder instead of local source files
+**Solution**: 
+```bash
+# 1. Make changes to LOCAL source files (./script.js, ./index.html, etc.)
+# 2. Test locally with python3 serve_dashboard.py
+# 3. Run deploy script: python3 deploy-github-clean.py
+# 4. This regenerates docs/ folder with your local changes
+```
+
+### **❌ "Deployed version doesn't have my fixes!"**
+**Cause**: You forgot to run the deploy script after making local changes
+**Solution**:
+```bash
+# 1. Verify changes are in local source files
+# 2. Run: python3 deploy-github-clean.py
+# 3. Commit and push to staging
+# 4. Test deployed version
+```
+
+### **❌ "I'm editing the wrong files!"**
+**Remember**: 
+- **Edit**: `./script.js`, `./index.html`, `./data_manager.js`
+- **Don't Edit**: `./docs/script.js`, `./docs/index.html`, `./docs/data_manager.js`
 
 ## 🎉 **You're All Set!**
 

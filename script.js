@@ -2285,42 +2285,86 @@ function updateCurrentGWLeader() {
     const leaderNameElement = document.getElementById('current-gw-leader-name');
     const leaderPointsElement = document.getElementById('current-gw-leader-points');
     const leaderBadgeElement = document.getElementById('current-gw-leader-badge');
+    const currentGWLeaderSection = document.getElementById('current-gw-leader-section');
     
     if (!leaderNameElement || !leaderPointsElement || !leaderBadgeElement) {
         console.warn('Current GW Leader elements not found');
         return;
     }
     
-    // Update the gameweek badge
+    // Check if we have final results for the current gameweek
     const currentGameweek = dashboardData.currentGameweek || 1;
+    const hasFinalResults = dataManager?.getFinalResults?.(currentGameweek)?.length > 0;
+    
+    // If we have final results, hide the Current GW Leader section
+    if (hasFinalResults && currentGWLeaderSection) {
+        currentGWLeaderSection.style.display = 'none';
+        console.log('👑 Current GW Leader section hidden - final results available');
+        return;
+    }
+    
+    // Show the section if we only have partial results
+    if (currentGWLeaderSection) {
+        currentGWLeaderSection.style.display = 'block';
+    }
+    
+    // Update the gameweek badge
     leaderBadgeElement.textContent = `GW${currentGameweek}`;
     
-    // Find the manager with the highest current GW points
+    // Find the manager with the highest current GW points from partial results
     if (dashboardData.leaderboard && dashboardData.leaderboard.length > 0) {
-        const currentGWLeader = dashboardData.leaderboard.reduce((max, team) => {
-            const maxCurrentGWPoints = parseInt(team.currentGWPoints) || 0;
-            const teamCurrentGWPoints = parseInt(team.currentGWPoints) || 0;
-            return teamCurrentGWPoints > maxCurrentGWPoints ? team : max;
-        }, dashboardData.leaderboard[0]);
+        // Get partial results for current gameweek
+        const partialResults = dataManager?.getPartialResults?.(currentGameweek) || [];
         
-        if (currentGWLeader && (parseInt(currentGWLeader.currentGWPoints) || 0) > 0) {
-            // Update the leader name and points
-            leaderNameElement.textContent = currentGWLeader.manager || currentGWLeader.teamName;
-            leaderPointsElement.textContent = `${currentGWLeader.currentGWPoints} pts`;
+        if (partialResults.length > 0) {
+            // Calculate current GW points from partial results
+            const teamPoints = [];
+            partialResults.forEach(result => {
+                // Home team
+                teamPoints.push({
+                    teamName: result.homeTeam,
+                    manager: result.homeManager || getManagerFromTeamName(result.homeTeam),
+                    points: parseInt(result.homeScore) || 0
+                });
+                // Away team
+                teamPoints.push({
+                    teamName: result.awayTeam,
+                    manager: result.awayManager || getManagerFromTeamName(result.awayTeam),
+                    points: parseInt(result.awayScore) || 0
+                });
+            });
             
-            // Add some visual flair for the leader
-            leaderNameElement.className = 'text-2xl font-bold text-white mb-2';
-            leaderPointsElement.className = 'text-yellow-300 text-lg mb-2';
+            // Find the highest scorer
+            const currentGWLeader = teamPoints.reduce((max, team) => 
+                team.points > max.points ? team : max, teamPoints[0]);
             
-            console.log(`👑 Current GW Leader: ${currentGWLeader.manager} with ${currentGWLeader.currentGWPoints} points`);
+            if (currentGWLeader && currentGWLeader.points > 0) {
+                // Update the leader name and points
+                leaderNameElement.textContent = currentGWLeader.manager || currentGWLeader.teamName;
+                leaderPointsElement.textContent = `${currentGWLeader.points} pts`;
+                
+                // Add some visual flair for the leader
+                leaderNameElement.className = 'text-2xl font-bold text-white mb-2';
+                leaderPointsElement.className = 'text-yellow-300 text-lg mb-2';
+                
+                console.log(`👑 Current GW Leader: ${currentGWLeader.manager} with ${currentGWLeader.points} points`);
+            } else {
+                // No current GW points yet
+                leaderNameElement.textContent = 'No points yet';
+                leaderPointsElement.textContent = '0 pts';
+                leaderNameElement.className = 'text-xl text-gray-400 mb-2';
+                leaderPointsElement.className = 'text-gray-400 text-lg mb-2';
+                
+                console.log('👑 No Current GW Leader yet (no points recorded)');
+            }
         } else {
-            // No current GW points yet
-            leaderNameElement.textContent = 'No points yet';
+            // No partial results
+            leaderNameElement.textContent = 'No live data';
             leaderPointsElement.textContent = '0 pts';
             leaderNameElement.className = 'text-xl text-gray-400 mb-2';
             leaderPointsElement.className = 'text-gray-400 text-lg mb-2';
             
-            console.log('👑 No Current GW Leader yet (no points recorded)');
+            console.log('👑 No partial results available for current GW');
         }
     } else {
         // No leaderboard data
@@ -6623,19 +6667,24 @@ document.addEventListener('DOMContentLoaded', addLoadingStates);
 function calculateFormFromResults(teamName) {
     if (!dataManager) return 'N/A';
     
-    const results = dataManager.getResults();
-    if (!results || results.length === 0) return 'N/A';
+    // Get final results first (prioritize over partial results)
+    const finalResults = dataManager.getAllFinalResults();
+    if (!finalResults || finalResults.length === 0) return 'N/A';
     
-    // Get all results for this team and sort by gameweek
-    const teamResults = results.filter(result => 
+    // Get all final results for this team and sort by gameweek
+    const teamFinalResults = finalResults.filter(result => 
         result.homeTeam === teamName || result.awayTeam === teamName
     );
     
-    // Also check for current gameweek partial results if we're in the middle of a gameweek
+    // Only check for partial results if we're in the middle of a gameweek with no final results
     const currentGameweek = dashboardData.currentGameweek || 1;
     const currentGwData = dataManager.getGameweekData(currentGameweek);
+    const hasCurrentFinalResults = currentGwData && currentGwData.finalResults && currentGwData.finalResults.length > 0;
     
-    if (currentGwData && currentGwData.partialResults && currentGwData.partialResults.length > 0) {
+    let teamResults = [...teamFinalResults];
+    
+    // Only add partial results if current gameweek has no final results
+    if (!hasCurrentFinalResults && currentGwData && currentGwData.partialResults && currentGwData.partialResults.length > 0) {
         // Find current gameweek partial result for this team
         const currentResult = currentGwData.partialResults.find(result => 
             result.homeTeam === teamName || result.awayTeam === teamName
