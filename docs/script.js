@@ -136,6 +136,9 @@ async function loadDataFromManager() {
 
     // Compute and display Weekly Winner based on results (final > partial)
     computeAndDisplayWeeklyWinner(dashboardData.currentGameweek || 1);
+    
+    // Update Current GW Leader
+    updateCurrentGWLeader();
 }
 
 // Populate dashboard with data
@@ -154,6 +157,7 @@ function populateDashboard() {
     updateOverviewStats(); // Update Current Month and Weekly Winner
     updateDataStatus();
     updateFixturesHeaders(); // Update both current and upcoming fixtures headers
+    updateCurrentGWLeader(); // Update Current GW Leader
 }
 
 // Calculate cumulative team performance up to a specific gameweek
@@ -2152,6 +2156,9 @@ function updateGameweekSpecificData(gameweek) {
 
     // Recompute Weekly Winner for selected gameweek
     computeAndDisplayWeeklyWinner(gameweek);
+    
+    // Update Current GW Leader for selected gameweek
+    updateCurrentGWLeader();
 }
 
 // Populate gameweek selector with current season gameweeks
@@ -2259,6 +2266,57 @@ async function loadWeeklySummary(gameweek) {
         }
     } catch (err) {
         console.warn('Failed to load weekly summary:', err);
+    }
+}
+
+// Update Current GW Leader display
+function updateCurrentGWLeader() {
+    const leaderNameElement = document.getElementById('current-gw-leader-name');
+    const leaderPointsElement = document.getElementById('current-gw-leader-points');
+    const leaderBadgeElement = document.getElementById('current-gw-leader-badge');
+    
+    if (!leaderNameElement || !leaderPointsElement || !leaderBadgeElement) {
+        console.warn('Current GW Leader elements not found');
+        return;
+    }
+    
+    // Update the gameweek badge
+    const currentGameweek = dashboardData.currentGameweek || 1;
+    leaderBadgeElement.textContent = `GW${currentGameweek}`;
+    
+    // Find the manager with the highest current GW points
+    if (dashboardData.leaderboard && dashboardData.leaderboard.length > 0) {
+        const currentGWLeader = dashboardData.leaderboard.reduce((max, team) => {
+            const maxCurrentGWPoints = parseInt(team.currentGWPoints) || 0;
+            const teamCurrentGWPoints = parseInt(team.currentGWPoints) || 0;
+            return teamCurrentGWPoints > maxCurrentGWPoints ? team : max;
+        }, dashboardData.leaderboard[0]);
+        
+        if (currentGWLeader && (parseInt(currentGWLeader.currentGWPoints) || 0) > 0) {
+            // Update the leader name and points
+            leaderNameElement.textContent = currentGWLeader.manager || currentGWLeader.teamName;
+            leaderPointsElement.textContent = `${currentGWLeader.currentGWPoints} pts`;
+            
+            // Add some visual flair for the leader
+            leaderNameElement.className = 'text-2xl font-bold text-white mb-2';
+            leaderPointsElement.className = 'text-yellow-300 text-lg mb-2';
+            
+            console.log(`👑 Current GW Leader: ${currentGWLeader.manager} with ${currentGWLeader.currentGWPoints} points`);
+        } else {
+            // No current GW points yet
+            leaderNameElement.textContent = 'No points yet';
+            leaderPointsElement.textContent = '0 pts';
+            leaderNameElement.className = 'text-xl text-gray-400 mb-2';
+            leaderPointsElement.className = 'text-gray-400 text-lg mb-2';
+            
+            console.log('👑 No Current GW Leader yet (no points recorded)');
+        }
+    } else {
+        // No leaderboard data
+        leaderNameElement.textContent = 'Loading...';
+        leaderPointsElement.textContent = '0 pts';
+        leaderNameElement.className = 'text-xl text-gray-400 mb-2';
+        leaderPointsElement.className = 'text-gray-400 text-lg mb-2';
     }
 }
 
