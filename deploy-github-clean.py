@@ -1015,6 +1015,10 @@ class FPLDataManager {{
                         otherStats: player
                     }};
                     
+                    // ALSO add roundPoints and totalPoints at the top level for script.js compatibility
+                    allPlayers[playerKey].roundPoints = finalRoundPts;
+                    allPlayers[playerKey].totalPoints = playerPoints;
+                    
                     // Update totals
                     allPlayers[playerKey].totalPoints += playerPoints;
                     
