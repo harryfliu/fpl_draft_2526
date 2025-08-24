@@ -1811,46 +1811,8 @@ function displayTeamTopContributors(team) {
         console.log(`🏆 DEBUG: Processing player ${index + 1}/${currentSquad.length}: "${currentPlayerName}"`);
         
         const matchedPlayer = playerData.find(player => {
-            if (player.name === currentPlayerName) {
-                console.log(`🏆 DEBUG: Exact match found for "${currentPlayerName}"`);
-                return true;
-            }
-            
-            const playerNameLower = player.name.toLowerCase();
-            const currentNameLower = currentPlayerName.toLowerCase();
-            
-            // Much stricter matching logic to avoid false positives
-            let partialMatch = false;
-            
-            // 1. Only allow direct inclusion if the shorter name is at least 80% of the longer name
-            const directInclusion = (playerNameLower.includes(currentNameLower) || currentNameLower.includes(playerNameLower));
-            if (directInclusion) {
-                const shorterLength = Math.min(playerNameLower.length, currentNameLower.length);
-                const longerLength = Math.max(playerNameLower.length, currentNameLower.length);
-                partialMatch = (shorterLength / longerLength) >= 0.8;
-            }
-            
-            // 2. If no direct match, try word-based matching with strict rules
-            if (!partialMatch) {
-                // For hyphenated names, both names must contain the hyphen or be very similar
-                if (currentNameLower.includes('-')) {
-                    // Only match if the player name also contains the hyphen or is very close
-                    partialMatch = playerNameLower.includes('-') && 
-                                 (playerNameLower.includes(currentNameLower.replace('-', '')) || 
-                                  currentNameLower.includes(playerNameLower.replace('-', '')));
-                } else {
-                    // For non-hyphenated names, require very substantial overlap
-                    partialMatch = playerNameLower.split(' ').some(part => 
-                        currentNameLower === part && part.length > 4
-                    );
-                }
-            }
-            
-            if (partialMatch) {
-                console.log(`🏆 DEBUG: Partial match found: "${currentPlayerName}" → "${player.name}"`);
-            }
-            
-            return partialMatch;
+            // EXACT MATCH ONLY - no more fuzzy matching!
+            return player.name === currentPlayerName;
         });
         
         if (matchedPlayer) {
@@ -3172,7 +3134,7 @@ function analyzeConsistency() {
     
     // Calculate performance trends
     const performanceTrends = calculatePerformanceTrends(teams, allResults, currentGameweek);
-
+    
     container.innerHTML = `
         <div class="space-y-6">
             <!-- Top Performers -->
@@ -3186,10 +3148,10 @@ function analyzeConsistency() {
                         <div class="flex items-center justify-between p-2 bg-gray-700/30 rounded">
                             <div class="flex items-center">
                                 <span class="text-2xl mr-2">${index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉'}</span>
-                                <div>
+                            <div>
                                     <div class="font-semibold text-white">${team.manager}</div>
                                     <div class="text-sm text-gray-300">${team.teamName}</div>
-                                </div>
+                            </div>
                             </div>
                             <div class="text-right">
                                 <div class="text-sm text-gray-300">${team.performanceNote}</div>
@@ -3199,7 +3161,7 @@ function analyzeConsistency() {
                     `).join('')}
                 </div>
             </div>
-
+            
             <!-- Most Volatile -->
             <div class="bg-gray-800/50 border border-gray-600/50 rounded-lg p-4">
                 <h4 class="font-semibold text-white mb-3 flex items-center">
@@ -3211,7 +3173,7 @@ function analyzeConsistency() {
                         <div class="flex items-center justify-between p-2 bg-red-600/20 rounded border border-red-500/30">
                             <div class="font-medium text-red-200">${team.manager}</div>
                             <div class="text-sm text-red-300">Form: ${team.form} • ${team.points} pts</div>
-                        </div>
+                            </div>
                     `).join('')}
                 </div>
             </div>
@@ -4955,20 +4917,8 @@ function getTopPlayerContributors(players, draftData) {
             // Try to find this player in the performance data
             // We need to match by name, handling potential variations
             const matchedPlayer = players.find(player => {
-                // Try exact match first
-                if (player.name === currentPlayerName) return true;
-                
-                // Try partial matches (handling different name formats)
-                const playerNameLower = player.name.toLowerCase();
-                const currentNameLower = currentPlayerName.toLowerCase();
-                
-                // Check if player name is contained in current name or vice versa
-                return playerNameLower.includes(currentNameLower) || 
-                       currentNameLower.includes(playerNameLower) ||
-                       // Check last name matching (common in FPL)
-                       playerNameLower.split(' ').some(part => 
-                           currentNameLower.includes(part) && part.length > 2
-                       );
+                // EXACT MATCH ONLY - no more fuzzy matching!
+                return player.name === currentPlayerName;
             });
             
             if (matchedPlayer) {
@@ -5087,6 +5037,8 @@ function getBestAndWorstPlayers(players, draftData) {
         // Get current squad using team name and the correct manager name
         const currentSquad = calculateCurrentTeam(team.teamName, null, managerName);
         
+
+        
         if (!currentSquad || currentSquad.length === 0) {
             return;
         }
@@ -5094,18 +5046,12 @@ function getBestAndWorstPlayers(players, draftData) {
         // Find all players that belong to this manager
         const managerPlayers = [];
         
+
+        
         currentSquad.forEach(currentPlayerName => {
             const matchedPlayer = players.find(player => {
-                if (player.name === currentPlayerName) return true;
-                
-                const playerNameLower = player.name.toLowerCase();
-                const currentNameLower = currentPlayerName.toLowerCase();
-                
-                return playerNameLower.includes(currentNameLower) || 
-                       currentNameLower.includes(playerNameLower) ||
-                       playerNameLower.split(' ').some(part => 
-                           currentNameLower.includes(part) && part.length > 2
-                       );
+                // EXACT MATCH ONLY - no more fuzzy matching!
+                return player.name === currentPlayerName;
             });
             
             if (matchedPlayer) {
@@ -5120,6 +5066,8 @@ function getBestAndWorstPlayers(players, draftData) {
             return;
         }
         
+
+        
         // Sort players by points to find best and worst
         const sortedPlayers = managerPlayers.sort((a, b) => {
             const aPoints = a.roundPoints || a.totalPoints || 0;
@@ -5128,6 +5076,8 @@ function getBestAndWorstPlayers(players, draftData) {
         });
         const bestPlayer = sortedPlayers[0];
         const worstPlayer = sortedPlayers[sortedPlayers.length - 1];
+        
+
         
         managerAnalysis.push({
             name: (managerName || team.teamName).split(' ')[0], // First name only
@@ -6311,6 +6261,8 @@ function calculateCurrentTeam(teamNameOrManager, targetGameweek = null, managerN
             console.log(`📊 Squad size after free agent move: ${currentSquad.length}`);
         }
     });
+    
+    
     
     console.log(`✅ Final squad for ${teamManagerName} at GW${targetGameweek}:`, currentSquad);
     return currentSquad;
