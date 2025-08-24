@@ -3031,42 +3031,58 @@ function analyzeConsistency() {
         return;
     }
     
-    const partialResults = dataManager.getAllPartialResults();
+    // Get all available gameweeks and aggregate results
+    const currentGameweek = dashboardData.currentGameweek || 1;
+    const allResults = [];
+    
+    // Collect results from all gameweeks up to current
+    for (let gw = 1; gw <= currentGameweek; gw++) {
+        const gwResults = dataManager?.getResults(gw) || [];
+        if (gwResults.length > 0) {
+            allResults.push(...gwResults);
+        }
+    }
+    
+    const partialResults = allResults;
     const teams = dashboardData.leaderboard || [];
     
     if (!Array.isArray(teams) || teams.length === 0 || partialResults.length === 0) {
-        container.innerHTML = '<p class="text-white">No match data available</p>';
+        container.innerHTML = '<p class="text-white">No match results available across all gameweeks</p>';
         return;
     }
     
     // Calculate team performance from partial results
     const consistencyRankings = teams.map(team => {
-        const performance = calculateTeamPerformanceFromResults(team.teamName);
-        
-        // Get GW points from partial results
-        let gwPoints = 0;
-        partialResults.forEach(result => {
+        // Get cumulative GW points from all results for tiebreaking
+        let cumulativePoints = 0;
+        allResults.forEach(result => {
             if (result.homeTeam === team.teamName) {
-                gwPoints = result.homeScore;
+                cumulativePoints += result.homeScore || 0;
             } else if (result.awayTeam === team.teamName) {
-                gwPoints = result.awayScore;
+                cumulativePoints += result.awayScore || 0;
             }
         });
         
-        // Calculate consistency based on performance
+        // Use live leaderboard data for performance (already calculated correctly)
+        const wins = team.wins || 0;
+        const draws = team.draws || 0;
+        const losses = team.losses || 0;
+        const points = team.points || 0;
+        
+        // Calculate consistency based on live leaderboard data
         let consistencyScore = 0;
         let performanceNote = '';
         
-        if (performance.wins > 0 && performance.losses === 0) {
+        if (wins > 0 && losses === 0) {
             consistencyScore = 5; // All wins = most consistent
             performanceNote = 'Perfect record';
-        } else if (performance.wins > 0 && performance.draws > 0 && performance.losses === 0) {
+        } else if (wins > 0 && draws > 0 && losses === 0) {
             consistencyScore = 4; // Wins + draws only
             performanceNote = 'Unbeaten';
-        } else if (performance.wins > 0 && performance.losses > 0) {
+        } else if (wins > 0 && losses > 0) {
             consistencyScore = 2; // Mixed results
             performanceNote = 'Mixed form';
-        } else if (performance.losses > 0 && performance.wins === 0) {
+        } else if (losses > 0 && wins === 0) {
             consistencyScore = 1; // All losses
             performanceNote = 'Struggling';
         } else {
@@ -3075,66 +3091,396 @@ function analyzeConsistency() {
         }
         
         return {
-            manager: getManagerFromTeamName(team.teamName), // Use function to get manager name
+            manager: getManagerFromTeamName(team.teamName),
             teamName: team.teamName,
-            wins: performance.wins,
-            draws: performance.draws,
-            losses: performance.losses,
+            wins: wins,
+            draws: draws,
+            losses: losses,
             consistencyScore: consistencyScore,
             performanceNote: performanceNote,
-            form: `${performance.wins > 0 ? 'W'.repeat(performance.wins) : ''}${performance.draws > 0 ? 'D'.repeat(performance.draws) : ''}${performance.losses > 0 ? 'L'.repeat(performance.losses) : ''}`.split('').join('-') || 'N/A',
-            points: performance.points,
-            gwPoints: gwPoints
+            form: `${wins > 0 ? 'W'.repeat(wins) : ''}${draws > 0 ? 'D'.repeat(draws) : ''}${losses > 0 ? 'L'.repeat(losses) : ''}`.split('').join('-') || 'N/A',
+            points: points,
+            cumulativePoints: cumulativePoints
         };
     }).sort((a, b) => {
-        // Sort by consistency score first, then by GW points (FPL points) as tiebreaker
+        // Sort by consistency score first, then by cumulative points as tiebreaker
         if (b.consistencyScore !== a.consistencyScore) {
             return b.consistencyScore - a.consistencyScore;
         }
-        // If consistency score is equal, sort by GW points (FPL points) as tiebreaker
-        if (b.gwPoints !== a.gwPoints) {
-            return b.gwPoints - a.gwPoints;
+        // If consistency score is equal, sort by cumulative points as tiebreaker
+        if (b.cumulativePoints !== a.cumulativePoints) {
+            return b.cumulativePoints - a.cumulativePoints;
         }
-        // If GW points are equal, sort by points
+        // If cumulative points are equal, sort by league points
         return b.points - a.points;
     });
     
-    const mostConsistent = consistencyRankings.slice(0, 3);
-    const leastConsistent = consistencyRankings.slice(-2);
+    // Calculate trend analysis data
+    const trendAnalysis = calculateTrendAnalysis(teams, allResults, currentGameweek);
     
+    // Calculate volatility metrics
+    const volatilityMetrics = calculateVolatilityMetrics(teams, allResults, currentGameweek);
+    
+    // Calculate streak analysis
+    const streakAnalysis = calculateStreakAnalysis(teams);
+    
+    // Calculate performance trends
+    const performanceTrends = calculatePerformanceTrends(teams, allResults, currentGameweek);
+
     container.innerHTML = `
-        <div class="space-y-4">
-            <div>
-                <h4 class="font-semibold text-white mb-2">📈 Most Consistent</h4>
+        <div class="space-y-6">
+            <!-- Top Performers -->
+            <div class="bg-gray-800/50 border border-gray-600/50 rounded-lg p-4">
+                <h4 class="font-semibold text-white mb-3 flex items-center">
+                    <i class="fas fa-trophy text-yellow-400 mr-2"></i>
+                    🏆 Top Performers
+                </h4>
                 <div class="space-y-2">
-                    ${mostConsistent.map((team, index) => `
-                        <div class="flex items-center justify-between p-2 bg-green-50 rounded border border-green-200">
-                            <div>
-                                <div class="font-medium text-green-800">${index + 1}. ${team.manager}</div>
-                                <div class="text-xs text-green-600">${team.performanceNote} • ${team.wins}W ${team.draws}D ${team.losses}L</div>
+                    ${consistencyRankings.slice(0, 3).map((team, index) => `
+                        <div class="flex items-center justify-between p-2 bg-gray-700/30 rounded">
+                            <div class="flex items-center">
+                                <span class="text-2xl mr-2">${index === 0 ? '🥇' : index === 1 ? '🥈' : '🥉'}</span>
+                                <div>
+                                    <div class="font-semibold text-white">${team.manager}</div>
+                                    <div class="text-sm text-gray-300">${team.teamName}</div>
+                                </div>
                             </div>
-                            <div class="text-green-800 font-bold">${team.points} pts</div>
+                            <div class="text-right">
+                                <div class="text-sm text-gray-300">${team.performanceNote}</div>
+                                <div class="text-xs text-gray-400">${team.wins}W ${team.draws}D ${team.losses}L • ${team.points} pts</div>
+                            </div>
                         </div>
                     `).join('')}
                 </div>
             </div>
-            
-            <div>
-                <h4 class="font-semibold text-white mb-2">📉 Most Volatile</h4>
+
+            <!-- Most Volatile -->
+            <div class="bg-gray-800/50 border border-gray-600/50 rounded-lg p-4">
+                <h4 class="font-semibold text-white mb-3 flex items-center">
+                    <i class="fas fa-chart-line text-red-400 mr-2"></i>
+                    📉 Most Volatile
+                </h4>
                 <div class="space-y-2">
-                    ${leastConsistent.map(team => `
-                        <div class="flex items-center justify-between p-2 bg-orange-50 rounded border border-orange-200">
-                            <div>
-                                <div class="font-medium text-orange-800">${team.manager}</div>
-                                <div class="text-xs text-orange-600">Form: ${team.form}</div>
-                            </div>
-                            <div class="text-orange-800 font-bold">${team.points} pts</div>
+                    ${consistencyRankings.slice(-2).map(team => `
+                        <div class="flex items-center justify-between p-2 bg-red-600/20 rounded border border-red-500/30">
+                            <div class="font-medium text-red-200">${team.manager}</div>
+                            <div class="text-sm text-red-300">Form: ${team.form} • ${team.points} pts</div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+
+            <!-- Trend Analysis -->
+            <div class="bg-gray-800/50 border border-gray-600/50 rounded-lg p-4">
+                <h4 class="font-semibold text-white mb-3 flex items-center">
+                    <i class="fas fa-arrow-trend-up text-green-400 mr-2"></i>
+                    📊 Trend Analysis
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Trending Up -->
+                    <div class="bg-green-600/20 border border-green-500/30 rounded-lg p-3">
+                        <h5 class="font-semibold text-green-300 mb-2">📈 Trending Up</h5>
+                        <div class="space-y-2">
+                            ${trendAnalysis.trendingUp.slice(0, 3).map(team => `
+                                <div class="flex items-center justify-between">
+                                    <div class="font-medium text-green-200">${team.manager}</div>
+                                    <div class="text-sm text-green-300">+${team.improvement} pts (GW${team.previousGW}→GW${team.currentGW})</div>
+                                </div>
+                            `).join('') || '<div class="text-sm text-gray-400">No improvement data available</div>'}
+                        </div>
+                    </div>
+                    
+                    <!-- Trending Down -->
+                    <div class="bg-red-600/20 border border-red-500/30 rounded-lg p-3">
+                        <h5 class="font-semibold text-red-300 mb-2">📉 Trending Down</h5>
+                        <div class="space-y-2">
+                            ${trendAnalysis.trendingDown.slice(0, 3).map(team => `
+                                <div class="flex items-center justify-between">
+                                    <div class="font-medium text-red-200">${team.manager}</div>
+                                    <div class="text-sm text-red-300">${team.decline} pts (GW${team.previousGW}→GW${team.currentGW})</div>
+                                </div>
+                            `).join('') || '<div class="text-sm text-gray-400">No decline data available</div>'}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Volatility Metrics -->
+            <div class="bg-gray-800/50 border border-gray-600/50 rounded-lg p-4">
+                <h4 class="font-semibold text-white mb-3 flex items-center">
+                    <i class="fas fa-chart-area text-purple-400 mr-2"></i>
+                    🎯 Score Volatility
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <div class="text-center p-3 bg-green-600/20 rounded-lg border border-green-500/30">
+                        <div class="font-semibold text-green-300">🏆 Most Stable</div>
+                        <div class="text-lg font-bold text-green-300">${volatilityMetrics.mostStable.manager}</div>
+                        <div class="text-sm text-green-200">${volatilityMetrics.mostStable.range} pt range</div>
+                        <div class="text-xs text-green-300">${volatilityMetrics.mostStable.window}</div>
+                    </div>
+                    
+                    <div class="text-center p-3 bg-red-600/20 border border-red-500/30 rounded-lg">
+                        <div class="font-semibold text-red-300">🎲 Most Volatile</div>
+                        <div class="text-lg font-bold text-red-300">${volatilityMetrics.mostVolatile.manager}</div>
+                        <div class="text-sm text-red-200">${volatilityMetrics.mostVolatile.range} pt range</div>
+                        <div class="text-xs text-red-300">${volatilityMetrics.mostVolatile.window}</div>
+                    </div>
+                    
+                    <div class="text-center p-3 bg-blue-600/20 border border-blue-500/30 rounded-lg">
+                        <div class="font-semibold text-blue-300">📊 League Average</div>
+                        <div class="text-lg font-bold text-blue-300">${volatilityMetrics.leagueAverage} pt range</div>
+                        <div class="text-sm text-blue-200">${teams.length} teams • ${volatilityMetrics.rollingWindow}-week window</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Streak Analysis -->
+            <div class="bg-gray-800/50 border border-gray-600/50 rounded-lg p-4">
+                <h4 class="font-semibold text-white mb-3 flex items-center">
+                    <i class="fas fa-fire text-orange-400 mr-2"></i>
+                    🔥 Current Streaks
+                </h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Win Streaks -->
+                    <div class="bg-green-600/20 border border-green-500/30 rounded-lg p-3">
+                        <h5 class="font-semibold text-green-300 mb-2">🔥 Win Streaks</h5>
+                        <div class="space-y-2">
+                            ${streakAnalysis.winStreaks.slice(0, 3).map(team => `
+                                <div class="flex items-center justify-between">
+                                    <div class="font-medium text-green-200">${team.manager}</div>
+                                    <div class="text-sm text-green-300">${team.streak}W streak</div>
+                                </div>
+                            `).join('') || '<div class="text-sm text-gray-400">No active win streaks</div>'}
+                        </div>
+                    </div>
+                    
+                    <!-- Loss Streaks -->
+                    <div class="bg-red-600/20 border border-red-500/30 rounded-lg p-3">
+                        <h5 class="font-semibold text-red-300 mb-2">💀 Loss Streaks</h5>
+                        <div class="space-y-2">
+                            ${streakAnalysis.lossStreaks.slice(0, 3).map(team => `
+                                <div class="flex items-center justify-between">
+                                    <div class="font-medium text-red-200">${team.manager}</div>
+                                    <div class="text-sm text-red-300">${team.streak}L streak</div>
+                                </div>
+                            `).join('') || '<div class="text-sm text-gray-400">No active loss streaks</div>'}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Performance Trends -->
+            <div class="bg-gray-800/50 border border-gray-600/50 rounded-lg p-4">
+                <h4 class="font-semibold text-white mb-3 flex items-center">
+                    <i class="fas fa-chart-line text-yellow-400 mr-2"></i>
+                    📈 Performance Trends
+                </h4>
+                <div class="space-y-3">
+                    ${performanceTrends.map(trend => `
+                        <div class="flex items-center justify-between p-2 bg-gray-700/30 rounded">
+                            <div class="font-medium text-white">${trend.title}</div>
+                            <div class="text-sm text-gray-300">${trend.description}</div>
                         </div>
                     `).join('')}
                 </div>
             </div>
         </div>
     `;
+}
+
+// Helper function to calculate trend analysis
+function calculateTrendAnalysis(teams, allResults, currentGameweek) {
+    const trends = {
+        trendingUp: [],
+        trendingDown: []
+    };
+
+    if (currentGameweek < 2) return trends;
+
+    teams.forEach(team => {
+        // Get scores from the last two gameweeks for trend analysis
+        const previousGameweek = currentGameweek - 1;
+        const currentScore = getTeamScoreForGameweek(team.teamName, currentGameweek, allResults);
+        const previousScore = getTeamScoreForGameweek(team.teamName, previousGameweek, allResults);
+        
+        if (currentScore !== null && previousScore !== null) {
+            const improvement = currentScore - previousScore;
+            const trendData = {
+                manager: getManagerFromTeamName(team.teamName),
+                teamName: team.teamName,
+                previousScore: previousScore,
+                currentScore: currentScore,
+                improvement: improvement,
+                decline: Math.abs(improvement),
+                previousGW: previousGameweek,
+                currentGW: currentGameweek
+            };
+            
+            if (improvement > 0) {
+                trends.trendingUp.push(trendData);
+            } else if (improvement < 0) {
+                trends.trendingDown.push(trendData);
+            }
+        }
+    });
+
+    // Sort by magnitude of change
+    trends.trendingUp.sort((a, b) => b.improvement - a.improvement);
+    trends.trendingDown.sort((a, b) => a.improvement - b.improvement);
+
+    return trends;
+}
+
+// Helper function to calculate volatility metrics
+function calculateVolatilityMetrics(teams, allResults, currentGameweek) {
+    const teamVolatility = [];
+    const rollingWindow = Math.min(5, currentGameweek); // Use rolling 5-week window, or all available if less than 5
+
+    teams.forEach(team => {
+        const scores = [];
+        // Start from the most recent gameweek and go back up to 5 weeks
+        const startGameweek = Math.max(1, currentGameweek - rollingWindow + 1);
+        
+        for (let gw = startGameweek; gw <= currentGameweek; gw++) {
+            const score = getTeamScoreForGameweek(team.teamName, gw, allResults);
+            if (score !== null) {
+                scores.push(score);
+            }
+        }
+        
+        if (scores.length > 1) {
+            const range = Math.max(...scores) - Math.min(...scores);
+            teamVolatility.push({
+                manager: getManagerFromTeamName(team.teamName),
+                teamName: team.teamName,
+                range: range,
+                scores: scores,
+                gameweeks: scores.length,
+                window: `GW${startGameweek}-GW${currentGameweek}`
+            });
+        }
+    });
+
+    teamVolatility.sort((a, b) => a.range - b.range);
+    
+    const mostStable = teamVolatility[0] || { manager: 'N/A', range: 0, window: 'N/A' };
+    const mostVolatile = teamVolatility[teamVolatility.length - 1] || { manager: 'N/A', range: 0, window: 'N/A' };
+    const leagueAverage = teamVolatility.length > 0 ? 
+        Math.round(teamVolatility.reduce((sum, t) => sum + t.range, 0) / teamVolatility.length) : 0;
+
+    return { mostStable, mostVolatile, leagueAverage, rollingWindow };
+}
+
+// Helper function to calculate streak analysis
+function calculateStreakAnalysis(teams) {
+    const streaks = {
+        winStreaks: [],
+        lossStreaks: []
+    };
+
+    teams.forEach(team => {
+        const wins = team.wins || 0;
+        const losses = team.losses || 0;
+        
+        if (wins > 1) {
+            streaks.winStreaks.push({
+                manager: getManagerFromTeamName(team.teamName),
+                teamName: team.teamName,
+                streak: wins
+            });
+        }
+        
+        if (losses > 1) {
+            streaks.lossStreaks.push({
+                manager: getManagerFromTeamName(team.teamName),
+                teamName: team.teamName,
+                streak: losses
+            });
+        }
+    });
+
+    // Sort by streak length
+    streaks.winStreaks.sort((a, b) => b.streak - a.streak);
+    streaks.lossStreaks.sort((a, b) => b.streak - a.streak);
+
+    return streaks;
+}
+
+// Helper function to calculate performance trends
+function calculatePerformanceTrends(teams, allResults, currentGameweek) {
+    const trends = [];
+    
+    if (currentGameweek >= 2) {
+        // Calculate league average changes between current and previous gameweek
+        const previousGameweek = currentGameweek - 1;
+        const currentScores = [];
+        const previousScores = [];
+        
+        teams.forEach(team => {
+            const currentScore = getTeamScoreForGameweek(team.teamName, currentGameweek, allResults);
+            const previousScore = getTeamScoreForGameweek(team.teamName, previousGameweek, allResults);
+            
+            if (currentScore !== null) currentScores.push(currentScore);
+            if (previousScore !== null) previousScores.push(previousScore);
+        });
+        
+        if (currentScores.length > 0 && previousScores.length > 0) {
+            const currentAvg = Math.round(currentScores.reduce((sum, score) => sum + score, 0) / currentScores.length);
+            const previousAvg = Math.round(previousScores.reduce((sum, score) => sum + score, 0) / previousScores.length);
+            const avgChange = currentAvg - previousAvg;
+            
+            trends.push({
+                title: 'League Average Trend',
+                description: `GW${previousGameweek}: ${previousAvg} pts → GW${currentGameweek}: ${currentAvg} pts (${avgChange > 0 ? '+' : ''}${avgChange} pts)`
+            });
+        }
+    }
+    
+    // Add rolling window consistency insights
+    const rollingWindow = Math.min(5, currentGameweek);
+    if (rollingWindow >= 3) {
+        trends.push({
+            title: 'Rolling Window Analysis',
+            description: `Analyzing consistency over last ${rollingWindow} gameweeks (GW${Math.max(1, currentGameweek - rollingWindow + 1)}-GW${currentGameweek})`
+        });
+    }
+    
+    // Add consistency insights
+    const perfectRecords = teams.filter(team => (team.wins || 0) > 0 && (team.losses || 0) === 0).length;
+    const strugglingTeams = teams.filter(team => (team.losses || 0) > 0 && (team.wins || 0) === 0).length;
+    
+    if (perfectRecords > 0) {
+        trends.push({
+            title: 'Perfect Records',
+            description: `${perfectRecords} manager${perfectRecords > 1 ? 's' : ''} still unbeaten this season`
+        });
+    }
+    
+    if (strugglingTeams > 0) {
+        trends.push({
+            title: 'Struggling Teams',
+            description: `${strugglingTeams} manager${strugglingTeams > 1 ? 's' : ''} yet to record a win`
+        });
+    }
+    
+    return trends;
+}
+
+// Helper function to get team score for specific gameweek
+function getTeamScoreForGameweek(teamName, gameweek, allResults) {
+    // Since allResults contains results from multiple gameweeks, we need to identify which gameweek each result is from
+    // We can do this by checking if the result has a gameweek field, or by using the dataManager directly
+    const gameweekResults = dataManager?.getResults(gameweek) || [];
+    
+    for (const result of gameweekResults) {
+        if (result.homeTeam === teamName) {
+            return result.homeScore;
+        } else if (result.awayTeam === teamName) {
+            return result.awayScore;
+        }
+    }
+    
+    return null;
 }
 
 // Weekly Winners Analysis
