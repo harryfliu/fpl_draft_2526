@@ -2696,9 +2696,9 @@ function analyzeHeadToHead() {
     console.log('🔍 Debug: Results from working source:', partialResults.length);
     console.log('🔍 Debug: Results:', partialResults);
     
-    // Use the live leaderboard data directly instead of recalculating from results
+    // Use the live leaderboard data directly for accurate league standings
     const teamPerformance = teams.map(team => {
-        // Get GW points from partial results for current gameweek display
+        // Get current GW points from partial results for display purposes
         let gwPoints = 0;
         partialResults.forEach(result => {
             if (result.homeTeam === team.teamName) {
@@ -2711,26 +2711,27 @@ function analyzeHeadToHead() {
         return {
             ...team,
             // Use the live leaderboard data that already has correct cumulative totals
-            points: team.points || 0,
+            points: team.points || 0,                    // League points (W/D/L)
+            totalGWPoints: team.totalGWPoints || 0,      // Total accumulated FPL points
             wins: team.wins || 0,
             draws: team.draws || 0,
             losses: team.losses || 0,
             goalsFor: team.goalsFor || 0,
             goalsAgainst: team.goalsAgainst || 0,
-            gwPoints: gwPoints
+            gwPoints: gwPoints                           // Current GW points only
         };
     });
     
-    // Sort by points (highest first), then by GW points (FPL points) as tiebreaker, then by goal difference, then by goals for
+    // Sort by league points (highest first), then by total FPL points as tiebreaker, then by goal difference, then by goals for
     teamPerformance.sort((a, b) => {
         if (b.points !== a.points) {
             return b.points - a.points;
         }
-        // If points are equal, sort by GW points (FPL points) as tiebreaker
-        if (b.gwPoints !== a.gwPoints) {
-            return b.gwPoints - a.gwPoints;
+        // If league points are equal, sort by total FPL points (totalGWPoints) as tiebreaker
+        if (b.totalGWPoints !== a.totalGWPoints) {
+            return b.totalGWPoints - a.totalGWPoints;
         }
-        // If GW points are equal, sort by goal difference
+        // If total FPL points are equal, sort by goal difference
         const aGoalDiff = (a.goalsFor || 0) - (a.goalsAgainst || 0);
         const bGoalDiff = (b.goalsFor || 0) - (b.goalsAgainst || 0);
         if (bGoalDiff !== aGoalDiff) {
