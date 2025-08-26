@@ -92,6 +92,23 @@
 - [ ] **Add real-time status updates (if possible)**
 - [ ] **Make it easily accessible from main dashboard**
 
+### 2. Live Leaderboard Row Click Navigation
+- [ ] **Make live leaderboard rows clickable**
+- [ ] **Clicking a manager's row automatically navigates to Teams section**
+- [ ] **Auto-select the corresponding manager in Teams dropdown**
+- [ ] **Smooth transition animation between sections**
+- [ ] **Ensure mobile-friendly touch targets**
+
+### 3. Live Head-to-Head Team Comparison (Fantasy NFL Style)
+- [ ] **Add new section in Teams area for live H2H comparison**
+- [ ] **Show two managers' teams side by side**
+- [ ] **Display each player's live points (partial or final)**
+- [ ] **Real-time points accumulation during live matches**
+- [ ] **Compare player performance head-to-head**
+- [ ] **Show total team points and live score**
+- [ ] **Include player status (playing, subbed, injured, etc.)**
+- [ ] **Make it easily accessible from Teams section**
+
 ## 🧪 Testing Checklist:
 
 ### Data Accuracy
@@ -134,6 +151,8 @@
 7. **✅ Mobile Optimization** **COMPLETED!** 🎉 - Mobile experience significantly improved
 8. **✅ Workflow & Documentation** **COMPLETED!** 🎉 - Development workflow fully documented and optimized
 9. **Design "Currently Playing" Feature** (new value-add feature) ⚠️ STILL NEEDS WORK
+10. **Live Leaderboard Row Click Navigation** (UX improvement) ⚠️ NEW FEATURE
+11. **Live Head-to-Head Team Comparison** (Fantasy NFL style) ⚠️ NEW FEATURE
 
 ## 💡 Development Tips:
 
