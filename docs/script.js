@@ -1535,19 +1535,15 @@ function displayTeamDetails(team) {
     if (teamManager) teamManager.textContent = team.manager;
     if (teamPosition) teamPosition.textContent = `#${team.position}`;
     
-    // Update team stats with partial results data
-    const teamPerformance = calculateTeamPerformanceFromResults(team.teamName);
+    // Update team stats with cumulative data (same as live leaderboard)
+    const cumulativePerformance = calculateCumulativeTeamPerformance(team.teamName, dashboardData.currentGameweek || 1);
     const teamTotalPoints = document.getElementById('team-total-points');
     const teamGWPoints = document.getElementById('team-gw-points');
     const teamForm = document.getElementById('team-form');
     const teamWinnings = document.getElementById('team-winnings');
     
-    // Use partial results for points if available
-    if (teamPerformance.points > 0) {
-        if (teamTotalPoints) teamTotalPoints.textContent = teamPerformance.points;
-    } else {
-    if (teamTotalPoints) teamTotalPoints.textContent = team.points || 0;
-    }
+    // Use cumulative data for total points (same as live leaderboard)
+    if (teamTotalPoints) teamTotalPoints.textContent = cumulativePerformance.totalPoints;
     
     // Calculate GW Points from partial results (actual FPL points earned)
     // For Teams section: only show current gameweek points, not cumulative
@@ -1655,11 +1651,11 @@ function displayTeamDetails(team) {
     const teamLosses = document.getElementById('team-losses');
     const teamRank = document.getElementById('team-rank');
     
-    if (teamWins) teamWins.textContent = teamPerformance.wins;
-    if (teamDraws) teamDraws.textContent = teamPerformance.draws;
-    if (teamLosses) teamLosses.textContent = teamPerformance.losses;
+    if (teamWins) teamWins.textContent = cumulativePerformance.totalWins;
+    if (teamDraws) teamDraws.textContent = cumulativePerformance.totalDraws;
+    if (teamLosses) teamLosses.textContent = cumulativePerformance.totalLosses;
     // Use the exact same ranking from the live Season Leaderboard
-    if (dataManager && teamPerformance.points > 0) {
+    if (dataManager && cumulativePerformance.totalPoints > 0) {
         console.log('🔍 DEBUG: Looking for team position for:', team.teamName);
         
         // Instead of recalculating, get the team's position from the DOM table that's already been populated
@@ -6075,7 +6071,7 @@ function populateWaiversTable(waivers) {
                 </span>
             </td>
             <td>
-                <span class="badge ${move.Result === 'Success' ? 'badge-success' : 'badge-error'} badge-sm">
+                <span class="badge ${move.Result === 'Success' || move.Result === 'Accepted' ? 'badge-success' : 'badge-error'} badge-sm">
                     ${move.Result.includes('Denied') ? 'Denied' : move.Result}
                 </span>
             </td>
@@ -6123,7 +6119,7 @@ function populateTradesTable(trades) {
                 </span>
             </td>
             <td>
-                <span class="badge ${trade.Result === 'Accepted' ? 'badge-success' : 'badge-error'} badge-sm">
+                <span class="badge ${trade.Result === 'Accepted' || trade.Result === 'Success' ? 'badge-success' : 'badge-error'} badge-sm">
                     ${trade.Result}
                 </span>
             </td>
