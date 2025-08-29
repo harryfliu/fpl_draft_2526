@@ -6397,35 +6397,67 @@ function analyzePlayerPopularity() {
     const container = document.getElementById('player-popularity-analysis');
     if (!container) return;
     
+    // Use the latest gameweek's transfer history (already contains cumulative data)
     const transferHistory = dashboardData.transferHistory || { waivers: [], freeAgents: [], trades: [] };
     
-    // Track players coming in vs going out
+    console.log('🔍 Using latest gameweek transfer history (cumulative):', {
+        waivers: transferHistory.waivers.length,
+        freeAgents: transferHistory.freeAgents.length,
+        trades: transferHistory.trades.length
+    });
+    
+    // Track players coming in vs going out (count ALL attempts, successful and denied)
     const playersIn = {};
     const playersOut = {};
     
-    // Analyze free agents
+    console.log('🔍 DEBUG: transferHistory structure:', transferHistory);
+    console.log('🔍 DEBUG: freeAgents count:', transferHistory.freeAgents?.length || 0);
+    console.log('🔍 DEBUG: waivers count:', transferHistory.waivers?.length || 0);
+    console.log('🔍 DEBUG: trades count:', transferHistory.trades?.length || 0);
+    
+    // Analyze free agents (count ALL attempts)
     transferHistory.freeAgents.forEach(move => {
-        if (move.In) playersIn[move.In] = (playersIn[move.In] || 0) + 1;
-        if (move.Out) playersOut[move.Out] = (playersOut[move.Out] || 0) + 1;
-    });
-    
-    // Analyze successful waivers
-    transferHistory.waivers.forEach(move => {
-        if (move.Result === 'Success' && move.In) {
+        console.log('🔍 DEBUG: Processing free agent move:', move);
+        if (move.In) {
             playersIn[move.In] = (playersIn[move.In] || 0) + 1;
+            console.log(`🔍 DEBUG: Added ${move.In} to playersIn, count now: ${playersIn[move.In]}`);
         }
-        if (move.Result === 'Success' && move.Out) {
+        if (move.Out) {
             playersOut[move.Out] = (playersOut[move.Out] || 0) + 1;
+            console.log(`🔍 DEBUG: Added ${move.Out} to playersOut, count now: ${playersOut[move.Out]}`);
         }
     });
     
-    // Analyze trades
-    transferHistory.trades.forEach(trade => {
-        if (trade.Result === 'Accepted') {
-            if (trade.Offered) playersIn[trade.Offered] = (playersIn[trade.Offered] || 0) + 1;
-            if (trade.Requested) playersIn[trade.Requested] = (playersIn[trade.Requested] || 0) + 1;
+    // Analyze waivers (count ALL attempts, successful and denied)
+    transferHistory.waivers.forEach(move => {
+        console.log('🔍 DEBUG: Processing waiver move:', move);
+        // Count ALL attempts regardless of result
+        if (move.In) {
+            playersIn[move.In] = (playersIn[move.In] || 0) + 1;
+            console.log(`🔍 DEBUG: Added ${move.In} to playersIn from waiver, count now: ${playersIn[move.In]}`);
+        }
+        if (move.Out) {
+            playersOut[move.Out] = (playersOut[move.Out] || 0) + 1;
+            console.log(`🔍 DEBUG: Added ${move.Out} to playersOut from waiver, count now: ${playersOut[move.Out]}`);
         }
     });
+    
+    // Analyze trades (count ALL attempts, successful and denied)
+    transferHistory.trades.forEach(trade => {
+        console.log('🔍 DEBUG: Processing trade:', trade);
+        // Count ALL attempts regardless of result
+        if (trade.Offered) {
+            playersIn[trade.Offered] = (playersIn[trade.Offered] || 0) + 1;
+            console.log(`🔍 DEBUG: Added ${trade.Offered} to playersIn from trade, count now: ${playersIn[trade.Offered]}`);
+        }
+        if (trade.Requested) {
+            playersIn[trade.Requested] = (playersIn[trade.Requested] || 0) + 1;
+            console.log(`🔍 DEBUG: Added ${trade.Requested} to playersIn from trade, count now: ${playersIn[trade.Requested]}`);
+        }
+    });
+    
+    console.log('🔍 DEBUG: Final playersIn counts:', playersIn);
+    console.log('🔍 DEBUG: Final playersOut counts:', playersOut);
     
     // Get top targets and most dropped
     const topTargets = Object.entries(playersIn)
