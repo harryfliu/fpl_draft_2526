@@ -1,25 +1,25 @@
 # FPL Draft League - Gameweek 2 Summary
 
-*Generated on August 25, 2025 at 06:24 PM*
+*Generated on August 25, 2025 at 10:44 PM*
 
 ---
 
-## 📊 Current Standings
+## 📊 Current Standings (Cumulative)
 
-| Pos | Manager | Team | Pts | GW Pts | P | W | D | L | GF | GA | GD |
-|-----|---------|------|-----|--------|---|---|---|---|----|----|----| 
-| 1 | Kyle Herrera | Extended Foreplay | 3 | 55 | 1 | 1 | 0 | 0 | 55 | 37 | +18 |
-| 2 | Ronangel Rojas | Atlético SeaSlug | 3 | 50 | 1 | 1 | 0 | 0 | 50 | 39 | +11 |
-| 3 | Andrew Smith | Cunha Get Me Points | 3 | 41 | 1 | 1 | 0 | 0 | 41 | 21 | +20 |
-| 4 | Josiah Loh | thenotsospecialone | 3 | 38 | 1 | 1 | 0 | 0 | 38 | 26 | +12 |
-| 5 | Roy Boateng | This Year FC | 3 | 38 | 1 | 1 | 0 | 0 | 38 | 33 | +5 |
-| 6 | Sean Dunn | Gweepy | 3 | 35 | 1 | 1 | 0 | 0 | 35 | 23 | +12 |
-| 7 | Zryan Bhao | FootAndBallFetish | 0 | 39 | 1 | 0 | 0 | 1 | 39 | 50 | -11 |
-| 8 | chris duncam | Schrödongers | 0 | 37 | 1 | 0 | 0 | 1 | 37 | 55 | -18 |
-| 9 | Peter Henze | Peattle Pounders | 0 | 33 | 1 | 0 | 0 | 1 | 33 | 38 | -5 |
-| 10 | Don Kim | son4lyfe | 0 | 26 | 1 | 0 | 0 | 1 | 26 | 38 | -12 |
-| 11 | Harry Liu | cunha believe it | 0 | 23 | 1 | 0 | 0 | 1 | 23 | 35 | -12 |
-| 12 | Noah Wilson | Trophies Matter FC | 0 | 21 | 1 | 0 | 0 | 1 | 21 | 41 | -20 |
+| Pos | Manager | Team | Total League Pts | Current GW Pts | Total GW Pts | P | W | D | L | GF | GA | GD |
+|-----|---------|------|------------------|----------------|--------------|---|---|---|---|----|----|----| 
+| 1 | Josiah Loh | thenotsospecialone | 6 | 38 | 102 | 2 | 2 | 0 | 0 | 102 | 55 | +47 |
+| 2 | Roy Boateng | This Year FC | 6 | 38 | 89 | 2 | 2 | 0 | 0 | 89 | 68 | +21 |
+| 3 | Andrew Smith | Cunha Get Me Points | 6 | 41 | 83 | 2 | 2 | 0 | 0 | 83 | 59 | +24 |
+| 4 | chris duncam | Schrödongers | 3 | 37 | 97 | 2 | 1 | 0 | 1 | 97 | 93 | +4 |
+| 5 | Ronangel Rojas | Atlético SeaSlug | 3 | 50 | 88 | 2 | 1 | 0 | 1 | 88 | 99 | -11 |
+| 6 | Kyle Herrera | Extended Foreplay | 3 | 55 | 80 | 2 | 1 | 0 | 1 | 80 | 77 | +3 |
+| 7 | Sean Dunn | Gweepy | 3 | 35 | 64 | 2 | 1 | 0 | 1 | 64 | 87 | -23 |
+| 8 | Harry Liu | cunha believe it | 3 | 23 | 62 | 2 | 1 | 0 | 1 | 62 | 66 | -4 |
+| 9 | Noah Wilson | Trophies Matter FC | 3 | 21 | 61 | 2 | 1 | 0 | 1 | 61 | 66 | -5 |
+| 10 | Zryan Bhao | FootAndBallFetish | 0 | 39 | 74 | 2 | 0 | 0 | 2 | 74 | 101 | -27 |
+| 11 | Peter Henze | Peattle Pounders | 0 | 33 | 64 | 2 | 0 | 0 | 2 | 64 | 77 | -13 |
+| 12 | Don Kim | son4lyfe | 0 | 26 | 64 | 2 | 0 | 0 | 2 | 64 | 80 | -16 |
 
 ---
 
@@ -40,9 +40,38 @@
 
 ---
 
-## 🔄 Transfer Activity
+## 🔄 Transfer Activity (This Gameweek)
 
-*No transfers this gameweek*
+### Waiver Claims
+- **Kyle Herrera**: Barnes ← J.Murphy
+- **Sean Dunn**: O'Riley ← Maddison
+- **Peter Henze**: Ballard ← Hall
+- **Ronangel Rojas**: Lewis ← Estève
+- **Don Kim**: Cash ← Matheus N.
+- **Harry Liu**: Digne ← Botman
+- **Noah Wilson**: Nmecha ← Højlund
+- **Andrew Smith**: Bobb ← Souček
+- **Roy Boateng**: Broja ← G.Jesus
+- **chris duncam**: O.Dango ← Dewsbury-Hall
+- **Josiah Loh**: Spence ← Udogie
+- **Don Kim**: Roefs ← Areola
+- **Andrew Smith**: Acheampong ← Diouf
+- **Roy Boateng**: Redmond ← Barry
+- **Josiah Loh**: Dalot ← Branthwaite
+
+### Free Agent Pickups
+- **Peter Henze**: Perri ← Meslier
+- **Peter Henze**: Estêvão ← Onana
+- **Don Kim**: Gittens ← Barnes
+- **Don Kim**: Hume ← Trippier
+- **Don Kim**: Onana ← Gittens
+- **Harry Liu**: Ndoye ← Wilson
+- **Andrew Smith**: P.M.Sarr ← Minteh
+- **Don Kim**: Zubimendi ← Onana
+- **Kyle Herrera**: Isidor ← Havertz
+
+### Trades
+- **Don Kim** ↔ **Kyle Herrera**: Frimpong ↔ Matheus N.
 
 ---
 
@@ -82,82 +111,85 @@
 
 ### Kyle Herrera (Extended Foreplay)
 
-**GKP**: A.Becker (Liverpool), Bayindir (Manchester United)
-**DEF**: Cucurella (Chelsea), J.Timber (Arsenal), Burn (Newcastle United)
-**MID**: M.Salah (Liverpool), Madueke (Arsenal), J.Murphy (Unknown), Amad (Manchester United), Havertz (Unknown), Mykolenko (Unknown), Matheus N. (Unknown), Muniz (Unknown), Hudson-Odoi (Unknown)
-**FWD**: Delap (Chelsea)
+**GKP**: A.Becker (Liverpool) - 1 pts, Bayindir (Manchester United) - 2 pts
+**DEF**: Cucurella (Chelsea) - 5 pts, J.Timber (Arsenal) - 24 pts, Burn (Newcastle United) - 2 pts
+**MID**: M.Salah (Liverpool) - 5 pts, Madueke (Arsenal) - 3 pts, Amad (Manchester United) - 1 pts, Mykolenko (Unknown) - 0 pts, Muniz (Unknown) - 0 pts, Hudson-Odoi (Nottingham Forest) - 10 pts, Frimpong (Unknown) - 0 pts, Barnes (Newcastle United) - 2 pts
+**FWD**: Delap (Chelsea) - 2 pts, Isidor (Sunderland) - 1 pts
 
 ### Andrew Smith (Cunha Get Me Points)
 
-**GKP**: Petrović (Bournemouth)
-**DEF**: Saliba (Arsenal), Diouf (West Ham United), Dorgu (Manchester United)
-**MID**: Strand Larsen (Unknown), Sarr (Crystal Palace), Minteh (Brighton & Hove Albion), Sels (Unknown), Martinelli (Unknown), Souček (West Ham United), Van de Ven (Unknown), N.Williams (Unknown), Tonali (Newcastle United), Awoniyi (Unknown)
-**FWD**: Haaland (Manchester City)
+**GKP**: Sels (Nottingham Forest) - 2 pts, Petrović (Bournemouth) - 6 pts
+**DEF**: Saliba (Arsenal) - 6 pts, Van de Ven (Tottenham Hotspur) - 6 pts, N.Williams (Nottingham Forest) - 2 pts, Dorgu (Manchester United) - 2 pts
+**MID**: Sarr (Crystal Palace) - 8 pts, Martinelli (Unknown) - 0 pts, Tonali (Newcastle United) - 2 pts, Awoniyi (Unknown) - 0 pts, Bobb (Manchester City) - 2 pts, Acheampong (Unknown) - 0 pts, P.M.Sarr (Tottenham Hotspur) - 3 pts
+**FWD**: Haaland (Manchester City) - 2 pts, Strand Larsen (Wolverhampton Wanderers) - 2 pts
 
 ### Harry Liu (cunha believe it)
 
-**GKP**: Leno (Fulham)
-**DEF**: Kerkez (Liverpool), Livramento (Newcastle United), Yoro (Manchester United)
-**MID**: Palmer (Unknown), Solanke (Unknown), Mitoma (Brighton & Hove Albion), Gibbs-White (Unknown), Cherki (Manchester City), Aina (Unknown), Beto (Unknown), Wilson (Fulham), Botman (Unknown), José Sá (Unknown)
-**FWD**: Šeško (Manchester United)
+**GKP**: Leno (Fulham) - 3 pts, José Sá (Wolverhampton Wanderers) - 3 pts
+**DEF**: Kerkez (Liverpool) - 1 pts, Aina (Nottingham Forest) - 1 pts, Livramento (Newcastle United) - 4 pts, Yoro (Manchester United) - 6 pts, Digne (Aston Villa) - 2 pts
+**MID**: Palmer (Unknown) - 0 pts, Mitoma (Brighton & Hove Albion) - 2 pts, Gibbs-White (Nottingham Forest) - 2 pts, Cherki (Manchester City) - 1 pts, Beto (Unknown) - 0 pts, Ndoye (Nottingham Forest) - 7 pts
+**FWD**: Šeško (Manchester United) - 1 pts, Solanke (Tottenham Hotspur) - 1 pts
 
 ### chris duncam (Schrödongers)
 
-**GKP**: Martinez (Aston Villa), Verbruggen (Brighton & Hove Albion)
-**DEF**: Aït-Nouri (Manchester City), Lacroix (Crystal Palace), Chalobah (Chelsea)
-**MID**: Isak (Unknown), Wood (Unknown), Wissa (Unknown), Reijnders (Manchester City), Kluivert (Bournemouth), Georginio (Unknown), Murillo (Unknown), Damsgaard (Brentford), De Cuyper (Unknown), Dewsbury-Hall (Everton)
+**GKP**: Martinez (Aston Villa) - 2 pts, Verbruggen (Brighton & Hove Albion) - 1 pts
+**DEF**: Aït-Nouri (Manchester City) - 1 pts, Murillo (Nottingham Forest) - 1 pts, Lacroix (Crystal Palace) - 3 pts, Chalobah (Chelsea) - 8 pts
+**MID**: Isak (Unknown) - 0 pts, Wissa (Unknown) - 0 pts, Reijnders (Manchester City) - 2 pts, Kluivert (Bournemouth) - 1 pts, Georginio (Unknown) - 0 pts, Damsgaard (Brentford) - 5 pts, De Cuyper (Unknown) - 0 pts, O.Dango (Brentford) - 13 pts
+**FWD**: Wood (Nottingham Forest) - 2 pts
 
 ### Don Kim (son4lyfe)
 
-**DEF**: Trippier (Newcastle United)
-**MID**: B.Fernandes (Manchester United), Rogers (Aston Villa), Johnson (Unknown), Frimpong (Unknown), Szoboszlai (Liverpool), White (Unknown), Romero (Unknown), Wan-Bissaka (Unknown), Mayenda (Unknown), Barnes (Newcastle United), Areola (Unknown), Onana (Aston Villa)
-**FWD**: Mateta (Crystal Palace), Thiago (Brentford)
+**GKP**: Roefs (Sunderland) - 1 pts
+**DEF**: Romero (Tottenham Hotspur) - 7 pts, Cash (Aston Villa) - 2 pts, Hume (Sunderland) - 1 pts
+**MID**: B.Fernandes (Manchester United) - 2 pts, Rogers (Aston Villa) - 2 pts, Johnson (Tottenham Hotspur) - 9 pts, Szoboszlai (Liverpool) - 2 pts, White (Unknown) - 0 pts, Wan-Bissaka (Unknown) - 0 pts, Gittens (Chelsea) - 1 pts, Onana (Aston Villa) - 1 pts, Zubimendi (Arsenal) - 3 pts
+**FWD**: Mateta (Crystal Palace) - 2 pts, Thiago (Brentford) - 2 pts, Mayenda (Sunderland) - 2 pts
 
 ### Josiah Loh (thenotsospecialone)
 
-**GKP**: Sánchez (Chelsea)
-**DEF**: Mitchell (Crystal Palace), Gusto (Chelsea)
-**MID**: Eze (Unknown), Kudus (Unknown), Semenyo (Bournemouth), Pedro Porro (Unknown), Welbeck (Unknown), Bernardo (Manchester City), Branthwaite (Unknown), Chiesa (Liverpool), Udogie (Unknown), Bamford (Unknown), Kinsky (Unknown)
-**FWD**: João Pedro (Chelsea)
+**GKP**: Sánchez (Chelsea) - 3 pts
+**DEF**: Pedro Porro (Tottenham Hotspur) - 5 pts, Mitchell (Crystal Palace) - 1 pts, Gusto (Chelsea) - 2 pts, Spence (Tottenham Hotspur) - 6 pts, Dalot (Manchester United) - 1 pts
+**MID**: Eze (Unknown) - 0 pts, Kudus (Tottenham Hotspur) - 3 pts, Semenyo (Bournemouth) - 6 pts, Welbeck (Unknown) - 0 pts, Bernardo (Manchester City) - 1 pts, Chiesa (Liverpool) - 1 pts, Bamford (Unknown) - 0 pts, Kinsky (Unknown) - 0 pts
+**FWD**: João Pedro (Chelsea) - 15 pts
 
 ### Noah Wilson (Trophies Matter FC)
 
-**DEF**: Virgil (Liverpool), Stones (Manchester City)
-**MID**: Marmoush (Manchester City), Neto (Chelsea), Robertson (Unknown), Garnacho (Unknown), Henderson (Brentford), Savinho (Unknown), Mac Allister (Unknown), Richarlison (Unknown), Højlund (Unknown), Khusanov (Unknown), Kiwior (Unknown), Ortega Moreno (Unknown)
-**FWD**: Watkins (Aston Villa)
+**DEF**: Virgil (Liverpool) - 3 pts, Stones (Manchester City) - 1 pts
+**MID**: Marmoush (Manchester City) - 1 pts, Neto (Chelsea) - 7 pts, Robertson (Unknown) - 0 pts, Garnacho (Unknown) - 0 pts, Henderson (Brentford) - 3 pts, Savinho (Unknown) - 0 pts, Mac Allister (Unknown) - 0 pts, Khusanov (Unknown) - 0 pts, Kiwior (Unknown) - 0 pts, Ortega Moreno (Unknown) - 0 pts
+**FWD**: Watkins (Aston Villa) - 2 pts, Richarlison (Tottenham Hotspur) - 4 pts, Nmecha (Leeds United) - 1 pts
 
 ### Peter Henze (Peattle Pounders)
 
-**DEF**: Gabriel (Arsenal), Hall (Newcastle United), Richards (Crystal Palace), Van Hecke (Brighton & Hove Albion)
-**MID**: Wirtz (Liverpool), Schade (Brentford), Malen (Aston Villa), Konaté (Unknown), Anderson (Unknown), Marc Guiu (Unknown), Onana (Aston Villa), Vicario (Unknown), Meslier (Unknown)
-**FWD**: Bowen (West Ham United), Evanilson (Bournemouth)
+**GKP**: Vicario (Tottenham Hotspur) - 9 pts
+**DEF**: Gabriel (Arsenal) - 6 pts, Richards (Crystal Palace) - 2 pts, Van Hecke (Brighton & Hove Albion) - 1 pts, Ballard (Sunderland) - 1 pts
+**MID**: Wirtz (Liverpool) - 2 pts, Schade (Brentford) - 3 pts, Malen (Aston Villa) - 1 pts, Konaté (Unknown) - 0 pts, Anderson (Nottingham Forest) - 2 pts, Perri (Unknown) - 0 pts, Estêvão (Chelsea) - 5 pts, Perri (Unknown) - 0 pts, Estêvão (Chelsea) - 5 pts
+**FWD**: Bowen (West Ham United) - 2 pts, Evanilson (Bournemouth) - 2 pts, Marc Guiu (Sunderland) - 1 pts
 
 ### Roy Boateng (This Year FC)
 
-**GKP**: Trafford (Manchester City)
-**DEF**: Rúben (Manchester City), Schär (Newcastle United), Calafiori (Arsenal), Aké (Manchester City)
-**MID**: Mbeumo (Manchester United), Ødegaard (Arsenal), Trossard (Arsenal), Rice (Arsenal), Enzo (Chelsea), Akanji (Unknown), G.Jesus (Unknown), Zirkzee (Unknown), Arrizabalaga (Unknown)
-**FWD**: Barry (Everton)
+**GKP**: Trafford (Manchester City) - 2 pts
+**DEF**: Rúben (Manchester City) - 1 pts, Schär (Newcastle United) - 1 pts, Calafiori (Arsenal) - 13 pts, Aké (Manchester City) - 1 pts
+**MID**: Mbeumo (Manchester United) - 2 pts, Ødegaard (Arsenal) - 1 pts, Trossard (Arsenal) - 1 pts, Rice (Arsenal) - 6 pts, Enzo (Chelsea) - 10 pts, Akanji (Unknown) - 0 pts, Zirkzee (Unknown) - 0 pts, Arrizabalaga (Unknown) - 0 pts, Broja (Unknown) - 0 pts, Redmond (Unknown) - 0 pts
 
 ### Ronangel Rojas (Atlético SeaSlug)
 
-**GKP**: Pope (Newcastle United)
-**DEF**: Muñoz (Crystal Palace), Tosin (Chelsea), Guéhi (Crystal Palace), Mosquera (Arsenal)
-**MID**: Gakpo (Liverpool), Elanga (Newcastle United), Grealish (Everton), Caicedo (Chelsea), J.Arias (Unknown), Estève (Unknown), Ramsdale (Unknown)
-**FWD**: Gyökeres (Arsenal), Raúl (Fulham), Füllkrug (West Ham United)
+**GKP**: Pope (Newcastle United) - 4 pts
+**DEF**: Muñoz (Crystal Palace) - 5 pts, Tosin (Chelsea) - 2 pts, Guéhi (Crystal Palace) - 2 pts, Mosquera (Arsenal) - 1 pts, Lewis (Manchester City) - 1 pts
+**MID**: Gakpo (Liverpool) - 10 pts, Elanga (Newcastle United) - 2 pts, Grealish (Everton) - 11 pts, Caicedo (Chelsea) - 8 pts, J.Arias (Wolverhampton Wanderers) - 1 pts, Ramsdale (Unknown) - 0 pts
+**FWD**: Gyökeres (Arsenal) - 12 pts, Raúl (Fulham) - 1 pts, Füllkrug (West Ham United) - 1 pts
 
 ### Sean Dunn (Gweepy)
 
-**GKP**: Raya (Arsenal), Pickford (Everton)
-**DEF**: Lewis-Skelly (Arsenal), Tarkowski (Everton), James (Chelsea)
-**MID**: Saka (Arsenal), Foden (Manchester City), Gvardiol (Unknown), Milenković (Unknown), Maddison (Unknown), Rodrigo (Manchester City), Bruno G. (Newcastle United), Igor Jesus (Unknown), Wilson (Fulham), Nketiah (Unknown)
+**GKP**: Raya (Arsenal) - 6 pts, Pickford (Everton) - 15 pts
+**DEF**: Milenković (Nottingham Forest) - 2 pts, Lewis-Skelly (Arsenal) - 1 pts, Tarkowski (Everton) - 8 pts
+**MID**: Saka (Arsenal) - 6 pts, Foden (Manchester City) - 1 pts, Gvardiol (Unknown) - 0 pts, James (Leeds United) - 2 pts, Rodrigo (Manchester City) - 1 pts, Bruno G. (Newcastle United) - 6 pts, Wilson (Fulham) - 1 pts, Nketiah (Unknown) - 0 pts, O'Riley (Brighton & Hove Albion) - 2 pts
+**FWD**: Igor Jesus (Nottingham Forest) - 1 pts
 
 ### Zryan Bhao (FootAndBallFetish)
 
-**GKP**: Kelleher (Brentford)
-**DEF**: O'Brien (Everton)
-**MID**: Cunha (Manchester United), Gordon (Unknown), Ndiaye (Everton), Iwobi (Fulham), Piroe (Unknown), Guessand (Aston Villa), N.Jackson (Unknown), Rodon (Unknown), Ederson M. (Unknown), Konsa (Unknown), Pinnock (Unknown), Kilman (Unknown)
-**FWD**: Ekitiké (Liverpool)
+**GKP**: Kelleher (Brentford) - 5 pts
+**DEF**: Rodon (Leeds United) - 2 pts, O'Brien (Everton) - 6 pts
+**MID**: Cunha (Manchester United) - 2 pts, Gordon (Unknown) - 0 pts, Ndiaye (Everton) - 8 pts, Iwobi (Fulham) - 7 pts, Guessand (Aston Villa) - 1 pts, N.Jackson (Unknown) - 0 pts, Ederson M. (Unknown) - 0 pts, Konsa (Unknown) - 0 pts, Pinnock (Unknown) - 0 pts, Kilman (Unknown) - 0 pts
+**FWD**: Ekitiké (Liverpool) - 9 pts, Piroe (Leeds United) - 1 pts
 
 ---
 
@@ -165,17 +197,28 @@
 
 ### August
 
+- **Peter Henze** owes **Josiah Loh**: $1
+- **Peter Henze** owes **Kyle Herrera**: $1
+- **Harry Liu** owes **Josiah Loh**: $1
 - **Harry Liu** owes **Kyle Herrera**: $1
+- **Zryan Bhao** owes **Josiah Loh**: $1
+- **Zryan Bhao** owes **Kyle Herrera**: $1
+- **Roy Boateng** owes **Josiah Loh**: $1
+- **Roy Boateng** owes **Kyle Herrera**: $1
+- **chris duncam** owes **Josiah Loh**: $1
+- **chris duncam** owes **Kyle Herrera**: $1
+- **Ronangel Rojas** owes **Josiah Loh**: $1
+- **Ronangel Rojas** owes **Kyle Herrera**: $1
+- **Noah Wilson** owes **Josiah Loh**: $1
+- **Noah Wilson** owes **Kyle Herrera**: $1
+- **Kyle Herrera** owes **Josiah Loh**: $1
+- **Don Kim** owes **Josiah Loh**: $1
+- **Don Kim** owes **Kyle Herrera**: $1
+- **Andrew Smith** owes **Josiah Loh**: $1
+- **Andrew Smith** owes **Kyle Herrera**: $1
+- **Sean Dunn** owes **Josiah Loh**: $1
 - **Sean Dunn** owes **Kyle Herrera**: $1
 - **Josiah Loh** owes **Kyle Herrera**: $1
-- **Don Kim** owes **Kyle Herrera**: $1
-- **Andrew Smith** owes **Kyle Herrera**: $1
-- **Noah Wilson** owes **Kyle Herrera**: $1
-- **chris duncam** owes **Kyle Herrera**: $1
-- **Ronangel Rojas** owes **Kyle Herrera**: $1
-- **Zryan Bhao** owes **Kyle Herrera**: $1
-- **Roy Boateng** owes **Kyle Herrera**: $1
-- **Peter Henze** owes **Kyle Herrera**: $1
 
 ---
 

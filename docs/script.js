@@ -4595,7 +4595,7 @@ function generateKeyInsights() {
 
 // Player Performance Analytics
 function analyzePlayerPerformance() {
-    console.log('🔍 DEBUG: analyzePlayerPerformance() called');
+    // console.log('🔍 DEBUG: analyzePlayerPerformance() called');
     
     const container = document.getElementById('player-analytics');
     if (!container) return;
@@ -4609,14 +4609,13 @@ function analyzePlayerPerformance() {
     const currentData = dataManager.getGameweekData(dashboardData.currentGameweek);
     const currentPlayers = currentData?.playerData || currentData?.players || [];
     
-    console.log('🔍 DEBUG: Current gameweek:', dashboardData.currentGameweek);
-    console.log('🔍 DEBUG: Current data:', currentData);
-    console.log('🔍 DEBUG: Current players:', currentPlayers);
+    // console.log('🔍 DEBUG: Current gameweek:', dashboardData.currentGameweek);
+    // console.log('🔍 DEBUG: Current data:', currentData);
+    // console.log('🔍 DEBUG: Current players:', currentPlayers);
     
     if (!currentPlayers || currentPlayers.length === 0) {
         console.warn('⚠️ DEBUG: No player data found for current gameweek');
-        container.innerHTML = `<p class="text-white">No player data available for GW${dashboardData.currentGameweek}</p>
-                              <p class="text-white">DEBUG: currentData = ${JSON.stringify(currentData)}</p>`;
+        container.innerHTML = `<p class="text-white">No player data available for GW${dashboardData.currentGameweek}</p>`;
         return;
     }
     
@@ -4625,28 +4624,28 @@ function analyzePlayerPerformance() {
         teams: currentData?.draft?.teams || []
     };
     
-    console.log('🔍 Debug: Current gameweek data:', currentData);
-    console.log('🔍 Debug: Current players (GW-specific):', currentPlayers);
-    console.log('🔍 Debug: Current players sample:', currentPlayers[0]);
-    console.log('🔍 Debug: Draft data structure:', draftData);
+    // console.log('🔍 Debug: Current gameweek data:', currentData);
+    // console.log('🔍 Debug: Current players (GW-specific):', currentPlayers);
+    // console.log('🔍 Debug: Current players sample:', currentPlayers[0]);
+    // console.log('🔍 Debug: Draft data structure:', draftData);
     
-    // DEBUG: Check what fields are available in player data
-    if (currentPlayers.length > 0) {
-        const samplePlayer = currentPlayers[0];
-        console.log('🔍 DEBUG: Sample player fields:', Object.keys(samplePlayer));
-        console.log('🔍 DEBUG: Sample player data:', {
-            name: samplePlayer.name,
-            team: samplePlayer.team,
-            position: samplePlayer.position,
-            cost: samplePlayer.cost,
-            roundPoints: samplePlayer.roundPoints,
-            roundPts: samplePlayer.roundPts,
-            totalPoints: samplePlayer.totalPoints,
-            points: samplePlayer.points,
-            'Pts.': samplePlayer['Pts.'],
-            RP: samplePlayer.RP
-        });
-    }
+    // DEBUG: Check what fields are available in player data (commented out for production)
+    // if (currentPlayers.length > 0) {
+    //     const samplePlayer = currentPlayers[0];
+    //     console.log('🔍 DEBUG: Sample player fields:', Object.keys(samplePlayer));
+    //     console.log('🔍 DEBUG: Sample player data:', {
+    //         name: samplePlayer.name,
+    //         team: samplePlayer.team,
+    //         position: samplePlayer.position,
+    //         cost: samplePlayer.cost,
+    //         roundPoints: samplePlayer.roundPoints,
+    //         roundPts: samplePlayer.roundPts,
+    //         totalPoints: samplePlayer.totalPoints,
+    //         points: samplePlayer.points,
+    //         'Pts.': samplePlayer['Pts.'],
+    //         RP: samplePlayer.RP
+    //     });
+    // }
     
     // Create the HTML with the 3 cool analytics
     const playerAnalyticsHTML = `

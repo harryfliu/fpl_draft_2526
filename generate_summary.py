@@ -29,37 +29,55 @@ class FPLSummaryGenerator:
         self.transfer_history = []
         self.player_data = []
         self.fixtures = []
+        self.standings_data = []
         
     def load_data(self):
         """Load all relevant data files"""
         print(f"🔄 Loading data for GW{self.gameweek}...")
         
-        # Load final results
+        # Load final results for current gameweek
         final_results_file = self.base_path / self.gw_folder / f"final_results_gw{self.gameweek}.csv"
         if final_results_file.exists():
             self.final_results = self.parse_final_results(final_results_file)
-            print(f"✅ Loaded {len(self.final_results)} final results")
+            print(f"✅ Loaded {len(self.final_results)} final results for GW{self.gameweek}")
         else:
             print(f"❌ No final results found: {final_results_file}")
             return False
             
-        # Load draft data (after final results for manager names)
+        # Load final results for ALL previous gameweeks to calculate cumulative standings
+        self.all_final_results = []
+        for gw in range(1, int(self.gameweek) + 1):
+            gw_results_file = self.base_path / f"gw{gw}" / f"final_results_gw{gw}.csv"
+            if gw_results_file.exists():
+                gw_results = self.parse_final_results(gw_results_file)
+                for result in gw_results:
+                    result['gameweek'] = gw
+                self.all_final_results.extend(gw_results)
+        print(f"✅ Loaded {len(self.all_final_results)} total final results across all gameweeks")
+            
+        # Load draft data
         draft_file = self.base_path / self.gw_folder / "starting_draft.csv"
         if draft_file.exists():
             self.draft_data = self.parse_draft_data(draft_file)
             print(f"✅ Loaded draft data with {len(self.draft_data.get('teams', []))} teams")
             
-        # Load transfer history
-        transfer_file = self.base_path / self.gw_folder / "transfer_history.csv"
-        if transfer_file.exists():
-            self.transfer_history = self.parse_transfer_history(transfer_file)
-            print(f"✅ Loaded {len(self.transfer_history)} transfer records")
+        # Load ALL transfer history from previous gameweeks
+        self.transfer_history = []
+        for gw in range(1, int(self.gameweek) + 1):
+            transfer_file = self.base_path / f"gw{gw}" / "transfer_history.csv"
+            if transfer_file.exists():
+                gw_transfers = self.parse_transfer_history(transfer_file)
+                # Add gameweek info to each transfer
+                for transfer in gw_transfers:
+                    transfer['gameweek'] = gw
+                self.transfer_history.extend(gw_transfers)
+        print(f"✅ Loaded {len(self.transfer_history)} total transfer records across all gameweeks")
             
-        # Load player data
+        # Load player data for current gameweek
         player_file = self.base_path / self.gw_folder / f"players_gw{self.gameweek}.csv"
         if player_file.exists():
             self.player_data = self.parse_player_data(player_file)
-            print(f"✅ Loaded {len(self.player_data)} player records")
+            print(f"✅ Loaded {len(self.player_data)} player records for GW{self.gameweek}")
             
         # Load fixtures
         fixture_file = self.base_path / self.gw_folder / "fixture_list.csv"
@@ -113,16 +131,14 @@ class FPLSummaryGenerator:
                         away_team = away_team.strip()
                         away_manager = away_manager.strip()
                         
-                        # Debug: parsing successful
-                        
                         results.append({
                             'homeTeam': home_team,
-                            'homeManager': home_manager,
                             'awayTeam': away_team,
+                            'homeManager': home_manager,
                             'awayManager': away_manager,
                             'homeScore': home_score,
                             'awayScore': away_score,
-                            'gameweekDate': current_gameweek_date
+                            'date': current_gameweek_date
                         })
                         
         return results
@@ -154,7 +170,7 @@ class FPLSummaryGenerator:
                     for i, pick in enumerate(picks):
                         if i < len(teams) and pick.strip():
                             teams[i]['draftPicks'].append(pick.strip())
-                
+            
         # Add manager names from final results
         for team in teams:
             for result in self.final_results:
@@ -168,35 +184,97 @@ class FPLSummaryGenerator:
         return {'teams': teams}
         
     def parse_transfer_history(self, file_path):
-        """Parse transfer_history.csv"""
+        """Parse transfer_history.csv with proper structure"""
         transfers = []
         
         with open(file_path, 'r', encoding='utf-8') as f:
-            reader = csv.DictReader(f)
+            reader = csv.reader(f)
+            
+            current_section = None
+            
             for row in reader:
-                transfers.append(row)
+                if not row or len(row) == 0:
+                    continue
+                    
+                # Check for section headers
+                if 'Waivers History' in row[0]:
+                    current_section = 'waiver'
+                    continue
+                elif 'Free Agents History' in row[0]:
+                    current_section = 'free_agent'
+                    continue
+                elif 'Trades History' in row[0]:
+                    current_section = 'trade'
+                    continue
+                    
+                # Skip header rows
+                if row[0] == 'GW' or row[0] == 'Manager':
+                    continue
+                    
+                if current_section == 'waiver' and len(row) >= 6:
+                    transfers.append({
+                        'type': 'waiver',
+                        'GW': row[0],
+                        'Manager': row[1],
+                        'In': row[2],
+                        'Out': row[3],
+                        'Result': row[4]
+                    })
+                elif current_section == 'free_agent' and len(row) >= 5:
+                    transfers.append({
+                        'type': 'free_agent',
+                        'GW': row[0],
+                        'Manager': row[1],
+                        'In': row[2],
+                        'Out': row[3],
+                        'Date': row[4]
+                    })
+                elif current_section == 'trade' and len(row) >= 7:
+                    transfers.append({
+                        'type': 'trade',
+                        'GW': row[0],
+                        'Offered By': row[1],
+                        'Offered To': row[2],
+                        'Offered': row[3],
+                        'Requested': row[4],
+                        'Result': row[5],
+                        'Date': row[6]
+                    })
                 
         return transfers
         
     def parse_player_data(self, file_path):
-        """Parse players_gw#.csv"""
+        """Parse players_gw#.csv with correct format"""
         players = []
         
         with open(file_path, 'r', encoding='utf-8') as f:
-            reader = csv.DictReader(f)
+            reader = csv.reader(f)
+            
+            # Skip header row
+            next(reader, None)
+            
             for row in reader:
-                # Extract player info from first column
-                player_info = row.get('Player', '').strip()
-                player_name, team, position = self.extract_player_info(player_info)
-                
-                players.append({
-                    'name': player_name,
-                    'team': team,
-                    'position': position,
-                    'totalPoints': int(row.get('Pts', 0) or 0),
-                    'roundPoints': int(row.get('Round Pts', 0) or 0),
-                    'cost': float(row.get('Cost', 0) or 0)
-                })
+                if len(row) >= 6:
+                    player_string = row[0]
+                    cost = float(row[1]) if row[1] and row[1] != 'Cost' else 0
+                    selection_percent = row[2] if row[2] and row[2] != 'Sel.%' else "0%"
+                    form = float(row[3]) if row[3] and row[3] != 'Form' else 0
+                    total_points = int(row[4]) if row[4] and row[4] != 'Pts.' else 0
+                    round_points = int(row[5]) if row[5] and row[5] != 'RP' else 0
+                    
+                    # Extract player info
+                    player_name, team, position = self.extract_player_info(player_string)
+                    
+                    players.append({
+                        'name': player_name,
+                        'team': team,
+                        'position': position,
+                        'cost': cost,
+                        'selectionPercent': selection_percent,
+                        'form': form,
+                        'totalPoints': total_points,
+                        'roundPoints': round_points
+                    })
                 
         return players
         
@@ -205,21 +283,25 @@ class FPLSummaryGenerator:
         # Common team abbreviations and mappings
         team_mapping = {
             'Man City': 'Manchester City',
+            'Man United': 'Manchester United',
             'Man Utd': 'Manchester United',
-            'Brighton': 'Brighton & Hove Albion',
             'Newcastle': 'Newcastle United',
+            'Nott\'m Forest': 'Nottingham Forest',
+            'Tottenham': 'Tottenham Hotspur',
+            'Spurs': 'Tottenham Hotspur',
             'West Ham': 'West Ham United',
-            'Nottm Forest': 'Nottingham Forest'
+            'Wolves': 'Wolverhampton Wanderers',
+            'Brighton': 'Brighton & Hove Albion',
+            'Leeds': 'Leeds United'
         }
         
         premier_league_teams = [
             'Arsenal', 'Aston Villa', 'Bournemouth', 'Brentford', 'Brighton & Hove Albion',
-            'Chelsea', 'Crystal Palace', 'Everton', 'Fulham', 'Ipswich Town',
-            'Leicester City', 'Liverpool', 'Manchester City', 'Manchester United',
-            'Newcastle United', 'Nottingham Forest', 'Southampton', 'Tottenham Hotspur',
-            'West Ham United', 'Wolverhampton Wanderers',
-            # Abbreviations
-            'Man City', 'Man Utd', 'Brighton', 'Newcastle', 'West Ham', 'Nottm Forest'
+            'Brighton', 'Burnley', 'Chelsea', 'Crystal Palace', 'Everton', 'Fulham', 'Leeds United',
+            'Leeds', 'Liverpool', 'Manchester City', 'Man City', 'Manchester United', 'Man United', 'Man Utd',
+            'Newcastle United', 'Newcastle', 'Nottingham Forest', 'Nott\'m Forest',
+            'Sunderland', 'Tottenham Hotspur', 'Tottenham', 'Spurs', 'West Ham United', 
+            'West Ham', 'Wolverhampton Wanderers', 'Wolves'
         ]
         
         positions = ['GKP', 'DEF', 'MID', 'FWD', 'GK']
@@ -299,134 +381,106 @@ class FPLSummaryGenerator:
                     
         return fixtures
         
-    def calculate_standings(self):
-        """Calculate current standings from final results"""
-        standings = {}
+    def get_current_squads(self):
+        """Get current squad for each manager after ALL transfers from previous gameweeks"""
+        squads = {}
         
-        # Initialize standings for each team
-        for result in self.final_results:
-            for team_key, manager_key, score_key in [
-                ('homeTeam', 'homeManager', 'homeScore'),
-                ('awayTeam', 'awayManager', 'awayScore')
-            ]:
-                team = result[team_key]
-                manager = result[manager_key]
-                
-                if team not in standings:
-                    standings[team] = {
-                        'teamName': team,
-                        'manager': manager,
-                        'points': 0,
-                        'gwPoints': 0,
-                        'played': 0,
-                        'wins': 0,
-                        'draws': 0,
-                        'losses': 0,
-                        'goalsFor': 0,
-                        'goalsAgainst': 0,
-                        'goalDifference': 0
-                    }
-                    
-        # Calculate stats from results
-        for result in self.final_results:
-            home_team = result['homeTeam']
-            away_team = result['awayTeam']
-            home_score = result['homeScore']
-            away_score = result['awayScore']
+        if not self.draft_data:
+            return squads
             
-            # Update stats
-            standings[home_team]['played'] += 1
-            standings[away_team]['played'] += 1
-            standings[home_team]['goalsFor'] += home_score
-            standings[home_team]['goalsAgainst'] += away_score
-            standings[away_team]['goalsFor'] += away_score
-            standings[away_team]['goalsAgainst'] += home_score
-            standings[home_team]['gwPoints'] += home_score
-            standings[away_team]['gwPoints'] += away_score
+        # Start with draft picks
+        for team in self.draft_data['teams']:
+            team_name = team['teamName']
+            manager = team.get('manager', '')
             
-            # Determine result
-            if home_score > away_score:
-                standings[home_team]['wins'] += 1
-                standings[home_team]['points'] += 3
-                standings[away_team]['losses'] += 1
-            elif away_score > home_score:
-                standings[away_team]['wins'] += 1
-                standings[away_team]['points'] += 3
-                standings[home_team]['losses'] += 1
-            else:
-                standings[home_team]['draws'] += 1
-                standings[home_team]['points'] += 1
-                standings[away_team]['draws'] += 1
-                standings[away_team]['points'] += 1
-                
-        # Calculate goal difference
-        for team in standings.values():
-            team['goalDifference'] = team['goalsFor'] - team['goalsAgainst']
+            # Get manager from results if not in draft
+            if not manager:
+                for result in self.final_results:
+                    if result['homeTeam'] == team_name:
+                        manager = result['homeManager']
+                        break
+                    elif result['awayTeam'] == team_name:
+                        manager = result['awayManager']
+                        break
+                        
+            squads[manager or team_name] = {
+                'team_name': team_name,
+                'players': team['draftPicks'].copy()
+            }
             
-        # Sort standings
-        sorted_standings = sorted(standings.values(), key=lambda x: (
-            -x['points'],          # Points (descending)
-            -x['gwPoints'],        # GW Points as tiebreaker (descending)
-            -x['goalDifference'],  # Goal difference (descending)
-            -x['goalsFor']         # Goals for (descending)
-        ))
+        # Apply ALL transfers from previous gameweeks (up to current gameweek)
+        # Apply in correct order: Trades → Waivers → Free Agents
         
-        return sorted_standings
-        
-    def calculate_transfer_activity(self):
-        """Calculate transfer activity with player names and teams"""
-        activity = {
-            'waivers': [],
-            'free_agents': [],
-            'trades': []
-        }
-        
+        # 1. Apply accepted trades FIRST
         for transfer in self.transfer_history:
-            transfer_type = transfer.get('Type', '').lower()
-            manager = transfer.get('Manager', '')
-            player_in = transfer.get('Player In', '')
-            player_out = transfer.get('Player Out', '')
-            
-            # Get player team info
-            player_in_info = self.get_player_team_info(player_in)
-            player_out_info = self.get_player_team_info(player_out)
-            
-            if 'waiver' in transfer_type:
-                activity['waivers'].append({
-                    'manager': manager,
-                    'player_in': player_in,
-                    'player_in_team': player_in_info['team'],
-                    'player_out': player_out,
-                    'player_out_team': player_out_info['team']
-                })
-            elif 'free' in transfer_type:
-                activity['free_agents'].append({
-                    'manager': manager,
-                    'player_in': player_in,
-                    'player_in_team': player_in_info['team'],
-                    'player_out': player_out,
-                    'player_out_team': player_out_info['team']
-                })
-            elif 'trade' in transfer_type:
-                activity['trades'].append({
-                    'manager': manager,
-                    'player_in': player_in,
-                    'player_in_team': player_in_info['team'],
-                    'player_out': player_out,
-                    'player_out_team': player_out_info['team']
-                })
-                
-        return activity
+            if transfer['type'] == 'trade' and transfer['Result'] in ['Accepted', 'Processed']:
+                transfer_gw = int(transfer.get('GW', 0))
+                if transfer_gw <= int(self.gameweek):
+                    offered_by = transfer['Offered By']
+                    offered_to = transfer['Offered To']
+                    offered = transfer['Offered']
+                    requested = transfer['Requested']
+                    
+                    # Find managers in squads
+                    for manager in squads.keys():
+                        if manager == offered_by:
+                            # Remove offered player, add requested player
+                            if offered in squads[manager]['players']:
+                                squads[manager]['players'].remove(offered)
+                            if requested:
+                                squads[manager]['players'].append(requested)
+                        elif manager == offered_to:
+                            # Remove requested player, add offered player
+                            if requested in squads[manager]['players']:
+                                squads[manager]['players'].remove(requested)
+                            if offered:
+                                squads[manager]['players'].append(offered)
         
-    def get_player_team_info(self, player_name):
-        """Get team info for a player"""
+        # 2. Apply successful waiver transactions SECOND
+        for transfer in self.transfer_history:
+            if transfer['type'] == 'waiver' and transfer['Result'] == 'Accepted':
+                transfer_gw = int(transfer.get('GW', 0))
+                if transfer_gw <= int(self.gameweek):
+                    manager = transfer['Manager']
+                    player_in = transfer['In']
+                    player_out = transfer['Out']
+                    
+                    if manager in squads:
+                        # Remove player out
+                        if player_out in squads[manager]['players']:
+                            squads[manager]['players'].remove(player_out)
+                        # Add player in
+                        if player_in:
+                            squads[manager]['players'].append(player_in)
+        
+        # 3. Apply free agent transactions LAST
+        for transfer in self.transfer_history:
+            if transfer['type'] == 'free_agent':
+                transfer_gw = int(transfer.get('GW', 0))
+                if transfer_gw <= int(self.gameweek):
+                    manager = transfer['Manager']
+                    player_in = transfer['In']
+                    player_out = transfer['Out']
+                    
+                    if manager in squads:
+                        # Remove player out
+                        if player_out in squads[manager]['players']:
+                            squads[manager]['players'].remove(player_out)
+                        # Add player in
+                        if player_in:
+                            squads[manager]['players'].append(player_in)
+                    
+        return squads
+        
+    def get_player_points_for_gw(self, player_name, manager):
+        """Get points earned by a specific player for their manager in this gameweek"""
         for player in self.player_data:
             if player['name'].lower() == player_name.lower():
-                return {'team': player['team'], 'position': player['position']}
-        return {'team': 'Unknown', 'position': 'Unknown'}
+                return player['roundPoints']
+        return 0
         
     def calculate_weekly_winner(self):
-        """Calculate weekly winner and prize money"""
+        """Calculate weekly winner and prize money for current gameweek"""
         if not self.final_results:
             return None
             
@@ -457,71 +511,135 @@ class FPLSummaryGenerator:
             'prize': weekly_prize
         }
         
-    def get_current_squads(self):
-        """Get current squad for each manager after transfers"""
-        squads = {}
+    def calculate_cumulative_standings(self):
+        """Calculate cumulative standings from ALL gameweeks up to current"""
+        standings = {}
         
-        if not self.draft_data:
-            return squads
-            
-        # Start with draft picks
-        for team in self.draft_data['teams']:
-            team_name = team['teamName']
-            manager = team.get('manager', '')
-            
-            # Get manager from results if not in draft
-            if not manager:
-                for result in self.final_results:
-                    if result['homeTeam'] == team_name:
-                        manager = result['homeManager']
-                        break
-                    elif result['awayTeam'] == team_name:
-                        manager = result['awayManager']
-                        break
-                        
-            squads[manager or team_name] = {
-                'team_name': team_name,
-                'players': team['draftPicks'].copy()
-            }
-            
-        # Apply transfers
-        for transfer in self.transfer_history:
-            manager = transfer.get('Manager', '')
-            player_in = transfer.get('Player In', '')
-            player_out = transfer.get('Player Out', '')
-            
-            if manager in squads:
-                # Remove player out
-                if player_out in squads[manager]['players']:
-                    squads[manager]['players'].remove(player_out)
-                # Add player in
-                if player_in:
-                    squads[manager]['players'].append(player_in)
+        # Initialize standings for each team
+        for result in self.all_final_results:
+            for team_key, manager_key, score_key in [
+                ('homeTeam', 'homeManager', 'homeScore'),
+                ('awayTeam', 'awayManager', 'awayScore')
+            ]:
+                team = result[team_key]
+                manager = result[manager_key]
+                
+                if team not in standings:
+                    standings[team] = {
+                        'position': 0,
+                        'teamName': team,
+                        'manager': manager,
+                        'points': 0,
+                        'gwPoints': 0,
+                        'totalGWPoints': 0,
+                        'played': 0,
+                        'wins': 0,
+                        'draws': 0,
+                        'losses': 0,
+                        'goalsFor': 0,
+                        'goalsAgainst': 0,
+                        'goalDifference': 0,
+                        'winnings': 0
+                    }
                     
-        return squads
+        # Calculate stats from all results
+        for result in self.all_final_results:
+            home_team = result['homeTeam']
+            away_team = result['awayTeam']
+            home_score = result['homeScore']
+            away_score = result['awayScore']
+            gameweek = result.get('gameweek', 1)
+            
+            # Update stats
+            standings[home_team]['played'] += 1
+            standings[away_team]['played'] += 1
+            standings[home_team]['goalsFor'] += home_score
+            standings[home_team]['goalsAgainst'] += away_score
+            standings[away_team]['goalsFor'] += away_score
+            standings[away_team]['goalsAgainst'] += home_score
+            
+            # Add to total GW points (cumulative)
+            standings[home_team]['totalGWPoints'] += home_score
+            standings[away_team]['totalGWPoints'] += away_score
+            
+            # Set current GW points to the latest gameweek
+            if gameweek == int(self.gameweek):
+                standings[home_team]['gwPoints'] = home_score
+                standings[away_team]['gwPoints'] = away_score
+            
+            # Determine result
+            if home_score > away_score:
+                standings[home_team]['wins'] += 1
+                standings[home_team]['points'] += 3
+                standings[away_team]['losses'] += 1
+            elif away_score > home_score:
+                standings[away_team]['wins'] += 1
+                standings[away_team]['points'] += 3
+                standings[home_team]['losses'] += 1
+            else:
+                standings[home_team]['draws'] += 1
+                standings[home_team]['points'] += 1
+                standings[away_team]['draws'] += 1
+                standings[away_team]['points'] += 1
+                
+        # Calculate goal difference
+        for team in standings.values():
+            team['goalDifference'] = team['goalsFor'] - team['goalsAgainst']
+            
+        # Sort standings and add positions
+        sorted_standings = sorted(standings.values(), key=lambda x: (
+            -x['points'],          # Points (descending)
+            -x['totalGWPoints'],   # Total GW Points as tiebreaker (descending)
+            -x['goalDifference'],  # Goal difference (descending)
+            -x['goalsFor']         # Goals for (descending)
+        ))
         
-    def calculate_outstanding_payments(self):
-        """Calculate outstanding payments by month"""
+        # Add positions
+        for i, team in enumerate(sorted_standings, 1):
+            team['position'] = i
+            
+        return sorted_standings
+        
+    def calculate_cumulative_outstanding_payments(self):
+        """Calculate cumulative outstanding payments from ALL previous gameweeks"""
         payments = {}
         
-        # For now, just calculate weekly winner payments
-        weekly_winner_data = self.calculate_weekly_winner()
-        if weekly_winner_data:
-            winner = weekly_winner_data['winner']
-            
-            # Get current month based on gameweek
-            month = self.get_month_from_gameweek(self.gameweek)
-            
-            if month not in payments:
-                payments[month] = {}
+        # Calculate weekly winners for all previous gameweeks
+        for gw in range(1, int(self.gameweek) + 1):
+            # Load final results for this gameweek
+            final_results_file = self.base_path / f"gw{gw}" / f"final_results_gw{gw}.csv"
+            if final_results_file.exists():
+                gw_results = self.parse_final_results(final_results_file)
                 
-            # Each manager owes $1 to the weekly winner
-            for result in self.final_results:
-                for manager in [result['homeManager'], result['awayManager']]:
-                    if manager and manager != winner:
-                        if manager not in payments[month]:
-                            payments[month][manager] = {}
-                        payments[month][manager][winner] = 1
+                if gw_results:
+                    # Calculate weekly winner for this gameweek
+                    manager_points = {}
+                    for result in gw_results:
+                        home_manager = result['homeManager']
+                        away_manager = result['awayManager']
+                        home_score = result['homeScore']
+                        away_score = result['awayScore']
+                        
+                        if home_manager:
+                            manager_points[home_manager] = home_score
+                        if away_manager:
+                            manager_points[away_manager] = away_score
+                    
+                    if manager_points:
+                        winner = max(manager_points.items(), key=lambda x: x[1])
+                        month = self.get_month_from_gameweek(gw)
+                        
+                        if month not in payments:
+                            payments[month] = {}
+                            
+                        # Each manager owes $1 to the weekly winner
+                        for manager in manager_points.keys():
+                            if manager != winner[0]:
+                                if manager not in payments[month]:
+                                    payments[month][manager] = {}
+                                if winner[0] not in payments[month][manager]:
+                                    payments[month][manager][winner[0]] = 0
+                                payments[month][manager][winner[0]] += 1
                         
         return payments
         
@@ -544,12 +662,13 @@ class FPLSummaryGenerator:
         """Generate the comprehensive markdown report"""
         print(f"📝 Generating markdown summary for GW{self.gameweek}...")
         
-        # Calculate all data
-        standings = self.calculate_standings()
-        transfer_activity = self.calculate_transfer_activity()
+        # Calculate cumulative standings from all gameweeks
+        standings = self.calculate_cumulative_standings()
+        
+        # Calculate other data
         weekly_winner = self.calculate_weekly_winner()
         current_squads = self.get_current_squads()
-        outstanding_payments = self.calculate_outstanding_payments()
+        outstanding_payments = self.calculate_cumulative_outstanding_payments()
         next_fixtures = [f for f in self.fixtures if f['gameweek'] == int(self.gameweek) + 1]
         
         # Generate markdown
@@ -559,15 +678,15 @@ class FPLSummaryGenerator:
 
 ---
 
-## 📊 Current Standings
+## 📊 Current Standings (Cumulative)
 
-| Pos | Manager | Team | Pts | GW Pts | P | W | D | L | GF | GA | GD |
-|-----|---------|------|-----|--------|---|---|---|---|----|----|----| 
+| Pos | Manager | Team | Total League Pts | Current GW Pts | Total GW Pts | P | W | D | L | GF | GA | GD |
+|-----|---------|------|------------------|----------------|--------------|---|---|---|---|----|----|----| 
 """
 
-        for i, team in enumerate(standings, 1):
+        for team in standings:
             manager_display = team['manager'] if team['manager'] else 'Unknown'
-            md_content += f"| {i} | {manager_display} | {team['teamName']} | {team['points']} | {team['gwPoints']} | {team['played']} | {team['wins']} | {team['draws']} | {team['losses']} | {team['goalsFor']} | {team['goalsAgainst']} | {team['goalDifference']:+} |\n"
+            md_content += f"| {team['position']} | {manager_display} | {team['teamName']} | {team['points']} | {team['gwPoints']} | {team['totalGWPoints']} | {team['played']} | {team['wins']} | {team['draws']} | {team['losses']} | {team['goalsFor']} | {team['goalsAgainst']} | {team['goalDifference']:+} |\n"
             
         md_content += "\n---\n\n## ⚽ Gameweek Points\n\n"
         
@@ -586,28 +705,34 @@ class FPLSummaryGenerator:
             manager_display = manager if manager else "Unknown"
             md_content += f"{emoji} **{manager_display}**: {score} points\n"
             
-        md_content += "\n---\n\n## 🔄 Transfer Activity\n\n"
+        md_content += "\n---\n\n## 🔄 Transfer Activity (This Gameweek)\n\n"
         
-        # Transfer activity
-        if transfer_activity['waivers']:
+        # Transfer activity (only for current gameweek)
+        current_gw_transfers = [t for t in self.transfer_history if int(t.get('gameweek', 0)) == int(self.gameweek)]
+        
+        waivers = [t for t in current_gw_transfers if t['type'] == 'waiver' and t['Result'] == 'Accepted']
+        free_agents = [t for t in current_gw_transfers if t['type'] == 'free_agent']
+        trades = [t for t in current_gw_transfers if t['type'] == 'trade' and t['Result'] in ['Accepted', 'Processed']]
+        
+        if waivers:
             md_content += "### Waiver Claims\n"
-            for waiver in transfer_activity['waivers']:
-                md_content += f"- **{waiver['manager']}**: {waiver['player_in']} ({waiver['player_in_team']}) ← {waiver['player_out']} ({waiver['player_out_team']})\n"
+            for waiver in waivers:
+                md_content += f"- **{waiver['Manager']}**: {waiver['In']} ← {waiver['Out']}\n"
             md_content += "\n"
             
-        if transfer_activity['free_agents']:
+        if free_agents:
             md_content += "### Free Agent Pickups\n"
-            for fa in transfer_activity['free_agents']:
-                md_content += f"- **{fa['manager']}**: {fa['player_in']} ({fa['player_in_team']}) ← {fa['player_out']} ({fa['player_out_team']})\n"
+            for fa in free_agents:
+                md_content += f"- **{fa['Manager']}**: {fa['In']} ← {fa['Out']}\n"
             md_content += "\n"
             
-        if transfer_activity['trades']:
+        if trades:
             md_content += "### Trades\n"
-            for trade in transfer_activity['trades']:
-                md_content += f"- **{trade['manager']}**: {trade['player_in']} ({trade['player_in_team']}) ← {trade['player_out']} ({trade['player_out_team']})\n"
+            for trade in trades:
+                md_content += f"- **{trade['Offered By']}** ↔ **{trade['Offered To']}**: {trade['Offered']} ↔ {trade['Requested']}\n"
             md_content += "\n"
             
-        if not any([transfer_activity['waivers'], transfer_activity['free_agents'], transfer_activity['trades']]):
+        if not any([waivers, free_agents, trades]):
             md_content += "*No transfers this gameweek*\n\n"
             
         md_content += "---\n\n## 💰 Prize Money\n\n"
@@ -645,7 +770,7 @@ class FPLSummaryGenerator:
             
         md_content += "\n---\n\n## 👥 Current Squads\n\n"
         
-        # Current squads
+        # Current squads with player points
         for manager, squad_data in current_squads.items():
             md_content += f"### {manager} ({squad_data['team_name']})\n\n"
             
@@ -656,11 +781,12 @@ class FPLSummaryGenerator:
                 player_info = self.get_player_team_info(player_name)
                 position = player_info['position']
                 team = player_info['team']
+                player_points = self.get_player_points_for_gw(player_name, manager)
                 
                 if position in positions:
-                    positions[position].append(f"{player_name} ({team})")
+                    positions[position].append(f"{player_name} ({team}) - {player_points} pts")
                 else:
-                    positions['MID'].append(f"{player_name} ({team})")  # Default to MID
+                    positions['MID'].append(f"{player_name} ({team}) - {player_points} pts")  # Default to MID
                     
             for pos, players in positions.items():
                 if players:
@@ -670,7 +796,7 @@ class FPLSummaryGenerator:
             
         md_content += "---\n\n## 💳 Outstanding Payments\n\n"
         
-        # Outstanding payments
+        # Outstanding payments (cumulative)
         if outstanding_payments:
             for month, debts in outstanding_payments.items():
                 md_content += f"### {month}\n\n"
@@ -684,6 +810,17 @@ class FPLSummaryGenerator:
         md_content += "---\n\n*Report generated automatically from final results data*"
         
         return md_content
+        
+    def get_player_team_info(self, player_name):
+        """Get team info for a player"""
+        # First try to get from player performance data
+        for player in self.player_data:
+            if player['name'].lower() == player_name.lower():
+                return {'team': player['team'], 'position': player['position']}
+        
+        # If not found in performance data, player didn't play in this gameweek
+        # Return Unknown team and position
+        return {'team': 'Unknown', 'position': 'Unknown'}
         
     def save_summary(self, md_content):
         """Save the markdown summary to the gw folder"""

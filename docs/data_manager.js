@@ -44,7 +44,7 @@ class FPLDataManager {
         
         // Check for available gameweeks (only check what exists)
         // Since we're generating this from local data, we know what exists
-        const gameweekList = ['gw1', 'gw2']; // Only check for gameweeks that actually exist
+        const gameweekList = ['gw1', 'gw2', 'gw3']; // Only check for gameweeks that actually exist
         
         for (const gw of gameweekList) {
             const gwData = await this.loadJSONFile(`./data/${gw}.json`);
