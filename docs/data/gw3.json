@@ -1209,60 +1209,60 @@
       "day": 1,
       "homeTeam": "FootAndBallFetish",
       "homeManager": "Zryan Bhao",
-      "homeScore": 0,
+      "homeScore": 16,
       "awayTeam": "cunha believe it",
       "awayManager": "Harry Liu",
-      "awayScore": 0
+      "awayScore": 12
     },
     {
       "gameweek": 3,
       "day": 1,
       "homeTeam": "Schr\u00f6dongers",
       "homeManager": "chris duncam",
-      "homeScore": 0,
+      "homeScore": 27,
       "awayTeam": "Peattle Pounders",
       "awayManager": "Peter Henze",
-      "awayScore": 0
+      "awayScore": 12
     },
     {
       "gameweek": 3,
       "day": 1,
       "homeTeam": "Trophies Matter FC",
       "homeManager": "Noah Wilson",
-      "homeScore": 0,
+      "homeScore": 9,
       "awayTeam": "This Year FC",
       "awayManager": "Roy Boateng",
-      "awayScore": 0
+      "awayScore": 25
     },
     {
       "gameweek": 3,
       "day": 1,
       "homeTeam": "son4lyfe",
       "homeManager": "Don Kim",
-      "homeScore": 0,
+      "homeScore": 30,
       "awayTeam": "Atl\u00e9tico SeaSlug",
       "awayManager": "Ronangel Rojas",
-      "awayScore": 0
+      "awayScore": 27
     },
     {
       "gameweek": 3,
       "day": 1,
       "homeTeam": "Gweepy",
       "homeManager": "Sean Dunn",
-      "homeScore": 0,
+      "homeScore": 6,
       "awayTeam": "Extended Foreplay",
       "awayManager": "Kyle Herrera",
-      "awayScore": 0
+      "awayScore": 21
     },
     {
       "gameweek": 3,
       "day": 1,
       "homeTeam": "thenotsospecialone",
       "homeManager": "Josiah Loh",
-      "homeScore": 0,
+      "homeScore": 25,
       "awayTeam": "Cunha Get Me Points",
       "awayManager": "Andrew Smith",
-      "awayScore": 0
+      "awayScore": 5
     }
   ],
   "starting_draft": [
@@ -1492,7 +1492,1748 @@
       "FootAndBallFetish": "Kilman"
     }
   ],
-  "players_gw3": [],
+  "players_gw3": [
+    {
+      "name": "Senesi",
+      "team": "Bournemouth",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "1.90%",
+      "Form": 7.3,
+      "Pts.": 22,
+      "RP": 11
+    },
+    {
+      "name": "Chalobah",
+      "team": "Chelsea",
+      "position": "DEF",
+      "Cost": 5,
+      "Sel.%": "4.10%",
+      "Form": 8.3,
+      "Pts.": 25,
+      "RP": 11
+    },
+    {
+      "name": "Enzo",
+      "team": "Chelsea",
+      "position": "MID",
+      "Cost": 6.5,
+      "Sel.%": "5.80%",
+      "Form": 8,
+      "Pts.": 24,
+      "RP": 11
+    },
+    {
+      "name": "Dewsbury-Hall",
+      "team": "Everton",
+      "position": "MID",
+      "Cost": 5,
+      "Sel.%": "3.90%",
+      "Form": 4.3,
+      "Pts.": 13,
+      "RP": 9
+    },
+    {
+      "name": "E.Le F\u00e9e",
+      "team": "Sunderland",
+      "position": "MID",
+      "Cost": 4.9,
+      "Sel.%": "0.30%",
+      "Form": 3.7,
+      "Pts.": 11,
+      "RP": 9
+    },
+    {
+      "name": "Tosin",
+      "team": "Chelsea",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "1.10%",
+      "Form": 3.3,
+      "Pts.": 10,
+      "RP": 8
+    },
+    {
+      "name": "Grealish",
+      "team": "Everton",
+      "position": "MID",
+      "Cost": 6.6,
+      "Sel.%": "7.90%",
+      "Form": 6.7,
+      "Pts.": 20,
+      "RP": 8
+    },
+    {
+      "name": "B.Fernandes",
+      "team": "Manchester United",
+      "position": "MID",
+      "Cost": 9,
+      "Sel.%": "21.40%",
+      "Form": 4,
+      "Pts.": 12,
+      "RP": 8
+    },
+    {
+      "name": "Roefs",
+      "team": "Sunderland",
+      "position": "GKP",
+      "Cost": 4.5,
+      "Sel.%": "1.20%",
+      "Form": 5.7,
+      "Pts.": 17,
+      "RP": 8
+    },
+    {
+      "name": "Ndiaye",
+      "team": "Everton",
+      "position": "MID",
+      "Cost": 6.5,
+      "Sel.%": "9.40%",
+      "Form": 5.7,
+      "Pts.": 17,
+      "RP": 7
+    },
+    {
+      "name": "Mbeumo",
+      "team": "Manchester United",
+      "position": "MID",
+      "Cost": 8,
+      "Sel.%": "15.40%",
+      "Form": 3.7,
+      "Pts.": 11,
+      "RP": 7
+    },
+    {
+      "name": "R.Gomes",
+      "team": "Wolverhampton Wanderers",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "0.10%",
+      "Form": 2.7,
+      "Pts.": 8,
+      "RP": 7
+    },
+    {
+      "name": "Hee Chan",
+      "team": "Wolverhampton Wanderers",
+      "position": "MID",
+      "Cost": 5.9,
+      "Sel.%": "0.10%",
+      "Form": 3,
+      "Pts.": 9,
+      "RP": 7
+    },
+    {
+      "name": "Anthony",
+      "team": "Burnley",
+      "position": "MID",
+      "Cost": 5.5,
+      "Sel.%": "0.40%",
+      "Form": 7,
+      "Pts.": 21,
+      "RP": 6
+    },
+    {
+      "name": "Truffert",
+      "team": "Bournemouth",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "1.00%",
+      "Form": 4,
+      "Pts.": 12,
+      "RP": 6
+    },
+    {
+      "name": "Diakit\u00e9",
+      "team": "Bournemouth",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "0.30%",
+      "Form": 5.3,
+      "Pts.": 16,
+      "RP": 6
+    },
+    {
+      "name": "Evanilson",
+      "team": "Bournemouth",
+      "position": "FWD",
+      "Cost": 7,
+      "Sel.%": "2.00%",
+      "Form": 3,
+      "Pts.": 9,
+      "RP": 6
+    },
+    {
+      "name": "Lewis-Potter",
+      "team": "Brentford",
+      "position": "DEF",
+      "Cost": 5,
+      "Sel.%": "0.40%",
+      "Form": 4.3,
+      "Pts.": 13,
+      "RP": 6
+    },
+    {
+      "name": "S\u00e1nchez",
+      "team": "Chelsea",
+      "position": "GKP",
+      "Cost": 5,
+      "Sel.%": "24.90%",
+      "Form": 5.7,
+      "Pts.": 17,
+      "RP": 6
+    },
+    {
+      "name": "Cucurella",
+      "team": "Chelsea",
+      "position": "DEF",
+      "Cost": 6.1,
+      "Sel.%": "27.40%",
+      "Form": 6.3,
+      "Pts.": 19,
+      "RP": 6
+    },
+    {
+      "name": "Gusto",
+      "team": "Chelsea",
+      "position": "DEF",
+      "Cost": 5,
+      "Sel.%": "1.50%",
+      "Form": 3,
+      "Pts.": 9,
+      "RP": 6
+    },
+    {
+      "name": "Jo\u00e3o Pedro",
+      "team": "Chelsea",
+      "position": "FWD",
+      "Cost": 7.6,
+      "Sel.%": "60.70%",
+      "Form": 7.7,
+      "Pts.": 23,
+      "RP": 6
+    },
+    {
+      "name": "Beto",
+      "team": "Everton",
+      "position": "FWD",
+      "Cost": 5.4,
+      "Sel.%": "5.60%",
+      "Form": 2.7,
+      "Pts.": 8,
+      "RP": 6
+    },
+    {
+      "name": "Perri",
+      "team": "Leeds United",
+      "position": "GKP",
+      "Cost": 4.5,
+      "Sel.%": "0.40%",
+      "Form": 4,
+      "Pts.": 12,
+      "RP": 6
+    },
+    {
+      "name": "Bogle",
+      "team": "Leeds United",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "0.20%",
+      "Form": 3.7,
+      "Pts.": 11,
+      "RP": 6
+    },
+    {
+      "name": "Struijk",
+      "team": "Leeds United",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "0.40%",
+      "Form": 4.7,
+      "Pts.": 14,
+      "RP": 6
+    },
+    {
+      "name": "Gudmundsson",
+      "team": "Leeds United",
+      "position": "DEF",
+      "Cost": 4,
+      "Sel.%": "3.60%",
+      "Form": 4.7,
+      "Pts.": 14,
+      "RP": 6
+    },
+    {
+      "name": "Rodon",
+      "team": "Leeds United",
+      "position": "DEF",
+      "Cost": 4,
+      "Sel.%": "2.40%",
+      "Form": 5,
+      "Pts.": 15,
+      "RP": 6
+    },
+    {
+      "name": "Sch\u00e4r",
+      "team": "Newcastle United",
+      "position": "DEF",
+      "Cost": 5.5,
+      "Sel.%": "2.70%",
+      "Form": 5,
+      "Pts.": 15,
+      "RP": 6
+    },
+    {
+      "name": "Botman",
+      "team": "Newcastle United",
+      "position": "DEF",
+      "Cost": 4.9,
+      "Sel.%": "0.40%",
+      "Form": 2,
+      "Pts.": 6,
+      "RP": 6
+    },
+    {
+      "name": "Burn",
+      "team": "Newcastle United",
+      "position": "DEF",
+      "Cost": 5,
+      "Sel.%": "5.10%",
+      "Form": 5.7,
+      "Pts.": 17,
+      "RP": 6
+    },
+    {
+      "name": "Livramento",
+      "team": "Newcastle United",
+      "position": "DEF",
+      "Cost": 5.1,
+      "Sel.%": "7.60%",
+      "Form": 6.3,
+      "Pts.": 19,
+      "RP": 6
+    },
+    {
+      "name": "Trippier",
+      "team": "Newcastle United",
+      "position": "DEF",
+      "Cost": 5,
+      "Sel.%": "2.60%",
+      "Form": 4.3,
+      "Pts.": 13,
+      "RP": 6
+    },
+    {
+      "name": "Bruun Larsen",
+      "team": "Burnley",
+      "position": "MID",
+      "Cost": 5.4,
+      "Sel.%": "0.00%",
+      "Form": 3,
+      "Pts.": 9,
+      "RP": 5
+    },
+    {
+      "name": "Foster",
+      "team": "Burnley",
+      "position": "FWD",
+      "Cost": 5,
+      "Sel.%": "0.60%",
+      "Form": 3,
+      "Pts.": 9,
+      "RP": 5
+    },
+    {
+      "name": "Petrovi\u0107",
+      "team": "Bournemouth",
+      "position": "GKP",
+      "Cost": 4.5,
+      "Sel.%": "3.60%",
+      "Form": 4.3,
+      "Pts.": 13,
+      "RP": 5
+    },
+    {
+      "name": "Hill",
+      "team": "Bournemouth",
+      "position": "DEF",
+      "Cost": 4,
+      "Sel.%": "0.70%",
+      "Form": 2.3,
+      "Pts.": 7,
+      "RP": 5
+    },
+    {
+      "name": "Thiago",
+      "team": "Brentford",
+      "position": "FWD",
+      "Cost": 6,
+      "Sel.%": "1.30%",
+      "Form": 4.3,
+      "Pts.": 13,
+      "RP": 5
+    },
+    {
+      "name": "Longstaff",
+      "team": "Leeds United",
+      "position": "MID",
+      "Cost": 4.9,
+      "Sel.%": "0.10%",
+      "Form": 2.3,
+      "Pts.": 7,
+      "RP": 5
+    },
+    {
+      "name": "Amad",
+      "team": "Manchester United",
+      "position": "MID",
+      "Cost": 6.4,
+      "Sel.%": "2.10%",
+      "Form": 2.3,
+      "Pts.": 7,
+      "RP": 5
+    },
+    {
+      "name": "Casemiro",
+      "team": "Manchester United",
+      "position": "MID",
+      "Cost": 5.5,
+      "Sel.%": "0.20%",
+      "Form": 2.3,
+      "Pts.": 7,
+      "RP": 5
+    },
+    {
+      "name": "Pope",
+      "team": "Newcastle United",
+      "position": "GKP",
+      "Cost": 5,
+      "Sel.%": "5.20%",
+      "Form": 6,
+      "Pts.": 18,
+      "RP": 5
+    },
+    {
+      "name": "Isidor",
+      "team": "Sunderland",
+      "position": "FWD",
+      "Cost": 5.5,
+      "Sel.%": "0.30%",
+      "Form": 3.7,
+      "Pts.": 11,
+      "RP": 5
+    },
+    {
+      "name": "Munetsi",
+      "team": "Wolverhampton Wanderers",
+      "position": "MID",
+      "Cost": 5.5,
+      "Sel.%": "0.10%",
+      "Form": 3,
+      "Pts.": 9,
+      "RP": 5
+    },
+    {
+      "name": "Adams",
+      "team": "Bournemouth",
+      "position": "MID",
+      "Cost": 5,
+      "Sel.%": "0.30%",
+      "Form": 3.3,
+      "Pts.": 10,
+      "RP": 4
+    },
+    {
+      "name": "Onyeka",
+      "team": "Brentford",
+      "position": "MID",
+      "Cost": 5,
+      "Sel.%": "0.10%",
+      "Form": 3,
+      "Pts.": 9,
+      "RP": 4
+    },
+    {
+      "name": "Caicedo",
+      "team": "Chelsea",
+      "position": "MID",
+      "Cost": 5.5,
+      "Sel.%": "6.60%",
+      "Form": 5.7,
+      "Pts.": 17,
+      "RP": 4
+    },
+    {
+      "name": "Garner",
+      "team": "Everton",
+      "position": "MID",
+      "Cost": 5,
+      "Sel.%": "0.30%",
+      "Form": 5.3,
+      "Pts.": 16,
+      "RP": 4
+    },
+    {
+      "name": "Dalot",
+      "team": "Manchester United",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "1.90%",
+      "Form": 2,
+      "Pts.": 6,
+      "RP": 4
+    },
+    {
+      "name": "Alderete",
+      "team": "Sunderland",
+      "position": "DEF",
+      "Cost": 4,
+      "Sel.%": "1.30%",
+      "Form": 3,
+      "Pts.": 9,
+      "RP": 4
+    },
+    {
+      "name": "Mukiele",
+      "team": "Sunderland",
+      "position": "DEF",
+      "Cost": 4,
+      "Sel.%": "0.40%",
+      "Form": 2,
+      "Pts.": 4,
+      "RP": 4
+    },
+    {
+      "name": "Diarra",
+      "team": "Sunderland",
+      "position": "MID",
+      "Cost": 5.5,
+      "Sel.%": "0.10%",
+      "Form": 3,
+      "Pts.": 9,
+      "RP": 4
+    },
+    {
+      "name": "Xhaka",
+      "team": "Sunderland",
+      "position": "MID",
+      "Cost": 5,
+      "Sel.%": "2.70%",
+      "Form": 3.7,
+      "Pts.": 11,
+      "RP": 4
+    },
+    {
+      "name": "Pedro Porro",
+      "team": "Tottenham Hotspur",
+      "position": "DEF",
+      "Cost": 5.6,
+      "Sel.%": "25.30%",
+      "Form": 5,
+      "Pts.": 15,
+      "RP": 4
+    },
+    {
+      "name": "M\u00f8ller Wolfe",
+      "team": "Wolverhampton Wanderers",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "0.10%",
+      "Form": 2,
+      "Pts.": 6,
+      "RP": 4
+    },
+    {
+      "name": "Ekdal",
+      "team": "Burnley",
+      "position": "DEF",
+      "Cost": 4,
+      "Sel.%": "1.00%",
+      "Form": 4.3,
+      "Pts.": 13,
+      "RP": 3
+    },
+    {
+      "name": "Tchaouna",
+      "team": "Burnley",
+      "position": "MID",
+      "Cost": 5,
+      "Sel.%": "0.00%",
+      "Form": 1.7,
+      "Pts.": 5,
+      "RP": 3
+    },
+    {
+      "name": "Tavernier",
+      "team": "Bournemouth",
+      "position": "MID",
+      "Cost": 5.5,
+      "Sel.%": "1.10%",
+      "Form": 6,
+      "Pts.": 18,
+      "RP": 3
+    },
+    {
+      "name": "Brooks",
+      "team": "Bournemouth",
+      "position": "MID",
+      "Cost": 5,
+      "Sel.%": "0.30%",
+      "Form": 3.3,
+      "Pts.": 10,
+      "RP": 3
+    },
+    {
+      "name": "Scott",
+      "team": "Bournemouth",
+      "position": "MID",
+      "Cost": 5,
+      "Sel.%": "0.10%",
+      "Form": 2.3,
+      "Pts.": 7,
+      "RP": 3
+    },
+    {
+      "name": "Collins",
+      "team": "Brentford",
+      "position": "DEF",
+      "Cost": 5,
+      "Sel.%": "1.70%",
+      "Form": 4,
+      "Pts.": 12,
+      "RP": 3
+    },
+    {
+      "name": "Van den Berg",
+      "team": "Brentford",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "0.70%",
+      "Form": 4.7,
+      "Pts.": 14,
+      "RP": 3
+    },
+    {
+      "name": "Henderson",
+      "team": "Brentford",
+      "position": "MID",
+      "Cost": 5,
+      "Sel.%": "0.30%",
+      "Form": 2.3,
+      "Pts.": 7,
+      "RP": 3
+    },
+    {
+      "name": "Neto",
+      "team": "Chelsea",
+      "position": "MID",
+      "Cost": 7,
+      "Sel.%": "5.70%",
+      "Form": 4.3,
+      "Pts.": 13,
+      "RP": 3
+    },
+    {
+      "name": "Est\u00eav\u00e3o",
+      "team": "Chelsea",
+      "position": "MID",
+      "Cost": 6.5,
+      "Sel.%": "2.60%",
+      "Form": 2.7,
+      "Pts.": 8,
+      "RP": 3
+    },
+    {
+      "name": "George",
+      "team": "Chelsea",
+      "position": "MID",
+      "Cost": 4.9,
+      "Sel.%": "0.10%",
+      "Form": 1,
+      "Pts.": 3,
+      "RP": 3
+    },
+    {
+      "name": "Tarkowski",
+      "team": "Everton",
+      "position": "DEF",
+      "Cost": 5.5,
+      "Sel.%": "7.50%",
+      "Form": 5,
+      "Pts.": 15,
+      "RP": 3
+    },
+    {
+      "name": "Keane",
+      "team": "Everton",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "0.50%",
+      "Form": 4.3,
+      "Pts.": 13,
+      "RP": 3
+    },
+    {
+      "name": "Andersen",
+      "team": "Fulham",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "2.70%",
+      "Form": 3,
+      "Pts.": 9,
+      "RP": 3
+    },
+    {
+      "name": "Tete",
+      "team": "Fulham",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "0.20%",
+      "Form": 2.3,
+      "Pts.": 7,
+      "RP": 3
+    },
+    {
+      "name": "Gruev",
+      "team": "Leeds United",
+      "position": "MID",
+      "Cost": 5,
+      "Sel.%": "0.00%",
+      "Form": 2,
+      "Pts.": 6,
+      "RP": 3
+    },
+    {
+      "name": "Stach",
+      "team": "Leeds United",
+      "position": "MID",
+      "Cost": 5,
+      "Sel.%": "0.50%",
+      "Form": 4.3,
+      "Pts.": 13,
+      "RP": 3
+    },
+    {
+      "name": "Bruno G.",
+      "team": "Newcastle United",
+      "position": "MID",
+      "Cost": 6.5,
+      "Sel.%": "2.30%",
+      "Form": 4,
+      "Pts.": 12,
+      "RP": 3
+    },
+    {
+      "name": "J.Murphy",
+      "team": "Newcastle United",
+      "position": "MID",
+      "Cost": 6.3,
+      "Sel.%": "1.40%",
+      "Form": 1.3,
+      "Pts.": 4,
+      "RP": 3
+    },
+    {
+      "name": "Tonali",
+      "team": "Newcastle United",
+      "position": "MID",
+      "Cost": 5.4,
+      "Sel.%": "1.30%",
+      "Form": 2.7,
+      "Pts.": 8,
+      "RP": 3
+    },
+    {
+      "name": "Talbi",
+      "team": "Sunderland",
+      "position": "MID",
+      "Cost": 5,
+      "Sel.%": "0.30%",
+      "Form": 3.7,
+      "Pts.": 11,
+      "RP": 3
+    },
+    {
+      "name": "Vicario",
+      "team": "Tottenham Hotspur",
+      "position": "GKP",
+      "Cost": 5,
+      "Sel.%": "7.30%",
+      "Form": 7,
+      "Pts.": 21,
+      "RP": 3
+    },
+    {
+      "name": "S.Bueno",
+      "team": "Wolverhampton Wanderers",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "0.00%",
+      "Form": 1.3,
+      "Pts.": 4,
+      "RP": 3
+    },
+    {
+      "name": "Toti",
+      "team": "Wolverhampton Wanderers",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "0.10%",
+      "Form": 0.3,
+      "Pts.": 1,
+      "RP": 3
+    },
+    {
+      "name": "D\u00fabravka",
+      "team": "Burnley",
+      "position": "GKP",
+      "Cost": 4,
+      "Sel.%": "34.10%",
+      "Form": 3.3,
+      "Pts.": 10,
+      "RP": 2
+    },
+    {
+      "name": "Cullen",
+      "team": "Burnley",
+      "position": "MID",
+      "Cost": 5,
+      "Sel.%": "1.80%",
+      "Form": 6.7,
+      "Pts.": 20,
+      "RP": 2
+    },
+    {
+      "name": "Hannibal",
+      "team": "Burnley",
+      "position": "MID",
+      "Cost": 5,
+      "Sel.%": "0.20%",
+      "Form": 3,
+      "Pts.": 9,
+      "RP": 2
+    },
+    {
+      "name": "Ugochukwu",
+      "team": "Burnley",
+      "position": "MID",
+      "Cost": 5,
+      "Sel.%": "0.00%",
+      "Form": 2,
+      "Pts.": 6,
+      "RP": 2
+    },
+    {
+      "name": "Semenyo",
+      "team": "Bournemouth",
+      "position": "MID",
+      "Cost": 7.3,
+      "Sel.%": "26.20%",
+      "Form": 7.7,
+      "Pts.": 23,
+      "RP": 2
+    },
+    {
+      "name": "O.Dango",
+      "team": "Brentford",
+      "position": "MID",
+      "Cost": 6,
+      "Sel.%": "1.10%",
+      "Form": 5,
+      "Pts.": 15,
+      "RP": 2
+    },
+    {
+      "name": "Damsgaard",
+      "team": "Brentford",
+      "position": "MID",
+      "Cost": 5.9,
+      "Sel.%": "0.90%",
+      "Form": 2.3,
+      "Pts.": 7,
+      "RP": 2
+    },
+    {
+      "name": "Yarmoliuk",
+      "team": "Brentford",
+      "position": "MID",
+      "Cost": 5,
+      "Sel.%": "0.10%",
+      "Form": 3,
+      "Pts.": 9,
+      "RP": 2
+    },
+    {
+      "name": "Gana",
+      "team": "Everton",
+      "position": "MID",
+      "Cost": 5.5,
+      "Sel.%": "0.10%",
+      "Form": 2.3,
+      "Pts.": 7,
+      "RP": 2
+    },
+    {
+      "name": "Leno",
+      "team": "Fulham",
+      "position": "GKP",
+      "Cost": 5,
+      "Sel.%": "1.50%",
+      "Form": 2.7,
+      "Pts.": 8,
+      "RP": 2
+    },
+    {
+      "name": "Sessegnon",
+      "team": "Fulham",
+      "position": "MID",
+      "Cost": 5.4,
+      "Sel.%": "0.00%",
+      "Form": 1.3,
+      "Pts.": 4,
+      "RP": 2
+    },
+    {
+      "name": "Berge",
+      "team": "Fulham",
+      "position": "MID",
+      "Cost": 5,
+      "Sel.%": "0.10%",
+      "Form": 2,
+      "Pts.": 6,
+      "RP": 2
+    },
+    {
+      "name": "King",
+      "team": "Fulham",
+      "position": "MID",
+      "Cost": 4.5,
+      "Sel.%": "1.40%",
+      "Form": 2,
+      "Pts.": 6,
+      "RP": 2
+    },
+    {
+      "name": "Nmecha",
+      "team": "Leeds United",
+      "position": "FWD",
+      "Cost": 5,
+      "Sel.%": "0.80%",
+      "Form": 2.7,
+      "Pts.": 8,
+      "RP": 2
+    },
+    {
+      "name": "Osula",
+      "team": "Newcastle United",
+      "position": "FWD",
+      "Cost": 5.5,
+      "Sel.%": "0.50%",
+      "Form": 2.7,
+      "Pts.": 8,
+      "RP": 2
+    },
+    {
+      "name": "Hume",
+      "team": "Sunderland",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "0.30%",
+      "Form": 3,
+      "Pts.": 9,
+      "RP": 2
+    },
+    {
+      "name": "Sadiki",
+      "team": "Sunderland",
+      "position": "MID",
+      "Cost": 5,
+      "Sel.%": "0.00%",
+      "Form": 2.3,
+      "Pts.": 7,
+      "RP": 2
+    },
+    {
+      "name": "Mayenda",
+      "team": "Sunderland",
+      "position": "FWD",
+      "Cost": 5.5,
+      "Sel.%": "2.00%",
+      "Form": 4,
+      "Pts.": 12,
+      "RP": 2
+    },
+    {
+      "name": "Romero",
+      "team": "Tottenham Hotspur",
+      "position": "DEF",
+      "Cost": 5,
+      "Sel.%": "5.40%",
+      "Form": 5,
+      "Pts.": 15,
+      "RP": 2
+    },
+    {
+      "name": "Kudus",
+      "team": "Tottenham Hotspur",
+      "position": "MID",
+      "Cost": 6.6,
+      "Sel.%": "33.20%",
+      "Form": 5,
+      "Pts.": 15,
+      "RP": 2
+    },
+    {
+      "name": "Bentancur",
+      "team": "Tottenham Hotspur",
+      "position": "MID",
+      "Cost": 5.5,
+      "Sel.%": "0.20%",
+      "Form": 2,
+      "Pts.": 6,
+      "RP": 2
+    },
+    {
+      "name": "P.M.Sarr",
+      "team": "Tottenham Hotspur",
+      "position": "MID",
+      "Cost": 5,
+      "Sel.%": "2.80%",
+      "Form": 3.7,
+      "Pts.": 11,
+      "RP": 2
+    },
+    {
+      "name": "Richarlison",
+      "team": "Tottenham Hotspur",
+      "position": "FWD",
+      "Cost": 6.7,
+      "Sel.%": "13.60%",
+      "Form": 6.3,
+      "Pts.": 19,
+      "RP": 2
+    },
+    {
+      "name": "Andr\u00e9",
+      "team": "Wolverhampton Wanderers",
+      "position": "MID",
+      "Cost": 5.5,
+      "Sel.%": "0.10%",
+      "Form": 2.3,
+      "Pts.": 7,
+      "RP": 2
+    },
+    {
+      "name": "Gomes",
+      "team": "Wolverhampton Wanderers",
+      "position": "MID",
+      "Cost": 5.5,
+      "Sel.%": "0.10%",
+      "Form": 1.7,
+      "Pts.": 5,
+      "RP": 2
+    },
+    {
+      "name": "J.Arias",
+      "team": "Wolverhampton Wanderers",
+      "position": "MID",
+      "Cost": 5.4,
+      "Sel.%": "0.50%",
+      "Form": 1.3,
+      "Pts.": 4,
+      "RP": 2
+    },
+    {
+      "name": "Est\u00e8ve",
+      "team": "Burnley",
+      "position": "DEF",
+      "Cost": 4,
+      "Sel.%": "18.70%",
+      "Form": 2.7,
+      "Pts.": 8,
+      "RP": 1
+    },
+    {
+      "name": "Hartman",
+      "team": "Burnley",
+      "position": "DEF",
+      "Cost": 4,
+      "Sel.%": "0.50%",
+      "Form": 2.7,
+      "Pts.": 8,
+      "RP": 1
+    },
+    {
+      "name": "Sonne",
+      "team": "Burnley",
+      "position": "DEF",
+      "Cost": 4,
+      "Sel.%": "0.10%",
+      "Form": 1,
+      "Pts.": 3,
+      "RP": 1
+    },
+    {
+      "name": "Worrall",
+      "team": "Burnley",
+      "position": "DEF",
+      "Cost": 4,
+      "Sel.%": "0.10%",
+      "Form": 0.7,
+      "Pts.": 2,
+      "RP": 1
+    },
+    {
+      "name": "Smith",
+      "team": "Bournemouth",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "0.40%",
+      "Form": 2.7,
+      "Pts.": 8,
+      "RP": 1
+    },
+    {
+      "name": "Kluivert",
+      "team": "Bournemouth",
+      "position": "MID",
+      "Cost": 7,
+      "Sel.%": "0.60%",
+      "Form": 0.7,
+      "Pts.": 2,
+      "RP": 1
+    },
+    {
+      "name": "Christie",
+      "team": "Bournemouth",
+      "position": "MID",
+      "Cost": 5,
+      "Sel.%": "0.10%",
+      "Form": 0.7,
+      "Pts.": 2,
+      "RP": 1
+    },
+    {
+      "name": "Adli",
+      "team": "Bournemouth",
+      "position": "MID",
+      "Cost": 5.5,
+      "Sel.%": "0.00%",
+      "Form": 1,
+      "Pts.": 2,
+      "RP": 1
+    },
+    {
+      "name": "Kroupi.Jr",
+      "team": "Bournemouth",
+      "position": "FWD",
+      "Cost": 4.5,
+      "Sel.%": "1.20%",
+      "Form": 1,
+      "Pts.": 3,
+      "RP": 1
+    },
+    {
+      "name": "Kelleher",
+      "team": "Brentford",
+      "position": "GKP",
+      "Cost": 4.5,
+      "Sel.%": "10.30%",
+      "Form": 2.3,
+      "Pts.": 7,
+      "RP": 1
+    },
+    {
+      "name": "Kayode",
+      "team": "Brentford",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "0.50%",
+      "Form": 4,
+      "Pts.": 12,
+      "RP": 1
+    },
+    {
+      "name": "Carvalho",
+      "team": "Brentford",
+      "position": "MID",
+      "Cost": 5,
+      "Sel.%": "0.20%",
+      "Form": 1,
+      "Pts.": 3,
+      "RP": 1
+    },
+    {
+      "name": "James",
+      "team": "Chelsea",
+      "position": "DEF",
+      "Cost": 5.5,
+      "Sel.%": "5.60%",
+      "Form": 2.3,
+      "Pts.": 7,
+      "RP": 1
+    },
+    {
+      "name": "Gittens",
+      "team": "Chelsea",
+      "position": "MID",
+      "Cost": 6.4,
+      "Sel.%": "0.20%",
+      "Form": 1,
+      "Pts.": 3,
+      "RP": 1
+    },
+    {
+      "name": "Delap",
+      "team": "Chelsea",
+      "position": "FWD",
+      "Cost": 6.4,
+      "Sel.%": "2.80%",
+      "Form": 1.3,
+      "Pts.": 4,
+      "RP": 1
+    },
+    {
+      "name": "Pickford",
+      "team": "Everton",
+      "position": "GKP",
+      "Cost": 5.5,
+      "Sel.%": "12.00%",
+      "Form": 6,
+      "Pts.": 18,
+      "RP": 1
+    },
+    {
+      "name": "Mykolenko",
+      "team": "Everton",
+      "position": "DEF",
+      "Cost": 4.9,
+      "Sel.%": "0.50%",
+      "Form": 0.3,
+      "Pts.": 1,
+      "RP": 1
+    },
+    {
+      "name": "O'Brien",
+      "team": "Everton",
+      "position": "DEF",
+      "Cost": 5,
+      "Sel.%": "0.60%",
+      "Form": 3,
+      "Pts.": 9,
+      "RP": 1
+    },
+    {
+      "name": "Coleman",
+      "team": "Everton",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "0.10%",
+      "Form": 0.3,
+      "Pts.": 1,
+      "RP": 1
+    },
+    {
+      "name": "Alcaraz",
+      "team": "Everton",
+      "position": "MID",
+      "Cost": 5.4,
+      "Sel.%": "0.10%",
+      "Form": 1,
+      "Pts.": 3,
+      "RP": 1
+    },
+    {
+      "name": "Iroegbunam",
+      "team": "Everton",
+      "position": "MID",
+      "Cost": 5,
+      "Sel.%": "0.00%",
+      "Form": 1.7,
+      "Pts.": 5,
+      "RP": 1
+    },
+    {
+      "name": "Barry",
+      "team": "Everton",
+      "position": "FWD",
+      "Cost": 5.9,
+      "Sel.%": "0.60%",
+      "Form": 1.3,
+      "Pts.": 4,
+      "RP": 1
+    },
+    {
+      "name": "Robinson",
+      "team": "Fulham",
+      "position": "DEF",
+      "Cost": 5,
+      "Sel.%": "0.70%",
+      "Form": 0.7,
+      "Pts.": 2,
+      "RP": 1
+    },
+    {
+      "name": "Bassey",
+      "team": "Fulham",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "0.50%",
+      "Form": 1.3,
+      "Pts.": 4,
+      "RP": 1
+    },
+    {
+      "name": "Iwobi",
+      "team": "Fulham",
+      "position": "MID",
+      "Cost": 6.5,
+      "Sel.%": "1.30%",
+      "Form": 3.3,
+      "Pts.": 10,
+      "RP": 1
+    },
+    {
+      "name": "Smith Rowe",
+      "team": "Fulham",
+      "position": "MID",
+      "Cost": 5.9,
+      "Sel.%": "0.80%",
+      "Form": 2.7,
+      "Pts.": 8,
+      "RP": 1
+    },
+    {
+      "name": "Adama",
+      "team": "Fulham",
+      "position": "MID",
+      "Cost": 5.4,
+      "Sel.%": "0.20%",
+      "Form": 0.7,
+      "Pts.": 2,
+      "RP": 1
+    },
+    {
+      "name": "Wilson",
+      "team": "Fulham",
+      "position": "MID",
+      "Cost": 5.5,
+      "Sel.%": "0.70%",
+      "Form": 2.3,
+      "Pts.": 7,
+      "RP": 1
+    },
+    {
+      "name": "Luki\u0107",
+      "team": "Fulham",
+      "position": "MID",
+      "Cost": 5,
+      "Sel.%": "0.10%",
+      "Form": 2,
+      "Pts.": 6,
+      "RP": 1
+    },
+    {
+      "name": "Ra\u00fal",
+      "team": "Fulham",
+      "position": "FWD",
+      "Cost": 6.4,
+      "Sel.%": "1.50%",
+      "Form": 1.3,
+      "Pts.": 4,
+      "RP": 1
+    },
+    {
+      "name": "Muniz",
+      "team": "Fulham",
+      "position": "FWD",
+      "Cost": 5.5,
+      "Sel.%": "2.30%",
+      "Form": 2.7,
+      "Pts.": 8,
+      "RP": 1
+    },
+    {
+      "name": "Justin",
+      "team": "Leeds United",
+      "position": "DEF",
+      "Cost": 4,
+      "Sel.%": "0.10%",
+      "Form": 1,
+      "Pts.": 1,
+      "RP": 1
+    },
+    {
+      "name": "Aaronson",
+      "team": "Leeds United",
+      "position": "MID",
+      "Cost": 5.4,
+      "Sel.%": "0.10%",
+      "Form": 1,
+      "Pts.": 3,
+      "RP": 1
+    },
+    {
+      "name": "Harrison",
+      "team": "Leeds United",
+      "position": "MID",
+      "Cost": 5.4,
+      "Sel.%": "0.10%",
+      "Form": 0.7,
+      "Pts.": 2,
+      "RP": 1
+    },
+    {
+      "name": "James",
+      "team": "Leeds United",
+      "position": "MID",
+      "Cost": 5.4,
+      "Sel.%": "0.40%",
+      "Form": 2,
+      "Pts.": 6,
+      "RP": 1
+    },
+    {
+      "name": "Calvert-Lewin",
+      "team": "Leeds United",
+      "position": "FWD",
+      "Cost": 5.5,
+      "Sel.%": "0.10%",
+      "Form": 0.5,
+      "Pts.": 1,
+      "RP": 1
+    },
+    {
+      "name": "Bayindir",
+      "team": "Manchester United",
+      "position": "GKP",
+      "Cost": 5,
+      "Sel.%": "0.50%",
+      "Form": 1.7,
+      "Pts.": 5,
+      "RP": 1
+    },
+    {
+      "name": "De Ligt",
+      "team": "Manchester United",
+      "position": "DEF",
+      "Cost": 5,
+      "Sel.%": "3.20%",
+      "Form": 4,
+      "Pts.": 12,
+      "RP": 1
+    },
+    {
+      "name": "Mazraoui",
+      "team": "Manchester United",
+      "position": "DEF",
+      "Cost": 4.9,
+      "Sel.%": "0.20%",
+      "Form": 0.3,
+      "Pts.": 1,
+      "RP": 1
+    },
+    {
+      "name": "Shaw",
+      "team": "Manchester United",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "0.30%",
+      "Form": 1.7,
+      "Pts.": 5,
+      "RP": 1
+    },
+    {
+      "name": "Yoro",
+      "team": "Manchester United",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "2.60%",
+      "Form": 3.7,
+      "Pts.": 11,
+      "RP": 1
+    },
+    {
+      "name": "Cunha",
+      "team": "Manchester United",
+      "position": "MID",
+      "Cost": 8.1,
+      "Sel.%": "12.50%",
+      "Form": 1.7,
+      "Pts.": 5,
+      "RP": 1
+    },
+    {
+      "name": "Mount",
+      "team": "Manchester United",
+      "position": "MID",
+      "Cost": 6,
+      "Sel.%": "0.40%",
+      "Form": 2,
+      "Pts.": 6,
+      "RP": 1
+    },
+    {
+      "name": "Mainoo",
+      "team": "Manchester United",
+      "position": "MID",
+      "Cost": 4.9,
+      "Sel.%": "0.60%",
+      "Form": 0.3,
+      "Pts.": 1,
+      "RP": 1
+    },
+    {
+      "name": "Zirkzee",
+      "team": "Manchester United",
+      "position": "FWD",
+      "Cost": 5.9,
+      "Sel.%": "0.40%",
+      "Form": 0.3,
+      "Pts.": 1,
+      "RP": 1
+    },
+    {
+      "name": "\u0160e\u0161ko",
+      "team": "Manchester United",
+      "position": "FWD",
+      "Cost": 7.5,
+      "Sel.%": "7.20%",
+      "Form": 1,
+      "Pts.": 3,
+      "RP": 1
+    },
+    {
+      "name": "Hall",
+      "team": "Newcastle United",
+      "position": "DEF",
+      "Cost": 5.5,
+      "Sel.%": "1.70%",
+      "Form": 0.7,
+      "Pts.": 2,
+      "RP": 1
+    },
+    {
+      "name": "J.Ramsey",
+      "team": "Newcastle United",
+      "position": "MID",
+      "Cost": 5.5,
+      "Sel.%": "0.50%",
+      "Form": 0.7,
+      "Pts.": 2,
+      "RP": 1
+    },
+    {
+      "name": "Elanga",
+      "team": "Newcastle United",
+      "position": "MID",
+      "Cost": 7,
+      "Sel.%": "9.10%",
+      "Form": 2,
+      "Pts.": 6,
+      "RP": 1
+    },
+    {
+      "name": "Barnes",
+      "team": "Newcastle United",
+      "position": "MID",
+      "Cost": 6.5,
+      "Sel.%": "1.20%",
+      "Form": 2,
+      "Pts.": 6,
+      "RP": 1
+    },
+    {
+      "name": "L.Miley",
+      "team": "Newcastle United",
+      "position": "MID",
+      "Cost": 4.5,
+      "Sel.%": "2.20%",
+      "Form": 1,
+      "Pts.": 3,
+      "RP": 1
+    },
+    {
+      "name": "Reinildo",
+      "team": "Sunderland",
+      "position": "DEF",
+      "Cost": 4,
+      "Sel.%": "8.50%",
+      "Form": 3.3,
+      "Pts.": 10,
+      "RP": 1
+    },
+    {
+      "name": "Adingra",
+      "team": "Sunderland",
+      "position": "MID",
+      "Cost": 5.5,
+      "Sel.%": "1.60%",
+      "Form": 2.7,
+      "Pts.": 8,
+      "RP": 1
+    },
+    {
+      "name": "Marc Guiu",
+      "team": "Sunderland",
+      "position": "FWD",
+      "Cost": 4.5,
+      "Sel.%": "14.70%",
+      "Form": 0.7,
+      "Pts.": 2,
+      "RP": 1
+    },
+    {
+      "name": "Spence",
+      "team": "Tottenham Hotspur",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "2.30%",
+      "Form": 4.3,
+      "Pts.": 13,
+      "RP": 1
+    },
+    {
+      "name": "Udogie",
+      "team": "Tottenham Hotspur",
+      "position": "DEF",
+      "Cost": 4.4,
+      "Sel.%": "0.40%",
+      "Form": 0.3,
+      "Pts.": 1,
+      "RP": 1
+    },
+    {
+      "name": "Van de Ven",
+      "team": "Tottenham Hotspur",
+      "position": "DEF",
+      "Cost": 4.6,
+      "Sel.%": "29.20%",
+      "Form": 4.3,
+      "Pts.": 13,
+      "RP": 1
+    },
+    {
+      "name": "Johnson",
+      "team": "Tottenham Hotspur",
+      "position": "MID",
+      "Cost": 7.1,
+      "Sel.%": "10.30%",
+      "Form": 6,
+      "Pts.": 18,
+      "RP": 1
+    },
+    {
+      "name": "Tel",
+      "team": "Tottenham Hotspur",
+      "position": "MID",
+      "Cost": 6.3,
+      "Sel.%": "0.10%",
+      "Form": 0.7,
+      "Pts.": 2,
+      "RP": 1
+    },
+    {
+      "name": "Bergvall",
+      "team": "Tottenham Hotspur",
+      "position": "MID",
+      "Cost": 5.5,
+      "Sel.%": "0.10%",
+      "Form": 1.7,
+      "Pts.": 5,
+      "RP": 1
+    },
+    {
+      "name": "Odobert",
+      "team": "Tottenham Hotspur",
+      "position": "MID",
+      "Cost": 5.4,
+      "Sel.%": "0.00%",
+      "Form": 1,
+      "Pts.": 3,
+      "RP": 1
+    },
+    {
+      "name": "J.Palhinha",
+      "team": "Tottenham Hotspur",
+      "position": "MID",
+      "Cost": 5.5,
+      "Sel.%": "0.70%",
+      "Form": 4.3,
+      "Pts.": 13,
+      "RP": 1
+    },
+    {
+      "name": "Jos\u00e9 S\u00e1",
+      "team": "Wolverhampton Wanderers",
+      "position": "GKP",
+      "Cost": 4.5,
+      "Sel.%": "1.80%",
+      "Form": 1.3,
+      "Pts.": 4,
+      "RP": 1
+    },
+    {
+      "name": "Agbadou",
+      "team": "Wolverhampton Wanderers",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "0.50%",
+      "Form": 1.7,
+      "Pts.": 5,
+      "RP": 1
+    },
+    {
+      "name": "H.Bueno",
+      "team": "Wolverhampton Wanderers",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "0.10%",
+      "Form": 0.7,
+      "Pts.": 2,
+      "RP": 1
+    },
+    {
+      "name": "Tchatchoua",
+      "team": "Wolverhampton Wanderers",
+      "position": "DEF",
+      "Cost": 4.5,
+      "Sel.%": "0.00%",
+      "Form": 1,
+      "Pts.": 2,
+      "RP": 1
+    },
+    {
+      "name": "Bellegarde",
+      "team": "Wolverhampton Wanderers",
+      "position": "MID",
+      "Cost": 5.5,
+      "Sel.%": "0.10%",
+      "Form": 1.3,
+      "Pts.": 4,
+      "RP": 1
+    },
+    {
+      "name": "Fer L\u00f3pez",
+      "team": "Wolverhampton Wanderers",
+      "position": "MID",
+      "Cost": 5.4,
+      "Sel.%": "0.00%",
+      "Form": 0.7,
+      "Pts.": 2,
+      "RP": 1
+    },
+    {
+      "name": "Kalajd\u017ei\u0107",
+      "team": "Wolverhampton Wanderers",
+      "position": "FWD",
+      "Cost": 4.9,
+      "Sel.%": "0.10%",
+      "Form": 0.3,
+      "Pts.": 1,
+      "RP": 1
+    }
+  ],
   "transfer_history": {
     "waivers": [
       {
