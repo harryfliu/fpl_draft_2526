@@ -158,6 +158,9 @@ function populateDashboard() {
     updateDataStatus();
     updateFixturesHeaders(); // Update both current and upcoming fixtures headers
     updateCurrentGWLeader(); // Update Current GW Leader
+    
+    // Populate monthly winners history
+    populateMonthlyWinnersHistory();
 }
 
 // Calculate cumulative team performance up to a specific gameweek
@@ -351,6 +354,20 @@ function calculateCumulativeWinnings(teamName, targetGameweek) {
             console.log(`   ⚠️ No final results data for GW${gw}`);
         }
     }
+    
+    // Add monthly winner earnings
+    const availableMonths = ['August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May'];
+    
+    availableMonths.forEach(month => {
+        if (isMonthComplete(month, targetGameweek)) {
+            const monthlyWinner = getMonthlyWinner(month, targetGameweek);
+            if (monthlyWinner && monthlyWinner.teamName === teamName) {
+                const monthlyWinnings = (dashboardData.leaderboard.length - 1) * 2; // $2 from each other manager
+                totalWinnings += monthlyWinnings;
+                console.log(`   🏆 ${teamName} won ${month}: +$${monthlyWinnings} (monthly winner)`);
+            }
+        }
+    });
     
     console.log(`\n💰 === ${teamName} TOTAL WINNINGS: $${totalWinnings} ===\n`);
     return totalWinnings;
@@ -1061,13 +1078,24 @@ function populateMonthlyStandings() {
                             const totalManagers = dashboardData.leaderboard.length;
                             const weeklyWinnings = totalManagers - 1; // $1 from each other manager
                             monthlyWinnings += weeklyWinnings;
-                        }
-                    }
+                                            }
                 }
             }
         }
+    }
+    
+    // Check if this month is complete and calculate monthly winner bonus
+    if (isMonthComplete(currentMonth, currentGameweek)) {
+        // Find the monthly winner for this month
+        const monthlyWinner = getMonthlyWinner(currentMonth, currentGameweek);
+        if (monthlyWinner && monthlyWinner.teamName === team.teamName) {
+            // Monthly winner gets $2 from every other manager (11 other managers = $22)
+            const monthlyWinnerBonus = (dashboardData.leaderboard.length - 1) * 2;
+            monthlyWinnings += monthlyWinnerBonus;
+        }
+    }
 
-        return {
+    return {
         position: team.position,
             manager: getManagerFromTeamName(team.teamName), // Use function to get manager name
             teamName: team.teamName,
@@ -1114,6 +1142,86 @@ function populateMonthlyStandings() {
         
         container.appendChild(standingElement);
     });
+}
+
+// Check if a month is complete (has all its gameweeks with final results)
+function isMonthComplete(month, currentGameweek) {
+    const monthGameweeks = getGameweeksForMonth(month);
+    if (!monthGameweeks) return false;
+    
+    // Month is complete if we have final results for all gameweeks in that month
+    for (const gw of monthGameweeks) {
+        if (gw > currentGameweek) return false; // Month not finished yet
+        
+        const gwData = dataManager.getGameweekData(gw);
+        if (!gwData || !gwData.finalResults || gwData.finalResults.length === 0) {
+            return false; // No final results for this gameweek
+        }
+    }
+    
+    return true;
+}
+
+// Get all gameweeks that belong to a specific month
+function getGameweeksForMonth(month) {
+    const monthMap = {
+        'August': [1, 2, 3],
+        'September': [4, 5, 6],
+        'October': [7, 8, 9, 10],
+        'November': [11, 12, 13, 14],
+        'December': [15, 16, 17, 18],
+        'January': [19, 20, 21, 22],
+        'February': [23, 24, 25, 26],
+        'March': [27, 28, 29, 30],
+        'April': [31, 32, 33, 34],
+        'May': [35, 36, 37, 38]
+    };
+    
+    return monthMap[month] || null;
+}
+
+// Get the monthly winner for a specific month
+function getMonthlyWinner(month, currentGameweek) {
+    const monthGameweeks = getGameweeksForMonth(month);
+    if (!monthGameweeks) return null;
+    
+    // Calculate total FPL points for each team in this month
+    const monthlyPoints = {};
+    
+    for (const gw of monthGameweeks) {
+        if (gw > currentGameweek) break; // Don't count future gameweeks
+        
+        const gwData = dataManager.getGameweekData(gw);
+        if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
+            // Process each final result
+            gwData.finalResults.forEach(result => {
+                const homeTeam = result.homeTeam;
+                const awayTeam = result.awayTeam;
+                const homeScore = result.homeScore || 0;
+                const awayScore = result.awayScore || 0;
+                
+                // Add points to monthly totals
+                if (!monthlyPoints[homeTeam]) monthlyPoints[homeTeam] = 0;
+                if (!monthlyPoints[awayTeam]) monthlyPoints[awayTeam] = 0;
+                
+                monthlyPoints[homeTeam] += homeScore;
+                monthlyPoints[awayTeam] += awayScore;
+            });
+        }
+    }
+    
+    // Find the team with the highest monthly points
+    let winner = null;
+    let highestPoints = -1;
+    
+    Object.entries(monthlyPoints).forEach(([teamName, points]) => {
+        if (points > highestPoints) {
+            highestPoints = points;
+            winner = { teamName, points };
+        }
+    });
+    
+    return winner;
 }
 
 // Update both current and upcoming fixtures header gameweek indicators
@@ -5254,56 +5362,29 @@ class PrizePoolManager {
 
     // Calculate monthly winners based on cumulative points in calendar months
     calculateMonthlyWinners(weeklyWinners, targetGameweek) {
-        // Group gameweeks by month (assume GW1 = August for now)
-        const monthlyGroups = this.groupGameweeksByMonth(targetGameweek);
         const monthlyWinners = [];
 
-        monthlyGroups.forEach(monthData => {
-            // Only calculate monthly winners for complete months
-            if (!monthData.isComplete) {
-                console.log(`📅 Skipping incomplete month: ${monthData.name} (GW${monthData.startGW}-${monthData.endGW})`);
-                return;
-            }
-            
-            const monthlyPointsMap = new Map();
-            
-            // Sum points for each manager in this month
-            for (let gw = monthData.startGW; gw <= monthData.endGW; gw++) {
-                const gameweekData = dataManager.gameweekData.get(`gw${gw}`);
-                if (gameweekData && gameweekData.standings) {
-                    gameweekData.standings.forEach(manager => {
-                        const managerName = manager.manager || manager.teamName;
-                        const gwPoints = parseInt(manager.gwPoints) || 0;
-                        const currentTotal = monthlyPointsMap.get(managerName) || 0;
-                        monthlyPointsMap.set(managerName, currentTotal + gwPoints);
-                    });
-                }
-            }
-
-            // Find monthly winner
-            if (monthlyPointsMap.size > 0) {
-                let monthlyWinner = null;
-                let maxPoints = 0;
-                
-                monthlyPointsMap.forEach((points, manager) => {
-                    if (points > maxPoints) {
-                        maxPoints = points;
-                        monthlyWinner = manager;
-                    }
-                });
-
-                if (monthlyWinner && maxPoints > 0) {
+        // Use our new monthly winner logic
+        const availableMonths = ['August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May'];
+        
+        availableMonths.forEach(month => {
+            if (isMonthComplete(month, targetGameweek)) {
+                const monthlyWinner = getMonthlyWinner(month, targetGameweek);
+                if (monthlyWinner) {
+                    // Get manager name for the winning team
+                    const winnerManagerName = getManagerFromTeamName(monthlyWinner.teamName);
+                    
                     // Monthly winner gets $2 from each of the other 11 managers
                     const monthlyWinnings = (this.leagueSize - 1) * this.monthlyWinnerAmount;
                     
-                    console.log(`🏆 Monthly winner for ${monthData.name}: ${monthlyWinner} with ${maxPoints} points, winning $${monthlyWinnings}`);
+                    console.log(`🏆 Monthly winner for ${month}: ${winnerManagerName} with ${monthlyWinner.points} points, winning $${monthlyWinnings}`);
                     
                     monthlyWinners.push({
-                        month: monthData.name,
-                        manager: monthlyWinner,
-                        points: maxPoints,
+                        month: month,
+                        manager: winnerManagerName,
+                        points: monthlyWinner.points,
                         winnings: monthlyWinnings,
-                        gameweeksIncluded: `GW${monthData.startGW}-${monthData.endGW}`
+                        gameweeksIncluded: `GW${getGameweeksForMonth(month)?.join('-') || 'Unknown'}`
                     });
                 }
             }
@@ -5312,35 +5393,7 @@ class PrizePoolManager {
         return monthlyWinners;
     }
 
-    // Group gameweeks by calendar month
-    groupGameweeksByMonth(targetGameweek) {
-        // Simplified: assume 4 gameweeks per month, starting in August
-        const months = [];
-        const monthNames = ['August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May'];
-        
-        let currentGW = 1;
-        let monthIndex = 0;
-        
-        while (currentGW <= targetGameweek && monthIndex < monthNames.length) {
-            const endGW = Math.min(currentGW + 3, targetGameweek); // 4 gameweeks per month
-            
-            // Only include months that are complete (have all 4 gameweeks or reach target gameweek)
-            // This prevents calculating monthly winners for incomplete months
-            if (endGW - currentGW + 1 >= 4 || endGW === targetGameweek) {
-            months.push({
-                name: monthNames[monthIndex],
-                startGW: currentGW,
-                    endGW: endGW,
-                    isComplete: endGW - currentGW + 1 >= 4
-            });
-            }
-            
-            currentGW = endGW + 1;
-            monthIndex++;
-        }
-        
-        return months;
-    }
+
 
     // Calculate who owes what payments (only pay when you lose to weekly/monthly winners)
     calculateOutstandingPayments(managerEarnings, weeklyWinners, monthlyWinners) {
@@ -5637,6 +5690,78 @@ function updatePrizePoolStats(earnings, targetGameweek) {
     
     // Display outstanding payments
     displayOutstandingPayments();
+    
+    // Populate monthly winners history
+    populateMonthlyWinnersHistory();
+}
+
+// Populate monthly winners history table
+function populateMonthlyWinnersHistory() {
+    const tbody = document.getElementById('monthly-winners-table');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '';
+    
+    // Get all available months up to current gameweek
+    const currentGameweek = dashboardData.currentGameweek || 1;
+    const availableMonths = ['August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May'];
+    
+    let monthlyWinnersData = [];
+    
+    // Check each month to see if it's complete and has a winner
+    availableMonths.forEach(month => {
+        if (isMonthComplete(month, currentGameweek)) {
+            const monthlyWinner = getMonthlyWinner(month, currentGameweek);
+            if (monthlyWinner) {
+                // Get manager name for the winning team
+                const managerName = getManagerFromTeamName(monthlyWinner.teamName);
+                
+                monthlyWinnersData.push({
+                    month: month,
+                    winner: managerName,
+                    teamName: monthlyWinner.teamName,
+                    totalPoints: monthlyWinner.points,
+                    winnings: (dashboardData.leaderboard.length - 1) * 2 // $2 from each other manager
+                });
+            }
+        }
+    });
+    
+    if (monthlyWinnersData.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="4" class="text-center py-4 text-gray-400">
+                    <i class="fas fa-calendar-alt mr-2"></i>
+                    No monthly winners yet
+                </td>
+            </tr>
+        `;
+        return;
+    }
+    
+    // Sort by month (chronological order)
+    monthlyWinnersData.sort((a, b) => {
+        const monthOrder = ['August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May'];
+        return monthOrder.indexOf(a.month) - monthOrder.indexOf(b.month);
+    });
+    
+    monthlyWinnersData.forEach(winner => {
+        const row = document.createElement('tr');
+        row.className = 'hover:bg-purple-900/20 text-white';
+        
+        row.innerHTML = `
+            <td class="font-medium">${winner.month}</td>
+            <td class="font-medium">${winner.winner}</td>
+            <td class="hidden sm:table-cell">${winner.totalPoints} pts</td>
+            <td>
+                <span class="badge badge-success badge-sm">
+                    +$${winner.winnings}
+                </span>
+            </td>
+        `;
+        
+        tbody.appendChild(row);
+    });
 }
 
 // Populate weekly winners table
@@ -5806,6 +5931,23 @@ function populateTopEarners(managerEarnings) {
         }
     }
     
+    // Add monthly winner earnings
+    const availableMonths = ['August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May'];
+    
+    availableMonths.forEach(month => {
+        if (isMonthComplete(month, currentGameweek)) {
+            const monthlyWinner = getMonthlyWinner(month, currentGameweek);
+            if (monthlyWinner) {
+                const winnerManagerName = getManagerFromTeamName(monthlyWinner.teamName);
+                const monthlyWinnings = (dashboardData.leaderboard.length - 1) * 2; // $2 from each other manager
+                
+                // Add to cumulative earnings
+                const currentEarnings = cumulativeEarnings.get(winnerManagerName) || 0;
+                cumulativeEarnings.set(winnerManagerName, currentEarnings + monthlyWinnings);
+            }
+        }
+    });
+    
     const sortedEarners = Array.from(cumulativeEarnings.entries())
         .sort((a, b) => b[1] - a[1])
         .slice(0, 5);
@@ -5881,6 +6023,23 @@ function populateTopEarnersLeaderboard() {
             }
         }
     }
+    
+    // Add monthly winner earnings
+    const availableMonths = ['August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May'];
+    
+    availableMonths.forEach(month => {
+        if (isMonthComplete(month, currentGameweek)) {
+            const monthlyWinner = getMonthlyWinner(month, currentGameweek);
+            if (monthlyWinner) {
+                const winnerManagerName = getManagerFromTeamName(monthlyWinner.teamName);
+                const monthlyWinnings = (dashboardData.leaderboard.length - 1) * 2; // $2 from each other manager
+                
+                // Add to cumulative earnings
+                const currentEarnings = cumulativeEarnings.get(winnerManagerName) || 0;
+                cumulativeEarnings.set(winnerManagerName, currentEarnings + monthlyWinnings);
+            }
+        }
+    });
     
     if (cumulativeEarnings.size === 0) {
         tbody.innerHTML = `
@@ -6850,6 +7009,47 @@ function calculateOutstandingPayments() {
         }
     }
     
+    // Add monthly winner debts
+    const availableMonths = ['August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May'];
+    
+    availableMonths.forEach(month => {
+        if (isMonthComplete(month, currentGameweek)) {
+            const monthlyWinner = getMonthlyWinner(month, currentGameweek);
+            if (monthlyWinner) {
+                // Initialize month structure if not exists
+                if (!monthlyPayments[month]) {
+                    monthlyPayments[month] = {
+                        winners: [],
+                        debts: {}
+                    };
+                    // Initialize debt tracking for all managers
+                    allManagers.forEach(manager => {
+                        monthlyPayments[month].debts[manager] = 0;
+                    });
+                }
+                
+                // Get manager name for the winning team
+                const winnerManagerName = getManagerFromTeamName(monthlyWinner.teamName);
+                
+                // Add monthly winner to month
+                monthlyPayments[month].winners.push({
+                    gameweek: 'Monthly',
+                    winner: winnerManagerName,
+                    gwPoints: monthlyWinner.points,
+                    month: month,
+                    type: 'monthly'
+                });
+                
+                // Calculate debts: all other managers owe $2 to the monthly winner
+                allManagers.forEach(manager => {
+                    if (manager !== winnerManagerName) {
+                        monthlyPayments[month].debts[manager] += 2;
+                    }
+                });
+            }
+        }
+    });
+    
     return monthlyPayments;
 }
 
@@ -6898,6 +7098,7 @@ function displayOutstandingPayments() {
         return;
     }
     
+    // Create unified monthly sections with winners and outstanding payments
     let html = '';
     
     // Sort months chronologically
@@ -6907,54 +7108,76 @@ function displayOutstandingPayments() {
     monthOrder.forEach(month => {
         if (monthlyPayments[month]) {
             const monthData = monthlyPayments[month];
-            const totalDebt = Object.values(monthData.debts).reduce((sum, debt) => sum + debt, 0);
-            
-            if (totalDebt > 0) {
+            if (monthData.winners && monthData.winners.length > 0) {
                 html += `
-                    <div class="mb-4 p-3 bg-gray-800/50 rounded-lg border border-gray-700/50">
-                        <h5 class="font-semibold text-white mb-2 flex items-center">
-                            <i class="fas fa-calendar text-blue-400 mr-2"></i>
-                            ${month} Payments Due
-                            <span class="badge badge-warning ml-2">$${totalDebt} total</span>
+                    <div class="mb-6 p-4 bg-gray-800/50 rounded-lg border border-gray-700/50">
+                        <h5 class="text-lg font-semibold text-white mb-3 flex items-center">
+                            <i class="fas fa-calendar-alt text-purple-400 mr-2"></i>
+                            ${month}
                         </h5>
                         
-                        <div class="mb-3">
-                            <h6 class="text-sm font-medium text-blue-300 mb-2">Weekly Winners:</h6>
+                        <div class="mb-4">
+                            <h6 class="text-sm font-medium text-gray-300 mb-2">Winners:</h6>
                             <div class="flex flex-wrap gap-2">
                                 ${monthData.winners.map(winner => `
                                     <span class="badge badge-success badge-sm">
-                                        GW${winner.gameweek}: ${winner.winner} (${winner.gwPoints} pts)
+                                        ${winner.winner} (${winner.gwPoints || winner.points} pts)
                                     </span>
                                 `).join('')}
                             </div>
                         </div>
                         
-                        <div class="overflow-x-auto">
-                            <table class="table table-zebra bg-gray-700/50 min-w-max text-xs">
-                                <thead>
-                                    <tr class="bg-gray-800/90 border-b border-gray-600/50">
-                                        <th class="text-white">Manager</th>
-                                        <th class="text-white">Owes</th>
-                                        <th class="text-white">To</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${Object.entries(monthData.debts)
-                                        .filter(([manager, debt]) => debt > 0)
-                                        .map(([manager, debt]) => `
-                                            <tr class="hover:bg-gray-600/30">
-                                                <td class="text-white font-medium">${manager}</td>
-                                                <td class="text-red-400 font-bold">$${debt}</td>
-                                                <td class="text-green-400">
-                                                    ${monthData.winners
-                                                        .filter(winner => winner.winner !== manager)
-                                                        .map(winner => winner.winner)
-                                                        .join(', ')}
-                                                </td>
-                                            </tr>
-                                        `).join('')}
-                                </tbody>
-                            </table>
+                        <div class="mb-4">
+                            <h6 class="text-sm font-medium text-red-300 mb-2">Outstanding Payments:</h6>
+                            <div class="overflow-x-auto">
+                                <table class="table table-zebra bg-gray-700/50 min-w-max text-xs">
+                                    <thead>
+                                        <tr class="bg-gray-800/90 border-b border-gray-600/50">
+                                            <th class="text-white">Manager</th>
+                                            <th class="text-white">Total Owed</th>
+                                            <th class="text-white">Breakdown</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${Object.entries(monthData.debts)
+                                            .filter(([manager, debt]) => debt > 0)
+                                            .map(([manager, debt]) => {
+                                                // Calculate detailed breakdown for this manager
+                                                let breakdown = [];
+                                                monthData.winners.forEach(winner => {
+                                                    if (winner.winner !== manager) {
+                                                        // This manager owes money to the winner
+                                                        const amount = winner.type === 'monthly' ? 2 : 1; // $2 for monthly, $1 for weekly
+                                                        
+                                                        // Add to breakdown
+                                                        const existingEntry = breakdown.find(item => item.to === winner.winner);
+                                                        if (existingEntry) {
+                                                            existingEntry.amount += amount;
+                                                        } else {
+                                                            breakdown.push({
+                                                                to: winner.winner,
+                                                                amount: amount
+                                                            });
+                                                        }
+                                                    }
+                                                });
+                                                
+                                                // Format breakdown as "X to Y, Z to W"
+                                                const breakdownText = breakdown
+                                                    .map(item => `$${item.amount} to ${item.to}`)
+                                                    .join(', ');
+                                                
+                                                return `
+                                                    <tr class="hover:bg-gray-600/30">
+                                                        <td class="text-white font-medium">${manager}</td>
+                                                        <td class="text-red-400 font-bold">$${debt}</td>
+                                                        <td class="text-green-400 text-xs">${breakdownText}</td>
+                                                    </tr>
+                                                `;
+                                            }).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 `;

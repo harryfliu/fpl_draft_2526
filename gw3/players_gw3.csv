@@ -1,175 +1,292 @@
 Player,Cost,Sel.%,Form,Pts.,RP
-SenesiBournemouthDEF,4.5,1.90%,7.3,22,11
-ChalobahChelseaDEF,5,4.10%,8.3,25,11
-EnzoChelseaMID,6.5,5.80%,8,24,11
-Dewsbury-HallEvertonMID,5,3.90%,4.3,13,9
-E.Le FéeSunderlandMID,4.9,0.30%,3.7,11,9
+GuéhiCrystal PalaceDEF,4.5,13.50%,7.7,23,15
+SenesiBournemouthDEF,4.5,3.20%,8.3,25,14
+ChalobahChelseaDEF,5.1,5.00%,9,27,13
+SzoboszlaiLiverpoolMID,6.5,2.00%,5.7,17,13
+EnzoChelseaMID,6.6,7.30%,8.3,25,12
+Dewsbury-HallEvertonMID,5,4.00%,5.3,16,12
+LacroixCrystal PalaceDEF,5,1.80%,7.3,22,11
+E.Le FéeSunderlandMID,4.9,0.30%,4.3,13,11
+GrealishEvertonMID,6.7,10.80%,7.3,22,10
+MbeumoMan UtdMID,8.1,15.80%,4.7,14,10
+B.FernandesMan UtdMID,9,21.50%,4.7,14,10
+DioufWest HamDEF,4.5,5.50%,4.7,14,10
+L.PaquetáWest HamMID,5.9,1.40%,7,21,10
+João PedroChelseaFWD,7.7,62.00%,8.7,26,9
+MuñozCrystal PalaceDEF,5.5,10.10%,6.3,19,9
+GudmundssonLeedsDEF,4,3.70%,5.7,17,9
+HaalandMan CityFWD,14.1,31.90%,8,24,9
+BowenWest HamFWD,7.8,7.80%,4.3,13,9
+EvanilsonBournemouthFWD,7,2.10%,3.7,11,8
+GrudaBrightonMID,5.4,0.00%,3.3,10,8
 TosinChelseaDEF,4.5,1.10%,3.3,10,8
-GrealishEvertonMID,6.6,7.90%,6.7,20,8
-B.FernandesMan UtdMID,9,21.40%,4,12,8
+RichardsCrystal PalaceDEF,4.5,1.60%,5.3,16,8
+A.BeckerLiverpoolGKP,5.5,10.30%,3.3,10,8
+VirgilLiverpoolDEF,6,24.90%,4.7,14,8
+BotmanNewcastleDEF,4.9,0.40%,2.7,8,8
 RoefsSunderlandGKP,4.5,1.20%,5.7,17,8
-NdiayeEvertonMID,6.5,9.40%,5.7,17,7
-MbeumoMan UtdMID,8,15.40%,3.7,11,7
+IsidorSunderlandFWD,5.5,0.40%,4.7,14,8
+TruffertBournemouthDEF,4.5,1.00%,4.3,13,7
+HendersonCrystal PalaceGKP,5,7.30%,5,15,7
+SarrCrystal PalaceMID,6.5,7.00%,6,18,7
+NdiayeEvertonMID,6.5,9.50%,5.7,17,7
+BetoEvertonFWD,5.4,5.60%,3,9,7
+RodonLeedsDEF,4,2.60%,5.3,16,7
+MarmoushMan CityMID,8.4,7.50%,3,9,7
+HermansenWest HamGKP,4.5,0.30%,2.7,8,7
+SummervilleWest HamMID,5.5,0.00%,2.3,7,7
+WilsonWest HamFWD,5.9,0.40%,3,9,7
 R.GomesWolvesDEF,4.5,0.10%,2.7,8,7
 Hee ChanWolvesMID,5.9,0.10%,3,9,7
-AnthonyBurnleyMID,5.5,0.40%,7,21,6
-TruffertBournemouthDEF,4.5,1.00%,4,12,6
-DiakitéBournemouthDEF,4.5,0.30%,5.3,16,6
-EvanilsonBournemouthFWD,7,2.00%,3,9,6
+AnthonyBurnleyMID,5.5,0.60%,7,21,6
+FosterBurnleyFWD,5,0.60%,3.3,10,6
+DiakitéBournemouthDEF,4.5,0.40%,5.3,16,6
 Lewis-PotterBrentfordDEF,5,0.40%,4.3,13,6
-SánchezChelseaGKP,5,24.90%,5.7,17,6
-CucurellaChelseaDEF,6.1,27.40%,6.3,19,6
+ThiagoBrentfordFWD,6,1.40%,4.7,14,6
+MilnerBrightonMID,5,0.10%,2.3,7,6
+SánchezChelseaGKP,5,24.80%,5.7,17,6
+CucurellaChelseaDEF,6.1,27.70%,6.3,19,6
 GustoChelseaDEF,5,1.50%,3,9,6
-João PedroChelseaFWD,7.6,60.70%,7.7,23,6
-BetoEvertonFWD,5.4,5.60%,2.7,8,6
+MitchellCrystal PalaceDEF,5,1.80%,5.3,16,6
+KamadaCrystal PalaceMID,5,0.00%,2,6,6
 PerriLeedsGKP,4.5,0.40%,4,12,6
 BogleLeedsDEF,4.5,0.20%,3.7,11,6
 StruijkLeedsDEF,4.5,0.40%,4.7,14,6
-GudmundssonLeedsDEF,4,3.60%,4.7,14,6
-RodonLeedsDEF,4,2.40%,5,15,6
+KerkezLiverpoolDEF,6,5.60%,2.3,7,6
+KonatéLiverpoolDEF,5.5,2.80%,2.3,7,6
 SchärNewcastleDEF,5.5,2.70%,5,15,6
-BotmanNewcastleDEF,4.9,0.40%,2,6,6
-BurnNewcastleDEF,5,5.10%,5.7,17,6
-LivramentoNewcastleDEF,5.1,7.60%,6.3,19,6
-TrippierNewcastleDEF,5,2.60%,4.3,13,6
+BurnNewcastleDEF,5,5.20%,5.7,17,6
+LivramentoNewcastleDEF,5.1,8.00%,6.3,19,6
+TrippierNewcastleDEF,5,2.70%,4.3,13,6
+KilmanWest HamDEF,4.4,0.20%,2,6,6
+MavropanosWest HamDEF,4.4,0.00%,2,6,6
+Walker-PetersWest HamDEF,4.4,0.30%,2.3,7,6
 Bruun LarsenBurnleyMID,5.4,0.00%,3,9,5
-FosterBurnleyFWD,5,0.60%,3,9,5
-PetrovićBournemouthGKP,4.5,3.60%,4.3,13,5
-HillBournemouthDEF,4,0.70%,2.3,7,5
-ThiagoBrentfordFWD,6,1.30%,4.3,13,5
+PetrovićBournemouthGKP,4.5,3.80%,4.3,13,5
+HillBournemouthDEF,4,0.80%,2.3,7,5
+DunkBrightonDEF,4.5,1.20%,2.7,8,5
+MitomaBrightonMID,6.4,5.00%,3,9,5
+MatetaCrystal PalaceFWD,7.5,8.20%,2.7,8,5
 LongstaffLeedsMID,4.9,0.10%,2.3,7,5
 AmadMan UtdMID,6.4,2.10%,2.3,7,5
 CasemiroMan UtdMID,5.5,0.20%,2.3,7,5
-PopeNewcastleGKP,5,5.20%,6,18,5
-IsidorSunderlandFWD,5.5,0.30%,3.7,11,5
+PopeNewcastleGKP,5,5.30%,6,18,5
 MunetsiWolvesMID,5.5,0.10%,3,9,5
+RiceArsenalMID,6.5,8.80%,5.3,16,4
 AdamsBournemouthMID,5,0.30%,3.3,10,4
+BrooksBournemouthMID,5,0.30%,3.7,11,4
 OnyekaBrentfordMID,5,0.10%,3,9,4
-CaicedoChelseaMID,5.5,6.60%,5.7,17,4
+MintehBrightonMID,5.9,0.80%,3,9,4
+CaicedoChelseaMID,5.5,6.70%,5.7,17,4
 GarnerEvertonMID,5,0.30%,5.3,16,4
+C.JonesLiverpoolMID,5.4,0.10%,2.3,7,4
 DalotMan UtdDEF,4.5,1.90%,2,6,4
+SangaréNott'm ForestMID,5,0.10%,2.7,8,4
 AldereteSunderlandDEF,4,1.30%,3,9,4
 MukieleSunderlandDEF,4,0.40%,2,4,4
 DiarraSunderlandMID,5.5,0.10%,3,9,4
 XhakaSunderlandMID,5,2.70%,3.7,11,4
-Pedro PorroSpursDEF,5.6,25.30%,5,15,4
+Pedro PorroSpursDEF,5.6,25.40%,5,15,4
 Møller WolfeWolvesDEF,4.5,0.10%,2,6,4
+MartinelliArsenalMID,6.9,1.10%,1.3,4,3
+MerinoArsenalMID,5.9,0.40%,1.3,4,3
 EkdalBurnleyDEF,4,1.00%,4.3,13,3
 TchaounaBurnleyMID,5,0.00%,1.7,5,3
-TavernierBournemouthMID,5.5,1.10%,6,18,3
-BrooksBournemouthMID,5,0.30%,3.3,10,3
+TavernierBournemouthMID,5.5,1.20%,6,18,3
 ScottBournemouthMID,5,0.10%,2.3,7,3
 CollinsBrentfordDEF,5,1.70%,4,12,3
 Van den BergBrentfordDEF,4.5,0.70%,4.7,14,3
 HendersonBrentfordMID,5,0.30%,2.3,7,3
-NetoChelseaMID,7,5.70%,4.3,13,3
-EstêvãoChelseaMID,6.5,2.60%,2.7,8,3
+NetoChelseaMID,7,5.60%,4.3,13,3
+EstêvãoChelseaMID,6.5,2.50%,2.7,8,3
 GeorgeChelseaMID,4.9,0.10%,1,3,3
-TarkowskiEvertonDEF,5.5,7.50%,5,15,3
+TarkowskiEvertonDEF,5.5,7.40%,5,15,3
 KeaneEvertonDEF,4.5,0.50%,4.3,13,3
 AndersenFulhamDEF,4.5,2.70%,3,9,3
 TeteFulhamDEF,4.5,0.20%,2.3,7,3
 GruevLeedsMID,5,0.00%,2,6,3
 StachLeedsMID,5,0.50%,4.3,13,3
+M.SalahLiverpoolMID,14.5,54.20%,5.3,16,3
+WirtzLiverpoolMID,8.4,21.70%,2.3,7,3
+GakpoLiverpoolMID,7.6,15.10%,6.7,20,3
+Mac AllisterLiverpoolMID,6.5,1.60%,2.7,8,3
 Bruno G.NewcastleMID,6.5,2.30%,4,12,3
-J.MurphyNewcastleMID,6.3,1.40%,1.3,4,3
+J.MurphyNewcastleMID,6.3,1.30%,1.3,4,3
 TonaliNewcastleMID,5.4,1.30%,2.7,8,3
 TalbiSunderlandMID,5,0.30%,3.7,11,3
-VicarioSpursGKP,5,7.30%,7,21,3
+VicarioSpursGKP,5,7.70%,7,21,3
+SoučekWest HamMID,5.8,0.50%,2,6,3
+Ward-ProwseWest HamMID,5.9,0.30%,2.3,7,3
+M.FernandesWest HamMID,5.5,0.00%,3,3,3
 S.BuenoWolvesDEF,4.5,0.00%,1.3,4,3
 TotiWolvesDEF,4.5,0.10%,0.3,1,3
-DúbravkaBurnleyGKP,4,34.10%,3.3,10,2
+RayaArsenalGKP,5.5,21.80%,6,18,2
+GabrielArsenalDEF,6.1,20.70%,4.7,14,2
+CalafioriArsenalDEF,5.6,9.50%,9.3,28,2
+J.TimberArsenalDEF,5.6,7.80%,8.7,26,2
+MosqueraArsenalDEF,5.4,0.10%,1,3,2
+MaduekeArsenalMID,7,1.00%,2,6,2
+RogersAston VillaMID,7,8.70%,2.3,7,2
+TielemansAston VillaMID,6,1.90%,2.3,7,2
+MalenAston VillaMID,5.3,1.00%,1.3,4,2
+McGinnAston VillaMID,5.5,0.60%,2.3,7,2
+WatkinsAston VillaFWD,8.9,19.30%,2,6,2
+DúbravkaBurnleyGKP,4,34.00%,3.3,10,2
 CullenBurnleyMID,5,1.80%,6.7,20,2
 HannibalBurnleyMID,5,0.20%,3,9,2
 UgochukwuBurnleyMID,5,0.00%,2,6,2
-SemenyoBournemouthMID,7.3,26.20%,7.7,23,2
-O.DangoBrentfordMID,6,1.10%,5,15,2
+SemenyoBournemouthMID,7.3,27.30%,7.7,23,2
+O.DangoBrentfordMID,6,1.00%,5,15,2
 DamsgaardBrentfordMID,5.9,0.90%,2.3,7,2
 YarmoliukBrentfordMID,5,0.10%,3,9,2
-GanaEvertonMID,5.5,0.10%,2.3,7,2
+VerbruggenBrightonGKP,4.5,6.30%,1.7,5,2
+De CuyperBrightonDEF,4.5,4.80%,1.3,4,2
+HinshelwoodBrightonMID,5.4,0.10%,1,3,2
+GomezBrightonMID,5,0.10%,1,3,2
+WelbeckBrightonFWD,6.4,2.50%,1,3,2
+HughesCrystal PalaceMID,5,0.10%,1.7,5,2
+GanaEvertonMID,5.4,0.10%,2.3,7,2
 LenoFulhamGKP,5,1.50%,2.7,8,2
 SessegnonFulhamMID,5.4,0.00%,1.3,4,2
 BergeFulhamMID,5,0.10%,2,6,2
-KingFulhamMID,4.5,1.40%,2,6,2
+KingFulhamMID,4.5,1.50%,2,6,2
 NmechaLeedsFWD,5,0.80%,2.7,8,2
+GravenberchLiverpoolMID,5.5,0.50%,3,9,2
+EkitikéLiverpoolFWD,8.7,29.40%,7.3,22,2
+TraffordMan CityGKP,5,2.50%,3.7,11,2
+Matheus N.Man CityDEF,5.4,0.30%,1,3,2
+BernardoMan CityMID,6.4,0.70%,2,6,2
+RodrigoMan CityMID,6.4,0.60%,1,3,2
+BobbMan CityMID,5.5,0.50%,3.3,10,2
+ReijndersMan CityMID,5.7,33.50%,4.7,14,2
 OsulaNewcastleFWD,5.5,0.50%,2.7,8,2
+SelsNott'm ForestGKP,5,17.80%,2,6,2
+Gibbs-WhiteNott'm ForestMID,7.5,6.00%,3,9,2
+Hudson-OdoiNott'm ForestMID,6,1.60%,4.7,14,2
+AndersonNott'm ForestMID,5.5,5.90%,3.3,10,2
+WoodNott'm ForestFWD,7.7,26.70%,5.7,17,2
 HumeSunderlandDEF,4.5,0.30%,3,9,2
 SadikiSunderlandMID,5,0.00%,2.3,7,2
-MayendaSunderlandFWD,5.5,2.00%,4,12,2
+MayendaSunderlandFWD,5.5,1.90%,4,12,2
 RomeroSpursDEF,5,5.40%,5,15,2
-KudusSpursMID,6.6,33.20%,5,15,2
+KudusSpursMID,6.6,33.00%,5,15,2
 BentancurSpursMID,5.5,0.20%,2,6,2
-P.M.SarrSpursMID,5,2.80%,3.7,11,2
-RicharlisonSpursFWD,6.7,13.60%,6.3,19,2
+P.M.SarrSpursMID,5,2.70%,3.7,11,2
+RicharlisonSpursFWD,6.7,13.80%,6.3,19,2
+FüllkrugWest HamFWD,5.9,1.90%,1.7,5,2
 AndréWolvesMID,5.5,0.10%,2.3,7,2
 GomesWolvesMID,5.5,0.10%,1.7,5,2
 J.AriasWolvesMID,5.4,0.50%,1.3,4,2
-EstèveBurnleyDEF,4,18.70%,2.7,8,1
+SalibaArsenalDEF,6.1,18.10%,5.3,16,1
+ØdegaardArsenalMID,7.9,2.40%,2.3,7,1
+ZubimendiArsenalMID,5.5,1.90%,3,9,1
+EzeArsenalMID,7.5,10.80%,1.3,4,1
+DowmanArsenalMID,4.5,0.30%,2.5,5,1
+GyökeresArsenalFWD,9,25.40%,4.7,14,1
+DigneAston VillaDEF,4.5,2.20%,3,9,1
+KonsaAston VillaDEF,4.5,14.30%,1.3,4,1
+MaatsenAston VillaDEF,4.4,0.70%,0.7,2,1
+MingsAston VillaDEF,4.5,1.30%,3,9,1
+PauAston VillaDEF,4.5,0.40%,1,3,1
+BogardeAston VillaDEF,4,0.30%,0.3,1,1
+BuendíaAston VillaMID,5.3,0.10%,0.7,2,1
+GuessandAston VillaMID,6.4,0.00%,0.7,2,1
+BurrowesAston VillaMID,4.5,0.10%,0.5,1,1
+EstèveBurnleyDEF,4,18.40%,2.7,8,1
 HartmanBurnleyDEF,4,0.50%,2.7,8,1
 SonneBurnleyDEF,4,0.10%,1,3,1
 WorrallBurnleyDEF,4,0.10%,0.7,2,1
-SmithBournemouthDEF,4.5,0.40%,2.7,8,1
-KluivertBournemouthMID,7,0.60%,0.7,2,1
+SmithBournemouthDEF,4.5,0.30%,2.7,8,1
+KluivertBournemouthMID,7,0.70%,0.7,2,1
 ChristieBournemouthMID,5,0.10%,0.7,2,1
 AdliBournemouthMID,5.5,0.00%,1,2,1
 Kroupi.JrBournemouthFWD,4.5,1.20%,1,3,1
-KelleherBrentfordGKP,4.5,10.30%,2.3,7,1
+KelleherBrentfordGKP,4.5,10.10%,2.3,7,1
 KayodeBrentfordDEF,4.5,0.50%,4,12,1
-CarvalhoBrentfordMID,5,0.20%,1,3,1
-JamesChelseaDEF,5.5,5.60%,2.3,7,1
+CarvalhoBrentfordMID,4.9,0.20%,1,3,1
+CoppolaBrightonDEF,4.4,0.10%,0.3,1,1
+Van HeckeBrightonDEF,4.5,1.00%,1.3,4,1
+VeltmanBrightonDEF,4.4,0.20%,0.3,1,1
+GeorginioBrightonMID,5.9,0.80%,2.3,7,1
+AyariBrightonMID,5,0.20%,2,6,1
+BalebaBrightonMID,5,3.70%,1.7,5,1
+JamesChelseaDEF,5.5,5.40%,2.3,7,1
 GittensChelseaMID,6.4,0.20%,1,3,1
-DelapChelseaFWD,6.4,2.80%,1.3,4,1
+DelapChelseaFWD,6.4,2.60%,1.3,4,1
+ClyneCrystal PalaceDEF,4,0.60%,0.3,1,1
+LermaCrystal PalaceMID,5,0.10%,1,3,1
+WhartonCrystal PalaceMID,5,0.60%,2,6,1
+DevennyCrystal PalaceMID,4.5,1.50%,1.3,4,1
+PinoCrystal PalaceMID,6,0.00%,1,1,1
 PickfordEvertonGKP,5.5,12.00%,6,18,1
 MykolenkoEvertonDEF,4.9,0.50%,0.3,1,1
 O'BrienEvertonDEF,5,0.60%,3,9,1
 ColemanEvertonDEF,4.5,0.10%,0.3,1,1
 AlcarazEvertonMID,5.4,0.10%,1,3,1
 IroegbunamEvertonMID,5,0.00%,1.7,5,1
-BarryEvertonFWD,5.9,0.60%,1.3,4,1
+BarryEvertonFWD,5.9,0.50%,1.3,4,1
 RobinsonFulhamDEF,5,0.70%,0.7,2,1
 BasseyFulhamDEF,4.5,0.50%,1.3,4,1
 IwobiFulhamMID,6.5,1.30%,3.3,10,1
 Smith RoweFulhamMID,5.9,0.80%,2.7,8,1
 AdamaFulhamMID,5.4,0.20%,0.7,2,1
-WilsonFulhamMID,5.5,0.70%,2.3,7,1
+WilsonFulhamMID,5.4,0.60%,2.3,7,1
 LukićFulhamMID,5,0.10%,2,6,1
-RaúlFulhamFWD,6.4,1.50%,1.3,4,1
+RaúlFulhamFWD,6.4,1.40%,1.3,4,1
 MunizFulhamFWD,5.5,2.30%,2.7,8,1
-JustinLeedsDEF,4,0.10%,1,1,1
+JustinLeedsDEF,4,0.20%,1,1,1
 AaronsonLeedsMID,5.4,0.10%,1,3,1
 HarrisonLeedsMID,5.4,0.10%,0.7,2,1
 JamesLeedsMID,5.4,0.40%,2,6,1
 Calvert-LewinLeedsFWD,5.5,0.10%,0.5,1,1
+GomezLiverpoolDEF,5,0.10%,0.7,2,1
+ChiesaLiverpoolMID,6.5,0.30%,2.7,8,1
+KhusanovMan CityDEF,5.4,0.30%,0.7,2,1
+RúbenMan CityDEF,5.5,4.20%,2.7,8,1
+StonesMan CityDEF,5.5,1.10%,2.7,8,1
+LewisMan CityDEF,5,3.90%,4.3,13,1
+O’ReillyMan CityDEF,4.9,0.10%,0.3,1,1
+DokuMan CityMID,6.4,1.00%,1.7,5,1
 BayindirMan UtdGKP,5,0.50%,1.7,5,1
 De LigtMan UtdDEF,5,3.20%,4,12,1
 MazraouiMan UtdDEF,4.9,0.20%,0.3,1,1
 ShawMan UtdDEF,4.5,0.30%,1.7,5,1
 YoroMan UtdDEF,4.5,2.60%,3.7,11,1
-CunhaMan UtdMID,8.1,12.50%,1.7,5,1
-MountMan UtdMID,6,0.40%,2,6,1
+CunhaMan UtdMID,8.1,11.20%,1.7,5,1
+MountMan UtdMID,6,0.30%,2,6,1
 MainooMan UtdMID,4.9,0.60%,0.3,1,1
 ZirkzeeMan UtdFWD,5.9,0.40%,0.3,1,1
-ŠeškoMan UtdFWD,7.5,7.20%,1,3,1
-HallNewcastleDEF,5.5,1.70%,0.7,2,1
+ŠeškoMan UtdFWD,7.4,6.80%,1,3,1
+HallNewcastleDEF,5.4,1.60%,0.7,2,1
 J.RamseyNewcastleMID,5.5,0.50%,0.7,2,1
-ElangaNewcastleMID,7,9.10%,2,6,1
-BarnesNewcastleMID,6.5,1.20%,2,6,1
-L.MileyNewcastleMID,4.5,2.20%,1,3,1
-ReinildoSunderlandDEF,4,8.50%,3.3,10,1
-AdingraSunderlandMID,5.5,1.60%,2.7,8,1
-Marc GuiuSunderlandFWD,4.5,14.70%,0.7,2,1
+ElangaNewcastleMID,7,8.90%,2,6,1
+BarnesNewcastleMID,6.5,1.10%,2,6,1
+L.MileyNewcastleMID,4.5,2.10%,1,3,1
+MilenkovićNott'm ForestDEF,5.5,9.00%,1.7,5,1
+MurilloNott'm ForestDEF,5.5,6.00%,1.3,4,1
+AinaNott'm ForestDEF,5,13.70%,2,6,1
+N.WilliamsNott'm ForestDEF,5,8.80%,1.3,4,1
+McAteeNott'm ForestMID,5.5,0.20%,0.7,2,1
+NdoyeNott'm ForestMID,6.1,3.50%,5.7,17,1
+HutchinsonNott'm ForestMID,5.5,0.00%,1,2,1
+Igor JesusNott'm ForestFWD,5.9,0.60%,1,3,1
+KalimuendoNott'm ForestFWD,6,0.10%,1,2,1
+ReinildoSunderlandDEF,4,8.40%,3.3,10,1
+AdingraSunderlandMID,5.5,1.50%,2.7,8,1
+Marc GuiuSunderlandFWD,4.4,14.30%,0.7,2,1
 SpenceSpursDEF,4.5,2.30%,4.3,13,1
-UdogieSpursDEF,4.4,0.40%,0.3,1,1
-Van de VenSpursDEF,4.6,29.20%,4.3,13,1
-JohnsonSpursMID,7.1,10.30%,6,18,1
+UdogieSpursDEF,4.4,0.50%,0.3,1,1
+Van de VenSpursDEF,4.6,29.00%,4.3,13,1
+JohnsonSpursMID,7.1,10.20%,6,18,1
 TelSpursMID,6.3,0.10%,0.7,2,1
-BergvallSpursMID,5.5,0.10%,1.7,5,1
+BergvallSpursMID,5.4,0.10%,1.7,5,1
 OdobertSpursMID,5.4,0.00%,1,3,1
-J.PalhinhaSpursMID,5.5,0.70%,4.3,13,1
+J.PalhinhaSpursMID,5.5,0.80%,4.3,13,1
+IrvingWest HamMID,4.5,0.30%,0.7,2,1
 José SáWolvesGKP,4.5,1.80%,1.3,4,1
 AgbadouWolvesDEF,4.5,0.50%,1.7,5,1
 H.BuenoWolvesDEF,4.5,0.10%,0.7,2,1
 TchatchouaWolvesDEF,4.5,0.00%,1,2,1
-BellegardeWolvesMID,5.5,0.10%,1.3,4,1
+BellegardeWolvesMID,5.4,0.10%,1.3,4,1
 Fer LópezWolvesMID,5.4,0.00%,0.7,2,1
 KalajdžićWolvesFWD,4.9,0.10%,0.3,1,1
