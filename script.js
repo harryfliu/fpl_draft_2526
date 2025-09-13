@@ -1373,17 +1373,21 @@ function getSeasonMonthNumber(monthName) {
 
 // Update overview stats (Current Month and Weekly Winner)
 function updateOverviewStats() {
+    // Calculate current month based on current gameweek
+    const currentGameweek = dashboardData.currentGameweek || 1;
+    const currentMonth = getMonthFromGameweek(currentGameweek);
+    
     // Update Current Month display
     const currentMonthElement = document.getElementById('current-month-display');
     if (currentMonthElement) {
-        currentMonthElement.textContent = dashboardData.currentMonth;
-        console.log(`📅 Updated Current Month display to: ${dashboardData.currentMonth}`);
+        currentMonthElement.textContent = currentMonth;
+        console.log(`📅 Updated Current Month display to: ${currentMonth} (based on GW${currentGameweek})`);
     }
     
     // Update Season Month display
     const seasonMonthElement = document.getElementById('season-month-display');
     if (seasonMonthElement) {
-        const monthNumber = getSeasonMonthNumber(dashboardData.currentMonth);
+        const monthNumber = getSeasonMonthNumber(currentMonth);
         seasonMonthElement.textContent = `Month ${monthNumber}`;
         console.log(`📅 Updated Season Month display to: Month ${monthNumber}`);
     }
