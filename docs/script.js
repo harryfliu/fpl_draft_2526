@@ -315,28 +315,68 @@ function calculateCumulativeWinnings(teamName, targetGameweek) {
                 console.log(`     ${index + 1}. ${result.homeTeam} ${result.homeScore} - ${result.awayScore} ${result.awayTeam}`);
             });
             
-            // Find the weekly winner (highest score across all results)
-            let highestScore = 0;
-            let weeklyWinner = null;
-            
+            // Find the weekly winner using the same tie-breaking logic as PrizePoolCalculator
+            const teamPoints = [];
             gwData.finalResults.forEach(result => {
-                const homeScore = result.homeScore || 0;
-                const awayScore = result.awayScore || 0;
-                const maxScore = Math.max(homeScore, awayScore);
-                
-                if (maxScore > highestScore) {
-                    highestScore = maxScore;
-                    weeklyWinner = result;
-                }
+                // Home
+                teamPoints.push({ 
+                    teamName: result.homeTeam, 
+                    manager: result.homeManager || getManagerFromTeamName(result.homeTeam), 
+                    gwPoints: parseInt(result.homeScore) || 0 
+                });
+                // Away
+                teamPoints.push({ 
+                    teamName: result.awayTeam, 
+                    manager: result.awayManager || getManagerFromTeamName(result.awayTeam), 
+                    gwPoints: parseInt(result.awayScore) || 0 
+                });
             });
+
+            // Find highest GW points
+            const maxPoints = Math.max(...teamPoints.map(t => t.gwPoints));
             
-            if (weeklyWinner) {
-                const winnerTeam = weeklyWinner.homeScore > weeklyWinner.awayScore ? 
-                    weeklyWinner.homeTeam : weeklyWinner.awayTeam;
-                const winnerScore = Math.max(weeklyWinner.homeScore || 0, weeklyWinner.awayScore || 0);
+            // Get all teams with the highest points (handle ties)
+            const tiedTeams = teamPoints.filter(t => t.gwPoints === maxPoints);
+            
+            let winner = null;
+            if (tiedTeams.length === 1) {
+                // No tie, use the single winner
+                winner = tiedTeams[0];
+            } else if (tiedTeams.length > 1) {
+                // Tie exists - choose the manager who is LOWER on the live leaderboard table
+                console.log(`   🏆 Tie detected! ${tiedTeams.length} teams with ${maxPoints} points:`, tiedTeams.map(t => t.manager || t.teamName));
                 
-                console.log(`   🏆 Weekly winner: ${winnerTeam} with ${winnerScore} points`);
-                console.log(`   🏆 Winner result: ${weeklyWinner.homeTeam} ${weeklyWinner.homeScore} - ${weeklyWinner.awayScore} ${weeklyWinner.awayTeam}`);
+                // Get current leaderboard positions
+                const leaderboard = dashboardData.leaderboard || [];
+                let lowestPosition = -1;
+                
+                for (const tiedTeam of tiedTeams) {
+                    const leaderboardTeam = leaderboard.find(team => 
+                        team.teamName === tiedTeam.teamName || 
+                        team.manager === tiedTeam.manager
+                    );
+                    
+                    if (leaderboardTeam && leaderboardTeam.position) {
+                        console.log(`   📊 ${tiedTeam.manager || tiedTeam.teamName} is at position ${leaderboardTeam.position} on leaderboard`);
+                        
+                        // Choose the team with the HIGHER position number (lower on table)
+                        if (lowestPosition === -1 || leaderboardTeam.position > lowestPosition) {
+                            lowestPosition = leaderboardTeam.position;
+                            winner = tiedTeam;
+                        }
+                    }
+                }
+                
+                if (winner) {
+                    console.log(`   🏆 Tie-breaker: ${winner.manager || winner.teamName} wins (position ${lowestPosition} on leaderboard)`);
+                }
+            }
+            
+            if (winner && winner.gwPoints > 0) {
+                const winnerTeam = winner.teamName;
+                const winnerScore = winner.gwPoints;
+                
+                console.log(`   🏆 Weekly winner: ${winnerTeam} (${winner.manager}) with ${winnerScore} points`);
                 
                 // Check if this team won this gameweek
                 if (teamName === winnerTeam) {
@@ -1054,20 +1094,49 @@ function populateMonthlyStandings() {
             if (monthForGW === currentMonth) {
                 const gwData = dataManager.getGameweekData(gw);
                 if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
-                    // Find the weekly winner for this gameweek
-                    let highestScore = 0;
-                    let weeklyWinner = null;
+                    // Find the weekly winner for this gameweek with tie-breaking logic
+                    const maxScore = Math.max(...gwData.finalResults.map(r => Math.max(r.homeScore || 0, r.awayScore || 0)));
                     
-                    gwData.finalResults.forEach(result => {
+                    // Get all teams with the highest score (handle ties)
+                    const tiedTeams = gwData.finalResults.filter(result => {
                         const homeScore = result.homeScore || 0;
                         const awayScore = result.awayScore || 0;
-                        const maxScore = Math.max(homeScore, awayScore);
-                        
-                        if (maxScore > highestScore) {
-                            highestScore = maxScore;
-                            weeklyWinner = result;
-                        }
+                        const maxResultScore = Math.max(homeScore, awayScore);
+                        return maxResultScore === maxScore;
                     });
+                    
+                    let weeklyWinner = null;
+                    if (tiedTeams.length === 1) {
+                        // No tie, use the single winner
+                        weeklyWinner = tiedTeams[0];
+                    } else if (tiedTeams.length > 1) {
+                        // Tie exists - choose the team who is LOWER on the live leaderboard table
+                        console.log(`🏆 Monthly Standings: Tie detected! ${tiedTeams.length} teams with ${maxScore} points:`, tiedTeams.map(t => t.homeScore > t.awayScore ? t.homeTeam : t.awayTeam));
+                        
+                        // Get current leaderboard positions
+                        const leaderboard = dashboardData.leaderboard || [];
+                        let lowestPosition = -1;
+                        
+                        for (const tiedResult of tiedTeams) {
+                            const winnerTeamName = tiedResult.homeScore > tiedResult.awayScore ? tiedResult.homeTeam : tiedResult.awayTeam;
+                            const leaderboardTeam = leaderboard.find(team => team.teamName === winnerTeamName);
+                            
+                            if (leaderboardTeam && leaderboardTeam.position) {
+                                console.log(`📊 Monthly Standings: ${winnerTeamName} is at position ${leaderboardTeam.position} on leaderboard`);
+                                
+                                // Choose the team with the HIGHER position number (lower on table)
+                                if (lowestPosition === -1 || leaderboardTeam.position > lowestPosition) {
+                                    lowestPosition = leaderboardTeam.position;
+                                    weeklyWinner = tiedResult;
+                                }
+                            }
+                        }
+                        
+                        if (weeklyWinner) {
+                            const winnerTeamName = weeklyWinner.homeScore > weeklyWinner.awayScore ? weeklyWinner.homeTeam : weeklyWinner.awayTeam;
+                            console.log(`🏆 Monthly Standings: Tie-breaker: ${winnerTeamName} wins (position ${lowestPosition} on leaderboard)`);
+                        }
+                    }
                     
                     if (weeklyWinner) {
                         const winnerTeam = weeklyWinner.homeScore > weeklyWinner.awayScore ? 
@@ -2503,8 +2572,46 @@ function computeAndDisplayWeeklyWinner(gameweek) {
         teamPoints.push({ teamName: r.awayTeam, manager: r.awayManager || getManagerFromTeamName(r.awayTeam), gwPoints: parseInt(r.awayScore) || 0 });
     });
 
-    // Pick highest GW points
-    const winner = teamPoints.reduce((max, cur) => (cur.gwPoints > (max?.gwPoints || -Infinity) ? cur : max), null);
+    // Find highest GW points
+    const maxPoints = Math.max(...teamPoints.map(t => t.gwPoints));
+    
+    // Get all teams with the highest points (handle ties)
+    const tiedTeams = teamPoints.filter(t => t.gwPoints === maxPoints);
+    
+    let winner = null;
+    if (tiedTeams.length === 1) {
+        // No tie, use the single winner
+        winner = tiedTeams[0];
+    } else if (tiedTeams.length > 1) {
+        // Tie exists - choose the manager who is LOWER on the live leaderboard table
+        console.log(`🏆 Tie detected! ${tiedTeams.length} teams with ${maxPoints} points:`, tiedTeams.map(t => t.manager || t.teamName));
+        
+        // Get current leaderboard positions
+        const leaderboard = dashboardData.leaderboard || [];
+        let lowestPosition = -1;
+        
+        for (const tiedTeam of tiedTeams) {
+            const leaderboardTeam = leaderboard.find(team => 
+                team.teamName === tiedTeam.teamName || 
+                team.manager === tiedTeam.manager
+            );
+            
+            if (leaderboardTeam && leaderboardTeam.position) {
+                console.log(`📊 ${tiedTeam.manager || tiedTeam.teamName} is at position ${leaderboardTeam.position} on leaderboard`);
+                
+                // Choose the team with the HIGHER position number (lower on table)
+                if (lowestPosition === -1 || leaderboardTeam.position > lowestPosition) {
+                    lowestPosition = leaderboardTeam.position;
+                    winner = tiedTeam;
+                }
+            }
+        }
+        
+        if (winner) {
+            console.log(`🏆 Tie-breaker: ${winner.manager || winner.teamName} wins (position ${lowestPosition} on leaderboard)`);
+        }
+    }
+    
     if (winner && winner.gwPoints > 0) {
         dashboardData.weeklyWinner = `${winner.manager || winner.teamName} (${winner.gwPoints} pts)`;
         
@@ -3695,8 +3802,44 @@ function analyzeWeeklyWinners() {
                 manager: result.awayManager
             });
         });
-        finalTeamScores.sort((a, b) => b.score - a.score);
-        weeklyWinner = finalTeamScores[0];
+        // Find highest score
+        const maxScore = Math.max(...finalTeamScores.map(t => t.score));
+        
+        // Get all teams with the highest score (handle ties)
+        const tiedTeams = finalTeamScores.filter(t => t.score === maxScore);
+        
+        if (tiedTeams.length === 1) {
+            // No tie, use the single winner
+            weeklyWinner = tiedTeams[0];
+        } else if (tiedTeams.length > 1) {
+            // Tie exists - choose the team who is LOWER on the live leaderboard table
+            console.log(`🏆 Weekly Analytics: Tie detected! ${tiedTeams.length} teams with ${maxScore} points:`, tiedTeams.map(t => t.manager));
+            
+            // Get current leaderboard positions
+            const leaderboard = dashboardData.leaderboard || [];
+            let lowestPosition = -1;
+            
+            for (const tiedTeam of tiedTeams) {
+                const leaderboardTeam = leaderboard.find(team => 
+                    team.teamName === tiedTeam.name || 
+                    team.manager === tiedTeam.manager
+                );
+                
+                if (leaderboardTeam && leaderboardTeam.position) {
+                    console.log(`📊 Weekly Analytics: ${tiedTeam.manager} is at position ${leaderboardTeam.position} on leaderboard`);
+                    
+                    // Choose the team with the HIGHER position number (lower on table)
+                    if (lowestPosition === -1 || leaderboardTeam.position > lowestPosition) {
+                        lowestPosition = leaderboardTeam.position;
+                        weeklyWinner = tiedTeam;
+                    }
+                }
+            }
+            
+            if (weeklyWinner) {
+                console.log(`🏆 Weekly Analytics: Tie-breaker: ${weeklyWinner.manager} wins (position ${lowestPosition} on leaderboard)`);
+            }
+        }
     }
     
     // Get previous gameweek data for comparison
@@ -5305,8 +5448,8 @@ class PrizePoolManager {
         // Calculate weekly earnings for each gameweek up to target
         for (let gw = 1; gw <= targetGameweek; gw++) {
             const gameweekData = dataManager.gameweekData.get(`gw${gw}`);
-            if (gameweekData && gameweekData.standings && gameweekData.standings.length > 0) {
-                const weeklyResult = this.calculateWeeklyWinner(gameweekData.standings, gw);
+            if (gameweekData && gameweekData.finalResults && gameweekData.finalResults.length > 0) {
+                const weeklyResult = this.calculateWeeklyWinnerFromResults(gameweekData.finalResults, gw);
                 if (weeklyResult) {
                     earnings.weeklyWinners.push(weeklyResult);
                     earnings.totalWeeklyPayout += weeklyResult.winnings;
@@ -5340,16 +5483,127 @@ class PrizePoolManager {
         return earnings;
     }
 
-    // Calculate weekly winner for a specific gameweek
+    // Calculate weekly winner for a specific gameweek using finalResults data
+    calculateWeeklyWinnerFromResults(finalResults, gameweek) {
+        if (!finalResults || finalResults.length === 0) return null;
+
+        // Build a map of team -> { manager, gwPoints } from finalResults
+        const teamPoints = [];
+        finalResults.forEach(r => {
+            // Home
+            teamPoints.push({ 
+                teamName: r.homeTeam, 
+                manager: r.homeManager || getManagerFromTeamName(r.homeTeam), 
+                gwPoints: parseInt(r.homeScore) || 0 
+            });
+            // Away
+            teamPoints.push({ 
+                teamName: r.awayTeam, 
+                manager: r.awayManager || getManagerFromTeamName(r.awayTeam), 
+                gwPoints: parseInt(r.awayScore) || 0 
+            });
+        });
+
+        // Find highest GW points
+        const maxPoints = Math.max(...teamPoints.map(t => t.gwPoints));
+        
+        // Get all teams with the highest points (handle ties)
+        const tiedTeams = teamPoints.filter(t => t.gwPoints === maxPoints);
+        
+        let winner = null;
+        if (tiedTeams.length === 1) {
+            // No tie, use the single winner
+            winner = tiedTeams[0];
+        } else if (tiedTeams.length > 1) {
+            // Tie exists - choose the manager who is LOWER on the live leaderboard table
+            console.log(`🏆 PrizePoolCalculator: Tie detected! ${tiedTeams.length} teams with ${maxPoints} points:`, tiedTeams.map(t => t.manager || t.teamName));
+            
+            // Get current leaderboard positions
+            const leaderboard = dashboardData.leaderboard || [];
+            console.log(`🔍 PrizePoolCalculator: Current leaderboard data:`, leaderboard.map(t => ({ name: t.manager || t.teamName, position: t.position, points: t.points, gwPoints: t.gwPoints })));
+            let lowestPosition = -1;
+            
+            for (const tiedTeam of tiedTeams) {
+                console.log(`🔍 PrizePoolCalculator: Looking for leaderboard match for:`, { teamName: tiedTeam.teamName, manager: tiedTeam.manager });
+                const leaderboardTeam = leaderboard.find(team => 
+                    team.teamName === tiedTeam.teamName || 
+                    team.manager === tiedTeam.manager
+                );
+                
+                if (leaderboardTeam && leaderboardTeam.position) {
+                    console.log(`📊 PrizePoolCalculator: ${tiedTeam.manager || tiedTeam.teamName} is at position ${leaderboardTeam.position} on leaderboard`);
+                    
+                    // Choose the team with the HIGHER position number (lower on table)
+                    if (lowestPosition === -1 || leaderboardTeam.position > lowestPosition) {
+                        lowestPosition = leaderboardTeam.position;
+                        winner = tiedTeam;
+                    }
+                } else {
+                    console.log(`❌ PrizePoolCalculator: No leaderboard match found for ${tiedTeam.manager || tiedTeam.teamName}`);
+                }
+            }
+            
+            if (winner) {
+                console.log(`🏆 PrizePoolCalculator: Tie-breaker: ${winner.manager || winner.teamName} wins (position ${lowestPosition} on leaderboard)`);
+            }
+        }
+
+        if (!winner || winner.gwPoints === 0) return null;
+
+        // Weekly winner gets $1 from each of the other 11 managers
+        const weeklyWinnings = (this.leagueSize - 1) * this.weeklyWinnerAmount;
+
+        return {
+            gameweek: gameweek,
+            manager: winner.manager || winner.teamName,
+            points: winner.gwPoints,
+            winnings: weeklyWinnings
+        };
+    }
+
+    // Calculate weekly winner for a specific gameweek (legacy function for standings data)
     calculateWeeklyWinner(standings, gameweek) {
         if (!standings || standings.length === 0) return null;
 
-        // Find manager with highest GW points
-        const winner = standings.reduce((max, manager) => {
-            const maxGwPoints = parseInt(max.gwPoints) || 0;
-            const managerGwPoints = parseInt(manager.gwPoints) || 0;
-            return managerGwPoints > maxGwPoints ? manager : max;
-        }, standings[0]);
+        // Find highest GW points
+        const maxPoints = Math.max(...standings.map(s => parseInt(s.gwPoints) || 0));
+        
+        // Get all managers with the highest points (handle ties)
+        const tiedManagers = standings.filter(s => (parseInt(s.gwPoints) || 0) === maxPoints);
+        
+        let winner = null;
+        if (tiedManagers.length === 1) {
+            // No tie, use the single winner
+            winner = tiedManagers[0];
+        } else if (tiedManagers.length > 1) {
+            // Tie exists - choose the manager who is LOWER on the live leaderboard table
+            console.log(`🏆 PrizePoolCalculator: Tie detected! ${tiedManagers.length} managers with ${maxPoints} points:`, tiedManagers.map(m => m.manager || m.teamName));
+            
+            // Get current leaderboard positions
+            const leaderboard = dashboardData.leaderboard || [];
+            let lowestPosition = -1;
+            
+            for (const tiedManager of tiedManagers) {
+                const leaderboardTeam = leaderboard.find(team => 
+                    team.teamName === tiedManager.teamName || 
+                    team.manager === tiedManager.manager
+                );
+                
+                if (leaderboardTeam && leaderboardTeam.position) {
+                    console.log(`📊 PrizePoolCalculator: ${tiedManager.manager || tiedManager.teamName} is at position ${leaderboardTeam.position} on leaderboard`);
+                    
+                    // Choose the team with the HIGHER position number (lower on table)
+                    if (lowestPosition === -1 || leaderboardTeam.position > lowestPosition) {
+                        lowestPosition = leaderboardTeam.position;
+                        winner = tiedManager;
+                    }
+                }
+            }
+            
+            if (winner) {
+                console.log(`🏆 PrizePoolCalculator: Tie-breaker: ${winner.manager || winner.teamName} wins (position ${lowestPosition} on leaderboard)`);
+            }
+        }
 
         if (!winner || (parseInt(winner.gwPoints) || 0) === 0) return null;
 
@@ -5782,33 +6036,59 @@ function populateWeeklyWinnersTable(weeklyWinners) {
         for (let gw = 1; gw <= currentGameweek; gw++) {
             const gwData = dataManager.getGameweekData(gw);
             if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
-                // Find the weekly winner for this gameweek
-                let highestScore = 0;
-                let weeklyWinner = null;
-                
+                // Find the weekly winner using the same tie-breaking logic as other functions
+                const teamPoints = [];
                 gwData.finalResults.forEach(result => {
-                    const homeScore = result.homeScore || 0;
-                    const awayScore = result.awayScore || 0;
-                    const maxScore = Math.max(homeScore, awayScore);
-                    
-                    if (maxScore > highestScore) {
-                        highestScore = maxScore;
-                        weeklyWinner = result;
-                    }
+                    // Home
+                    teamPoints.push({ 
+                        teamName: result.homeTeam, 
+                        manager: result.homeManager || getManagerFromTeamName(result.homeTeam), 
+                        gwPoints: parseInt(result.homeScore) || 0 
+                    });
+                    // Away
+                    teamPoints.push({ 
+                        teamName: result.awayTeam, 
+                        manager: result.awayManager || getManagerFromTeamName(result.awayTeam), 
+                        gwPoints: parseInt(result.awayScore) || 0 
+                    });
                 });
+
+                // Find highest GW points
+                const maxPoints = Math.max(...teamPoints.map(t => t.gwPoints));
                 
-                if (weeklyWinner) {
-                    const winnerTeam = weeklyWinner.homeScore > weeklyWinner.awayScore ? 
-                        weeklyWinner.homeTeam : weeklyWinner.awayTeam;
-                    const winnerScore = Math.max(weeklyWinner.homeScore || 0, weeklyWinner.awayScore || 0);
+                // Get all teams with the highest points (handle ties)
+                const tiedTeams = teamPoints.filter(t => t.gwPoints === maxPoints);
+                
+                let winner = null;
+                if (tiedTeams.length === 1) {
+                    // No tie, use the single winner
+                    winner = tiedTeams[0];
+                } else if (tiedTeams.length > 1) {
+                    // Tie exists - choose the manager who is LOWER on the live leaderboard table
+                    // Get current leaderboard positions
+                    const leaderboard = dashboardData.leaderboard || [];
+                    let lowestPosition = -1;
                     
-                    // Find manager name for the winning team
-                    let managerName = '';
-                    if (weeklyWinner.homeTeam === winnerTeam) {
-                        managerName = weeklyWinner.homeManager || winnerTeam;
-                    } else {
-                        managerName = weeklyWinner.awayManager || winnerTeam;
+                    for (const tiedTeam of tiedTeams) {
+                        const leaderboardTeam = leaderboard.find(team => 
+                            team.teamName === tiedTeam.teamName || 
+                            team.manager === tiedTeam.manager
+                        );
+                        
+                        if (leaderboardTeam && leaderboardTeam.position) {
+                            // Choose the team with the HIGHER position number (lower on table)
+                            if (lowestPosition === -1 || leaderboardTeam.position > lowestPosition) {
+                                lowestPosition = leaderboardTeam.position;
+                                winner = tiedTeam;
+                            }
+                        }
                     }
+                }
+                
+                if (winner && winner.gwPoints > 0) {
+                    const winnerTeam = winner.teamName;
+                    const winnerScore = winner.gwPoints;
+                    const managerName = winner.manager || winnerTeam;
                     
                     const totalManagers = dashboardData.leaderboard.length;
                     const weeklyWinnings = totalManagers - 1; // $1 from each other manager
