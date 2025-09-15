@@ -381,9 +381,21 @@ function calculateCumulativeWinnings(teamName, targetGameweek) {
                 // Check if this team won this gameweek
                 if (teamName === winnerTeam) {
                     const totalManagers = dashboardData.leaderboard.length;
-                    const weeklyWinnings = totalManagers - 1; // $1 from each other manager
+                    let weeklyWinnings;
+                    
+                    // Check if there was a tie (more than 1 team with highest score)
+                    if (tiedTeams && tiedTeams.length > 1) {
+                        // Tie case: winner gets $1 from everyone EXCEPT the tied teams
+                        const payingManagers = totalManagers - tiedTeams.length;
+                        weeklyWinnings = payingManagers;
+                        console.log(`   💰 ${teamName} won GW${gw} (TIE CASE): +$${weeklyWinnings} (from ${payingManagers} managers, excluding ${tiedTeams.length - 1} tied teams)`);
+                    } else {
+                        // No tie: winner gets $1 from each of the other managers
+                        weeklyWinnings = totalManagers - 1;
+                        console.log(`   💰 ${teamName} won GW${gw}: +$${weeklyWinnings} (from ${totalManagers - 1} other managers)`);
+                    }
+                    
                     totalWinnings += weeklyWinnings;
-                    console.log(`   💰 ${teamName} won GW${gw}: +$${weeklyWinnings} (from ${totalManagers} total managers)`);
                 } else {
                     console.log(`   ❌ ${teamName} did NOT win GW${gw} (winner was ${winnerTeam})`);
                 }
@@ -1145,7 +1157,18 @@ function populateMonthlyStandings() {
                         // Check if this team won this gameweek
                         if (team.teamName === winnerTeam) {
                             const totalManagers = dashboardData.leaderboard.length;
-                            const weeklyWinnings = totalManagers - 1; // $1 from each other manager
+                            let weeklyWinnings;
+                            
+                            // Check if there was a tie (more than 1 team with highest score)
+                            if (tiedTeams && tiedTeams.length > 1) {
+                                // Tie case: winner gets $1 from everyone EXCEPT the tied teams
+                                const payingManagers = totalManagers - tiedTeams.length;
+                                weeklyWinnings = payingManagers;
+                            } else {
+                                // No tie: winner gets $1 from each of the other managers
+                                weeklyWinnings = totalManagers - 1;
+                            }
+                            
                             monthlyWinnings += weeklyWinnings;
                                             }
                 }
@@ -5550,14 +5573,27 @@ class PrizePoolManager {
 
         if (!winner || winner.gwPoints === 0) return null;
 
-        // Weekly winner gets $1 from each of the other 11 managers
-        const weeklyWinnings = (this.leagueSize - 1) * this.weeklyWinnerAmount;
+        // Calculate weekly winnings based on whether there was a tie
+        let weeklyWinnings;
+        if (tiedTeams && tiedTeams.length > 1) {
+            // Tie case: winner gets $1 from everyone EXCEPT the tied teams
+            const tiedTeamNames = tiedTeams.map(t => t.teamName);
+            const tiedManagerNames = tiedTeams.map(t => t.manager);
+            const payingManagers = this.leagueSize - tiedTeams.length;
+            weeklyWinnings = payingManagers * this.weeklyWinnerAmount;
+            console.log(`💰 Tie case: ${winner.manager} gets $${weeklyWinnings} from ${payingManagers} managers (excluding tied teams: ${tiedManagerNames.join(', ')})`);
+        } else {
+            // No tie: winner gets $1 from each of the other 11 managers
+            weeklyWinnings = (this.leagueSize - 1) * this.weeklyWinnerAmount;
+            console.log(`💰 No tie: ${winner.manager} gets $${weeklyWinnings} from ${this.leagueSize - 1} managers`);
+        }
 
         return {
             gameweek: gameweek,
             manager: winner.manager || winner.teamName,
             points: winner.gwPoints,
-            winnings: weeklyWinnings
+            winnings: weeklyWinnings,
+            tiedTeams: tiedTeams ? tiedTeams.map(t => t.manager || t.teamName) : null
         };
     }
 
@@ -5607,14 +5643,26 @@ class PrizePoolManager {
 
         if (!winner || (parseInt(winner.gwPoints) || 0) === 0) return null;
 
-        // Weekly winner gets $1 from each of the other 11 managers
-        const weeklyWinnings = (this.leagueSize - 1) * this.weeklyWinnerAmount;
+        // Calculate weekly winnings based on whether there was a tie
+        let weeklyWinnings;
+        if (tiedManagers && tiedManagers.length > 1) {
+            // Tie case: winner gets $1 from everyone EXCEPT the tied managers
+            const tiedManagerNames = tiedManagers.map(m => m.manager || m.teamName);
+            const payingManagers = this.leagueSize - tiedManagers.length;
+            weeklyWinnings = payingManagers * this.weeklyWinnerAmount;
+            console.log(`💰 Tie case: ${winner.manager} gets $${weeklyWinnings} from ${payingManagers} managers (excluding tied managers: ${tiedManagerNames.join(', ')})`);
+        } else {
+            // No tie: winner gets $1 from each of the other 11 managers
+            weeklyWinnings = (this.leagueSize - 1) * this.weeklyWinnerAmount;
+            console.log(`💰 No tie: ${winner.manager} gets $${weeklyWinnings} from ${this.leagueSize - 1} managers`);
+        }
 
         return {
             gameweek: gameweek,
             manager: winner.manager || winner.teamName,
             points: parseInt(winner.gwPoints) || 0,
-            winnings: weeklyWinnings
+            winnings: weeklyWinnings,
+            tiedTeams: tiedManagers ? tiedManagers.map(m => m.manager || m.teamName) : null
         };
     }
 
@@ -5678,9 +5726,14 @@ class PrizePoolManager {
         // Calculate what each manager owes for weekly losses
         weeklyWinners.forEach(winner => {
             payments.forEach((payment, manager) => {
-                if (manager !== winner.manager) {
+                // Check if this manager was tied with the winner (and thus doesn't pay)
+                const isTiedWithWinner = winner.tiedTeams && winner.tiedTeams.includes(manager);
+                
+                if (manager !== winner.manager && !isTiedWithWinner) {
                     payment.totalOwed += this.weeklyWinnerAmount;
                     payment.weeklyLosses += this.weeklyWinnerAmount;
+                } else if (isTiedWithWinner) {
+                    console.log(`💰 ${manager} tied with winner ${winner.manager}, so they don't pay for this week`);
                 }
             });
         });
@@ -5886,39 +5939,8 @@ function updatePrizePoolStats(earnings, targetGameweek) {
     // Keep badge label static as "$MONEY"
     if (totalIndicator) totalIndicator.textContent = '$MONEY';
 
-    // Calculate total winnings (so far) - cumulative up to selected gameweek
-    const currentGameweek = dashboardData.currentGameweek || 1;
-    let totalWeeklyWinnings = 0;
-    
-    if (dataManager) {
-        // Loop through all gameweeks from GW1 to selected gameweek
-        for (let gw = 1; gw <= currentGameweek; gw++) {
-            const gwData = dataManager.getGameweekData(gw);
-            if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
-                // Find the weekly winner for this gameweek
-                let highestScore = 0;
-                let weeklyWinner = null;
-                
-                gwData.finalResults.forEach(result => {
-                    const homeScore = result.homeScore || 0;
-                    const awayScore = result.awayScore || 0;
-                    const maxScore = Math.max(homeScore, awayScore);
-                    
-                    if (maxScore > highestScore) {
-                        highestScore = maxScore;
-                        weeklyWinner = result;
-                    }
-                });
-                
-                if (weeklyWinner) {
-                    const totalManagers = dashboardData.leaderboard.length;
-                    const weeklyWinnings = totalManagers - 1; // $1 from each other manager
-                    totalWeeklyWinnings += weeklyWinnings;
-                }
-            }
-        }
-    }
-    
+    // Use the correct weekly winnings from PrizePoolCalculator (includes tie exemption logic)
+    const totalWeeklyWinnings = earnings.weeklyWinners.reduce((sum, winner) => sum + (winner.winnings || 0), 0);
     const totalMonthlyWinnings = earnings.monthlyWinners.reduce((sum, winner) => sum + (winner.winnings || 0), 0);
     const leaguePotWinnings = 0; // $0 during season, $420 at end ($35 entry fee * 12 managers)
     const totalWinnings = totalWeeklyWinnings + totalMonthlyWinnings + leaguePotWinnings;
@@ -6027,83 +6049,19 @@ function populateWeeklyWinnersTable(weeklyWinners) {
     const tbody = document.getElementById('weekly-winners-table');
     if (!tbody) return;
 
-    // Calculate cumulative weekly winners up to the selected gameweek
-    const currentGameweek = dashboardData.currentGameweek || 1;
+    // Use the weekly winners data from PrizePoolCalculator (which has correct tie logic)
     let cumulativeWeeklyWinners = [];
     
-    if (dataManager) {
-        // Loop through all gameweeks from GW1 to selected gameweek
-        for (let gw = 1; gw <= currentGameweek; gw++) {
-            const gwData = dataManager.getGameweekData(gw);
-            if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
-                // Find the weekly winner using the same tie-breaking logic as other functions
-                const teamPoints = [];
-                gwData.finalResults.forEach(result => {
-                    // Home
-                    teamPoints.push({ 
-                        teamName: result.homeTeam, 
-                        manager: result.homeManager || getManagerFromTeamName(result.homeTeam), 
-                        gwPoints: parseInt(result.homeScore) || 0 
-                    });
-                    // Away
-                    teamPoints.push({ 
-                        teamName: result.awayTeam, 
-                        manager: result.awayManager || getManagerFromTeamName(result.awayTeam), 
-                        gwPoints: parseInt(result.awayScore) || 0 
-                    });
-                });
-
-                // Find highest GW points
-                const maxPoints = Math.max(...teamPoints.map(t => t.gwPoints));
-                
-                // Get all teams with the highest points (handle ties)
-                const tiedTeams = teamPoints.filter(t => t.gwPoints === maxPoints);
-                
-                let winner = null;
-                if (tiedTeams.length === 1) {
-                    // No tie, use the single winner
-                    winner = tiedTeams[0];
-                } else if (tiedTeams.length > 1) {
-                    // Tie exists - choose the manager who is LOWER on the live leaderboard table
-                    // Get current leaderboard positions
-                    const leaderboard = dashboardData.leaderboard || [];
-                    let lowestPosition = -1;
-                    
-                    for (const tiedTeam of tiedTeams) {
-                        const leaderboardTeam = leaderboard.find(team => 
-                            team.teamName === tiedTeam.teamName || 
-                            team.manager === tiedTeam.manager
-                        );
-                        
-                        if (leaderboardTeam && leaderboardTeam.position) {
-                            // Choose the team with the HIGHER position number (lower on table)
-                            if (lowestPosition === -1 || leaderboardTeam.position > lowestPosition) {
-                                lowestPosition = leaderboardTeam.position;
-                                winner = tiedTeam;
-                            }
-                        }
-                    }
-                }
-                
-                if (winner && winner.gwPoints > 0) {
-                    const winnerTeam = winner.teamName;
-                    const winnerScore = winner.gwPoints;
-                    const managerName = winner.manager || winnerTeam;
-                    
-                    const totalManagers = dashboardData.leaderboard.length;
-                    const weeklyWinnings = totalManagers - 1; // $1 from each other manager
-                    
-                    cumulativeWeeklyWinners.push({
-                        gameweek: gw,
-                        manager: managerName,
-                        winner: winnerTeam,
-                        gwPoints: winnerScore,
-                        winnings: weeklyWinnings,
-                        amount: weeklyWinnings
-                    });
-                }
-            }
-        }
+    if (weeklyWinners && weeklyWinners.length > 0) {
+        // Use the data from PrizePoolCalculator which already has correct winnings amounts
+        cumulativeWeeklyWinners = weeklyWinners.map(winner => ({
+            gameweek: winner.gameweek,
+            manager: winner.manager,
+            winner: winner.manager, // For display purposes
+            gwPoints: winner.points,
+            winnings: winner.winnings,
+            amount: winner.winnings
+        }));
     }
     
     if (cumulativeWeeklyWinners.length === 0) {
