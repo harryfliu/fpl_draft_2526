@@ -5297,6 +5297,22 @@
         "Out": "Chiesa",
         "Date": "12 Sep",
         "": ""
+      },
+      {
+        "GW": "4",
+        "Manager": "Andrew Smith",
+        "In": "Andersen",
+        "Out": "N.Williams",
+        "Date": "12 Sep",
+        "": ""
+      },
+      {
+        "GW": "4",
+        "Manager": "Andrew Smith",
+        "In": "Merino",
+        "Out": "P.M.Sarr",
+        "Date": "12 Sep",
+        "": ""
       }
     ],
     "trades": [
@@ -5304,8 +5320,8 @@
         "GW": "2",
         "Offered By": "Don Kim",
         "Offered To": "Kyle Herrera",
-        "Offered": "Matheus N.",
-        "Requested": "Frimpong",
+        "Offered": "Frimpong",
+        "Requested": "Matheus N.",
         "Result": "Processed",
         "Date": "15 Aug"
       }

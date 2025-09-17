@@ -162,6 +162,15 @@ class FPLDataManager {
                 timestamp: new Date().toISOString()
             });
             
+            // Debug: Log transfer history for GW2
+            if (gameweek === 'gw2' && transferHistory.trades) {
+                console.log('🔍 DEBUG: GW2 transfer history loaded:', transferHistory);
+                const donTrades = transferHistory.trades.filter(trade => trade['Offered By'] === 'Don Kim');
+                if (donTrades.length > 0) {
+                    console.log('🔍 DEBUG: GW2 Don Kim trades:', donTrades);
+                }
+            }
+            
             console.log(`✅ Loaded ${gameweek} data successfully`);
             
         } catch (error) {
@@ -795,7 +804,7 @@ class FPLDataManager {
     async loadTransferHistory(gameweek) {
         try {
             console.log(`🔄 Loading transfer history for ${gameweek}...`);
-            const response = await fetch(`./${gameweek}/transfer_history.csv`);
+            const response = await fetch(`./${gameweek}/transfer_history.csv?t=${Date.now()}`);
             if (!response.ok) {
                 console.log(`❌ Transfer history file not found for ${gameweek}`);
                 return { waivers: [], freeAgents: [], trades: [] };
@@ -870,6 +879,16 @@ class FPLDataManager {
         }
         
         console.log('📊 Parsed transfer history:', result);
+        
+        // Debug: Log specific trade data for Don Kim
+        if (result.trades && result.trades.length > 0) {
+            console.log('🔍 DEBUG: All trades:', result.trades);
+            const donTrades = result.trades.filter(trade => trade['Offered By'] === 'Don Kim');
+            if (donTrades.length > 0) {
+                console.log('🔍 DEBUG: Don Kim trades:', donTrades);
+            }
+        }
+        
         return result;
     }
 

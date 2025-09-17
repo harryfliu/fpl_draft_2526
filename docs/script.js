@@ -6578,91 +6578,144 @@ function calculateCurrentTeam(teamNameOrManager, targetGameweek = null, managerN
         return shortName.trim().toLowerCase() === firstNameFromFull.toLowerCase();
     }
     
-    // Apply transfers in the correct order: Trades → Waivers → Free Agents
+    // Apply transfers in chronological order by date, not by type
     // Use the provided manager name or extract it from the team data
     const teamManagerName = managerName || managerTeam.manager || teamNameOrManager;
     console.log(`🏆 DEBUG: teamManagerName set to: "${teamManagerName}" (from managerName: "${managerName}" or managerTeam.manager: "${managerTeam.manager}" or fallback: "${teamNameOrManager}")`);
     
-    // 1. Apply accepted trades FIRST (only up to target gameweek)
-    console.log(`🏆 DEBUG: Processing ${transferHistory.trades.length} trade transactions for ${teamManagerName} at GW${targetGameweek}`);
+        // Special debugging for Don Kim
+        if (teamManagerName === 'Don Kim' || teamNameOrManager === 'Don Kim' || teamNameOrManager === 'son4lyfe') {
+            console.log(`🔍 DON DEBUG: Starting transfer processing for Don Kim at GW${targetGameweek}`);
+            console.log(`🔍 DON DEBUG: Initial squad:`, currentSquad);
+            console.log(`🔍 DON DEBUG: Transfer history:`, transferHistory);
+            console.log(`🔍 DON DEBUG: All trades in transfer history:`, transferHistory.trades);
+            if (transferHistory.trades && transferHistory.trades.length > 0) {
+                console.log(`🔍 DON DEBUG: First trade:`, transferHistory.trades[0]);
+            }
+        }
+    
+    // Combine all transfers and sort by date for chronological processing
+    const allTransfers = [];
+    
+    // Add trades with type marker
     transferHistory.trades.forEach(trade => {
-        const tradeGameweek = parseInt(trade.GW) || 1;
-        if ((trade.Result === 'Accepted' || trade.Result === 'Processed') && tradeGameweek <= targetGameweek) {
-            if (managerMatches(teamManagerName, trade['Offered By'])) {
-                // This manager gave away 'Offered' and received 'Requested'
-                const outIndex = currentSquad.indexOf(trade.Offered);
-            if (outIndex > -1) {
-                currentSquad.splice(outIndex, 1);
-                    console.log(`➖ Traded away ${trade.Offered} via trade for ${teamManagerName} in GW${tradeGameweek} (matched with ${trade['Offered By']})`);
-                } else {
-                    console.log(`⚠️ Could not find ${trade.Offered} to remove via trade for ${teamManagerName} in GW${tradeGameweek}`);
+        allTransfers.push({ ...trade, transferType: 'trade' });
+    });
+    
+    // Add waivers with type marker  
+    transferHistory.waivers.forEach(waiver => {
+        allTransfers.push({ ...waiver, transferType: 'waiver' });
+    });
+    
+    // Add free agents with type marker
+    transferHistory.freeAgents.forEach(freeAgent => {
+        allTransfers.push({ ...freeAgent, transferType: 'freeAgent' });
+    });
+    
+    // Sort by gameweek first, then by date if available
+    allTransfers.sort((a, b) => {
+        const gwA = parseInt(a.GW) || 1;
+        const gwB = parseInt(b.GW) || 1;
+        if (gwA !== gwB) return gwA - gwB;
+        
+        // If same gameweek, sort by date if available
+        if (a.Date && b.Date) {
+            return new Date(a.Date + ' 2024') - new Date(b.Date + ' 2024');
+        }
+        
+        // If no dates, maintain original order
+        return 0;
+    });
+    
+    console.log(`🏆 DEBUG: Processing ${allTransfers.length} total transfers chronologically for ${teamManagerName} at GW${targetGameweek}`);
+    
+    // Process all transfers in chronological order
+    allTransfers.forEach(transfer => {
+        const transferGameweek = parseInt(transfer.GW) || 1;
+        if (transferGameweek > targetGameweek) return; // Skip future transfers
+        
+        // Special debugging for Don Kim
+        if (teamManagerName === 'Don Kim' || teamNameOrManager === 'Don Kim' || teamNameOrManager === 'son4lyfe') {
+            console.log(`🔍 DON DEBUG: Processing ${transfer.transferType}:`, transfer);
+            console.log(`🔍 DON DEBUG: Transfer GW: ${transferGameweek}, Target GW: ${targetGameweek}`);
+        }
+        
+        if (transfer.transferType === 'trade') {
+            // Process trade
+            if ((transfer.Result === 'Accepted' || transfer.Result === 'Processed')) {
+                if (managerMatches(teamManagerName, transfer['Offered By'])) {
+                    // This manager gave away 'Offered' and received 'Requested'
+                    const outIndex = currentSquad.indexOf(transfer.Offered);
+                    if (outIndex > -1) {
+                        currentSquad.splice(outIndex, 1);
+                        console.log(`➖ Traded away ${transfer.Offered} via trade for ${teamManagerName} in GW${transferGameweek}`);
+                    } else {
+                        console.log(`⚠️ Could not find ${transfer.Offered} to remove via trade for ${teamManagerName} in GW${transferGameweek}`);
+                    }
+                    currentSquad.push(transfer.Requested);
+                    console.log(`➕ Received ${transfer.Requested} via trade for ${teamManagerName} in GW${transferGameweek}`);
+                } else if (managerMatches(teamManagerName, transfer['Offered To'])) {
+                    // This manager gave away 'Requested' and received 'Offered'
+                    const outIndex = currentSquad.indexOf(transfer.Requested);
+                    if (outIndex > -1) {
+                        currentSquad.splice(outIndex, 1);
+                        console.log(`➖ Traded away ${transfer.Requested} via trade for ${teamManagerName} in GW${transferGameweek}`);
+                    } else {
+                        console.log(`⚠️ Could not find ${transfer.Requested} to remove via trade for ${teamManagerName} in GW${transferGameweek}`);
+                    }
+                    currentSquad.push(transfer.Offered);
+                    console.log(`➕ Received ${transfer.Offered} via trade for ${teamManagerName} in GW${transferGameweek}`);
                 }
-                currentSquad.push(trade.Requested);
-                console.log(`➕ Received ${trade.Requested} via trade for ${teamManagerName} in GW${tradeGameweek} (matched with ${trade['Offered By']})`);
                 console.log(`📊 Squad size after trade: ${currentSquad.length}`);
-            } else if (managerMatches(teamManagerName, trade['Offered To'])) {
-                // This manager gave away 'Requested' and received 'Offered'
-                const outIndex = currentSquad.indexOf(trade.Requested);
+            }
+        } else if (transfer.transferType === 'waiver') {
+            // Process waiver
+            if (transfer.Result === 'Accepted' && managerMatches(teamManagerName, transfer.Manager)) {
+                const outIndex = currentSquad.indexOf(transfer.Out);
                 if (outIndex > -1) {
                     currentSquad.splice(outIndex, 1);
-                    console.log(`➖ Traded away ${trade.Requested} via trade for ${teamManagerName} in GW${tradeGameweek} (matched with ${trade['Offered To']})`);
+                    console.log(`➖ Removed ${transfer.Out} via waiver for ${teamManagerName} in GW${transferGameweek}`);
                 } else {
-                    console.log(`⚠️ Could not find ${trade.Requested} to remove via trade for ${teamManagerName} in GW${tradeGameweek}`);
+                    console.log(`⚠️ Could not find ${transfer.Out} to remove via waiver for ${teamManagerName} in GW${transferGameweek}`);
                 }
-                currentSquad.push(trade.Offered);
-                console.log(`➕ Received ${trade.Offered} via trade for ${teamManagerName} in GW${tradeGameweek} (matched with ${trade['Offered To']})`);
-                console.log(`📊 Squad size after trade: ${currentSquad.length}`);
+                currentSquad.push(transfer.In);
+                console.log(`➕ Added ${transfer.In} via waiver for ${teamManagerName} in GW${transferGameweek}`);
+                console.log(`📊 Squad size after waiver: ${currentSquad.length}`);
             }
-        }
-    });
-    
-    // 2. Apply successful waiver transactions SECOND (only up to target gameweek)
-    // Note: Denied waivers (Result !== 'Accepted') are never applied to team composition
-    console.log(`🏆 DEBUG: Processing ${transferHistory.waivers.length} waiver transactions for ${teamManagerName} at GW${targetGameweek}`);
-    transferHistory.waivers.forEach((move, index) => {
-        const moveGameweek = parseInt(move.GW) || 1;
-        
-        
-        if (managerMatches(teamManagerName, move.Manager) && move.Result === 'Accepted' && moveGameweek <= targetGameweek) {
-            // Remove player out
-            const outIndex = currentSquad.indexOf(move.Out);
-            if (outIndex > -1) {
-                currentSquad.splice(outIndex, 1);
-                console.log(`➖ Removed ${move.Out} via waiver for ${teamManagerName} in GW${moveGameweek} (matched with ${move.Manager})`);
-            } else {
-                console.log(`⚠️ Could not find ${move.Out} to remove via waiver for ${teamManagerName} in GW${moveGameweek}`);
-            }
-            // Add player in
-            currentSquad.push(move.In);
-            console.log(`➕ Added ${move.In} via waiver for ${teamManagerName} in GW${moveGameweek} (matched with ${move.Manager})`);
-            console.log(`📊 Squad size after waiver move: ${currentSquad.length}`);
-        }
-    });
-    
-    // 3. Apply free agent transactions LAST (only up to target gameweek)
-    console.log(`🏆 DEBUG: Processing ${transferHistory.freeAgents.length} free agent transactions for ${teamManagerName} at GW${targetGameweek}`);
-    transferHistory.freeAgents.forEach(move => {
-        const moveGameweek = parseInt(move.GW) || 1;
-        if (managerMatches(teamManagerName, move.Manager) && moveGameweek <= targetGameweek) {
-            // Remove player out
-            const outIndex = currentSquad.indexOf(move.Out);
+        } else if (transfer.transferType === 'freeAgent') {
+            // Process free agent
+            if (managerMatches(teamManagerName, transfer.Manager)) {
+                const outIndex = currentSquad.indexOf(transfer.Out);
                 if (outIndex > -1) {
                     currentSquad.splice(outIndex, 1);
-                console.log(`➖ Removed ${move.Out} for ${teamManagerName} in GW${moveGameweek} (matched with ${move.Manager})`);
-            } else {
-                console.log(`⚠️ Could not find ${move.Out} to remove for ${teamManagerName} in GW${moveGameweek}`);
+                    console.log(`➖ Removed ${transfer.Out} via free agent for ${teamManagerName} in GW${transferGameweek}`);
+                } else {
+                    console.log(`⚠️ Could not find ${transfer.Out} to remove via free agent for ${teamManagerName} in GW${transferGameweek}`);
+                }
+                currentSquad.push(transfer.In);
+                console.log(`➕ Added ${transfer.In} via free agent for ${teamManagerName} in GW${transferGameweek}`);
+                console.log(`📊 Squad size after free agent: ${currentSquad.length}`);
             }
-            // Add player in
-            currentSquad.push(move.In);
-            console.log(`➕ Added ${move.In} for ${teamManagerName} in GW${moveGameweek} (matched with ${move.Manager})`);
-            console.log(`📊 Squad size after free agent move: ${currentSquad.length}`);
+        }
+        
+        // Special debugging for Don Kim
+        if (teamManagerName === 'Don Kim' || teamNameOrManager === 'Don Kim' || teamNameOrManager === 'son4lyfe') {
+            console.log(`🔍 DON DEBUG: After ${transfer.transferType} - Squad:`, currentSquad);
         }
     });
     
     
+    // Remove duplicates and return final squad
+    const finalSquad = [...new Set(currentSquad)];
+    console.log(`✅ Final squad for ${teamManagerName} at GW${targetGameweek}:`, finalSquad);
     
-    console.log(`✅ Final squad for ${teamManagerName} at GW${targetGameweek}:`, currentSquad);
-    return currentSquad;
+    // Special debugging for Don Kim
+    if (teamManagerName === 'Don Kim' || teamNameOrManager === 'Don Kim' || teamNameOrManager === 'son4lyfe') {
+        console.log(`🔍 DON DEBUG: Final squad for Don Kim at GW${targetGameweek}:`, finalSquad);
+        console.log(`🔍 DON DEBUG: Squad size: ${finalSquad.length}`);
+    }
+    
+    return finalSquad;
 }
 
 // Show/hide movement type sections
@@ -7176,84 +7229,78 @@ function calculateOutstandingPayments() {
         return {};
     }
     
-    // Loop through all gameweeks from GW1 to selected gameweek
-    for (let gw = 1; gw <= currentGameweek; gw++) {
-        const gwData = dataManager.getGameweekData(gw);
-        if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
-            // Find the weekly winner for this gameweek
-            let highestScore = 0;
-            let weeklyWinner = null;
-            
-            gwData.finalResults.forEach(result => {
-                const homeScore = result.homeScore || 0;
-                const awayScore = result.awayScore || 0;
-                const maxScore = Math.max(homeScore, awayScore);
-                
-                if (maxScore > highestScore) {
-                    highestScore = maxScore;
-                    weeklyWinner = result;
-                }
-            });
-            
-            if (weeklyWinner) {
-                const winnerTeam = weeklyWinner.homeScore > weeklyWinner.awayScore ? 
-                    weeklyWinner.homeTeam : weeklyWinner.awayTeam;
-                const winnerScore = Math.max(weeklyWinner.homeScore || 0, weeklyWinner.awayScore || 0);
-                
-                // Find manager name for the winning team
-                let managerName = '';
-                if (weeklyWinner.homeTeam === winnerTeam) {
-                    managerName = weeklyWinner.homeManager || winnerTeam;
-                } else {
-                    managerName = weeklyWinner.awayManager || winnerTeam;
-                }
-                
-                // Determine month from gameweek (simplified logic)
-                let month = 'August'; // Default
-                if (gw <= 4) month = 'August';
-                else if (gw <= 8) month = 'September';
-                else if (gw <= 12) month = 'October';
-                else if (gw <= 16) month = 'November';
-                else if (gw <= 20) month = 'December';
-                else if (gw <= 24) month = 'January';
-                else if (gw <= 28) month = 'February';
-                else if (gw <= 32) month = 'March';
-                else if (gw <= 36) month = 'April';
-                else month = 'May';
-                
-                // Initialize month structure if not exists
-                if (!monthlyPayments[month]) {
-                    monthlyPayments[month] = {
-                        winners: [],
-                        debts: {}
-                    };
-                    // Initialize debt tracking for all managers
-                    allManagers.forEach(manager => {
-                        monthlyPayments[month].debts[manager] = 0;
-                    });
-                }
-                
-                // Add winner to month
-                monthlyPayments[month].winners.push({
-                    gameweek: gw,
-                    winner: managerName,
-                    gwPoints: winnerScore,
-                    month: month
-                });
-                
-                // Calculate debts: all other managers owe $1 to the winner
-                allManagers.forEach(manager => {
-                    if (manager !== managerName) {
-                        monthlyPayments[month].debts[manager] += 1;
-                    }
-                });
-            }
-        }
-    }
-    
-    // Add monthly winner debts
+    // Process only completed months
     const availableMonths = ['August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May'];
     
+    availableMonths.forEach(month => {
+        // Only process completed months
+        if (isMonthComplete(month, currentGameweek)) {
+            const monthGameweeks = getGameweeksForMonth(month);
+            if (!monthGameweeks) return;
+            
+            // Initialize month structure
+            monthlyPayments[month] = {
+                winners: [],
+                debts: {}
+            };
+            // Initialize debt tracking for all managers
+            allManagers.forEach(manager => {
+                monthlyPayments[month].debts[manager] = 0;
+            });
+            
+            // Process each gameweek in this completed month
+            for (const gw of monthGameweeks) {
+                const gwData = dataManager.getGameweekData(gw);
+                if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
+                    // Find the weekly winner for this gameweek
+                    let highestScore = 0;
+                    let weeklyWinner = null;
+                    
+                    gwData.finalResults.forEach(result => {
+                        const homeScore = result.homeScore || 0;
+                        const awayScore = result.awayScore || 0;
+                        const maxScore = Math.max(homeScore, awayScore);
+                        
+                        if (maxScore > highestScore) {
+                            highestScore = maxScore;
+                            weeklyWinner = result;
+                        }
+                    });
+                    
+                    if (weeklyWinner) {
+                        const winnerTeam = weeklyWinner.homeScore > weeklyWinner.awayScore ? 
+                            weeklyWinner.homeTeam : weeklyWinner.awayTeam;
+                        const winnerScore = Math.max(weeklyWinner.homeScore || 0, weeklyWinner.awayScore || 0);
+                        
+                        // Find manager name for the winning team
+                        let managerName = '';
+                        if (weeklyWinner.homeTeam === winnerTeam) {
+                            managerName = weeklyWinner.homeManager || winnerTeam;
+                        } else {
+                            managerName = weeklyWinner.awayManager || winnerTeam;
+                        }
+                        
+                        // Add winner to month
+                        monthlyPayments[month].winners.push({
+                            gameweek: gw,
+                            winner: managerName,
+                            gwPoints: winnerScore,
+                            month: month
+                        });
+                        
+                        // Calculate debts: all other managers owe $1 to the winner
+                        allManagers.forEach(manager => {
+                            if (manager !== managerName) {
+                                monthlyPayments[month].debts[manager] += 1;
+                            }
+                        });
+                    }
+                }
+            }
+        }
+    });
+    
+    // Add monthly winner debts
     availableMonths.forEach(month => {
         if (isMonthComplete(month, currentGameweek)) {
             const monthlyWinner = getMonthlyWinner(month, currentGameweek);
