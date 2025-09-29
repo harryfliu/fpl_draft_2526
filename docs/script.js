@@ -273,8 +273,8 @@ function calculateCumulativeTeamPerformance(teamName, targetGameweek) {
     // Calculate cumulative winnings up to target gameweek
     totalWinnings = calculateCumulativeWinnings(teamName, targetGameweek);
     
-    // Calculate form from recent results (last 5 gameweeks)
-    const form = calculateFormFromResults(teamName);
+    // Calculate form from recent results (dynamic based on target gameweek)
+    const form = calculateFormFromResults(teamName, targetGameweek);
     console.log(`   Form: ${form}`);
     console.log(`   Total Winnings: $${totalWinnings}`);
     console.log(`========================================\n`);
@@ -453,6 +453,8 @@ function populateLeaderboard() {
             // Calculate cumulative totals for all teams up to the current gameweek
     const currentGameweek = dashboardData.currentGameweek || 1;
     console.log(`🏆 Calculating cumulative totals up to GW${currentGameweek}`);
+    console.log(`🏆 dashboardData.currentGameweek: ${dashboardData.currentGameweek}`);
+    console.log(`🏆 Selected gameweek from dropdown: ${document.getElementById('gameweekSelector')?.value}`);
     
     let liveLeaderboard = [];
     
@@ -1798,7 +1800,7 @@ function displayTeamDetails(team) {
     
     // Use the new form calculation function for accurate form display
     if (teamForm) {
-        const calculatedForm = calculateFormFromResults(team.teamName);
+        const calculatedForm = calculateFormFromResults(team.teamName, dashboardData.currentGameweek || 1);
         if (calculatedForm !== 'N/A') {
             // Display form as badges (most recent on the right)
             teamForm.innerHTML = calculatedForm.split('-').map(result => 
@@ -2229,6 +2231,7 @@ function setCurrentGameweek(gameweek) {
         return;
     }
     
+    console.log(`📅 Setting current gameweek from ${dashboardData.currentGameweek} to ${gameweek}`);
     dashboardData.currentGameweek = gameweek;
     
     // Update the selector
@@ -2253,6 +2256,7 @@ function setCurrentGameweek(gameweek) {
 // Handle gameweek change
 function handleGameweekChange(event) {
     const selectedGameweek = parseInt(event.target.value);
+    console.log(`🔄 Gameweek changed to: ${selectedGameweek}`);
     
     // Update the dashboard data
     setCurrentGameweek(selectedGameweek);
@@ -7114,66 +7118,55 @@ window.showMovementType = showMovementType;
 document.addEventListener('DOMContentLoaded', addLoadingStates);
 
 // Calculate form from actual gameweek results in chronological order
-function calculateFormFromResults(teamName) {
+function calculateFormFromResults(teamName, targetGameweek) {
     if (!dataManager) return 'N/A';
     
-    // Get final results first (prioritize over partial results)
-    const finalResults = dataManager.getAllFinalResults();
-    if (!finalResults || finalResults.length === 0) return 'N/A';
+    // Build form results from GW1 to targetGameweek
+    const formResults = [];
     
-    // Get all final results for this team and sort by gameweek
-    const teamFinalResults = finalResults.filter(result => 
-        result.homeTeam === teamName || result.awayTeam === teamName
-    );
-    
-    // Only check for partial results if we're in the middle of a gameweek with no final results
-    const currentGameweek = dashboardData.currentGameweek || 1;
-    const currentGwData = dataManager.getGameweekData(currentGameweek);
-    const hasCurrentFinalResults = currentGwData && currentGwData.finalResults && currentGwData.finalResults.length > 0;
-    
-    let teamResults = [...teamFinalResults];
-    
-    // Only add partial results if current gameweek has no final results
-    if (!hasCurrentFinalResults && currentGwData && currentGwData.partialResults && currentGwData.partialResults.length > 0) {
-        // Find current gameweek partial result for this team
-        const currentResult = currentGwData.partialResults.find(result => 
-            result.homeTeam === teamName || result.awayTeam === teamName
-        );
+    for (let gw = 1; gw <= targetGameweek; gw++) {
+        const gwData = dataManager.getGameweekData(gw);
+        if (!gwData) continue;
         
-        if (currentResult) {
-            // Add current gameweek result to the list (it will be the most recent)
-            teamResults.push(currentResult);
+        // Check for results (final results take priority over partial results)
+        let result = null;
+        if (gwData.finalResults && gwData.finalResults.length > 0) {
+            result = gwData.finalResults.find(r => r.homeTeam === teamName || r.awayTeam === teamName);
+        } else if (gwData.partialResults && gwData.partialResults.length > 0) {
+            result = gwData.partialResults.find(r => r.homeTeam === teamName || r.awayTeam === teamName);
+        }
+        
+        if (result) {
+            if (result.homeTeam === teamName) {
+                // Team is home
+                if (result.homeScore > result.awayScore) {
+                    formResults.push('W');
+                } else if (result.homeScore < result.awayScore) {
+                    formResults.push('L');
+                } else {
+                    formResults.push('D');
+                }
+            } else {
+                // Team is away
+                if (result.awayScore > result.homeScore) {
+                    formResults.push('W');
+                } else if (result.awayScore < result.homeScore) {
+                    formResults.push('L');
+                } else {
+                    formResults.push('D');
+                }
+            }
         }
     }
     
-    if (teamResults.length === 0) return 'N/A';
+    if (formResults.length === 0) return 'N/A';
     
-    // Build form string from actual results (most recent last)
-    const formResults = [];
-    teamResults.forEach(result => {
-        if (result.homeTeam === teamName) {
-            // Team is home
-            if (result.homeScore > result.awayScore) {
-                formResults.push('W');
-            } else if (result.homeScore < result.awayScore) {
-                formResults.push('L');
-            } else {
-                formResults.push('D');
-            }
-        } else {
-            // Team is away
-            if (result.awayScore > result.homeScore) {
-                formResults.push('W');
-            } else if (result.awayScore < result.homeScore) {
-                formResults.push('L');
-            } else {
-                formResults.push('D');
-            }
-        }
-    });
+    // Dynamic form length based on target gameweek:
+    // - GW1-GW4: Show last N form (where N = targetGameweek)
+    // - GW5+: Show last 5 form (capped at 5)
+    const maxFormLength = targetGameweek <= 4 ? targetGameweek : 5;
+    const recentForm = formResults.slice(-maxFormLength);
     
-    // Take the last 5 results (most recent form) - most recent will be on the right
-    const recentForm = formResults.slice(-5);
     return recentForm.length > 0 ? recentForm.join('-') : 'N/A';
 }
 
