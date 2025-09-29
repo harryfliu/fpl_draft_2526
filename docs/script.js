@@ -6605,13 +6605,6 @@ function calculateCurrentTeam(teamNameOrManager, targetGameweek = null, managerN
     
         // Special debugging for Don Kim
         if (teamManagerName === 'Don Kim' || teamNameOrManager === 'Don Kim' || teamNameOrManager === 'son4lyfe') {
-            console.log(`🔍 DON DEBUG: Starting transfer processing for Don Kim at GW${targetGameweek}`);
-            console.log(`🔍 DON DEBUG: Initial squad:`, currentSquad);
-            console.log(`🔍 DON DEBUG: Transfer history:`, transferHistory);
-            console.log(`🔍 DON DEBUG: All trades in transfer history:`, transferHistory.trades);
-            if (transferHistory.trades && transferHistory.trades.length > 0) {
-                console.log(`🔍 DON DEBUG: First trade:`, transferHistory.trades[0]);
-            }
         }
     
     // Combine all transfers and sort by date for chronological processing
@@ -6656,8 +6649,6 @@ function calculateCurrentTeam(teamNameOrManager, targetGameweek = null, managerN
         
         // Special debugging for Don Kim
         if (teamManagerName === 'Don Kim' || teamNameOrManager === 'Don Kim' || teamNameOrManager === 'son4lyfe') {
-            console.log(`🔍 DON DEBUG: Processing ${transfer.transferType}:`, transfer);
-            console.log(`🔍 DON DEBUG: Transfer GW: ${transferGameweek}, Target GW: ${targetGameweek}`);
         }
         
         if (transfer.transferType === 'trade') {
@@ -6709,7 +6700,6 @@ function calculateCurrentTeam(teamNameOrManager, targetGameweek = null, managerN
         
         // Special debugging for Don Kim
         if (teamManagerName === 'Don Kim' || teamNameOrManager === 'Don Kim' || teamNameOrManager === 'son4lyfe') {
-            console.log(`🔍 DON DEBUG: After ${transfer.transferType} - Squad:`, currentSquad);
         }
     });
     
@@ -6719,8 +6709,6 @@ function calculateCurrentTeam(teamNameOrManager, targetGameweek = null, managerN
     
     // Special debugging for Don Kim
     if (teamManagerName === 'Don Kim' || teamNameOrManager === 'Don Kim' || teamNameOrManager === 'son4lyfe') {
-        console.log(`🔍 DON DEBUG: Final squad for Don Kim at GW${targetGameweek}:`, finalSquad);
-        console.log(`🔍 DON DEBUG: Squad size: ${finalSquad.length}`);
     }
     
     return finalSquad;
