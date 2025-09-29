@@ -6668,25 +6668,20 @@ function calculateCurrentTeam(teamNameOrManager, targetGameweek = null, managerN
                     const outIndex = currentSquad.indexOf(transfer.Offered);
                     if (outIndex > -1) {
                         currentSquad.splice(outIndex, 1);
-                        console.log(`➖ Traded away ${transfer.Offered} via trade for ${teamManagerName} in GW${transferGameweek}`);
                     } else {
                         console.log(`⚠️ Could not find ${transfer.Offered} to remove via trade for ${teamManagerName} in GW${transferGameweek}`);
                     }
                     currentSquad.push(transfer.Requested);
-                    console.log(`➕ Received ${transfer.Requested} via trade for ${teamManagerName} in GW${transferGameweek}`);
                 } else if (managerMatches(teamManagerName, transfer['Offered To'])) {
                     // This manager gave away 'Requested' and received 'Offered'
                     const outIndex = currentSquad.indexOf(transfer.Requested);
                     if (outIndex > -1) {
                         currentSquad.splice(outIndex, 1);
-                        console.log(`➖ Traded away ${transfer.Requested} via trade for ${teamManagerName} in GW${transferGameweek}`);
                     } else {
                         console.log(`⚠️ Could not find ${transfer.Requested} to remove via trade for ${teamManagerName} in GW${transferGameweek}`);
                     }
                     currentSquad.push(transfer.Offered);
-                    console.log(`➕ Received ${transfer.Offered} via trade for ${teamManagerName} in GW${transferGameweek}`);
                 }
-                console.log(`📊 Squad size after trade: ${currentSquad.length}`);
             }
         } else if (transfer.transferType === 'waiver') {
             // Process waiver
@@ -6694,13 +6689,10 @@ function calculateCurrentTeam(teamNameOrManager, targetGameweek = null, managerN
                 const outIndex = currentSquad.indexOf(transfer.Out);
                 if (outIndex > -1) {
                     currentSquad.splice(outIndex, 1);
-                    console.log(`➖ Removed ${transfer.Out} via waiver for ${teamManagerName} in GW${transferGameweek}`);
                 } else {
                     console.log(`⚠️ Could not find ${transfer.Out} to remove via waiver for ${teamManagerName} in GW${transferGameweek}`);
                 }
                 currentSquad.push(transfer.In);
-                console.log(`➕ Added ${transfer.In} via waiver for ${teamManagerName} in GW${transferGameweek}`);
-                console.log(`📊 Squad size after waiver: ${currentSquad.length}`);
             }
         } else if (transfer.transferType === 'freeAgent') {
             // Process free agent
@@ -6708,13 +6700,10 @@ function calculateCurrentTeam(teamNameOrManager, targetGameweek = null, managerN
                 const outIndex = currentSquad.indexOf(transfer.Out);
                 if (outIndex > -1) {
                     currentSquad.splice(outIndex, 1);
-                    console.log(`➖ Removed ${transfer.Out} via free agent for ${teamManagerName} in GW${transferGameweek}`);
                 } else {
                     console.log(`⚠️ Could not find ${transfer.Out} to remove via free agent for ${teamManagerName} in GW${transferGameweek}`);
                 }
                 currentSquad.push(transfer.In);
-                console.log(`➕ Added ${transfer.In} via free agent for ${teamManagerName} in GW${transferGameweek}`);
-                console.log(`📊 Squad size after free agent: ${currentSquad.length}`);
             }
         }
         
@@ -6727,7 +6716,6 @@ function calculateCurrentTeam(teamNameOrManager, targetGameweek = null, managerN
     
     // Remove duplicates and return final squad
     const finalSquad = [...new Set(currentSquad)];
-    console.log(`✅ Final squad for ${teamManagerName} at GW${targetGameweek}:`, finalSquad);
     
     // Special debugging for Don Kim
     if (teamManagerName === 'Don Kim' || teamNameOrManager === 'Don Kim' || teamNameOrManager === 'son4lyfe') {
