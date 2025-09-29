@@ -13,7 +13,7 @@ let fixturesPagination = {
 
 // Data structure for the dashboard
 let dashboardData = {
-    currentGameweek: 8,
+    currentGameweek: 1, // Will be updated by data manager
     leagueSize: 12,
     prizePool: 420,
     currentMonth: "August",
@@ -3115,6 +3115,11 @@ function buildHeadToHeadRecords(results, teamPerformance) {
         return '<p class="text-gray-400 text-sm">No head-to-head data available yet</p>';
     }
     
+    if (!teamPerformance || teamPerformance.length === 0) {
+        console.warn('⚠️ teamPerformance is empty, cannot build head-to-head records');
+        return '<p class="text-gray-400 text-sm">No team data available for head-to-head records</p>';
+    }
+    
     const h2hMap = new Map(); // teamName -> { opponent -> { wins, losses, draws, goalsFor, goalsAgainst } }
     
     // Initialize h2h map for all teams
@@ -3128,6 +3133,12 @@ function buildHeadToHeadRecords(results, teamPerformance) {
         const awayTeam = result.awayTeam;
         const homeScore = result.homeScore || 0;
         const awayScore = result.awayScore || 0;
+        
+        // Safety check: ensure both teams exist in the h2hMap
+        if (!h2hMap.has(homeTeam) || !h2hMap.has(awayTeam)) {
+            console.warn(`⚠️ Team not found in h2hMap: ${homeTeam} or ${awayTeam}`);
+            return; // Skip this result
+        }
         
         // Initialize opponent records if they don't exist
         if (!h2hMap.get(homeTeam).has(awayTeam)) {
