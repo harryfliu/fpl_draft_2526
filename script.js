@@ -293,6 +293,54 @@ function calculateCumulativeTeamPerformance(teamName, targetGameweek) {
     };
 }
 
+// Helper function to calculate cumulative totalPoints for a team up to a specific gameweek
+function calculateCumulativeTotalPoints(teamName, targetGameweek) {
+    if (!dataManager) return 0;
+    
+    let totalPoints = 0;
+    
+    // Calculate cumulative league points from GW1 to target gameweek
+    for (let gw = 1; gw <= targetGameweek; gw++) {
+        const gwData = dataManager.getGameweekData(gw);
+        
+        // Check for results (final results take priority over partial results)
+        let result = null;
+        if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
+            result = gwData.finalResults.find(r => 
+                r.homeTeam === teamName || r.awayTeam === teamName
+            );
+        } else if (gwData && gwData.partialResults && gwData.partialResults.length > 0) {
+            result = gwData.partialResults.find(r => 
+                r.homeTeam === teamName || r.awayTeam === teamName
+            );
+        }
+        
+        if (result) {
+            // Calculate league points (3 for win, 1 for draw, 0 for loss)
+            const homeScore = result.homeScore || 0;
+            const awayScore = result.awayScore || 0;
+            
+            if (result.homeTeam === teamName) {
+                if (homeScore > awayScore) {
+                    totalPoints += 3; // Win
+                } else if (homeScore === awayScore) {
+                    totalPoints += 1; // Draw
+                }
+                // Loss = 0 points
+            } else {
+                if (awayScore > homeScore) {
+                    totalPoints += 3; // Win
+                } else if (awayScore === homeScore) {
+                    totalPoints += 1; // Draw
+                }
+                // Loss = 0 points
+            }
+        }
+    }
+    
+    return totalPoints;
+}
+
 // Calculate cumulative winnings for a team up to a specific gameweek
 function calculateCumulativeWinnings(teamName, targetGameweek) {
     if (!dataManager) return 0;
@@ -351,29 +399,33 @@ function calculateCumulativeWinnings(teamName, targetGameweek) {
                 // Tie exists - choose the manager who is LOWER on the live leaderboard table
                 console.log(`   🏆 Tie detected! ${tiedTeams.length} teams with ${maxPoints} points:`, tiedTeams.map(t => t.manager || t.teamName));
                 
-                // Get current leaderboard positions
-                const leaderboard = dashboardData.leaderboard || [];
-                let lowestPosition = -1;
+                // Calculate cumulative totalPoints for each tied team up to this gameweek
+                console.log(`   📊 Using cumulative league points up to GW${gw} for tie-breaker...`);
+                let lowestTotalPoints = -1;
                 
+                console.log(`   🔍 Starting tie-breaker analysis using cumulative totals...`);
                 for (const tiedTeam of tiedTeams) {
-                    const leaderboardTeam = leaderboard.find(team => 
-                        team.teamName === tiedTeam.teamName || 
-                        team.manager === tiedTeam.manager
-                    );
+                    // Calculate cumulative totalPoints for this team up to this gameweek
+                    const cumulativeTotalPoints = calculateCumulativeTotalPoints(tiedTeam.teamName, gw);
                     
-                    if (leaderboardTeam && leaderboardTeam.position) {
-                        console.log(`   📊 ${tiedTeam.manager || tiedTeam.teamName} is at position ${leaderboardTeam.position} on leaderboard`);
+                    if (cumulativeTotalPoints !== undefined) {
+                        console.log(`   📊 ${tiedTeam.manager || tiedTeam.teamName} has ${cumulativeTotalPoints} cumulative league points up to GW${gw}`);
                         
-                        // Choose the team with the HIGHER position number (lower on table)
-                        if (lowestPosition === -1 || leaderboardTeam.position > lowestPosition) {
-                            lowestPosition = leaderboardTeam.position;
+                        // Choose the team with the LOWER total points (lower on table)
+                        if (lowestTotalPoints === -1 || cumulativeTotalPoints < lowestTotalPoints) {
+                            console.log(`   🏆 New leader: ${tiedTeam.manager || tiedTeam.teamName} (${cumulativeTotalPoints} points < ${lowestTotalPoints === -1 ? 'N/A' : lowestTotalPoints})`);
+                            lowestTotalPoints = cumulativeTotalPoints;
                             winner = tiedTeam;
+                        } else {
+                            console.log(`   ❌ ${tiedTeam.manager || tiedTeam.teamName} not chosen (${cumulativeTotalPoints} points >= ${lowestTotalPoints})`);
                         }
+                    } else {
+                        console.log(`   ⚠️ Could not calculate cumulative totalPoints for ${tiedTeam.manager || tiedTeam.teamName}`);
                     }
                 }
                 
                 if (winner) {
-                    console.log(`   🏆 Tie-breaker: ${winner.manager || winner.teamName} wins (position ${lowestPosition} on leaderboard)`);
+                    console.log(`   🏆 Tie-breaker: ${winner.manager || winner.teamName} wins (${lowestTotalPoints} cumulative league points up to GW${gw})`);
                 }
             }
             
