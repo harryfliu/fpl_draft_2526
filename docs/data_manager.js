@@ -61,8 +61,6 @@ class FPLDataManager {
             const highestGW = Math.max(...availableGameweeks.map(gw => parseInt(gw.replace('gw', ''))));
             this.currentGameweek = highestGW;
             console.log(`🏆 Set current gameweek to ${highestGW}`);
-            console.log(`🔍 DEBUG: Available gameweeks: ${availableGameweeks.join(', ')}`);
-            console.log(`🔍 DEBUG: Current gameweek set to: ${this.currentGameweek}`);
         }
         
         return availableGameweeks;
@@ -595,11 +593,6 @@ class FPLDataManager {
         if (gameweek) {
             const gwKey = `gw${gameweek}`;
             const data = this.gameweekData.get(gwKey);
-            console.log(`🔍 DEBUG: getPartialResults(${gameweek}) - gwKey: ${gwKey}, data exists: ${!!data}`);
-            if (data) {
-                console.log(`🔍 DEBUG: partialResults length: ${data.partialResults ? data.partialResults.length : 'undefined'}`);
-                console.log(`🔍 DEBUG: partialResults:`, data.partialResults);
-            }
             return data ? data.partialResults : [];
         }
         return this.getAllPartialResults();
