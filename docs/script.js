@@ -353,7 +353,7 @@ function calculateCumulativeWinnings(teamName, targetGameweek) {
                 
                 // Get current leaderboard positions
                 const leaderboard = dashboardData.leaderboard || [];
-                let lowestPosition = -1;
+                let lowestTotalPoints = -1;
                 
                 for (const tiedTeam of tiedTeams) {
                     const leaderboardTeam = leaderboard.find(team => 
@@ -361,19 +361,19 @@ function calculateCumulativeWinnings(teamName, targetGameweek) {
                         team.manager === tiedTeam.manager
                     );
                     
-                    if (leaderboardTeam && leaderboardTeam.position) {
-                        console.log(`   📊 ${tiedTeam.manager || tiedTeam.teamName} is at position ${leaderboardTeam.position} on leaderboard`);
+                    if (leaderboardTeam && leaderboardTeam.points !== undefined) {
+                        console.log(`   📊 ${tiedTeam.manager || tiedTeam.teamName} has ${leaderboardTeam.points} total points on leaderboard`);
                         
-                        // Choose the team with the HIGHER position number (lower on table)
-                        if (lowestPosition === -1 || leaderboardTeam.position > lowestPosition) {
-                            lowestPosition = leaderboardTeam.position;
+                        // Choose the team with the LOWER total points (lower on table)
+                        if (lowestTotalPoints === -1 || leaderboardTeam.points < lowestTotalPoints) {
+                            lowestTotalPoints = leaderboardTeam.points;
                             winner = tiedTeam;
                         }
                     }
                 }
                 
                 if (winner) {
-                    console.log(`   🏆 Tie-breaker: ${winner.manager || winner.teamName} wins (position ${lowestPosition} on leaderboard)`);
+                    console.log(`   🏆 Tie-breaker: ${winner.manager || winner.teamName} wins (${lowestTotalPoints} total points)`);
                 }
             }
             
