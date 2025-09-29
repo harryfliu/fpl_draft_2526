@@ -308,16 +308,21 @@ function calculateCumulativeWinnings(teamName, targetGameweek) {
         const gwData = dataManager.getGameweekData(gw);
         console.log(`   GW${gw} data exists: ${!!gwData}`);
         console.log(`   GW${gw} finalResults: ${gwData?.finalResults?.length || 0} results`);
+        console.log(`   GW${gw} partialResults: ${gwData?.partialResults?.length || 0} results`);
         
-        if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
-            console.log(`   📊 All GW${gw} results:`);
-            gwData.finalResults.forEach((result, index) => {
+        // Check for both final results and partial results
+        const resultsData = gwData?.finalResults?.length > 0 ? gwData.finalResults : gwData?.partialResults;
+        const resultsType = gwData?.finalResults?.length > 0 ? 'final' : 'partial';
+        
+        if (gwData && resultsData && resultsData.length > 0) {
+            console.log(`   📊 All GW${gw} ${resultsType} results:`);
+            resultsData.forEach((result, index) => {
                 console.log(`     ${index + 1}. ${result.homeTeam} ${result.homeScore} - ${result.awayScore} ${result.awayTeam}`);
             });
             
             // Find the weekly winner using the same tie-breaking logic as PrizePoolCalculator
             const teamPoints = [];
-            gwData.finalResults.forEach(result => {
+            resultsData.forEach(result => {
                 // Home
                 teamPoints.push({ 
                     teamName: result.homeTeam, 
@@ -403,7 +408,7 @@ function calculateCumulativeWinnings(teamName, targetGameweek) {
                 console.log(`   ⚠️ No weekly winner found for GW${gw}`);
             }
         } else {
-            console.log(`   ⚠️ No final results data for GW${gw}`);
+            console.log(`   ⚠️ No final or partial results data for GW${gw}`);
         }
     }
     
