@@ -339,22 +339,27 @@ function calculateCumulativeWinnings(teamName, targetGameweek) {
 
             // Find highest GW points
             const maxPoints = Math.max(...teamPoints.map(t => t.gwPoints));
+            console.log(`   📊 Highest GW${gw} points: ${maxPoints}`);
             
             // Get all teams with the highest points (handle ties)
             const tiedTeams = teamPoints.filter(t => t.gwPoints === maxPoints);
+            console.log(`   📊 Teams with ${maxPoints} points:`, tiedTeams.map(t => `${t.teamName} (${t.manager})`));
             
             let winner = null;
             if (tiedTeams.length === 1) {
                 // No tie, use the single winner
                 winner = tiedTeams[0];
+                console.log(`   🏆 No tie - single winner: ${winner.teamName} (${winner.manager})`);
             } else if (tiedTeams.length > 1) {
                 // Tie exists - choose the manager who is LOWER on the live leaderboard table
                 console.log(`   🏆 Tie detected! ${tiedTeams.length} teams with ${maxPoints} points:`, tiedTeams.map(t => t.manager || t.teamName));
                 
                 // Get current leaderboard positions
                 const leaderboard = dashboardData.leaderboard || [];
+                console.log(`   📊 Current leaderboard has ${leaderboard.length} teams`);
                 let lowestTotalPoints = -1;
                 
+                console.log(`   🔍 Starting tie-breaker analysis...`);
                 for (const tiedTeam of tiedTeams) {
                     const leaderboardTeam = leaderboard.find(team => 
                         team.teamName === tiedTeam.teamName || 
@@ -366,9 +371,14 @@ function calculateCumulativeWinnings(teamName, targetGameweek) {
                         
                         // Choose the team with the LOWER total points (lower on table)
                         if (lowestTotalPoints === -1 || leaderboardTeam.points < lowestTotalPoints) {
+                            console.log(`   🏆 New leader: ${tiedTeam.manager || tiedTeam.teamName} (${leaderboardTeam.points} points < ${lowestTotalPoints === -1 ? 'N/A' : lowestTotalPoints})`);
                             lowestTotalPoints = leaderboardTeam.points;
                             winner = tiedTeam;
+                        } else {
+                            console.log(`   ❌ ${tiedTeam.manager || tiedTeam.teamName} not chosen (${leaderboardTeam.points} points >= ${lowestTotalPoints})`);
                         }
+                    } else {
+                        console.log(`   ⚠️ Could not find ${tiedTeam.manager || tiedTeam.teamName} on leaderboard`);
                     }
                 }
                 
@@ -384,8 +394,13 @@ function calculateCumulativeWinnings(teamName, targetGameweek) {
                 console.log(`   🏆 Weekly winner: ${winnerTeam} (${winner.manager}) with ${winnerScore} points`);
                 
                 // Check if this team won this gameweek
+                console.log(`   🔍 Checking if ${teamName} won GW${gw}...`);
+                console.log(`   🔍 Winner was: ${winnerTeam}`);
+                console.log(`   🔍 Team name match: ${teamName === winnerTeam}`);
+                
                 if (teamName === winnerTeam) {
                     const totalManagers = dashboardData.leaderboard.length;
+                    console.log(`   📊 Total managers in league: ${totalManagers}`);
                     let weeklyWinnings;
                     
                     // Check if there was a tie (more than 1 team with highest score)
@@ -394,12 +409,15 @@ function calculateCumulativeWinnings(teamName, targetGameweek) {
                         const payingManagers = totalManagers - tiedTeams.length;
                         weeklyWinnings = payingManagers;
                         console.log(`   💰 ${teamName} won GW${gw} (TIE CASE): +$${weeklyWinnings} (from ${payingManagers} managers, excluding ${tiedTeams.length - 1} tied teams)`);
+                        console.log(`   💰 Calculation: ${totalManagers} total - ${tiedTeams.length} tied = ${payingManagers} paying managers`);
                     } else {
                         // No tie: winner gets $1 from each of the other managers
                         weeklyWinnings = totalManagers - 1;
                         console.log(`   💰 ${teamName} won GW${gw}: +$${weeklyWinnings} (from ${totalManagers - 1} other managers)`);
+                        console.log(`   💰 Calculation: ${totalManagers} total - 1 winner = ${totalManagers - 1} paying managers`);
                     }
                     
+                    console.log(`   💰 Adding $${weeklyWinnings} to total winnings (was $${totalWinnings}, now $${totalWinnings + weeklyWinnings})`);
                     totalWinnings += weeklyWinnings;
                 } else {
                     console.log(`   ❌ ${teamName} did NOT win GW${gw} (winner was ${winnerTeam})`);
