@@ -354,15 +354,15 @@ function calculateCumulativeWinnings(teamName, targetGameweek) {
                 // Tie exists - choose the manager who is LOWER on the live leaderboard table
                 console.log(`   🏆 Tie detected! ${tiedTeams.length} teams with ${maxPoints} points:`, tiedTeams.map(t => t.manager || t.teamName));
                 
-                // Get leaderboard from the specific gameweek being calculated
+                // Get standings from the specific gameweek being calculated
                 const gwData = dataManager.getGameweekData(gw);
-                const gameweekLeaderboard = gwData?.draft?.teams || [];
-                console.log(`   📊 GW${gw} leaderboard has ${gameweekLeaderboard.length} teams`);
+                const gameweekStandings = gwData?.standings || [];
+                console.log(`   📊 GW${gw} standings has ${gameweekStandings.length} teams`);
                 let lowestTotalPoints = -1;
                 
                 console.log(`   🔍 Starting tie-breaker analysis using GW${gw} standings...`);
                 for (const tiedTeam of tiedTeams) {
-                    const leaderboardTeam = gameweekLeaderboard.find(team => 
+                    const leaderboardTeam = gameweekStandings.find(team => 
                         team.teamName === tiedTeam.teamName || 
                         team.manager === tiedTeam.manager
                     );
@@ -379,7 +379,7 @@ function calculateCumulativeWinnings(teamName, targetGameweek) {
                             console.log(`   ❌ ${tiedTeam.manager || tiedTeam.teamName} not chosen (${leaderboardTeam.points} points >= ${lowestTotalPoints})`);
                         }
                     } else {
-                        console.log(`   ⚠️ Could not find ${tiedTeam.manager || tiedTeam.teamName} on GW${gw} leaderboard`);
+                        console.log(`   ⚠️ Could not find ${tiedTeam.manager || tiedTeam.teamName} on GW${gw} standings`);
                     }
                 }
                 
