@@ -348,25 +348,32 @@ function calculateCumulativeWinnings(teamName, targetGameweek) {
                 // No tie, use the single winner
                 winner = tiedTeams[0];
             } else if (tiedTeams.length > 1) {
-                // Tie exists - choose the manager with LOWER cumulative total league points
+                // Tie exists - choose the manager who is LOWER on the live leaderboard table
                 console.log(`   🏆 Tie detected! ${tiedTeams.length} teams with ${maxPoints} points:`, tiedTeams.map(t => t.manager || t.teamName));
                 
-                let lowestTotalPoints = -1;
+                // Get current leaderboard positions
+                const leaderboard = dashboardData.leaderboard || [];
+                let lowestPosition = -1;
                 
                 for (const tiedTeam of tiedTeams) {
-                    const cumulativeTotalPoints = calculateCumulativeTotalPoints(tiedTeam.teamName, gw);
-                    console.log(`   📊 ${tiedTeam.manager || tiedTeam.teamName} has ${cumulativeTotalPoints} cumulative total league points`);
+                    const leaderboardTeam = leaderboard.find(team => 
+                        team.teamName === tiedTeam.teamName || 
+                        team.manager === tiedTeam.manager
+                    );
                     
-                    if (cumulativeTotalPoints !== undefined) {
-                        if (lowestTotalPoints === -1 || cumulativeTotalPoints < lowestTotalPoints) {
-                            lowestTotalPoints = cumulativeTotalPoints;
+                    if (leaderboardTeam && leaderboardTeam.position) {
+                        console.log(`   📊 ${tiedTeam.manager || tiedTeam.teamName} is at position ${leaderboardTeam.position} on leaderboard`);
+                        
+                        // Choose the team with the HIGHER position number (lower on table)
+                        if (lowestPosition === -1 || leaderboardTeam.position > lowestPosition) {
+                            lowestPosition = leaderboardTeam.position;
                             winner = tiedTeam;
                         }
                     }
                 }
                 
                 if (winner) {
-                    console.log(`   🏆 Tie-breaker: ${winner.manager || winner.teamName} wins (${lowestTotalPoints} cumulative total league points)`);
+                    console.log(`   🏆 Tie-breaker: ${winner.manager || winner.teamName} wins (position ${lowestPosition} on leaderboard)`);
                 }
             }
             
