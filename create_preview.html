@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FPL Dashboard Preview</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #0a0a18 0%, #0f0f23 50%, #1e1e3f 100%);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            width: 1200px;
+            height: 630px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .logo {
+            font-size: 48px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #8b5cf6, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .subtitle {
+            font-size: 24px;
+            color: #94a3b8;
+            margin-bottom: 30px;
+        }
+        .features {
+            display: flex;
+            gap: 40px;
+            margin-top: 30px;
+        }
+        .feature {
+            text-align: center;
+        }
+        .feature-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        .feature-text {
+            font-size: 16px;
+            color: #64748b;
+        }
+        .url {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            color: #64748b;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">⚽ FPL Draft Dashboard</div>
+    <div class="subtitle">2025-26 Season</div>
+    <div class="features">
+        <div class="feature">
+            <div class="feature-icon">📊</div>
+            <div class="feature-text">Live Standings</div>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">🔄</div>
+            <div class="feature-text">Player Movements</div>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">💰</div>
+            <div class="feature-text">Prize Pool</div>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">📈</div>
+            <div class="feature-text">Analytics</div>
+        </div>
+    </div>
+    <div class="url">harryfliu.github.io/fpl_draft_2526</div>
+</body>
+</html>
