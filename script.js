@@ -48,6 +48,9 @@ document.addEventListener('DOMContentLoaded', async function() {
         setupEventListeners();
         addSmoothAnimations();
         
+        // Update dynamic social media image
+        updateDynamicImage();
+        
         console.log('✅ Dashboard initialized successfully');
     } else {
         console.error('❌ Failed to initialize data manager');
@@ -7541,4 +7544,35 @@ function displayOutstandingPayments() {
     });
     
     container.innerHTML = html;
+}
+
+// Update dynamic social media image
+function updateDynamicImage() {
+    console.log('🖼️ Updating dynamic social media image...');
+    
+    // This function could trigger a server-side image generation
+    // For now, we'll just log that the image should be updated
+    // In a full implementation, you'd call an API endpoint to regenerate the image
+    
+    // Update meta tags with current data
+    const currentGameweek = dashboardData.currentGameweek || 1;
+    const weeklyWinner = dashboardData.weeklyWinner || 'TBD';
+    
+    // Update title with current gameweek
+    document.title = `FPL Draft Dashboard 2025-26 - GW${currentGameweek}`;
+    
+    // Update Open Graph title
+    const ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) {
+        ogTitle.setAttribute('content', `FPL Draft Dashboard 2025-26 - GW${currentGameweek}`);
+    }
+    
+    // Update description with weekly winner
+    const ogDescription = document.querySelector('meta[property="og:description"]');
+    if (ogDescription) {
+        ogDescription.setAttribute('content', 
+            `Current GW${currentGameweek} winner: ${weeklyWinner}. Track your Fantasy Premier League draft league with live standings, player movements, and prize pool tracking.`);
+    }
+    
+    console.log(`✅ Updated social media tags - GW${currentGameweek}, Winner: ${weeklyWinner}`);
 }

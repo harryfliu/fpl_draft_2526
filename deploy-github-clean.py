@@ -31,7 +31,20 @@ def create_github_pages():
     # Create web-optimized data_manager.js for GitHub Pages
     update_data_manager_for_web(docs_path)
     
-    print("🌐 GitHub Pages version created in /docs")
+    # Generate dynamic social media image
+    print("\n🖼️ Generating dynamic social media image...")
+    try:
+        import subprocess
+        result = subprocess.run(['python3', 'generate_dynamic_image.py'], 
+                              capture_output=True, text=True, cwd=os.getcwd())
+        if result.returncode == 0:
+            print("✅ Dynamic image generated successfully")
+        else:
+            print(f"⚠️ Dynamic image generation failed: {result.stderr}")
+    except Exception as e:
+        print(f"⚠️ Could not generate dynamic image: {e}")
+    
+    print("\n🌐 GitHub Pages version created in /docs")
     print("\n📋 Next steps:")
     print("1. Create GitHub repository")
     print("2. Push this code to GitHub")
@@ -39,6 +52,7 @@ def create_github_pages():
     print("4. Set source to '/docs' folder")
     print("5. Your dashboard will be live at:")
     print("   https://[username].github.io/[repo-name]")
+    print("\n📱 Dynamic social media previews will show current league standings!")
 
 def convert_data_to_json(docs_path):
     """Convert CSV files to JSON for web access"""
