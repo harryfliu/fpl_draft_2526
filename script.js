@@ -310,9 +310,10 @@ function calculateCumulativeWinnings(teamName, targetGameweek) {
         console.log(`   GW${gw} finalResults: ${gwData?.finalResults?.length || 0} results`);
         console.log(`   GW${gw} partialResults: ${gwData?.partialResults?.length || 0} results`);
         
-        // Check for both final results and partial results
-        const resultsData = gwData?.finalResults?.length > 0 ? gwData.finalResults : gwData?.partialResults;
-        const resultsType = gwData?.finalResults?.length > 0 ? 'final' : 'partial';
+        // Only calculate winnings for gameweeks with FINAL results
+        // Partial results should not count for winnings until the gameweek is complete
+        const resultsData = gwData?.finalResults;
+        const resultsType = 'final';
         
         if (gwData && resultsData && resultsData.length > 0) {
             console.log(`   📊 All GW${gw} ${resultsType} results:`);
@@ -401,7 +402,7 @@ function calculateCumulativeWinnings(teamName, targetGameweek) {
                 console.log(`   ⚠️ No weekly winner found for GW${gw}`);
             }
         } else {
-            console.log(`   ⚠️ No final or partial results data for GW${gw}`);
+            console.log(`   ⚠️ No final results data for GW${gw} - winnings not calculated until gameweek is complete`);
         }
     }
     
