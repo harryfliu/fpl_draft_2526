@@ -352,25 +352,40 @@ function calculateCumulativeWinnings(teamName, targetGameweek) {
                 // No tie, use the single winner
                 winner = tiedTeams[0];
             } else if (tiedTeams.length > 1) {
-                // Tie exists - choose the manager with LOWER cumulative total league points
+                // Tie exists - use tie-breaking logic:
+                // 1. Choose the manager with LOWER cumulative total league points
+                // 2. If still tied, choose the manager with LOWER total GW points (FPL points)
                 console.log(`   🏆 Tie detected! ${tiedTeams.length} teams with ${maxPoints} points:`, tiedTeams.map(t => t.manager || t.teamName));
                 
                 let lowestTotalPoints = -1;
+                let lowestTotalGWPoints = -1;
                 
                 for (const tiedTeam of tiedTeams) {
                     const cumulativeTotalPoints = calculateCumulativeTotalPoints(tiedTeam.teamName, gw);
-                    console.log(`   📊 ${tiedTeam.manager || tiedTeam.teamName} has ${cumulativeTotalPoints} cumulative total league points`);
+                    const cumulativeTotalGWPoints = calculateCumulativeTotalGWPoints(tiedTeam.teamName, gw);
+                    console.log(`   📊 ${tiedTeam.manager || tiedTeam.teamName} has ${cumulativeTotalPoints} cumulative total league points, ${cumulativeTotalGWPoints} total GW points`);
                     
                     if (cumulativeTotalPoints !== undefined) {
+                        // First tie-breaker: cumulative total league points
                         if (lowestTotalPoints === -1 || cumulativeTotalPoints < lowestTotalPoints) {
                             lowestTotalPoints = cumulativeTotalPoints;
+                            lowestTotalGWPoints = cumulativeTotalGWPoints;
                             winner = tiedTeam;
+                        } else if (cumulativeTotalPoints === lowestTotalPoints) {
+                            // Second tie-breaker: total GW points (if league points are tied)
+                            if (cumulativeTotalGWPoints !== undefined && 
+                                (lowestTotalGWPoints === -1 || cumulativeTotalGWPoints < lowestTotalGWPoints)) {
+                                lowestTotalGWPoints = cumulativeTotalGWPoints;
+                                winner = tiedTeam;
+                            }
                         }
                     }
                 }
                 
                 if (winner) {
-                    console.log(`   🏆 Tie-breaker: ${winner.manager || winner.teamName} wins (${lowestTotalPoints} cumulative total league points)`);
+                    const winnerTotalPoints = calculateCumulativeTotalPoints(winner.teamName, gw);
+                    const winnerTotalGWPoints = calculateCumulativeTotalGWPoints(winner.teamName, gw);
+                    console.log(`   🏆 Tie-breaker: ${winner.manager || winner.teamName} wins (${winnerTotalPoints} cumulative total league points, ${winnerTotalGWPoints} total GW points)`);
                 }
             }
             
@@ -1261,9 +1276,9 @@ function getGameweeksForMonth(month) {
     const monthMap = {
         'August': [1, 2, 3],
         'September': [4, 5, 6],
-        'October': [7, 8, 9, 10],
-        'November': [11, 12, 13, 14],
-        'December': [15, 16, 17, 18],
+        'October': [7, 8, 9],
+        'November': [10, 11, 12, 13],
+        'December': [14, 15, 16, 17, 18],
         'January': [19, 20, 21, 22],
         'February': [23, 24, 25, 26],
         'March': [27, 28, 29, 30],
@@ -2608,32 +2623,40 @@ function computeAndDisplayWeeklyWinner(gameweek) {
         // No tie, use the single winner
         winner = tiedTeams[0];
     } else if (tiedTeams.length > 1) {
-        // Tie exists - choose the manager who is LOWER on the live leaderboard table
+        // Tie exists - use tie-breaking logic:
+        // 1. Choose the manager with LOWER cumulative total league points
+        // 2. If still tied, choose the manager with LOWER total GW points (FPL points)
         console.log(`🏆 Tie detected! ${tiedTeams.length} teams with ${maxPoints} points:`, tiedTeams.map(t => t.manager || t.teamName));
         
-        // Get current leaderboard positions
-        const leaderboard = dashboardData.leaderboard || [];
-        let lowestPosition = -1;
+        let lowestTotalPoints = -1;
+        let lowestTotalGWPoints = -1;
         
         for (const tiedTeam of tiedTeams) {
-            const leaderboardTeam = leaderboard.find(team => 
-                team.teamName === tiedTeam.teamName || 
-                team.manager === tiedTeam.manager
-            );
+            const cumulativeTotalPoints = calculateCumulativeTotalPoints(tiedTeam.teamName, gameweek);
+            const cumulativeTotalGWPoints = calculateCumulativeTotalGWPoints(tiedTeam.teamName, gameweek);
+            console.log(`   📊 ${tiedTeam.manager || tiedTeam.teamName} has ${cumulativeTotalPoints} cumulative total league points, ${cumulativeTotalGWPoints} total GW points`);
             
-            if (leaderboardTeam && leaderboardTeam.position) {
-                console.log(`📊 ${tiedTeam.manager || tiedTeam.teamName} is at position ${leaderboardTeam.position} on leaderboard`);
-                
-                // Choose the team with the HIGHER position number (lower on table)
-                if (lowestPosition === -1 || leaderboardTeam.position > lowestPosition) {
-                    lowestPosition = leaderboardTeam.position;
+            if (cumulativeTotalPoints !== undefined) {
+                // First tie-breaker: cumulative total league points
+                if (lowestTotalPoints === -1 || cumulativeTotalPoints < lowestTotalPoints) {
+                    lowestTotalPoints = cumulativeTotalPoints;
+                    lowestTotalGWPoints = cumulativeTotalGWPoints;
                     winner = tiedTeam;
+                } else if (cumulativeTotalPoints === lowestTotalPoints) {
+                    // Second tie-breaker: total GW points (if league points are tied)
+                    if (cumulativeTotalGWPoints !== undefined && 
+                        (lowestTotalGWPoints === -1 || cumulativeTotalGWPoints < lowestTotalGWPoints)) {
+                        lowestTotalGWPoints = cumulativeTotalGWPoints;
+                        winner = tiedTeam;
+                    }
                 }
             }
         }
         
         if (winner) {
-            console.log(`🏆 Tie-breaker: ${winner.manager || winner.teamName} wins (position ${lowestPosition} on leaderboard)`);
+            const winnerTotalPoints = calculateCumulativeTotalPoints(winner.teamName, gameweek);
+            const winnerTotalGWPoints = calculateCumulativeTotalGWPoints(winner.teamName, gameweek);
+            console.log(`   🏆 Tie-breaker: ${winner.manager || winner.teamName} wins (${winnerTotalPoints} cumulative total league points, ${winnerTotalGWPoints} total GW points)`);
         }
     }
     
@@ -7138,9 +7161,9 @@ function getMonthFromDate(dateString) {
         // Correct Premier League 2025/26 season mapping
         if (gw <= 3) return 'August';        // GW1-3: Aug 15-31
         if (gw <= 6) return 'September';     // GW4-6: Sep 13-28
-        if (gw <= 10) return 'October';      // GW7-10: Oct 4-25
-        if (gw <= 14) return 'November';     // GW11-14: Nov 8-29
-        if (gw <= 18) return 'December';     // GW15-18: Dec 3-27
+        if (gw <= 9) return 'October';       // GW7-9: Oct 4-25
+        if (gw <= 13) return 'November';     // GW10-13: Nov 1-29
+        if (gw <= 18) return 'December';     // GW14-18: Dec 3-27
         if (gw <= 22) return 'January';      // GW19-22: Dec 30-Jan 17
         if (gw <= 26) return 'February';     // GW23-26: Jan 24-Feb 11
         if (gw <= 30) return 'March';        // GW27-30: Feb 21-Mar 14
@@ -7156,9 +7179,9 @@ function getMonthFromGameweek(gameweek) {
     // Correct Premier League 2025/26 season mapping
     if (gameweek <= 3) return 'August';        // GW1-3: Aug 15-31
     if (gameweek <= 6) return 'September';     // GW4-6: Sep 13-28
-    if (gameweek <= 10) return 'October';      // GW7-10: Oct 4-25
-    if (gameweek <= 14) return 'November';     // GW11-14: Nov 8-29
-    if (gameweek <= 18) return 'December';     // GW15-18: Dec 3-27
+    if (gameweek <= 9) return 'October';       // GW7-9: Oct 4-25
+    if (gameweek <= 13) return 'November';     // GW10-13: Nov 1-29
+    if (gameweek <= 18) return 'December';     // GW14-18: Dec 3-27
     if (gameweek <= 22) return 'January';      // GW19-22: Dec 30-Jan 17
     if (gameweek <= 26) return 'February';     // GW23-26: Jan 24-Feb 11
     if (gameweek <= 30) return 'March';        // GW27-30: Feb 21-Mar 14
@@ -7216,6 +7239,41 @@ function calculateCumulativeTotalPoints(teamName, targetGameweek) {
     return totalPoints;
 }
 
+// Helper function to calculate cumulative total GW points (FPL points) for a team up to a specific gameweek
+function calculateCumulativeTotalGWPoints(teamName, targetGameweek) {
+    if (!dataManager) return 0;
+    
+    let totalGWPoints = 0;
+    
+    // Calculate cumulative GW points (FPL points) from GW1 to target gameweek
+    for (let gw = 1; gw <= targetGameweek; gw++) {
+        const gwData = dataManager.getGameweekData(gw);
+        
+        // Check for results (final results take priority over partial results)
+        let result = null;
+        if (gwData && gwData.finalResults && gwData.finalResults.length > 0) {
+            result = gwData.finalResults.find(r => 
+                r.homeTeam === teamName || r.awayTeam === teamName
+            );
+        } else if (gwData && gwData.partialResults && gwData.partialResults.length > 0) {
+            result = gwData.partialResults.find(r => 
+                r.homeTeam === teamName || r.awayTeam === teamName
+            );
+        }
+        
+        if (result) {
+            // Add GW points (FPL points) for this gameweek
+            if (result.homeTeam === teamName) {
+                totalGWPoints += result.homeScore || 0;
+            } else {
+                totalGWPoints += result.awayScore || 0;
+            }
+        }
+    }
+    
+    return totalGWPoints;
+}
+
 // Determine weekly winner using the same logic as calculateCumulativeWinnings
 function determineWeeklyWinner(gw, gwData) {
     if (!gwData || !gwData.finalResults || gwData.finalResults.length === 0) {
@@ -7260,18 +7318,30 @@ function determineWeeklyWinner(gw, gwData) {
         // No tie, use the single winner
         winner = tiedTeams[0];
     } else if (tiedTeams.length > 1) {
-        // Tie exists - use the same tie-breaker logic as calculateCumulativeWinnings
+        // Tie exists - use the same tie-breaker logic as calculateCumulativeWinnings:
+        // 1. Choose the manager with LOWER cumulative total league points
+        // 2. If still tied, choose the manager with LOWER total GW points (FPL points)
         let lowestTotalPoints = -1;
+        let lowestTotalGWPoints = -1;
         
         for (const tiedTeam of tiedTeams) {
             // Calculate cumulative totalPoints for this team up to this gameweek
             const cumulativeTotalPoints = calculateCumulativeTotalPoints(tiedTeam.teamName, gw);
+            const cumulativeTotalGWPoints = calculateCumulativeTotalGWPoints(tiedTeam.teamName, gw);
             
             if (cumulativeTotalPoints !== undefined) {
-                // Choose the team with the LOWER total points (lower on table)
+                // First tie-breaker: cumulative total league points
                 if (lowestTotalPoints === -1 || cumulativeTotalPoints < lowestTotalPoints) {
                     lowestTotalPoints = cumulativeTotalPoints;
+                    lowestTotalGWPoints = cumulativeTotalGWPoints;
                     winner = tiedTeam;
+                } else if (cumulativeTotalPoints === lowestTotalPoints) {
+                    // Second tie-breaker: total GW points (if league points are tied)
+                    if (cumulativeTotalGWPoints !== undefined && 
+                        (lowestTotalGWPoints === -1 || cumulativeTotalGWPoints < lowestTotalGWPoints)) {
+                        lowestTotalGWPoints = cumulativeTotalGWPoints;
+                        winner = tiedTeam;
+                    }
                 }
             }
         }
