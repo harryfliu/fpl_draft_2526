@@ -648,8 +648,8 @@ class FPLSummaryGenerator:
         gw = int(gameweek)
         if gw <= 3: return 'August'
         elif gw <= 6: return 'September'
-        elif gw <= 10: return 'October'
-        elif gw <= 14: return 'November'
+        elif gw <= 9: return 'October'
+        elif gw <= 13: return 'November'
         elif gw <= 18: return 'December'
         elif gw <= 22: return 'January'
         elif gw <= 26: return 'February'
@@ -657,6 +657,80 @@ class FPLSummaryGenerator:
         elif gw <= 34: return 'April'
         elif gw <= 38: return 'May'
         else: return 'Unknown'
+    
+    def get_gameweeks_for_month(self, month):
+        """Get list of gameweeks for a given month"""
+        month_map = {
+            'August': [1, 2, 3],
+            'September': [4, 5, 6],
+            'October': [7, 8, 9],
+            'November': [10, 11, 12, 13],
+            'December': [14, 15, 16, 17, 18],
+            'January': [19, 20, 21, 22],
+            'February': [23, 24, 25, 26],
+            'March': [27, 28, 29, 30],
+            'April': [31, 32, 33, 34],
+            'May': [35, 36, 37, 38]
+        }
+        return month_map.get(month, [])
+    
+    def is_month_complete(self, month, current_gameweek):
+        """Check if a month is complete based on current gameweek"""
+        month_gameweeks = self.get_gameweeks_for_month(month)
+        if not month_gameweeks:
+            return False
+        # Month is complete if current gameweek is >= the last gameweek of the month
+        return current_gameweek >= max(month_gameweeks)
+    
+    def calculate_monthly_winner(self, month, current_gameweek):
+        """Calculate monthly winner for a given month"""
+        month_gameweeks = self.get_gameweeks_for_month(month)
+        if not month_gameweeks:
+            return None
+        
+        # Calculate total FPL points for each team in this month
+        monthly_points = {}
+        monthly_managers = {}
+        
+        for gw in month_gameweeks:
+            if gw > current_gameweek:
+                break  # Don't count future gameweeks
+            
+            # Load final results for this gameweek
+            gw_results_file = self.base_path / f"gw{gw}" / f"final_results_gw{gw}.csv"
+            if gw_results_file.exists():
+                gw_results = self.parse_final_results(gw_results_file)
+                
+                for result in gw_results:
+                    home_team = result['homeTeam']
+                    away_team = result['awayTeam']
+                    home_score = result['homeScore']
+                    away_score = result['awayScore']
+                    home_manager = result['homeManager']
+                    away_manager = result['awayManager']
+                    
+                    # Add points to monthly totals
+                    if home_team not in monthly_points:
+                        monthly_points[home_team] = 0
+                        monthly_managers[home_team] = home_manager
+                    if away_team not in monthly_points:
+                        monthly_points[away_team] = 0
+                        monthly_managers[away_team] = away_manager
+                    
+                    monthly_points[home_team] += home_score
+                    monthly_points[away_team] += away_score
+        
+        if not monthly_points:
+            return None
+        
+        # Find the team with the highest monthly points
+        winner_team = max(monthly_points.items(), key=lambda x: x[1])
+        
+        return {
+            'teamName': winner_team[0],
+            'manager': monthly_managers.get(winner_team[0], 'Unknown'),
+            'points': winner_team[1]
+        }
         
     def generate_markdown(self):
         """Generate the comprehensive markdown report"""
@@ -744,6 +818,40 @@ class FPLSummaryGenerator:
             md_content += f"💵 Prize: ${weekly_winner['prize']} ($1 from each other manager)\n\n"
         else:
             md_content += "*Weekly winner will be calculated once final results are available*\n\n"
+        
+        # Monthly winner - show current month leader even if month not complete
+        current_month = self.get_month_from_gameweek(self.gameweek)
+        monthly_winner = self.calculate_monthly_winner(current_month, int(self.gameweek))
+        if monthly_winner:
+            monthly_prize = 11 * 2  # $2 from each of the other 11 managers
+            month_gameweeks = self.get_gameweeks_for_month(current_month)
+            completed_gws = [gw for gw in month_gameweeks if gw <= int(self.gameweek)]
+            if self.is_month_complete(current_month, int(self.gameweek)):
+                gw_range = f"GW{min(month_gameweeks)}-{max(month_gameweeks)}"
+                md_content += f"### Monthly Winner ({current_month})\n"
+            else:
+                gw_range = f"GW{min(completed_gws)}-{max(completed_gws)} (through GW{self.gameweek})"
+                md_content += f"### Monthly Leader ({current_month})\n"
+            md_content += f"🏆 **{monthly_winner['manager']}** ({monthly_winner['teamName']}) - {monthly_winner['points']} points\n"
+            if self.is_month_complete(current_month, int(self.gameweek)):
+                md_content += f"💵 Prize: ${monthly_prize} ($2 from each other manager)\n"
+            md_content += f"📅 Period: {gw_range}\n\n"
+        
+        # Check for previous months that might have just completed
+        previous_months = ['August', 'September', 'October']
+        for month in previous_months:
+            if self.is_month_complete(month, int(self.gameweek)):
+                monthly_winner = self.calculate_monthly_winner(month, int(self.gameweek))
+                if monthly_winner:
+                    # Only show if this month just completed (i.e., current gameweek is the last GW of the month)
+                    month_gameweeks = self.get_gameweeks_for_month(month)
+                    if int(self.gameweek) == max(month_gameweeks):
+                        monthly_prize = 11 * 2
+                        gw_range = f"GW{min(month_gameweeks)}-{max(month_gameweeks)}"
+                        md_content += f"### Monthly Winner ({month})\n"
+                        md_content += f"🏆 **{monthly_winner['manager']}** ({monthly_winner['teamName']}) - {monthly_winner['points']} points\n"
+                        md_content += f"💵 Prize: ${monthly_prize} ($2 from each other manager)\n"
+                        md_content += f"📅 Period: {gw_range}\n\n"
             
         md_content += "---\n\n## ⚽ Head-to-Head Results\n\n"
         
