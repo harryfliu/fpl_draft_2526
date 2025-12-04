@@ -2615,6 +2615,68 @@
       "awayScore": 12
     }
   ],
+  "final_results_gw13": [
+    {
+      "homeTeam": "cunha believe it",
+      "homeManager": "Harry Liu",
+      "awayTeam": "Gweepy",
+      "awayManager": "Sean Dunn",
+      "homeScore": 46,
+      "awayScore": 55,
+      "gameweek": 13,
+      "isFinal": true
+    },
+    {
+      "homeTeam": "thenotsospecialone",
+      "homeManager": "Josiah Loh",
+      "awayTeam": "son4lyfe",
+      "awayManager": "Don Kim",
+      "homeScore": 28,
+      "awayScore": 60,
+      "gameweek": 13,
+      "isFinal": true
+    },
+    {
+      "homeTeam": "Cunha Get Me Points",
+      "homeManager": "Andrew Smith",
+      "awayTeam": "Trophies Matter FC",
+      "awayManager": "Noah Wilson",
+      "homeScore": 31,
+      "awayScore": 31,
+      "gameweek": 13,
+      "isFinal": true
+    },
+    {
+      "homeTeam": "Extended Foreplay",
+      "homeManager": "Kyle Herrera",
+      "awayTeam": "Schr\u00f6dongers",
+      "awayManager": "chris duncam",
+      "homeScore": 22,
+      "awayScore": 41,
+      "gameweek": 13,
+      "isFinal": true
+    },
+    {
+      "homeTeam": "Atl\u00e9tico SeaSlug",
+      "homeManager": "Ronangel Rojas",
+      "awayTeam": "FootAndBallFetish",
+      "awayManager": "Zryan Bhao",
+      "homeScore": 31,
+      "awayScore": 19,
+      "gameweek": 13,
+      "isFinal": true
+    },
+    {
+      "homeTeam": "This Year FC",
+      "homeManager": "Roy Boateng",
+      "awayTeam": "Peattle Pounders",
+      "awayManager": "Peter Henze",
+      "homeScore": 20,
+      "awayScore": 38,
+      "gameweek": 13,
+      "isFinal": true
+    }
+  ],
   "starting_draft": [
     {
       "Round": "1",
