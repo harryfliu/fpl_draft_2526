@@ -1141,127 +1141,65 @@
       "awayTeam": "Extended Foreplay"
     }
   ],
-  "partial_results_gw16": [
+  "final_results_gw17": [
     {
-      "gameweek": 16,
-      "day": 1,
-      "homeTeam": "Schr\u00f6dongers",
-      "homeManager": "chris duncam",
-      "homeScore": 16,
-      "awayTeam": "cunha believe it",
-      "awayManager": "Harry Liu",
-      "awayScore": 13
+      "homeTeam": "cunha believe it",
+      "homeManager": "Harry Liu",
+      "awayTeam": "Cunha Get Me Points",
+      "awayManager": "Andrew Smith",
+      "homeScore": 50,
+      "awayScore": 50,
+      "gameweek": 17,
+      "isFinal": true
     },
     {
-      "gameweek": 16,
-      "day": 1,
-      "homeTeam": "Trophies Matter FC",
-      "homeManager": "Noah Wilson",
-      "homeScore": 37,
-      "awayTeam": "FootAndBallFetish",
-      "awayManager": "Zryan Bhao",
-      "awayScore": 18
-    },
-    {
-      "gameweek": 16,
-      "day": 1,
-      "homeTeam": "son4lyfe",
-      "homeManager": "Don Kim",
-      "homeScore": 9,
-      "awayTeam": "Peattle Pounders",
-      "awayManager": "Peter Henze",
-      "awayScore": 15
-    },
-    {
-      "gameweek": 16,
-      "day": 1,
-      "homeTeam": "Gweepy",
-      "homeManager": "Sean Dunn",
+      "homeTeam": "Extended Foreplay",
+      "homeManager": "Kyle Herrera",
+      "awayTeam": "thenotsospecialone",
+      "awayManager": "Josiah Loh",
       "homeScore": 24,
-      "awayTeam": "This Year FC",
-      "awayManager": "Roy Boateng",
-      "awayScore": 6
-    },
-    {
-      "gameweek": 16,
-      "day": 1,
-      "homeTeam": "thenotsospecialone",
-      "homeManager": "Josiah Loh",
-      "homeScore": 30,
-      "awayTeam": "Atl\u00e9tico SeaSlug",
-      "awayManager": "Ronangel Rojas",
-      "awayScore": 6
-    },
-    {
-      "gameweek": 16,
-      "day": 1,
-      "homeTeam": "Cunha Get Me Points",
-      "homeManager": "Andrew Smith",
-      "homeScore": 3,
-      "awayTeam": "Extended Foreplay",
-      "awayManager": "Kyle Herrera",
-      "awayScore": 24
-    }
-  ],
-  "final_results_gw16": [
-    {
-      "homeTeam": "Schr\u00f6dongers",
-      "homeManager": "chris duncam",
-      "awayTeam": "cunha believe it",
-      "awayManager": "Harry Liu",
-      "homeScore": 30,
-      "awayScore": 45,
-      "gameweek": 16,
+      "awayScore": 33,
+      "gameweek": 17,
       "isFinal": true
     },
     {
-      "homeTeam": "Trophies Matter FC",
-      "homeManager": "Noah Wilson",
-      "awayTeam": "FootAndBallFetish",
-      "awayManager": "Zryan Bhao",
-      "homeScore": 47,
-      "awayScore": 51,
-      "gameweek": 16,
+      "homeTeam": "Atl\u00e9tico SeaSlug",
+      "homeManager": "Ronangel Rojas",
+      "awayTeam": "Gweepy",
+      "awayManager": "Sean Dunn",
+      "homeScore": 48,
+      "awayScore": 59,
+      "gameweek": 17,
       "isFinal": true
     },
     {
-      "homeTeam": "son4lyfe",
-      "homeManager": "Don Kim",
-      "awayTeam": "Peattle Pounders",
-      "awayManager": "Peter Henze",
+      "homeTeam": "This Year FC",
+      "homeManager": "Roy Boateng",
+      "awayTeam": "son4lyfe",
+      "awayManager": "Don Kim",
       "homeScore": 38,
-      "awayScore": 47,
-      "gameweek": 16,
+      "awayScore": 29,
+      "gameweek": 17,
       "isFinal": true
     },
     {
-      "homeTeam": "Gweepy",
-      "homeManager": "Sean Dunn",
-      "awayTeam": "This Year FC",
-      "awayManager": "Roy Boateng",
-      "homeScore": 46,
-      "awayScore": 21,
-      "gameweek": 16,
-      "isFinal": true
-    },
-    {
-      "homeTeam": "thenotsospecialone",
-      "homeManager": "Josiah Loh",
-      "awayTeam": "Atl\u00e9tico SeaSlug",
-      "awayManager": "Ronangel Rojas",
-      "homeScore": 39,
-      "awayScore": 28,
-      "gameweek": 16,
-      "isFinal": true
-    },
-    {
-      "homeTeam": "Cunha Get Me Points",
-      "homeManager": "Andrew Smith",
-      "awayTeam": "Extended Foreplay",
-      "awayManager": "Kyle Herrera",
+      "homeTeam": "Peattle Pounders",
+      "homeManager": "Peter Henze",
+      "awayTeam": "Trophies Matter FC",
+      "awayManager": "Noah Wilson",
       "homeScore": 34,
-      "awayScore": 60,
-      "gameweek": 16,
+      "awayScore": 29,
+      "gameweek": 17,
+      "isFinal": true
+    },
+    {
+      "homeTeam": "FootAndBallFetish",
+      "homeManager": "Zryan Bhao",
+      "awayTeam": "Schr\u00f6dongers",
+      "awayManager": "chris duncam",
+      "homeScore": 57,
+      "awayScore": 48,
+      "gameweek": 17,
       "isFinal": true
     }
   ],
@@ -3877,6 +3815,150 @@
         "Out": "A\u00eft-Nouri",
         "Result": "Denied(player in not available)",
         "": ""
+      },
+      {
+        "GW": "17",
+        "Manager": "Zryan Bhao",
+        "In": "Grealish",
+        "Out": "O.Dango",
+        "Result": "Accepted",
+        "": ""
+      },
+      {
+        "GW": "17",
+        "Manager": "Harry Liu",
+        "In": "Delap",
+        "Out": "Nmecha",
+        "Result": "Accepted",
+        "": ""
+      },
+      {
+        "GW": "17",
+        "Manager": "Kyle Herrera",
+        "In": "Grealish",
+        "Out": "Madueke",
+        "Result": "Denied(player in not available)",
+        "": ""
+      },
+      {
+        "GW": "17",
+        "Manager": "chris duncam",
+        "In": "John",
+        "Out": "Mamardashvili",
+        "Result": "Accepted",
+        "": ""
+      },
+      {
+        "GW": "17",
+        "Manager": "Ronangel Rojas",
+        "In": "Robinson",
+        "Out": "Mykolenko",
+        "Result": "Accepted",
+        "": ""
+      },
+      {
+        "GW": "17",
+        "Manager": "Andrew Smith",
+        "In": "Merino",
+        "Out": "L.Miley",
+        "Result": "Accepted",
+        "": ""
+      },
+      {
+        "GW": "17",
+        "Manager": "Josiah Loh",
+        "In": "Grealish",
+        "Out": "Sarr",
+        "Result": "Denied(player in not available)",
+        "": ""
+      },
+      {
+        "GW": "17",
+        "Manager": "Josiah Loh",
+        "In": "Merino",
+        "Out": "Sarr",
+        "Result": "Denied(player in not available)",
+        "": ""
+      },
+      {
+        "GW": "17",
+        "Manager": "Josiah Loh",
+        "In": "Van den Berg",
+        "Out": "Mings",
+        "Result": "Accepted",
+        "": ""
+      },
+      {
+        "GW": "17",
+        "Manager": "Zryan Bhao",
+        "In": "Fofana",
+        "Out": "O'Brien",
+        "Result": "Accepted",
+        "": ""
+      },
+      {
+        "GW": "17",
+        "Manager": "Harry Liu",
+        "In": "Fofana",
+        "Out": "De Ligt",
+        "Result": "Denied(player in not available)",
+        "": ""
+      },
+      {
+        "GW": "17",
+        "Manager": "Harry Liu",
+        "In": "Kerkez",
+        "Out": "De Ligt",
+        "Result": "Accepted",
+        "": ""
+      },
+      {
+        "GW": "17",
+        "Manager": "chris duncam",
+        "In": "Henderson",
+        "Out": "Chukwueze",
+        "Result": "Accepted",
+        "": ""
+      },
+      {
+        "GW": "17",
+        "Manager": "Ronangel Rojas",
+        "In": "Henderson",
+        "Out": "Stach",
+        "Result": "Denied(player in not available)",
+        "": ""
+      },
+      {
+        "GW": "17",
+        "Manager": "Harry Liu",
+        "In": "Fofana",
+        "Out": "Digne",
+        "Result": "Denied(player in not available)",
+        "": ""
+      },
+      {
+        "GW": "17",
+        "Manager": "Harry Liu",
+        "In": "Kerkez",
+        "Out": "Digne",
+        "Result": "Denied(player in not available)",
+        "": ""
+      },
+      {
+        "GW": "17",
+        "Manager": "chris duncam",
+        "In": "Fofana",
+        "Out": "A\u00eft-Nouri",
+        "Result": "Denied(player in not available)",
+        "": ""
+      },
+      {
+        "GW": "17",
+        "Manager": "chris duncam",
+        "In": "Kerkez",
+        "Out": "A\u00eft-Nouri",
+        "Result": "Denied(player in not available)",
+        "": ""
       }
     ],
     "freeAgents": [
@@ -4398,6 +4480,38 @@
         "In": "Mykolenko",
         "Out": "Van den Berg",
         "Date": "12 Dec",
+        "": ""
+      },
+      {
+        "GW": "17",
+        "Manager": "chris duncam",
+        "In": "Collins",
+        "Out": "A\u00eft-Nouri",
+        "Date": "19 Dec",
+        "": ""
+      },
+      {
+        "GW": "17",
+        "Manager": "chris duncam",
+        "In": "Hudson-Odoi",
+        "Out": "Kamara",
+        "Date": "19 Dec",
+        "": ""
+      },
+      {
+        "GW": "17",
+        "Manager": "Andrew Smith",
+        "In": "N.Gonzalez",
+        "Out": "Doku",
+        "Date": "19 Dec",
+        "": ""
+      },
+      {
+        "GW": "17",
+        "Manager": "Harry Liu",
+        "In": "Mount",
+        "Out": "Gordon",
+        "Date": "20 Dec",
         "": ""
       }
     ],
