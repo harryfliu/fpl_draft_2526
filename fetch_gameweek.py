@@ -200,7 +200,7 @@ def main():
                 ['python3', 'generate_ai_summary.py', str(gameweek)],
                 capture_output=True,
                 text=True,
-                timeout=120
+                timeout=240  # Increased to 4 minutes for Claude API response time
             )
             if result.returncode == 0:
                 print(f"  ✓ AI summary generated")
