@@ -603,14 +603,15 @@ class FPLSummaryGenerator:
     def calculate_cumulative_outstanding_payments(self):
         """Calculate cumulative outstanding payments from ALL previous gameweeks"""
         payments = {}
-        
+        all_managers_by_month = {}  # Track all managers per month for monthly prize
+
         # Calculate weekly winners for all previous gameweeks
         for gw in range(1, int(self.gameweek) + 1):
             # Load final results for this gameweek
             final_results_file = self.base_path / f"gw{gw}" / f"final_results_gw{gw}.csv"
             if final_results_file.exists():
                 gw_results = self.parse_final_results(final_results_file)
-                
+
                 if gw_results:
                     # Calculate weekly winner for this gameweek
                     manager_points = {}
@@ -619,19 +620,24 @@ class FPLSummaryGenerator:
                         away_manager = result['awayManager']
                         home_score = result['homeScore']
                         away_score = result['awayScore']
-                        
+
                         if home_manager:
                             manager_points[home_manager] = home_score
                         if away_manager:
                             manager_points[away_manager] = away_score
-                    
+
                     if manager_points:
                         winner = max(manager_points.items(), key=lambda x: x[1])
                         month = self.get_month_from_gameweek(gw)
-                        
+
+                        # Track all managers for this month
+                        if month not in all_managers_by_month:
+                            all_managers_by_month[month] = set()
+                        all_managers_by_month[month].update(manager_points.keys())
+
                         if month not in payments:
                             payments[month] = {}
-                            
+
                         # Each manager owes $1 to the weekly winner
                         for manager in manager_points.keys():
                             if manager != winner[0]:
@@ -640,7 +646,22 @@ class FPLSummaryGenerator:
                                 if winner[0] not in payments[month][manager]:
                                     payments[month][manager][winner[0]] = 0
                                 payments[month][manager][winner[0]] += 1
-                        
+
+        # Add monthly winners' $2 prize for complete months
+        for month in payments.keys():
+            if self.is_month_complete(month, int(self.gameweek)):
+                monthly_winner_data = self.calculate_monthly_winner(month, int(self.gameweek))
+                if monthly_winner_data:
+                    monthly_winner = monthly_winner_data['manager']
+                    # Each manager owes $2 to the monthly winner
+                    for manager in all_managers_by_month.get(month, []):
+                        if manager != monthly_winner:
+                            if manager not in payments[month]:
+                                payments[month][manager] = {}
+                            if monthly_winner not in payments[month][manager]:
+                                payments[month][manager][monthly_winner] = 0
+                            payments[month][manager][monthly_winner] += 2
+
         return payments
         
     def get_month_from_gameweek(self, gameweek):

@@ -4,29 +4,34 @@
 
 ---
 
-## 🏆 Winner: Sean Dunn
+## 🏆 Winners
 
-**Total Points:** 273
+### Weekly Winners ($1 each)
+- **GW14:** Andrew Smith (76 pts)
+- **GW15:** Don Kim (71 pts)
+- **GW16:** Kyle Herrera (60 pts)
+- **GW17:** Sean Dunn (59 pts)
+- **GW18:** Noah Wilson (52 pts)
+
+### Monthly Winner ($2)
+- **Sean Dunn** (273 pts)
 
 ---
 
-## 💵 Payment Summary
+## 💵 Outstanding Payments
 
-**Everyone owes Sean Dunn: $2**
-
-- Ronangel Rojas → Sean Dunn: **$2**
-- Andrew Smith → Sean Dunn: **$2**
-- Noah Wilson → Sean Dunn: **$2**
-- Zryan Bhao → Sean Dunn: **$2**
-- Peter Henze → Sean Dunn: **$2**
-- Don Kim → Sean Dunn: **$2**
-- Josiah Loh → Sean Dunn: **$2**
-- Harry Liu → Sean Dunn: **$2**
-- chris duncam → Sean Dunn: **$2**
-- Kyle Herrera → Sean Dunn: **$2**
-- Roy Boateng → Sean Dunn: **$2**
-
-**Total Prize: $11 × $2 = $22**
+**Zryan Bhao** → **$7** ($3 to Sean Dunn, $1 to Andrew Smith, $1 to Don Kim, $1 to Kyle Herrera, $1 to Noah Wilson)
+**Harry Liu** → **$7** ($3 to Sean Dunn, $1 to Andrew Smith, $1 to Don Kim, $1 to Kyle Herrera, $1 to Noah Wilson)
+**chris duncam** → **$7** ($3 to Sean Dunn, $1 to Andrew Smith, $1 to Don Kim, $1 to Kyle Herrera, $1 to Noah Wilson)
+**Peter Henze** → **$7** ($3 to Sean Dunn, $1 to Andrew Smith, $1 to Don Kim, $1 to Kyle Herrera, $1 to Noah Wilson)
+**Roy Boateng** → **$7** ($3 to Sean Dunn, $1 to Andrew Smith, $1 to Don Kim, $1 to Kyle Herrera, $1 to Noah Wilson)
+**Ronangel Rojas** → **$7** ($3 to Sean Dunn, $1 to Andrew Smith, $1 to Don Kim, $1 to Kyle Herrera, $1 to Noah Wilson)
+**Josiah Loh** → **$7** ($3 to Sean Dunn, $1 to Andrew Smith, $1 to Don Kim, $1 to Kyle Herrera, $1 to Noah Wilson)
+**Noah Wilson** → **$6** ($3 to Sean Dunn, $1 to Andrew Smith, $1 to Don Kim, $1 to Kyle Herrera)
+**Don Kim** → **$6** ($3 to Sean Dunn, $1 to Andrew Smith, $1 to Kyle Herrera, $1 to Noah Wilson)
+**Kyle Herrera** → **$6** ($3 to Sean Dunn, $1 to Andrew Smith, $1 to Don Kim, $1 to Noah Wilson)
+**Andrew Smith** → **$6** ($3 to Sean Dunn, $1 to Don Kim, $1 to Kyle Herrera, $1 to Noah Wilson)
+**Sean Dunn** → **$4** ($1 to Andrew Smith, $1 to Don Kim, $1 to Kyle Herrera, $1 to Noah Wilson)
 
 ---
 

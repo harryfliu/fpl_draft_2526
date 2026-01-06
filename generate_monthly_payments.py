@@ -2,7 +2,10 @@
 """
 Monthly Prize Payment Generator for FPL Dashboard
 
-Generates a simple payment summary showing who owes who money for the monthly prize.
+Generates payment summary including:
+- Weekly winners ($1 from everyone else per gameweek)
+- Monthly winner ($2 from everyone else)
+
 Usage: python generate_monthly_payments.py <month_name> <start_gw> <end_gw>
 Example: python generate_monthly_payments.py December 14 18
 """
@@ -65,6 +68,44 @@ def calculate_monthly_totals(start_gw: int, end_gw: int) -> dict:
     return dict(monthly_totals)
 
 
+def get_weekly_winners(start_gw: int, end_gw: int) -> list:
+    """Get the winner for each gameweek in the month"""
+    weekly_winners = []
+
+    for gw in range(start_gw, end_gw + 1):
+        gw_scores = read_gameweek_results(gw)
+        if gw_scores:
+            winner = max(gw_scores, key=gw_scores.get)
+            winner_points = gw_scores[winner]
+            weekly_winners.append({
+                'gameweek': gw,
+                'manager': winner,
+                'points': winner_points
+            })
+
+    return weekly_winners
+
+
+def calculate_payments(weekly_winners: list, monthly_winner: str, all_managers: list) -> dict:
+    """Calculate who owes who how much"""
+    # Track what each person owes to each winner
+    payments = defaultdict(lambda: defaultdict(int))
+
+    # Weekly winners get $1 from everyone except themselves
+    for week in weekly_winners:
+        winner = week['manager']
+        for manager in all_managers:
+            if manager != winner:
+                payments[manager][winner] += 1
+
+    # Monthly winner gets $2 from everyone except themselves
+    for manager in all_managers:
+        if manager != monthly_winner:
+            payments[manager][monthly_winner] += 2
+
+    return payments
+
+
 def generate_payment_summary(month_name: str, start_gw: int, end_gw: int) -> str:
     """Generate payment summary markdown"""
 
@@ -74,33 +115,64 @@ def generate_payment_summary(month_name: str, start_gw: int, end_gw: int) -> str
     if not monthly_totals:
         return f"# {month_name} Monthly Prize\n\n❌ No results found for GW{start_gw}-{end_gw}\n"
 
-    # Find winner
-    winner = max(monthly_totals, key=monthly_totals.get)
-    winner_points = monthly_totals[winner]
+    # Get weekly winners
+    weekly_winners = get_weekly_winners(start_gw, end_gw)
+
+    # Find monthly winner
+    monthly_winner = max(monthly_totals, key=monthly_totals.get)
+    monthly_winner_points = monthly_totals[monthly_winner]
+
+    # Get all managers
+    all_managers = list(monthly_totals.keys())
+
+    # Calculate payments
+    payments = calculate_payments(weekly_winners, monthly_winner, all_managers)
+
+    # Calculate total owed by each manager
+    totals_owed = {}
+    for manager in all_managers:
+        totals_owed[manager] = sum(payments[manager].values())
+
+    # Sort by total owed (descending)
+    sorted_by_owed = sorted(totals_owed.items(), key=lambda x: x[1], reverse=True)
 
     # Sort by points for leaderboard
-    sorted_managers = sorted(monthly_totals.items(), key=lambda x: x[1], reverse=True)
+    sorted_by_points = sorted(monthly_totals.items(), key=lambda x: x[1], reverse=True)
 
     # Generate markdown
     md = f"# 💰 {month_name} Monthly Prize Payment Summary\n\n"
     md += f"**Period:** Gameweek {start_gw}-{end_gw}\n\n"
     md += "---\n\n"
-    md += f"## 🏆 Winner: {winner}\n\n"
-    md += f"**Total Points:** {winner_points}\n\n"
-    md += "---\n\n"
-    md += "## 💵 Payment Summary\n\n"
-    md += f"**Everyone owes {winner}: $2**\n\n"
 
-    # List all payments
-    for manager, points in sorted_managers:
-        if manager != winner:
-            md += f"- {manager} → {winner}: **$2**\n"
+    # Winners section
+    md += "## 🏆 Winners\n\n"
+    md += "### Weekly Winners ($1 each)\n"
+    for week in weekly_winners:
+        md += f"- **GW{week['gameweek']}:** {week['manager']} ({week['points']} pts)\n"
 
-    md += f"\n**Total Prize: ${len(sorted_managers) - 1} × $2 = ${(len(sorted_managers) - 1) * 2}**\n\n"
+    md += f"\n### Monthly Winner ($2)\n"
+    md += f"- **{monthly_winner}** ({monthly_winner_points} pts)\n\n"
     md += "---\n\n"
+
+    # Outstanding payments section
+    md += "## 💵 Outstanding Payments\n\n"
+
+    for manager, total in sorted_by_owed:
+        if total > 0:
+            # Build breakdown string
+            breakdown_parts = []
+            for recipient, amount in sorted(payments[manager].items(), key=lambda x: x[1], reverse=True):
+                if amount > 0:
+                    breakdown_parts.append(f"${amount} to {recipient}")
+
+            breakdown = ", ".join(breakdown_parts)
+            md += f"**{manager}** → **${total}** ({breakdown})\n"
+
+    md += "\n---\n\n"
+
+    # Monthly leaderboard
     md += "## 📊 Monthly Leaderboard\n\n"
-
-    for i, (manager, points) in enumerate(sorted_managers, 1):
+    for i, (manager, points) in enumerate(sorted_by_points, 1):
         medal = "🏆" if i == 1 else "🥈" if i == 2 else "🥉" if i == 3 else f"{i}."
         md += f"{medal} **{manager}** - {points} points\n"
 
