@@ -29,3 +29,7 @@ Thumbs.db
 *.temp
 .DS_Store
 dist/
+
+# Secrets and credentials
+.env
+.env.local
