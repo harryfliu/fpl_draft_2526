@@ -13,6 +13,7 @@ import anthropic
 import csv
 import os
 import sys
+from datetime import datetime
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -54,9 +55,16 @@ def generate_ai_summary(gameweek: int, api_key: str) -> str:
     # Read tone reference
     tone_reference = read_tone_reference()
 
+    # Get current date and season info
+    current_date = datetime.now()
+    current_year = current_date.year
+    season = "2025/26"
+
     # Build the prompt
     if tone_reference:
-        prompt = f"""You are writing a savage, hilarious roast-style summary for a Fantasy Premier League Draft league's Gameweek {gameweek}.
+        prompt = f"""CONTEXT: Today's date is {current_date.strftime('%B %d, %Y')}. We are in the {season} FPL season.
+
+You are writing a savage, hilarious roast-style summary for a Fantasy Premier League Draft league's Gameweek {gameweek}.
 
 CRITICAL TONE REQUIREMENTS:
 - Use the EXACT same tone, style, and voice as the reference summary below
@@ -79,7 +87,9 @@ Here is the data for Gameweek {gameweek}:
 
 Generate a complete roast-style summary for Gameweek {gameweek} following the EXACT same tone, brutality, and style as the reference above. Be creative with new insults but maintain the same energy and voice."""
     else:
-        prompt = f"""You are writing a savage, hilarious roast-style summary for a Fantasy Premier League Draft league's Gameweek {gameweek}.
+        prompt = f"""CONTEXT: Today's date is {current_date.strftime('%B %d, %Y')}. We are in the {season} FPL season.
+
+You are writing a savage, hilarious roast-style summary for a Fantasy Premier League Draft league's Gameweek {gameweek}.
 
 Write a brutally funny roast for each manager based on their performance. Be creative with insults, use metaphors, and make it entertaining. This is all in good fun between friends.
 
@@ -104,7 +114,7 @@ Generate a complete roast-style summary."""
 
     message = client.messages.create(
         model="claude-opus-4-20250514",
-        max_tokens=4096,
+        max_tokens=8192,  # Increased to allow full roast summaries
         messages=[
             {"role": "user", "content": prompt}
         ]
