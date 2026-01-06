@@ -110,10 +110,10 @@ Generate a complete roast-style summary."""
     client = anthropic.Anthropic(api_key=api_key)
 
     print(f"🤖 Generating AI summary with Claude...")
-    print(f"   Using model: claude-opus-4-20250514")
+    print(f"   Using model: claude-sonnet-4-5-20250929 (cost-effective)")
 
     message = client.messages.create(
-        model="claude-opus-4-20250514",
+        model="claude-sonnet-4-5-20250929",  # Sonnet 4.5 - much cheaper than Opus, still great quality
         max_tokens=8192,  # Increased to allow full roast summaries
         messages=[
             {"role": "user", "content": prompt}
