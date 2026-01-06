@@ -172,8 +172,10 @@ def main():
             print(f"⚠️ Warning: Failed to copy static files: {e}")
             print("  You may need to copy them manually")
 
-    # Step 7: Generate summaries (only for final results)
-    if not is_partial:
+    # Step 7: Generate summaries (only for finished gameweeks with actual results)
+    has_results = len(parsed_data.get('matches', [])) > 0
+
+    if not is_partial and has_results:
         import subprocess
 
         # Generate summary CSV
@@ -209,6 +211,8 @@ def main():
                 print(f"     {result.stderr}")
         except Exception as e:
             print(f"  ⚠️ Warning: Failed to generate AI summary: {e}")
+    elif not has_results:
+        print(f"\n⏸️  Skipping summaries - GW{gameweek} hasn't started yet (0 matches played)")
 
     # Success!
     print("\n" + "=" * 80)
