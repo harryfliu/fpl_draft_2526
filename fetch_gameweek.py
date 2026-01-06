@@ -6,12 +6,14 @@ Main orchestration script that automates the entire gameweek data fetching proce
 1. Fetches data from FPL Draft API
 2. Parses and transforms the data
 3. Generates CSV files in exact dashboard format
-4. Ready for deployment
+4. Generates summaries and AI roasts (for finished gameweeks)
+5. Generates monthly payment summaries (for end of month)
+6. Ready for deployment
 
 Usage:
     python fetch_gameweek.py --gameweek 18
     python fetch_gameweek.py --gameweek 18 --partial
-    python fetch_gameweek.py --gameweek 18 --previous-gw 17
+    python fetch_gameweek.py --gameweek 18 --end-of-month "December,14"
 """
 
 import argparse
@@ -36,6 +38,9 @@ Examples:
 
   # Fetch partial results for GW18 (in-progress)
   python fetch_gameweek.py --gameweek 18 --partial
+
+  # Fetch GW18 and generate monthly payment summary for December (GW14-18)
+  python fetch_gameweek.py --gameweek 18 --end-of-month "December,14"
 
   # Specify previous gameweek for copying static files
   python fetch_gameweek.py --gameweek 18 --previous-gw 17
@@ -74,6 +79,13 @@ Examples:
         '--output-dir', '-o',
         type=str,
         help='Custom output directory (default: gwX/)'
+    )
+
+    parser.add_argument(
+        '--end-of-month',
+        type=str,
+        metavar='MONTH,START_GW',
+        help='Generate monthly payment summary (format: "December,14" or "December,14,18")'
     )
 
     return parser.parse_args()
@@ -213,6 +225,36 @@ def main():
             print(f"  ⚠️ Warning: Failed to generate AI summary: {e}")
     elif not has_results:
         print(f"\n⏸️  Skipping summaries - GW{gameweek} hasn't started yet (0 matches played)")
+
+    # Step 8: Generate monthly payment summary (if end of month)
+    if args.end_of_month:
+        import subprocess
+
+        # Parse end_of_month parameter: "December,14" or "December,14,18"
+        parts = args.end_of_month.split(',')
+        if len(parts) < 2:
+            print(f"\n⚠️ Warning: Invalid --end-of-month format. Use 'Month,StartGW' or 'Month,StartGW,EndGW'")
+        else:
+            month_name = parts[0].strip()
+            start_gw = int(parts[1].strip())
+            end_gw = int(parts[2].strip()) if len(parts) > 2 else gameweek
+
+            print(f"\n💰 Generating monthly payment summary for {month_name}...")
+            try:
+                result = subprocess.run(
+                    ['python3', 'generate_monthly_payments.py', month_name, str(start_gw), str(end_gw)],
+                    capture_output=True,
+                    text=True,
+                    timeout=30
+                )
+                if result.returncode == 0:
+                    print(f"  ✓ Monthly payment summary generated")
+                    print(f"  📄 Saved to: gw{end_gw}/monthly_payments_{month_name.lower()}.md")
+                else:
+                    print(f"  ⚠️ Warning: Monthly payment generation had issues:")
+                    print(f"     {result.stderr}")
+            except Exception as e:
+                print(f"  ⚠️ Warning: Failed to generate monthly payment summary: {e}")
 
     # Success!
     print("\n" + "=" * 80)
