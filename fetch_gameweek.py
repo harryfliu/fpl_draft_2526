@@ -33,10 +33,10 @@ def parse_arguments():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Fetch final results for GW18
+  # Fetch GW18 (auto-detects: not started/partial/final)
   python fetch_gameweek.py --gameweek 18
 
-  # Fetch partial results for GW18 (in-progress)
+  # Force partial results mode (overrides auto-detection)
   python fetch_gameweek.py --gameweek 18 --partial
 
   # Fetch GW18 and generate monthly payment summary for December (GW14-18)
@@ -47,6 +47,11 @@ Examples:
 
   # Skip static files
   python fetch_gameweek.py --gameweek 18 --no-static
+
+Auto-detection logic:
+  - Not started: No matches started → No results file created
+  - In progress: Some matches started but not all finished → partial_results file
+  - Complete: All matches finished → final_results file + summaries + AI roast
         """
     )
 
@@ -60,7 +65,7 @@ Examples:
     parser.add_argument(
         '--partial', '-p',
         action='store_true',
-        help='Fetch partial results (for in-progress gameweek)'
+        help='Force partial results mode (auto-detected by default based on match status)'
     )
 
     parser.add_argument(
@@ -104,7 +109,7 @@ def main():
     print("=" * 80)
     print(f"  FPL DRAFT GAMEWEEK DATA FETCHER")
     print("=" * 80)
-    print(f"\n📊 Fetching {'PARTIAL' if is_partial else 'FINAL'} results for Gameweek {gameweek}")
+    print(f"\n📊 Fetching data for Gameweek {gameweek}")
     print(f"📁 Output directory: {output_dir}/\n")
 
     # Step 1: Load configuration
@@ -153,7 +158,28 @@ def main():
         print("Get a new token from Chrome DevTools → Network tab → x-api-authorization header")
         sys.exit(1)
 
-    # Step 4: Parse data
+    # Step 4: Auto-detect gameweek status if not explicitly set
+    if not args.partial:
+        # Check if gameweek is complete or in progress
+        matches = [m for m in api_data['league']['matches'] if m['event'] == gameweek]
+        if matches:
+            all_finished = all(m['finished'] for m in matches)
+            any_started = any(m['started'] for m in matches)
+
+            if not any_started:
+                print(f"📊 Auto-detected: GW{gameweek} hasn't started yet")
+                is_partial = False
+            elif not all_finished:
+                print(f"📊 Auto-detected: GW{gameweek} in progress (partial results)")
+                is_partial = True
+            else:
+                print(f"📊 Auto-detected: GW{gameweek} is complete (final results)")
+                is_partial = False
+        else:
+            print(f"📊 No matches found for GW{gameweek}")
+            is_partial = False
+
+    # Step 5: Parse data
     print(f"\n🔄 Parsing data...")
     try:
         parser = DataParser(config)
