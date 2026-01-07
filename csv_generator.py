@@ -37,8 +37,19 @@ class CSVGenerator:
         print(f"📝 Generating CSV files for GW{gameweek}...")
 
         # Generate match results
-        results_filename = f"partial_results_gw{gameweek}.csv" if is_partial else f"final_results_gw{gameweek}.csv"
-        self._generate_match_results(parsed_data['results'], gameweek, results_filename)
+        # Only generate if: partial mode OR (final mode AND matches exist)
+        has_matches = len(parsed_data['results']) > 0
+
+        if is_partial:
+            # Always generate partial results (even if 0-0, it shows in-progress)
+            results_filename = f"partial_results_gw{gameweek}.csv"
+            self._generate_match_results(parsed_data['results'], gameweek, results_filename)
+        elif has_matches:
+            # Only generate final results if matches actually exist
+            results_filename = f"final_results_gw{gameweek}.csv"
+            self._generate_match_results(parsed_data['results'], gameweek, results_filename)
+        else:
+            print(f"  ⏸️  Skipping results file - GW{gameweek} hasn't started yet")
 
         # Generate transfer history (cumulative)
         self._generate_transfer_history(parsed_data['transfers'])
