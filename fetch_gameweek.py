@@ -211,7 +211,7 @@ def main():
             print("  You may need to copy them manually")
 
     # Step 7: Generate summaries (only for finished gameweeks with actual results)
-    has_results = len(parsed_data.get('matches', [])) > 0
+    has_results = len(parsed_data.get('results', [])) > 0
 
     if not is_partial and has_results:
         import subprocess
