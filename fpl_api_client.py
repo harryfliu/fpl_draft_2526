@@ -198,6 +198,21 @@ class FPLDraftAPIClient:
             self._bootstrap_cache = self._make_request(url)
         return self._bootstrap_cache
 
+    def get_draft_bootstrap(self) -> Dict:
+        """
+        Fetch bootstrap static data from Draft API
+
+        IMPORTANT: Draft API has DIFFERENT player IDs than regular FPL API!
+        Use this for looking up player names in transactions (waivers/trades).
+        Use get_bootstrap_static() for player statistics.
+
+        Returns:
+            Dict with elements, teams, events, etc.
+        """
+        url = f"{self.config.draft_api_base}/bootstrap-static"
+        print(f"📡 Fetching Draft bootstrap data (for transaction player names)...")
+        return self._make_request(url)
+
     # Helper methods
 
     def get_team_event_data(self, entry_id: int, event_id: int) -> Dict:

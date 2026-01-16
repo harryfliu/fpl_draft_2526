@@ -25,7 +25,8 @@ class DataParser:
         self.pacific_tz = pytz.timezone(config.timezone)
 
         # Lookups (populated during parsing)
-        self.player_lookup = {}
+        self.player_lookup = {}  # Regular FPL player IDs (for stats)
+        self.draft_player_lookup = {}  # Draft API player IDs (for transactions)
         self.team_lookup = {}
         self.entry_lookup_by_id = {}
         self.entry_lookup_by_entry_id = {}
@@ -84,9 +85,14 @@ class DataParser:
 
     def _build_lookups(self, api_data: Dict):
         """Build lookup dictionaries for fast access"""
-        # Player lookup
+        # Player lookup (regular FPL API - for stats)
         for player in api_data['bootstrap']['elements']:
             self.player_lookup[player['id']] = player
+
+        # Draft player lookup (Draft API - for transactions)
+        # IMPORTANT: Draft API has DIFFERENT player IDs than regular FPL API!
+        for player in api_data['draft_bootstrap']['elements']:
+            self.draft_player_lookup[player['id']] = player
 
         # Team lookup
         for team in api_data['bootstrap']['teams']:
@@ -170,9 +176,10 @@ class DataParser:
 
             manager = f"{entry.get('player_first_name', '')} {entry.get('player_last_name', '')}"
 
-            # Get player names
-            player_in_data = self.player_lookup.get(tx['element_in'], {})
-            player_out_data = self.player_lookup.get(tx['element_out'], {})
+            # Get player names from DRAFT API player lookup
+            # (transactions use Draft API player IDs, not regular FPL IDs)
+            player_in_data = self.draft_player_lookup.get(tx['element_in'], {})
+            player_out_data = self.draft_player_lookup.get(tx['element_out'], {})
 
             player_in = player_in_data.get('web_name', 'Unknown')
             player_out = player_out_data.get('web_name', 'Unknown')

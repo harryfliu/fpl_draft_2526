@@ -149,7 +149,8 @@ def main():
             'league': client.get_league_details(),
             'transactions': client.get_transactions(),
             'pl_fixtures': client.get_pl_fixtures(event_id=gameweek),
-            'bootstrap': client.get_bootstrap_static()
+            'bootstrap': client.get_bootstrap_static(),
+            'draft_bootstrap': client.get_draft_bootstrap()  # For transaction player name lookups
         }
         print("  ✓ All API data fetched successfully")
     except Exception as e:
