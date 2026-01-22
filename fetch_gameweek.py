@@ -26,6 +26,155 @@ from data_parser import DataParser
 from csv_generator import CSVGenerator
 
 
+def get_gameweeks_for_month(month):
+    """Get list of gameweeks for a given month"""
+    month_map = {
+        'August': [1, 2, 3],
+        'September': [4, 5, 6],
+        'October': [7, 8, 9],
+        'November': [10, 11, 12, 13],
+        'December': [14, 15, 16, 17, 18],
+        'January': [19, 20, 21, 22, 23],
+        'February': [24, 25, 26],
+        'March': [27, 28, 29, 30],
+        'April': [31, 32, 33, 34],
+        'May': [35, 36, 37, 38]
+    }
+    return month_map.get(month, [])
+
+
+def get_month_for_gameweek(gameweek):
+    """Get the month name for a given gameweek"""
+    for month, gws in [
+        ('August', [1, 2, 3]),
+        ('September', [4, 5, 6]),
+        ('October', [7, 8, 9]),
+        ('November', [10, 11, 12, 13]),
+        ('December', [14, 15, 16, 17, 18]),
+        ('January', [19, 20, 21, 22, 23]),
+        ('February', [24, 25, 26]),
+        ('March', [27, 28, 29, 30]),
+        ('April', [31, 32, 33, 34]),
+        ('May', [35, 36, 37, 38])
+    ]:
+        if gameweek in gws:
+            return month
+    return None
+
+
+def print_gameweek_summary(parsed_data, gameweek):
+    """Print a quick summary of what happened this gameweek"""
+    results = parsed_data.get('results', [])
+    if not results:
+        return
+
+    print("\n" + "=" * 80)
+    print(f"  📢 GAMEWEEK {gameweek} SUMMARY")
+    print("=" * 80)
+
+    # Collect all scores
+    all_scores = []
+    for match in results:
+        all_scores.append({
+            'team': match['homeTeam'],
+            'manager': match['homeManager'],
+            'score': match['homeScore']
+        })
+        all_scores.append({
+            'team': match['awayTeam'],
+            'manager': match['awayManager'],
+            'score': match['awayScore']
+        })
+
+    # Sort by score descending
+    all_scores.sort(key=lambda x: x['score'], reverse=True)
+
+    # Weekly winner
+    weekly_winner = all_scores[0]
+    print(f"\n🏆 WEEKLY WINNER: {weekly_winner['manager']} ({weekly_winner['team']})")
+    print(f"   {weekly_winner['score']} points - wins $11!")
+
+    # Check for monthly winner
+    current_month = get_month_for_gameweek(gameweek)
+    month_gws = get_gameweeks_for_month(current_month)
+
+    if current_month and month_gws and gameweek == max(month_gws):
+        # This is the last gameweek of the month - calculate monthly winner
+        print(f"\n🎉 END OF {current_month.upper()}!")
+
+        # We need to calculate monthly totals from all GWs in this month
+        # For now, read from the summary file if it exists
+        summary_file = Path(f"gw{gameweek}/summary_gw{gameweek}.md")
+        if summary_file.exists():
+            content = summary_file.read_text()
+            # Look for Monthly Winner section
+            import re
+            monthly_match = re.search(r'### Monthly Winner \(' + current_month + r'\)\s*\n🏆 \*\*(.+?)\*\* \((.+?)\) - (\d+) points', content)
+            if monthly_match:
+                manager = monthly_match.group(1)
+                team = monthly_match.group(2)
+                points = monthly_match.group(3)
+                print(f"   💰 MONTHLY WINNER: {manager} ({team})")
+                print(f"   {points} points across GW{min(month_gws)}-{max(month_gws)} - wins $22!")
+    else:
+        # Show current monthly leader
+        if current_month:
+            summary_file = Path(f"gw{gameweek}/summary_gw{gameweek}.md")
+            if summary_file.exists():
+                content = summary_file.read_text()
+                import re
+                leader_match = re.search(r'### Monthly Leader \(' + current_month + r'\)\s*\n🏆 \*\*(.+?)\*\* \((.+?)\) - (\d+) points', content)
+                if leader_match:
+                    manager = leader_match.group(1)
+                    team = leader_match.group(2)
+                    points = leader_match.group(3)
+                    remaining_gws = [gw for gw in month_gws if gw > gameweek]
+                    print(f"\n📊 {current_month.upper()} LEADER: {manager} ({team})")
+                    print(f"   {points} points - {len(remaining_gws)} GW(s) remaining in month")
+
+    # Quick stats
+    print(f"\n📈 QUICK STATS:")
+
+    # Highest and lowest scores
+    highest = all_scores[0]
+    lowest = all_scores[-1]
+    print(f"   🔥 Highest: {highest['manager']} with {highest['score']} pts")
+    print(f"   💀 Lowest: {lowest['manager']} with {lowest['score']} pts")
+
+    # Average score
+    avg_score = sum(s['score'] for s in all_scores) / len(all_scores)
+    print(f"   📊 Average: {avg_score:.1f} pts")
+
+    # Closest match
+    closest_margin = float('inf')
+    closest_match = None
+    biggest_margin = 0
+    biggest_match = None
+
+    for match in results:
+        margin = abs(match['homeScore'] - match['awayScore'])
+        if margin < closest_margin:
+            closest_margin = margin
+            closest_match = match
+        if margin > biggest_margin:
+            biggest_margin = margin
+            biggest_match = match
+
+    if closest_match:
+        print(f"   🎯 Closest: {closest_match['homeTeam']} {closest_match['homeScore']}-{closest_match['awayScore']} {closest_match['awayTeam']} (margin: {closest_margin})")
+    if biggest_match:
+        print(f"   💥 Biggest: {biggest_match['homeTeam']} {biggest_match['homeScore']}-{biggest_match['awayScore']} {biggest_match['awayTeam']} (margin: {biggest_margin})")
+
+    # Results summary
+    print(f"\n⚽ RESULTS:")
+    for match in results:
+        home_result = "W" if match['homeScore'] > match['awayScore'] else ("L" if match['homeScore'] < match['awayScore'] else "D")
+        away_result = "W" if match['awayScore'] > match['homeScore'] else ("L" if match['awayScore'] < match['homeScore'] else "D")
+        print(f"   {match['homeTeam'][:20]:<20} {match['homeScore']:>2} - {match['awayScore']:<2} {match['awayTeam'][:20]:<20}")
+
+    print("")
+
+
 def parse_arguments():
     """Parse command line arguments"""
     parser = argparse.ArgumentParser(
@@ -253,7 +402,11 @@ def main():
     elif not has_results:
         print(f"\n⏸️  Skipping summaries - GW{gameweek} hasn't started yet (0 matches played)")
 
-    # Step 8: Generate monthly payment summary (if end of month)
+    # Step 8: Print gameweek summary (for finished gameweeks)
+    if not is_partial and has_results:
+        print_gameweek_summary(parsed_data, gameweek)
+
+    # Step 9: Generate monthly payment summary (if end of month)
     if args.end_of_month:
         import subprocess
 

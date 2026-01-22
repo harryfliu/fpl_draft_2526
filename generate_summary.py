@@ -687,8 +687,8 @@ class FPLSummaryGenerator:
             'October': [7, 8, 9],
             'November': [10, 11, 12, 13],
             'December': [14, 15, 16, 17, 18],
-            'January': [19, 20, 21, 22],
-            'February': [23, 24, 25, 26],
+            'January': [19, 20, 21, 22, 23],
+            'February': [24, 25, 26],
             'March': [27, 28, 29, 30],
             'April': [31, 32, 33, 34],
             'May': [35, 36, 37, 38]
