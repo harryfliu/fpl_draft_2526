@@ -1460,6 +1460,33 @@ function updateCurrentGameweek() {
         
         console.log(`🎯 updateCurrentGameweek: selected=${selectedGameweek}, actual=${actualCurrentGameweek}, showing label: ${selectedGameweek === actualCurrentGameweek}`);
     }
+
+    // Update gameweek date range from PL fixtures
+    const dateRangeEl = document.getElementById('gw-date-range');
+    if (dateRangeEl && dataManager) {
+        const gwData = dataManager.getGameweekData(dashboardData.currentGameweek);
+        const plFixtures = gwData?.plFixtures || [];
+        if (plFixtures.length > 0) {
+            const dates = plFixtures.map(f => f.date).filter(Boolean);
+            const uniqueDates = [...new Set(dates)];
+            if (uniqueDates.length > 0) {
+                const formatShortDate = (dateStr) => {
+                    const match = dateStr.match(/^(\w+) (\d+) (\w+)/);
+                    if (match) {
+                        return `${match[1].slice(0, 3)} ${match[3].slice(0, 3)} ${match[2]}`;
+                    }
+                    return dateStr;
+                };
+                const first = formatShortDate(uniqueDates[0]);
+                const last = formatShortDate(uniqueDates[uniqueDates.length - 1]);
+                dateRangeEl.textContent = first === last ? first : `${first} – ${last}`;
+            } else {
+                dateRangeEl.textContent = '';
+            }
+        } else {
+            dateRangeEl.textContent = '';
+        }
+    }
 }
 
 // Helper function to get season month number from month name
@@ -7182,8 +7209,8 @@ function getMonthFromGameweek(gameweek) {
     if (gameweek <= 9) return 'October';       // GW7-9: Oct 4-25
     if (gameweek <= 13) return 'November';     // GW10-13: Nov 1-29
     if (gameweek <= 18) return 'December';     // GW14-18: Dec 3-27
-    if (gameweek <= 22) return 'January';      // GW19-22: Dec 30-Jan 17
-    if (gameweek <= 26) return 'February';     // GW23-26: Jan 24-Feb 11
+    if (gameweek <= 23) return 'January';      // GW19-23: Dec 30-Jan 26
+    if (gameweek <= 26) return 'February';     // GW24-26: Feb 1-Feb 11
     if (gameweek <= 30) return 'March';        // GW27-30: Feb 21-Mar 14
     if (gameweek <= 34) return 'April';        // GW31-34: Mar 21-Apr 25
     if (gameweek <= 38) return 'May';          // GW35-38: May 2-24
