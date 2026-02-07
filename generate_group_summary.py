@@ -214,6 +214,10 @@ def generate_group_summary(gameweek):
             winner_totals.append((payee, total, dict(payers)))
         winner_totals.sort(key=lambda x: x[1], reverse=True)
 
+        # Intro line listing all winners
+        winner_names = ", ".join(first(payee) for payee, _, _ in winner_totals)
+        lines.append(f"For the winners {winner_names} if this is easier -- please make your requests accordingly:")
+
         for payee, total, payers in winner_totals:
             # Group payers by amount for cleaner display
             amount_groups = defaultdict(list)
@@ -227,8 +231,15 @@ def generate_group_summary(gameweek):
                 parts.append(f"${amount} from {name_list}")
 
             request_str = "; ".join(parts)
-            handle = VENMO_HANDLES.get(payee, "???")
-            lines.append(f"{first(payee)} ({handle}): Request {request_str} = ${total}")
+            lines.append("")
+            lines.append(f"{first(payee)}: Request {request_str} = ${total}")
+
+        # Venmo handles
+        lines.append("")
+        lines.append("Venmo handles:")
+        for name in sorted(all_managers):
+            handle = VENMO_HANDLES.get(name, "???")
+            lines.append(f"{first(name)}: {handle}")
 
     output = "\n".join(lines)
     return output
