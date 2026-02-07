@@ -191,7 +191,7 @@ def generate_group_summary(gameweek):
             medals = ["🥇", "🥈", "🥉"]
             lines.append(f"{medals[i]} {first(name)} - {pts} pts")
 
-    # --- Section 3: Venmo Payments (gross) ---
+    # --- Section 3: Venmo Payments (winner-centric) ---
     if month_complete:
         all_managers = list(monthly_totals.keys())
         payments = calculate_payments(weekly_winners, sorted_monthly[0][0], all_managers)
@@ -200,32 +200,35 @@ def generate_group_summary(gameweek):
         lines.append(f"💰 {current_month.upper()} VENMO")
         lines.append("")
 
-        # Build gross payment list per payer, sorted by total owed descending
-        payer_totals = []
+        # Invert payments: build payee -> {payer: amount} mapping
+        collections = defaultdict(lambda: defaultdict(int))
         for payer in all_managers:
-            debts = payments[payer]
-            total = sum(debts.values())
-            if total > 0:
-                payer_totals.append((payer, total, dict(debts)))
-        payer_totals.sort(key=lambda x: x[1], reverse=True)
-
-        for payer, total, debts in payer_totals:
-            parts = []
-            for payee, amount in sorted(debts.items(), key=lambda x: x[1], reverse=True):
+            for payee, amount in payments[payer].items():
                 if amount > 0:
-                    parts.append(f"${amount} to {first(payee)}")
-            debt_str = ", ".join(parts)
-            lines.append(f"{first(payer)}: {debt_str} = ${total}")
+                    collections[payee][payer] += amount
 
-        lines.append("")
-        lines.append("Pay up! 💸")
+        # Sort winners by total owed to them (descending)
+        winner_totals = []
+        for payee, payers in collections.items():
+            total = sum(payers.values())
+            winner_totals.append((payee, total, dict(payers)))
+        winner_totals.sort(key=lambda x: x[1], reverse=True)
 
-        # Venmo handles
-        lines.append("")
-        lines.append("Venmo handles:")
-        for name in sorted(all_managers):
-            handle = VENMO_HANDLES.get(name, "???")
-            lines.append(f"{first(name)}: {handle}")
+        for payee, total, payers in winner_totals:
+            # Group payers by amount for cleaner display
+            amount_groups = defaultdict(list)
+            for payer, amount in payers.items():
+                amount_groups[amount].append(payer)
+
+            parts = []
+            for amount in sorted(amount_groups.keys(), reverse=True):
+                names = sorted(amount_groups[amount], key=lambda n: first(n))
+                name_list = ", ".join(first(n) for n in names)
+                parts.append(f"${amount} from {name_list}")
+
+            request_str = "; ".join(parts)
+            handle = VENMO_HANDLES.get(payee, "???")
+            lines.append(f"{first(payee)} ({handle}): Request {request_str} = ${total}")
 
     output = "\n".join(lines)
     return output
