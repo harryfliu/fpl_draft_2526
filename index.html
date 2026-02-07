@@ -316,8 +316,9 @@
 
         /* GW badge in navbar */
         .navbar .bg-gradient-to-r {
-            background: var(--accent-gold) !important;
-            color: #111 !important;
+            background: transparent !important;
+            color: var(--accent-gold) !important;
+            border: 1px solid var(--accent-gold) !important;
             border-radius: 3px !important;
             font-family: 'Outfit', sans-serif !important;
             font-weight: 600 !important;
@@ -579,19 +580,6 @@
             background: var(--card-highlight) !important;
             border: 1px solid var(--border-color) !important;
             border-radius: 4px !important;
-        }
-
-        /* ===== INFO CARD (Gameweek Navigation) ===== */
-        .bg-blue-50\/80 {
-            background: var(--card-bg) !important;
-        }
-
-        .border-blue-200\/50 {
-            border-color: var(--border-color) !important;
-        }
-
-        .text-blue-600 {
-            color: var(--accent-gold) !important;
         }
 
         /* ===== DRAWER / SIDEBAR ===== */
@@ -978,26 +966,21 @@
                     </div>
                 </div>
                 <div class="flex-none">
-                    <div class="flex items-center gap-2 md:gap-3">
-                        <div class="form-control">
-                            <label class="label hidden md:block">
-                                <span class="label-text text-xs text-white" style="font-family: 'Outfit', sans-serif; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.6rem !important;">Gameweek</span>
-                            </label>
-                            <div class="flex gap-1 md:gap-2">
-                                <select class="select bg-gray-800/90 border-gray-600/50 text-white select-sm w-16 md:w-28 focus:border-purple-400 text-xs md:text-sm" id="gameweekSelector">
-                                    <!-- Gameweek options will be populated by JavaScript -->
-                                </select>
-                                <button class="btn bg-purple-600 hover:bg-purple-700 border-purple-600 text-white btn-sm w-8 md:w-auto" onclick="jumpToCurrentGameweek()" title="Jump to Current Gameweek">
-                                    <i class="fas fa-calendar-day text-xs"></i>
-                                </button>
-                            </div>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-2">
+                            <select class="select bg-gray-800/90 border-gray-600/50 text-white select-sm w-16 md:w-28 focus:border-purple-400 text-xs md:text-sm" id="gameweekSelector">
+                                <!-- Gameweek options will be populated by JavaScript -->
+                            </select>
+                            <button class="btn bg-purple-600 hover:bg-purple-700 border-purple-600 text-white btn-sm w-8 md:w-auto" onclick="jumpToCurrentGameweek()" title="Jump to Current Gameweek">
+                                <i class="fas fa-calendar-day text-xs"></i>
+                            </button>
                         </div>
-                        <div class="text-center">
-                            <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-2 py-1 md:px-4 md:py-2 rounded-full font-semibold shadow-lg text-xs md:text-sm">
+                        <div style="border-left: 1px solid var(--border-color); padding-left: 12px;">
+                            <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-2 py-1 md:px-4 md:py-2 rounded-full font-semibold shadow-lg text-xs md:text-sm" style="text-align: center;">
                                 GW <span id="currentGameweek">1</span>
                             </div>
-                            <div class="text-xs text-gray-400 mt-1 hidden md:block" id="gw-date-range"></div>
-                            <div class="text-xs text-white mt-1 hidden md:block" id="current-label" style="font-family: 'Outfit', sans-serif; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.55rem !important;">Current</div>
+                            <div class="text-xs mt-1 hidden md:block" id="gw-date-range" style="color: var(--text-secondary); text-align: center; font-size: 0.65rem;"></div>
+                            <div class="text-xs mt-0.5 hidden md:block" id="current-label" style="font-family: 'Outfit', sans-serif; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.55rem !important; color: var(--accent-gold); text-align: center;">Current</div>
                         </div>
                     </div>
                 </div>
@@ -1081,37 +1064,6 @@
                     </div>
                 </div>
 
-                <!-- Gameweek Controls Info -->
-                <div class="card bg-blue-50/80 backdrop-blur-sm shadow-sm border border-blue-200/50 mb-8" style="border-left: 4px solid var(--accent-gold) !important;">
-                    <div class="card-body">
-                        <div class="flex items-start gap-3">
-                            <div class="text-blue-600">
-                                <i class="fas fa-keyboard text-xl"></i>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-semibold text-white mb-2">Gameweek Navigation</h3>
-                                <div class="grid grid-cols-1 gap-3 md:gap-4 md:grid-cols-2 text-sm text-white">
-                                    <div>
-                                        <h4 class="font-semibold text-white mb-2" style="font-family: 'Outfit', sans-serif; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.08em; color: var(--text-muted) !important;">Mouse Controls</h4>
-                                        <ul class="space-y-1" style="font-size: 0.8rem; color: var(--text-secondary);">
-                                            <li><strong style="color: var(--text-primary);">Dropdown</strong> &mdash; Select any gameweek 1&ndash;38</li>
-                                            <li><strong style="color: var(--text-primary);">Calendar Button</strong> &mdash; Jump to current gameweek</li>
-                                            <li><strong style="color: var(--text-primary);">Current Badge</strong> &mdash; Shows selected gameweek</li>
-                                        </ul>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-white mb-2" style="font-family: 'Outfit', sans-serif; text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.08em; color: var(--text-muted) !important;">Keyboard Shortcuts</h4>
-                                        <ul class="space-y-1" style="font-size: 0.8rem; color: var(--text-secondary);">
-                                            <li><kbd style="background: var(--card-highlight); padding: 2px 6px; border-radius: 2px; font-family: 'Outfit', monospace; font-size: 0.7rem; border: 1px solid var(--border-color);">&larr; &rarr;</kbd> Previous / Next gameweek</li>
-                                            <li><kbd style="background: var(--card-highlight); padding: 2px 6px; border-radius: 2px; font-family: 'Outfit', monospace; font-size: 0.7rem; border: 1px solid var(--border-color);">Home</kbd> Jump to GW 1</li>
-                                            <li><kbd style="background: var(--card-highlight); padding: 2px 6px; border-radius: 2px; font-family: 'Outfit', monospace; font-size: 0.7rem; border: 1px solid var(--border-color);">End</kbd> Jump to GW 38</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Stats Overview -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8" id="overview">

@@ -76,14 +76,14 @@ def print_gameweek_summary(parsed_data, gameweek):
     all_scores = []
     for match in results:
         all_scores.append({
-            'team': match['homeTeam'],
-            'manager': match['homeManager'],
-            'score': match['homeScore']
+            'team': match['home_team'],
+            'manager': match['home_manager'],
+            'score': match['home_score']
         })
         all_scores.append({
-            'team': match['awayTeam'],
-            'manager': match['awayManager'],
-            'score': match['awayScore']
+            'team': match['away_team'],
+            'manager': match['away_manager'],
+            'score': match['away_score']
         })
 
     # Sort by score descending
@@ -152,7 +152,7 @@ def print_gameweek_summary(parsed_data, gameweek):
     biggest_match = None
 
     for match in results:
-        margin = abs(match['homeScore'] - match['awayScore'])
+        margin = abs(match['home_score'] - match['away_score'])
         if margin < closest_margin:
             closest_margin = margin
             closest_match = match
@@ -161,16 +161,16 @@ def print_gameweek_summary(parsed_data, gameweek):
             biggest_match = match
 
     if closest_match:
-        print(f"   🎯 Closest: {closest_match['homeTeam']} {closest_match['homeScore']}-{closest_match['awayScore']} {closest_match['awayTeam']} (margin: {closest_margin})")
+        print(f"   🎯 Closest: {closest_match['home_team']} {closest_match['home_score']}-{closest_match['away_score']} {closest_match['away_team']} (margin: {closest_margin})")
     if biggest_match:
-        print(f"   💥 Biggest: {biggest_match['homeTeam']} {biggest_match['homeScore']}-{biggest_match['awayScore']} {biggest_match['awayTeam']} (margin: {biggest_margin})")
+        print(f"   💥 Biggest: {biggest_match['home_team']} {biggest_match['home_score']}-{biggest_match['away_score']} {biggest_match['away_team']} (margin: {biggest_margin})")
 
     # Results summary
     print(f"\n⚽ RESULTS:")
     for match in results:
-        home_result = "W" if match['homeScore'] > match['awayScore'] else ("L" if match['homeScore'] < match['awayScore'] else "D")
-        away_result = "W" if match['awayScore'] > match['homeScore'] else ("L" if match['awayScore'] < match['homeScore'] else "D")
-        print(f"   {match['homeTeam'][:20]:<20} {match['homeScore']:>2} - {match['awayScore']:<2} {match['awayTeam'][:20]:<20}")
+        home_result = "W" if match['home_score'] > match['away_score'] else ("L" if match['home_score'] < match['away_score'] else "D")
+        away_result = "W" if match['away_score'] > match['home_score'] else ("L" if match['away_score'] < match['home_score'] else "D")
+        print(f"   {match['home_team'][:20]:<20} {match['home_score']:>2} - {match['away_score']:<2} {match['away_team'][:20]:<20}")
 
     print("")
 
