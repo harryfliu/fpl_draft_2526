@@ -76,6 +76,11 @@ CRITICAL TONE REQUIREMENTS:
 - Format with markdown headers for each manager
 - Include an intro and conclusion section
 
+ACCURACY REQUIREMENTS:
+- Pay close attention to whether the data says "Monthly Winner" vs "Monthly Leader" — these are different!
+- "Monthly Leader" means the month is NOT yet complete and there are still gameweeks remaining. Do NOT say someone "won" the monthly prize if they are only the current leader.
+- Only mention a monthly prize payout ($22) if the data explicitly says "Monthly Winner"
+
 REFERENCE SUMMARY (GW11 - use this EXACT tone and style):
 {tone_reference}
 

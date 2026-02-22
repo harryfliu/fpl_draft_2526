@@ -1,6 +1,6 @@
 # FPL Draft League - Gameweek 26 Summary
 
-*Generated on February 21, 2026 at 03:31 PM*
+*Generated on February 21, 2026 at 08:54 PM*
 
 ---
 
@@ -364,10 +364,9 @@
 🏆 **Harry Liu** - 61 points
 💵 Prize: $11 ($1 from each other manager)
 
-### Monthly Winner (February)
+### Monthly Leader (February)
 🏆 **Harry Liu** (cunha believe it) - 158 points
-💵 Prize: $22 ($2 from each other manager)
-📅 Period: GW24-26
+📅 Period: GW24-26 (through GW26)
 
 ---
 
@@ -717,44 +716,44 @@
 - **Zryan Bhao** owes **Peter Henze**: $1
 - **Zryan Bhao** owes **Josiah Loh**: $1
 - **Zryan Bhao** owes **Andrew Smith**: $1
-- **Zryan Bhao** owes **Harry Liu**: $3
+- **Zryan Bhao** owes **Harry Liu**: $1
 - **Roy Boateng** owes **Peter Henze**: $1
 - **Roy Boateng** owes **Josiah Loh**: $1
 - **Roy Boateng** owes **Andrew Smith**: $1
-- **Roy Boateng** owes **Harry Liu**: $3
+- **Roy Boateng** owes **Harry Liu**: $1
 - **chris duncam** owes **Peter Henze**: $1
 - **chris duncam** owes **Josiah Loh**: $1
 - **chris duncam** owes **Andrew Smith**: $1
-- **chris duncam** owes **Harry Liu**: $3
+- **chris duncam** owes **Harry Liu**: $1
 - **Ronangel Rojas** owes **Peter Henze**: $1
 - **Ronangel Rojas** owes **Josiah Loh**: $1
 - **Ronangel Rojas** owes **Andrew Smith**: $1
-- **Ronangel Rojas** owes **Harry Liu**: $3
+- **Ronangel Rojas** owes **Harry Liu**: $1
 - **Noah Wilson** owes **Peter Henze**: $1
 - **Noah Wilson** owes **Josiah Loh**: $1
 - **Noah Wilson** owes **Andrew Smith**: $1
-- **Noah Wilson** owes **Harry Liu**: $3
+- **Noah Wilson** owes **Harry Liu**: $1
 - **Kyle Herrera** owes **Peter Henze**: $1
 - **Kyle Herrera** owes **Josiah Loh**: $1
 - **Kyle Herrera** owes **Andrew Smith**: $1
-- **Kyle Herrera** owes **Harry Liu**: $3
+- **Kyle Herrera** owes **Harry Liu**: $1
 - **Don Kim** owes **Peter Henze**: $1
 - **Don Kim** owes **Josiah Loh**: $1
 - **Don Kim** owes **Andrew Smith**: $1
-- **Don Kim** owes **Harry Liu**: $3
+- **Don Kim** owes **Harry Liu**: $1
 - **Andrew Smith** owes **Peter Henze**: $1
 - **Andrew Smith** owes **Josiah Loh**: $1
-- **Andrew Smith** owes **Harry Liu**: $3
+- **Andrew Smith** owes **Harry Liu**: $1
 - **Sean Dunn** owes **Peter Henze**: $1
 - **Sean Dunn** owes **Josiah Loh**: $1
 - **Sean Dunn** owes **Andrew Smith**: $1
-- **Sean Dunn** owes **Harry Liu**: $3
+- **Sean Dunn** owes **Harry Liu**: $1
 - **Josiah Loh** owes **Peter Henze**: $1
 - **Josiah Loh** owes **Andrew Smith**: $1
-- **Josiah Loh** owes **Harry Liu**: $3
+- **Josiah Loh** owes **Harry Liu**: $1
 - **Peter Henze** owes **Josiah Loh**: $1
 - **Peter Henze** owes **Andrew Smith**: $1
-- **Peter Henze** owes **Harry Liu**: $3
+- **Peter Henze** owes **Harry Liu**: $1
 
 ---
 
