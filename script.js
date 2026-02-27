@@ -1280,9 +1280,9 @@ function getGameweeksForMonth(month) {
         'November': [10, 11, 12, 13],
         'December': [14, 15, 16, 17, 18],
         'January': [19, 20, 21, 22, 23],
-        'February': [24, 25, 26],
-        'March': [27, 28, 29, 30],
-        'April': [31, 32, 33, 34],
+        'February': [24, 25, 26, 27],
+        'March': [28, 29, 30, 31],
+        'April': [32, 33, 34],
         'May': [35, 36, 37, 38]
     };
     
@@ -7192,9 +7192,9 @@ function getMonthFromDate(dateString) {
         if (gw <= 13) return 'November';     // GW10-13: Nov 1-29
         if (gw <= 18) return 'December';     // GW14-18: Dec 3-27
         if (gw <= 22) return 'January';      // GW19-22: Dec 30-Jan 17
-        if (gw <= 26) return 'February';     // GW23-26: Jan 24-Feb 11
-        if (gw <= 30) return 'March';        // GW27-30: Feb 21-Mar 14
-        if (gw <= 34) return 'April';        // GW31-34: Mar 21-Apr 25
+        if (gw <= 27) return 'February';     // GW23-27: Jan 24-Feb 23
+        if (gw <= 31) return 'March';        // GW28-31: Feb 27-Mar 22
+        if (gw <= 34) return 'April';        // GW32-34: Apr 11-Apr 25
         if (gw <= 38) return 'May';          // GW35-38: May 2-24
     }
     
@@ -7210,9 +7210,9 @@ function getMonthFromGameweek(gameweek) {
     if (gameweek <= 13) return 'November';     // GW10-13: Nov 1-29
     if (gameweek <= 18) return 'December';     // GW14-18: Dec 3-27
     if (gameweek <= 23) return 'January';      // GW19-23: Dec 30-Jan 26
-    if (gameweek <= 26) return 'February';     // GW24-26: Feb 1-Feb 11
-    if (gameweek <= 30) return 'March';        // GW27-30: Feb 21-Mar 14
-    if (gameweek <= 34) return 'April';        // GW31-34: Mar 21-Apr 25
+    if (gameweek <= 27) return 'February';     // GW24-27: Feb 1-Feb 23
+    if (gameweek <= 31) return 'March';        // GW28-31: Feb 27-Mar 22
+    if (gameweek <= 34) return 'April';        // GW32-34: Apr 11-Apr 25
     if (gameweek <= 38) return 'May';          // GW35-38: May 2-24
     
     return 'Unknown Month';

@@ -673,8 +673,8 @@ class FPLSummaryGenerator:
         elif gw <= 13: return 'November'
         elif gw <= 18: return 'December'
         elif gw <= 22: return 'January'
-        elif gw <= 26: return 'February'
-        elif gw <= 30: return 'March'
+        elif gw <= 27: return 'February'
+        elif gw <= 31: return 'March'
         elif gw <= 34: return 'April'
         elif gw <= 38: return 'May'
         else: return 'Unknown'
@@ -689,8 +689,8 @@ class FPLSummaryGenerator:
             'December': [14, 15, 16, 17, 18],
             'January': [19, 20, 21, 22, 23],
             'February': [24, 25, 26, 27],
-            'March': [28, 29, 30],
-            'April': [31, 32, 33, 34],
+            'March': [28, 29, 30, 31],
+            'April': [32, 33, 34],
             'May': [35, 36, 37, 38]
         }
         return month_map.get(month, [])
