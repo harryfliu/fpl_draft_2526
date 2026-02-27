@@ -1203,6 +1203,68 @@
       "awayTeam": "Man Utd"
     }
   ],
+  "final_results_gw27": [
+    {
+      "homeTeam": "Schr\u00f6dongers",
+      "homeManager": "chris duncam",
+      "awayTeam": "cunha believe it",
+      "awayManager": "Harry Liu",
+      "homeScore": 25,
+      "awayScore": 56,
+      "gameweek": 27,
+      "isFinal": true
+    },
+    {
+      "homeTeam": "Trophies Matter FC",
+      "homeManager": "Noah Wilson",
+      "awayTeam": "FootAndBallFetish",
+      "awayManager": "Zryan Bhao",
+      "homeScore": 65,
+      "awayScore": 49,
+      "gameweek": 27,
+      "isFinal": true
+    },
+    {
+      "homeTeam": "son4lyfe",
+      "homeManager": "Don Kim",
+      "awayTeam": "Peattle Pounders",
+      "awayManager": "Peter Henze",
+      "homeScore": 25,
+      "awayScore": 32,
+      "gameweek": 27,
+      "isFinal": true
+    },
+    {
+      "homeTeam": "Gweepy",
+      "homeManager": "Sean Dunn",
+      "awayTeam": "This Year FC",
+      "awayManager": "Roy Boateng",
+      "homeScore": 31,
+      "awayScore": 18,
+      "gameweek": 27,
+      "isFinal": true
+    },
+    {
+      "homeTeam": "thenotsospecialone",
+      "homeManager": "Josiah Loh",
+      "awayTeam": "Atl\u00e9tico SeaSlug",
+      "awayManager": "Ronangel Rojas",
+      "homeScore": 54,
+      "awayScore": 54,
+      "gameweek": 27,
+      "isFinal": true
+    },
+    {
+      "homeTeam": "Cunha Get Me Points",
+      "homeManager": "Andrew Smith",
+      "awayTeam": "Extended Foreplay",
+      "awayManager": "Kyle Herrera",
+      "homeScore": 44,
+      "awayScore": 24,
+      "gameweek": 27,
+      "isFinal": true
+    }
+  ],
   "starting_draft": [
     {
       "Round": "1",
@@ -1498,18 +1560,18 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 14.8,
-      "Sel.%": 67.2,
-      "Form": 5.4,
-      "Pts.": 192,
-      "RP": 5
+      "Sel.%": 67.4,
+      "Form": 6.8,
+      "Pts.": 193,
+      "RP": 6
     },
     {
       "name": "SemenyoMCIMID",
       "team": "Unknown Team",
       "position": "Unknown Position",
-      "Cost": 8.0,
-      "Sel.%": 51.9,
-      "Form": 7.0,
+      "Cost": 8.1,
+      "Sel.%": 52.8,
+      "Form": 6.8,
       "Pts.": 157,
       "RP": 4
     },
@@ -1518,38 +1580,38 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 7.6,
-      "Sel.%": 34.2,
-      "Form": 4.0,
-      "Pts.": 149,
-      "RP": 1
-    },
-    {
-      "name": "GabrielARSDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 7.1,
-      "Sel.%": 42.9,
-      "Form": 3.8,
-      "Pts.": 143,
-      "RP": 1
+      "Sel.%": 33.7,
+      "Form": 5.2,
+      "Pts.": 152,
+      "RP": 4
     },
     {
       "name": "B.FernandesMUNMID",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 9.9,
-      "Sel.%": 37.1,
-      "Form": 5.4,
-      "Pts.": 143,
-      "RP": 0
+      "Sel.%": 37.3,
+      "Form": 6.0,
+      "Pts.": 145,
+      "RP": 2
+    },
+    {
+      "name": "GabrielARSDEF",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 7.1,
+      "Sel.%": 42.7,
+      "Form": 4.6,
+      "Pts.": 144,
+      "RP": 2
     },
     {
       "name": "Jo\u00e3o PedroCHEFWD",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 7.7,
-      "Sel.%": 47.8,
-      "Form": 9.4,
+      "Sel.%": 47.0,
+      "Form": 8.8,
       "Pts.": 139,
       "RP": 7
     },
@@ -1558,8 +1620,8 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 7.1,
-      "Sel.%": 31.8,
-      "Form": 2.6,
+      "Sel.%": 32.6,
+      "Form": 2.8,
       "Pts.": 135,
       "RP": 2
     },
@@ -1568,38 +1630,48 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 6.9,
-      "Sel.%": 7.5,
-      "Form": 2.8,
+      "Sel.%": 6.7,
+      "Form": 3.5,
       "Pts.": 134,
       "RP": 0
-    },
-    {
-      "name": "RogersAVLMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 7.7,
-      "Sel.%": 31.6,
-      "Form": 4.8,
-      "Pts.": 127,
-      "RP": 2
     },
     {
       "name": "WilsonFULMID",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.9,
-      "Sel.%": 19.8,
-      "Form": 4.6,
+      "Sel.%": 20.8,
+      "Form": 3.5,
+      "Pts.": 128,
+      "RP": 8
+    },
+    {
+      "name": "J.TimberARSDEF",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 6.4,
+      "Sel.%": 28.5,
+      "Form": 3.4,
       "Pts.": 127,
-      "RP": 7
+      "RP": 3
+    },
+    {
+      "name": "RogersAVLMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 7.7,
+      "Sel.%": 31.5,
+      "Form": 4.0,
+      "Pts.": 127,
+      "RP": 2
     },
     {
       "name": "ChalobahCHEDEF",
       "team": "Unknown Team",
       "position": "Unknown Position",
-      "Cost": 5.8,
-      "Sel.%": 23.5,
-      "Form": 3.2,
+      "Cost": 5.7,
+      "Sel.%": 21.7,
+      "Form": 3.0,
       "Pts.": 126,
       "RP": 2
     },
@@ -1608,59 +1680,49 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.2,
-      "Sel.%": 37.2,
-      "Form": 4.2,
+      "Sel.%": 36.9,
+      "Form": 3.8,
       "Pts.": 126,
       "RP": 2
-    },
-    {
-      "name": "J.TimberARSDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 6.4,
-      "Sel.%": 29.6,
-      "Form": 2.7,
-      "Pts.": 125,
-      "RP": 1
     },
     {
       "name": "BowenWHUFWD",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 7.6,
-      "Sel.%": 8.5,
-      "Form": 6.2,
+      "Sel.%": 8.2,
+      "Form": 4.8,
       "Pts.": 124,
       "RP": 4
-    },
-    {
-      "name": "EnzoCHEMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 6.9,
-      "Sel.%": 22.0,
-      "Form": 4.4,
-      "Pts.": 120,
-      "RP": 2
     },
     {
       "name": "VirgilLIVDEF",
       "team": "Unknown Team",
       "position": "Unknown Position",
-      "Cost": 5.9,
-      "Sel.%": 23.8,
-      "Form": 7.8,
-      "Pts.": 120,
-      "RP": 9
+      "Cost": 6.0,
+      "Sel.%": 26.7,
+      "Form": 8.0,
+      "Pts.": 122,
+      "RP": 11
     },
     {
-      "name": "AndersonNFOMID",
+      "name": "EnzoCHEMID",
       "team": "Unknown Team",
       "position": "Unknown Position",
-      "Cost": 5.4,
-      "Sel.%": 6.0,
-      "Form": 5.2,
-      "Pts.": 118,
+      "Cost": 6.8,
+      "Sel.%": 20.1,
+      "Form": 3.5,
+      "Pts.": 120,
+      "RP": 2
+    },
+    {
+      "name": "SakaARSMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 9.8,
+      "Sel.%": 7.6,
+      "Form": 3.6,
+      "Pts.": 119,
       "RP": 5
     },
     {
@@ -1668,18 +1730,28 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.7,
-      "Sel.%": 11.4,
-      "Form": 1.8,
-      "Pts.": 117,
-      "RP": 0
+      "Sel.%": 11.0,
+      "Form": 1.5,
+      "Pts.": 118,
+      "RP": 1
+    },
+    {
+      "name": "AndersonNFOMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 5.4,
+      "Sel.%": 6.3,
+      "Form": 5.2,
+      "Pts.": 118,
+      "RP": 5
     },
     {
       "name": "Matheus N.MCIDEF",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.4,
-      "Sel.%": 3.3,
-      "Form": 4.6,
+      "Sel.%": 3.2,
+      "Form": 3.0,
       "Pts.": 117,
       "RP": 2
     },
@@ -1687,9 +1759,9 @@
       "name": "O'ReillyMCIDEF",
       "team": "Unknown Team",
       "position": "Unknown Position",
-      "Cost": 4.9,
-      "Sel.%": 6.1,
-      "Form": 7.8,
+      "Cost": 5.0,
+      "Sel.%": 8.3,
+      "Form": 8.2,
       "Pts.": 117,
       "RP": 17
     },
@@ -1698,138 +1770,148 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.1,
-      "Sel.%": 5.6,
-      "Form": 3.4,
+      "Sel.%": 5.1,
+      "Form": 4.0,
       "Pts.": 116,
       "RP": 0
     },
     {
-      "name": "GravenberchLIVMID",
+      "name": "MbeumoMUNMID",
       "team": "Unknown Team",
       "position": "Unknown Position",
-      "Cost": 5.5,
-      "Sel.%": 4.8,
-      "Form": 4.0,
-      "Pts.": 116,
-      "RP": 5
-    },
-    {
-      "name": "SakaARSMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 9.8,
-      "Sel.%": 7.6,
-      "Form": 2.7,
+      "Cost": 8.7,
+      "Sel.%": 23.4,
+      "Form": 5.5,
       "Pts.": 115,
-      "RP": 1
-    },
-    {
-      "name": "MukieleSUNDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 4.6,
-      "Sel.%": 14.2,
-      "Form": 3.4,
-      "Pts.": 115,
-      "RP": 1
-    },
-    {
-      "name": "SenesiBOUDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 4.8,
-      "Sel.%": 15.7,
-      "Form": 4.0,
-      "Pts.": 111,
-      "RP": 5
-    },
-    {
-      "name": "GarnerEVEMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 5.2,
-      "Sel.%": 3.9,
-      "Form": 2.4,
-      "Pts.": 111,
-      "RP": 0
-    },
-    {
-      "name": "RayaARSGKP",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 6.0,
-      "Sel.%": 34.7,
-      "Form": 3.0,
-      "Pts.": 110,
-      "RP": 1
+      "RP": 6
     },
     {
       "name": "CasemiroMUNMID",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.6,
-      "Sel.%": 2.4,
-      "Form": 4.0,
-      "Pts.": 110,
-      "RP": 0
+      "Sel.%": 2.5,
+      "Form": 5.8,
+      "Pts.": 115,
+      "RP": 5
     },
     {
-      "name": "FodenMCIMID",
+      "name": "MukieleSUNDEF",
       "team": "Unknown Team",
       "position": "Unknown Position",
-      "Cost": 8.1,
-      "Sel.%": 9.4,
-      "Form": 1.6,
-      "Pts.": 109,
+      "Cost": 4.6,
+      "Sel.%": 13.2,
+      "Form": 3.2,
+      "Pts.": 115,
       "RP": 1
     },
     {
-      "name": "MbeumoMUNMID",
+      "name": "GravenberchLIVMID",
       "team": "Unknown Team",
       "position": "Unknown Position",
-      "Cost": 8.6,
-      "Sel.%": 22.8,
-      "Form": 5.2,
-      "Pts.": 109,
-      "RP": 0
+      "Cost": 5.5,
+      "Sel.%": 5.0,
+      "Form": 4.2,
+      "Pts.": 114,
+      "RP": 3
+    },
+    {
+      "name": "GarnerEVEMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 5.2,
+      "Sel.%": 3.8,
+      "Form": 3.0,
+      "Pts.": 113,
+      "RP": 2
+    },
+    {
+      "name": "RayaARSGKP",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 6.0,
+      "Sel.%": 34.4,
+      "Form": 3.8,
+      "Pts.": 112,
+      "RP": 3
+    },
+    {
+      "name": "SenesiBOUDEF",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 4.9,
+      "Sel.%": 16.0,
+      "Form": 4.2,
+      "Pts.": 111,
+      "RP": 5
     },
     {
       "name": "ZubimendiARSMID",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.3,
-      "Sel.%": 5.5,
-      "Form": 4.7,
-      "Pts.": 108,
-      "RP": 1
+      "Sel.%": 5.2,
+      "Form": 5.6,
+      "Pts.": 109,
+      "RP": 2
+    },
+    {
+      "name": "HendersonCRYGKP",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 5.0,
+      "Sel.%": 7.5,
+      "Form": 6.8,
+      "Pts.": 109,
+      "RP": 16
     },
     {
       "name": "PickfordEVEGKP",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.6,
-      "Sel.%": 13.3,
-      "Form": 1.6,
-      "Pts.": 108,
-      "RP": 0
+      "Sel.%": 13.1,
+      "Form": 1.5,
+      "Pts.": 109,
+      "RP": 1
+    },
+    {
+      "name": "FodenMCIMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 8.1,
+      "Sel.%": 9.2,
+      "Form": 1.8,
+      "Pts.": 109,
+      "RP": 1
     },
     {
       "name": "StachLEEMID",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.7,
-      "Sel.%": 1.8,
-      "Form": 4.2,
+      "Sel.%": 2.0,
+      "Form": 3.2,
       "Pts.": 108,
       "RP": 11
+    },
+    {
+      "name": "Konat\u00e9LIVDEF",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 5.4,
+      "Sel.%": 3.8,
+      "Form": 6.8,
+      "Pts.": 108,
+      "RP": 9
     },
     {
       "name": "RoefsSUNGKP",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.9,
-      "Sel.%": 11.7,
-      "Form": 2.2,
+      "Sel.%": 11.5,
+      "Form": 2.5,
       "Pts.": 108,
       "RP": 1
     },
@@ -1844,43 +1926,43 @@
       "RP": 8
     },
     {
-      "name": "Konat\u00e9LIVDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 5.4,
-      "Sel.%": 3.3,
-      "Form": 5.2,
-      "Pts.": 107,
-      "RP": 8
-    },
-    {
-      "name": "HendersonCRYGKP",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 5.0,
-      "Sel.%": 7.4,
-      "Form": 5.0,
-      "Pts.": 106,
-      "RP": 13
-    },
-    {
       "name": "Mu\u00f1ozCRYDEF",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.9,
       "Sel.%": 8.4,
-      "Form": 3.4,
-      "Pts.": 106,
-      "RP": 8
+      "Form": 4.2,
+      "Pts.": 107,
+      "RP": 9
     },
     {
       "name": "Ekitik\u00e9LIVFWD",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 8.9,
-      "Sel.%": 26.4,
-      "Form": 4.0,
+      "Sel.%": 26.8,
+      "Form": 4.8,
       "Pts.": 106,
+      "RP": 2
+    },
+    {
+      "name": "MitchellCRYDEF",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 5.0,
+      "Sel.%": 2.1,
+      "Form": 5.0,
+      "Pts.": 105,
+      "RP": 11
+    },
+    {
+      "name": "KeaneEVEDEF",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 4.6,
+      "Sel.%": 3.5,
+      "Form": 2.2,
+      "Pts.": 105,
       "RP": 2
     },
     {
@@ -1889,7 +1971,7 @@
       "position": "Unknown Position",
       "Cost": 7.3,
       "Sel.%": 3.4,
-      "Form": 4.2,
+      "Form": 3.8,
       "Pts.": 105,
       "RP": 2
     },
@@ -1898,8 +1980,8 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.8,
-      "Sel.%": 10.2,
-      "Form": 2.6,
+      "Sel.%": 9.7,
+      "Form": 2.8,
       "Pts.": 104,
       "RP": 2
     },
@@ -1908,30 +1990,10 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.6,
-      "Sel.%": 8.3,
-      "Form": 2.6,
+      "Sel.%": 8.2,
+      "Form": 1.8,
       "Pts.": 103,
       "RP": 6
-    },
-    {
-      "name": "MitchellCRYDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 5.0,
-      "Sel.%": 2.1,
-      "Form": 3.8,
-      "Pts.": 103,
-      "RP": 9
-    },
-    {
-      "name": "KeaneEVEDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 4.6,
-      "Sel.%": 3.5,
-      "Form": 1.4,
-      "Pts.": 103,
-      "RP": 0
     },
     {
       "name": "R\u00fabenMCIDEF",
@@ -1939,7 +2001,7 @@
       "position": "Unknown Position",
       "Cost": 5.5,
       "Sel.%": 3.3,
-      "Form": 1.4,
+      "Form": 1.8,
       "Pts.": 102,
       "RP": 0
     },
@@ -1948,8 +2010,8 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.9,
-      "Sel.%": 11.0,
-      "Form": 2.4,
+      "Sel.%": 11.1,
+      "Form": 1.5,
       "Pts.": 101,
       "RP": 2
     },
@@ -1958,8 +2020,8 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.4,
-      "Sel.%": 3.6,
-      "Form": 3.4,
+      "Sel.%": 3.7,
+      "Form": 4.0,
       "Pts.": 101,
       "RP": 9
     },
@@ -1969,7 +2031,7 @@
       "position": "Unknown Position",
       "Cost": 5.4,
       "Sel.%": 0.7,
-      "Form": 2.8,
+      "Form": 2.5,
       "Pts.": 101,
       "RP": 3
     },
@@ -1979,27 +2041,17 @@
       "position": "Unknown Position",
       "Cost": 4.6,
       "Sel.%": 3.1,
-      "Form": 4.0,
+      "Form": 4.5,
       "Pts.": 101,
       "RP": 4
-    },
-    {
-      "name": "Van de VenTOTDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 4.5,
-      "Sel.%": 23.3,
-      "Form": 2.4,
-      "Pts.": 101,
-      "RP": 1
     },
     {
       "name": "WirtzLIVMID",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 8.4,
-      "Sel.%": 13.9,
-      "Form": 3.8,
+      "Sel.%": 13.1,
+      "Form": 4.2,
       "Pts.": 100,
       "RP": 0
     },
@@ -2008,10 +2060,40 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 6.8,
-      "Sel.%": 7.1,
-      "Form": 5.8,
+      "Sel.%": 8.2,
+      "Form": 4.0,
       "Pts.": 100,
       "RP": 3
+    },
+    {
+      "name": "ThiawNEWDEF",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 5.0,
+      "Sel.%": 4.4,
+      "Form": 3.8,
+      "Pts.": 100,
+      "RP": 3
+    },
+    {
+      "name": "E.Le F\u00e9eSUNMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 4.9,
+      "Sel.%": 1.3,
+      "Form": 4.8,
+      "Pts.": 100,
+      "RP": 10
+    },
+    {
+      "name": "Van de VenTOTDEF",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 4.5,
+      "Sel.%": 23.0,
+      "Form": 1.0,
+      "Pts.": 100,
+      "RP": 0
     },
     {
       "name": "M.FernandesWHUMID",
@@ -2019,7 +2101,7 @@
       "position": "Unknown Position",
       "Cost": 5.5,
       "Sel.%": 0.5,
-      "Form": 5.6,
+      "Form": 5.0,
       "Pts.": 100,
       "RP": 5
     },
@@ -2029,77 +2111,77 @@
       "position": "Unknown Position",
       "Cost": 4.4,
       "Sel.%": 2.7,
-      "Form": 4.4,
+      "Form": 3.8,
       "Pts.": 99,
       "RP": 6
-    },
-    {
-      "name": "E.Le F\u00e9eSUNMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 4.9,
-      "Sel.%": 1.2,
-      "Form": 4.0,
-      "Pts.": 99,
-      "RP": 9
     },
     {
       "name": "KelleherBREGKP",
       "team": "Unknown Team",
       "position": "Unknown Position",
-      "Cost": 4.6,
-      "Sel.%": 11.0,
-      "Form": 3.2,
+      "Cost": 4.7,
+      "Sel.%": 11.4,
+      "Form": 3.8,
       "Pts.": 98,
-      "RP": 2
-    },
-    {
-      "name": "ThiawNEWDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 5.0,
-      "Sel.%": 4.3,
-      "Form": 2.8,
-      "Pts.": 98,
-      "RP": 1
-    },
-    {
-      "name": "WatkinsAVLFWD",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 8.6,
-      "Sel.%": 9.1,
-      "Form": 2.8,
-      "Pts.": 97,
       "RP": 2
     },
     {
       "name": "TrossardARSMID",
       "team": "Unknown Team",
       "position": "Unknown Position",
-      "Cost": 6.8,
+      "Cost": 6.7,
       "Sel.%": 1.1,
-      "Form": 2.5,
-      "Pts.": 96,
-      "RP": 1
+      "Form": 2.8,
+      "Pts.": 97,
+      "RP": 2
+    },
+    {
+      "name": "WatkinsAVLFWD",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 8.6,
+      "Sel.%": 9.0,
+      "Form": 1.5,
+      "Pts.": 97,
+      "RP": 2
+    },
+    {
+      "name": "Dewsbury-HallEVEMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 5.0,
+      "Sel.%": 3.4,
+      "Form": 5.2,
+      "Pts.": 97,
+      "RP": 4
     },
     {
       "name": "DonnarummaMCIGKP",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.6,
-      "Sel.%": 9.0,
-      "Form": 5.0,
+      "Sel.%": 9.1,
+      "Form": 4.2,
       "Pts.": 96,
       "RP": 5
+    },
+    {
+      "name": "CunhaMUNMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 8.0,
+      "Sel.%": 8.0,
+      "Form": 4.2,
+      "Pts.": 96,
+      "RP": 3
     },
     {
       "name": "MartinezAVLGKP",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.1,
-      "Sel.%": 4.6,
-      "Form": 5.8,
+      "Sel.%": 4.8,
+      "Form": 4.8,
       "Pts.": 95,
       "RP": 3
     },
@@ -2108,8 +2190,8 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.5,
-      "Sel.%": 1.9,
-      "Form": 4.8,
+      "Sel.%": 2.0,
+      "Form": 5.2,
       "Pts.": 95,
       "RP": 6
     },
@@ -2128,8 +2210,8 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.0,
-      "Sel.%": 1.0,
-      "Form": 5.8,
+      "Sel.%": 1.2,
+      "Form": 6.0,
       "Pts.": 95,
       "RP": 5
     },
@@ -2138,10 +2220,20 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.9,
-      "Sel.%": 14.9,
-      "Form": 2.0,
+      "Sel.%": 14.4,
+      "Form": 1.8,
       "Pts.": 95,
       "RP": 2
+    },
+    {
+      "name": "Ra\u00falFULFWD",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 6.1,
+      "Sel.%": 2.2,
+      "Form": 5.8,
+      "Pts.": 94,
+      "RP": 11
     },
     {
       "name": "CollinsBREDEF",
@@ -2149,66 +2241,56 @@
       "position": "Unknown Position",
       "Cost": 5.0,
       "Sel.%": 2.9,
-      "Form": 0.6,
+      "Form": 0.5,
       "Pts.": 93,
       "RP": 1
-    },
-    {
-      "name": "Dewsbury-HallEVEMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 5.0,
-      "Sel.%": 3.3,
-      "Form": 3.6,
-      "Pts.": 93,
-      "RP": 0
     },
     {
       "name": "AndersenFULDEF",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.5,
-      "Sel.%": 4.6,
-      "Form": 3.0,
+      "Sel.%": 4.7,
+      "Form": 1.8,
       "Pts.": 93,
       "RP": 4
     },
     {
-      "name": "CunhaMUNMID",
+      "name": "DalotMUNDEF",
       "team": "Unknown Team",
       "position": "Unknown Position",
-      "Cost": 8.1,
-      "Sel.%": 8.1,
-      "Form": 4.6,
+      "Cost": 4.5,
+      "Sel.%": 4.8,
+      "Form": 5.5,
       "Pts.": 93,
-      "RP": 0
-    },
-    {
-      "name": "Ra\u00falFULFWD",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 6.1,
-      "Sel.%": 1.8,
-      "Form": 4.6,
-      "Pts.": 92,
-      "RP": 9
+      "RP": 7
     },
     {
       "name": "GakpoLIVMID",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 7.3,
-      "Sel.%": 5.3,
-      "Form": 2.8,
+      "Sel.%": 5.4,
+      "Form": 3.0,
       "Pts.": 92,
       "RP": 3
+    },
+    {
+      "name": "Gy\u00f6keresARSFWD",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 8.8,
+      "Sel.%": 12.2,
+      "Form": 7.0,
+      "Pts.": 91,
+      "RP": 13
     },
     {
       "name": "CherkiMCIMID",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 6.4,
-      "Sel.%": 8.4,
+      "Sel.%": 8.1,
       "Form": 2.8,
       "Pts.": 91,
       "RP": 1
@@ -2218,7 +2300,7 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.1,
-      "Sel.%": 3.5,
+      "Sel.%": 3.4,
       "Form": 0.2,
       "Pts.": 91,
       "RP": 1
@@ -2228,18 +2310,28 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 6.1,
-      "Sel.%": 15.2,
-      "Form": 3.2,
+      "Sel.%": 14.6,
+      "Form": 3.0,
       "Pts.": 90,
       "RP": 0
+    },
+    {
+      "name": "NdiayeEVEMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 6.2,
+      "Sel.%": 3.9,
+      "Form": 3.8,
+      "Pts.": 90,
+      "RP": 2
     },
     {
       "name": "O.DangoBREMID",
       "team": "Unknown Team",
       "position": "Unknown Position",
-      "Cost": 5.8,
-      "Sel.%": 1.3,
-      "Form": 4.8,
+      "Cost": 5.9,
+      "Sel.%": 1.9,
+      "Form": 5.8,
       "Pts.": 89,
       "RP": 2
     },
@@ -2249,7 +2341,7 @@
       "position": "Unknown Position",
       "Cost": 4.1,
       "Sel.%": 6.4,
-      "Form": 2.2,
+      "Form": 2.5,
       "Pts.": 89,
       "RP": 1
     },
@@ -2258,28 +2350,28 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.0,
-      "Sel.%": 3.3,
-      "Form": 1.6,
+      "Sel.%": 3.2,
+      "Form": -0.8,
       "Pts.": 89,
       "RP": 0
     },
     {
-      "name": "NdiayeEVEMID",
+      "name": "J.PalhinhaTOTMID",
       "team": "Unknown Team",
       "position": "Unknown Position",
-      "Cost": 6.2,
-      "Sel.%": 3.9,
-      "Form": 3.0,
+      "Cost": 5.5,
+      "Sel.%": 0.8,
+      "Form": 2.5,
       "Pts.": 88,
-      "RP": 0
+      "RP": 4
     },
     {
       "name": "KonsaAVLDEF",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.4,
-      "Sel.%": 8.0,
-      "Form": 4.6,
+      "Sel.%": 8.2,
+      "Form": 4.2,
       "Pts.": 87,
       "RP": 7
     },
@@ -2289,7 +2381,7 @@
       "position": "Unknown Position",
       "Cost": 6.9,
       "Sel.%": 1.2,
-      "Form": 0.2,
+      "Form": -0.2,
       "Pts.": 87,
       "RP": 1
     },
@@ -2298,9 +2390,19 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.7,
-      "Sel.%": 7.9,
-      "Form": 2.6,
+      "Sel.%": 7.8,
+      "Form": 2.8,
       "Pts.": 87,
+      "RP": 2
+    },
+    {
+      "name": "SalibaARSDEF",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 6.1,
+      "Sel.%": 13.6,
+      "Form": 3.2,
+      "Pts.": 86,
       "RP": 2
     },
     {
@@ -2308,10 +2410,20 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.6,
-      "Sel.%": 6.4,
-      "Form": 1.5,
+      "Sel.%": 6.3,
+      "Form": 1.8,
       "Pts.": 86,
       "RP": 0
+    },
+    {
+      "name": "EzeARSMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 7.2,
+      "Sel.%": 7.9,
+      "Form": 3.6,
+      "Pts.": 86,
+      "RP": 14
     },
     {
       "name": "AnthonyBURMID",
@@ -2319,7 +2431,7 @@
       "position": "Unknown Position",
       "Cost": 5.0,
       "Sel.%": 1.8,
-      "Form": 3.0,
+      "Form": 3.2,
       "Pts.": 86,
       "RP": 2
     },
@@ -2329,7 +2441,7 @@
       "position": "Unknown Position",
       "Cost": 4.5,
       "Sel.%": 5.5,
-      "Form": 3.2,
+      "Form": 3.8,
       "Pts.": 86,
       "RP": 7
     },
@@ -2339,7 +2451,7 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 0.7,
-      "Form": 2.0,
+      "Form": 1.5,
       "Pts.": 86,
       "RP": 0
     },
@@ -2349,37 +2461,17 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 0.2,
-      "Form": 3.6,
+      "Form": 3.5,
       "Pts.": 86,
       "RP": 8
-    },
-    {
-      "name": "DalotMUNDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 4.5,
-      "Sel.%": 4.6,
-      "Form": 3.2,
-      "Pts.": 86,
-      "RP": 0
-    },
-    {
-      "name": "SalibaARSDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 6.1,
-      "Sel.%": 13.9,
-      "Form": 2.7,
-      "Pts.": 85,
-      "RP": 1
     },
     {
       "name": "Petrovi\u0107BOUGKP",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.5,
-      "Sel.%": 4.4,
-      "Form": 5.2,
+      "Sel.%": 4.6,
+      "Form": 6.2,
       "Pts.": 85,
       "RP": 9
     },
@@ -2389,7 +2481,7 @@
       "position": "Unknown Position",
       "Cost": 14.0,
       "Sel.%": 14.2,
-      "Form": 4.2,
+      "Form": 4.0,
       "Pts.": 85,
       "RP": 3
     },
@@ -2398,18 +2490,8 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 6.8,
-      "Sel.%": 7.8,
+      "Sel.%": 7.7,
       "Form": 1.0,
-      "Pts.": 85,
-      "RP": 1
-    },
-    {
-      "name": "J.PalhinhaTOTMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 5.5,
-      "Sel.%": 0.8,
-      "Form": 1.4,
       "Pts.": 85,
       "RP": 1
     },
@@ -2428,8 +2510,8 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 7.5,
-      "Sel.%": 6.9,
-      "Form": 0.4,
+      "Sel.%": 6.8,
+      "Form": 0.0,
       "Pts.": 84,
       "RP": 0
     },
@@ -2437,21 +2519,11 @@
       "name": "ReijndersMCIMID",
       "team": "Unknown Team",
       "position": "Unknown Position",
-      "Cost": 5.1,
-      "Sel.%": 10.1,
-      "Form": 1.0,
+      "Cost": 5.0,
+      "Sel.%": 9.9,
+      "Form": 0.5,
       "Pts.": 84,
       "RP": 0
-    },
-    {
-      "name": "VicarioTOTGKP",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 4.7,
-      "Sel.%": 5.9,
-      "Form": 1.6,
-      "Pts.": 84,
-      "RP": 1
     },
     {
       "name": "AyariBHAMID",
@@ -2459,7 +2531,7 @@
       "position": "Unknown Position",
       "Cost": 4.8,
       "Sel.%": 0.5,
-      "Form": 3.4,
+      "Form": 1.5,
       "Pts.": 83,
       "RP": 0
     },
@@ -2469,7 +2541,7 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 2.0,
-      "Form": 2.0,
+      "Form": 2.2,
       "Pts.": 83,
       "RP": 6
     },
@@ -2479,17 +2551,27 @@
       "position": "Unknown Position",
       "Cost": 4.7,
       "Sel.%": 2.9,
-      "Form": 3.6,
+      "Form": 2.5,
       "Pts.": 83,
       "RP": 4
+    },
+    {
+      "name": "VicarioTOTGKP",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 4.7,
+      "Sel.%": 5.8,
+      "Form": 1.5,
+      "Pts.": 83,
+      "RP": 0
     },
     {
       "name": "WelbeckBHAFWD",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 6.1,
-      "Sel.%": 3.6,
-      "Form": 3.2,
+      "Sel.%": 3.7,
+      "Form": 3.5,
       "Pts.": 82,
       "RP": 9
     },
@@ -2498,10 +2580,20 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 10.6,
-      "Sel.%": 17.2,
-      "Form": 7.4,
+      "Sel.%": 16.7,
+      "Form": 9.2,
       "Pts.": 82,
       "RP": 3
+    },
+    {
+      "name": "A.BeckerLIVGKP",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 5.4,
+      "Sel.%": 6.2,
+      "Form": 4.2,
+      "Pts.": 82,
+      "RP": 7
     },
     {
       "name": "RodonLEEDEF",
@@ -2509,19 +2601,9 @@
       "position": "Unknown Position",
       "Cost": 3.9,
       "Sel.%": 3.9,
-      "Form": 3.4,
+      "Form": 3.2,
       "Pts.": 81,
       "RP": 4
-    },
-    {
-      "name": "A.BeckerLIVGKP",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 5.4,
-      "Sel.%": 5.9,
-      "Form": 3.4,
-      "Pts.": 81,
-      "RP": 6
     },
     {
       "name": "PopeNEWGKP",
@@ -2529,7 +2611,7 @@
       "position": "Unknown Position",
       "Cost": 5.1,
       "Sel.%": 4.6,
-      "Form": 2.0,
+      "Form": 1.8,
       "Pts.": 81,
       "RP": 2
     },
@@ -2539,7 +2621,7 @@
       "position": "Unknown Position",
       "Cost": 5.1,
       "Sel.%": 3.2,
-      "Form": 4.4,
+      "Form": 3.5,
       "Pts.": 80,
       "RP": 4
     },
@@ -2548,20 +2630,10 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.7,
-      "Sel.%": 3.2,
-      "Form": 6.4,
+      "Sel.%": 3.1,
+      "Form": 6.0,
       "Pts.": 80,
       "RP": 3
-    },
-    {
-      "name": "Gy\u00f6keresARSFWD",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 8.8,
-      "Sel.%": 11.7,
-      "Form": 4.0,
-      "Pts.": 79,
-      "RP": 1
     },
     {
       "name": "EvanilsonBOUFWD",
@@ -2569,7 +2641,7 @@
       "position": "Unknown Position",
       "Cost": 6.9,
       "Sel.%": 2.6,
-      "Form": 3.0,
+      "Form": 1.8,
       "Pts.": 79,
       "RP": 2
     },
@@ -2584,12 +2656,32 @@
       "RP": 0
     },
     {
+      "name": "IwobiFULMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 6.3,
+      "Sel.%": 0.8,
+      "Form": 5.2,
+      "Pts.": 79,
+      "RP": 13
+    },
+    {
+      "name": "\u0160e\u0161koMUNFWD",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 7.2,
+      "Sel.%": 4.0,
+      "Form": 5.8,
+      "Pts.": 79,
+      "RP": 8
+    },
+    {
       "name": "Pedro PorroTOTDEF",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.1,
-      "Sel.%": 9.4,
-      "Form": 0.2,
+      "Sel.%": 9.3,
+      "Form": 0.0,
       "Pts.": 79,
       "RP": 0
     },
@@ -2598,8 +2690,8 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.0,
-      "Sel.%": 32.6,
-      "Form": 2.0,
+      "Sel.%": 32.5,
+      "Form": 1.2,
       "Pts.": 78,
       "RP": 2
     },
@@ -2609,7 +2701,7 @@
       "position": "Unknown Position",
       "Cost": 5.0,
       "Sel.%": 0.1,
-      "Form": 2.6,
+      "Form": 2.8,
       "Pts.": 78,
       "RP": 1
     },
@@ -2619,7 +2711,7 @@
       "position": "Unknown Position",
       "Cost": 5.0,
       "Sel.%": 0.6,
-      "Form": 2.2,
+      "Form": 3.0,
       "Pts.": 78,
       "RP": 2
     },
@@ -2629,7 +2721,7 @@
       "position": "Unknown Position",
       "Cost": 4.8,
       "Sel.%": 1.7,
-      "Form": 2.2,
+      "Form": 2.5,
       "Pts.": 77,
       "RP": 0
     },
@@ -2648,20 +2740,10 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.3,
-      "Sel.%": 0.6,
-      "Form": 3.2,
+      "Sel.%": 0.5,
+      "Form": 1.2,
       "Pts.": 76,
       "RP": 1
-    },
-    {
-      "name": "IwobiFULMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 6.3,
-      "Sel.%": 0.7,
-      "Form": 4.0,
-      "Pts.": 76,
-      "RP": 10
     },
     {
       "name": "StruijkLEEDEF",
@@ -2669,7 +2751,7 @@
       "position": "Unknown Position",
       "Cost": 4.3,
       "Sel.%": 0.4,
-      "Form": 2.4,
+      "Form": 2.0,
       "Pts.": 76,
       "RP": 2
     },
@@ -2679,9 +2761,19 @@
       "position": "Unknown Position",
       "Cost": 6.1,
       "Sel.%": 1.2,
-      "Form": 1.6,
+      "Form": 1.5,
       "Pts.": 76,
       "RP": 0
+    },
+    {
+      "name": "RicharlisonTOTFWD",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 6.3,
+      "Sel.%": 5.4,
+      "Form": 0.2,
+      "Pts.": 76,
+      "RP": 1
     },
     {
       "name": "HumeSUNDEF",
@@ -2689,7 +2781,7 @@
       "position": "Unknown Position",
       "Cost": 4.5,
       "Sel.%": 0.3,
-      "Form": 1.8,
+      "Form": 2.2,
       "Pts.": 75,
       "RP": 1
     },
@@ -2704,22 +2796,12 @@
       "RP": 0
     },
     {
-      "name": "RicharlisonTOTFWD",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 6.3,
-      "Sel.%": 5.4,
-      "Form": 0.0,
-      "Pts.": 75,
-      "RP": 0
-    },
-    {
       "name": "YarmoliukBREMID",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.0,
       "Sel.%": 0.1,
-      "Form": 1.4,
+      "Form": 1.0,
       "Pts.": 74,
       "RP": 0
     },
@@ -2729,7 +2811,7 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 1.5,
-      "Form": 1.4,
+      "Form": 1.0,
       "Pts.": 74,
       "RP": 2
     },
@@ -2737,21 +2819,11 @@
       "name": "DorguMUNDEF",
       "team": "Unknown Team",
       "position": "Unknown Position",
-      "Cost": 4.3,
-      "Sel.%": 4.2,
-      "Form": 1.6,
+      "Cost": 4.2,
+      "Sel.%": 3.9,
+      "Form": 0.0,
       "Pts.": 74,
       "RP": 0
-    },
-    {
-      "name": "EzeARSMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 7.2,
-      "Sel.%": 7.6,
-      "Form": 0.8,
-      "Pts.": 73,
-      "RP": 1
     },
     {
       "name": "KayodeBREDEF",
@@ -2759,7 +2831,7 @@
       "position": "Unknown Position",
       "Cost": 4.5,
       "Sel.%": 0.7,
-      "Form": 1.8,
+      "Form": 2.0,
       "Pts.": 73,
       "RP": 0
     },
@@ -2769,7 +2841,7 @@
       "position": "Unknown Position",
       "Cost": 4.4,
       "Sel.%": 0.3,
-      "Form": 3.0,
+      "Form": 3.5,
       "Pts.": 73,
       "RP": 8
     },
@@ -2778,8 +2850,8 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 6.4,
-      "Sel.%": 4.0,
-      "Form": 4.2,
+      "Sel.%": 3.8,
+      "Form": 4.8,
       "Pts.": 73,
       "RP": 2
     },
@@ -2789,7 +2861,7 @@
       "position": "Unknown Position",
       "Cost": 5.4,
       "Sel.%": 0.2,
-      "Form": 2.6,
+      "Form": 3.0,
       "Pts.": 73,
       "RP": 2
     },
@@ -2798,8 +2870,8 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.5,
-      "Sel.%": 1.6,
-      "Form": 1.4,
+      "Sel.%": 1.5,
+      "Form": 1.0,
       "Pts.": 72,
       "RP": 0
     },
@@ -2809,7 +2881,7 @@
       "position": "Unknown Position",
       "Cost": 6.4,
       "Sel.%": 2.3,
-      "Form": 0.2,
+      "Form": 0.0,
       "Pts.": 72,
       "RP": 0
     },
@@ -2819,7 +2891,7 @@
       "position": "Unknown Position",
       "Cost": 5.0,
       "Sel.%": 3.3,
-      "Form": 1.0,
+      "Form": 1.2,
       "Pts.": 72,
       "RP": 2
     },
@@ -2838,20 +2910,20 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.5,
-      "Sel.%": 0.7,
-      "Form": 3.8,
+      "Sel.%": 0.8,
+      "Form": 4.5,
       "Pts.": 71,
       "RP": 3
     },
     {
-      "name": "\u0160e\u0161koMUNFWD",
+      "name": "TeteFULDEF",
       "team": "Unknown Team",
       "position": "Unknown Position",
-      "Cost": 7.2,
-      "Sel.%": 3.5,
-      "Form": 3.2,
+      "Cost": 4.5,
+      "Sel.%": 0.3,
+      "Form": 1.5,
       "Pts.": 71,
-      "RP": 0
+      "RP": 4
     },
     {
       "name": "CullenBURMID",
@@ -2869,7 +2941,7 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 0.3,
-      "Form": 3.4,
+      "Form": 3.8,
       "Pts.": 70,
       "RP": 1
     },
@@ -2878,8 +2950,8 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.0,
-      "Sel.%": 1.6,
-      "Form": 5.2,
+      "Sel.%": 1.7,
+      "Form": 6.2,
       "Pts.": 70,
       "RP": 9
     },
@@ -2889,7 +2961,7 @@
       "position": "Unknown Position",
       "Cost": 4.7,
       "Sel.%": 7.3,
-      "Form": 2.6,
+      "Form": 3.0,
       "Pts.": 69,
       "RP": 2
     },
@@ -2899,7 +2971,7 @@
       "position": "Unknown Position",
       "Cost": 4.5,
       "Sel.%": 1.0,
-      "Form": 3.8,
+      "Form": 4.0,
       "Pts.": 69,
       "RP": 6
     },
@@ -2909,19 +2981,9 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 0.2,
-      "Form": 3.0,
+      "Form": 3.2,
       "Pts.": 69,
       "RP": 10
-    },
-    {
-      "name": "TeteFULDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 4.5,
-      "Sel.%": 0.3,
-      "Form": 0.8,
-      "Pts.": 69,
-      "RP": 2
     },
     {
       "name": "L.Paquet\u00e1WHUMID",
@@ -2934,12 +2996,42 @@
       "RP": 0
     },
     {
+      "name": "ShawMUNDEF",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 4.5,
+      "Sel.%": 0.8,
+      "Form": 3.8,
+      "Pts.": 68,
+      "RP": 6
+    },
+    {
+      "name": "AmadMUNMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 6.2,
+      "Sel.%": 1.7,
+      "Form": 1.8,
+      "Pts.": 68,
+      "RP": 1
+    },
+    {
+      "name": "LammensMUNGKP",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 5.0,
+      "Sel.%": 2.3,
+      "Form": 4.8,
+      "Pts.": 68,
+      "RP": 9
+    },
+    {
       "name": "GordonNEWMID",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 7.2,
-      "Sel.%": 2.3,
-      "Form": 3.0,
+      "Sel.%": 2.6,
+      "Form": 3.2,
       "Pts.": 68,
       "RP": 2
     },
@@ -2949,7 +3041,7 @@
       "position": "Unknown Position",
       "Cost": 5.7,
       "Sel.%": 0.7,
-      "Form": 2.4,
+      "Form": 2.2,
       "Pts.": 68,
       "RP": 3
     },
@@ -2959,7 +3051,7 @@
       "position": "Unknown Position",
       "Cost": 5.3,
       "Sel.%": 0.3,
-      "Form": 2.3,
+      "Form": 2.2,
       "Pts.": 68,
       "RP": 1
     },
@@ -2969,9 +3061,19 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 0.6,
-      "Form": 1.0,
+      "Form": 0.8,
       "Pts.": 67,
       "RP": 0
+    },
+    {
+      "name": "BarryEVEFWD",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 5.7,
+      "Sel.%": 1.1,
+      "Form": 2.0,
+      "Pts.": 67,
+      "RP": 2
     },
     {
       "name": "BergeFULMID",
@@ -2979,7 +3081,7 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 0.1,
-      "Form": 2.2,
+      "Form": 2.5,
       "Pts.": 67,
       "RP": 4
     },
@@ -2989,7 +3091,7 @@
       "position": "Unknown Position",
       "Cost": 5.5,
       "Sel.%": 0.1,
-      "Form": 3.0,
+      "Form": 3.5,
       "Pts.": 67,
       "RP": 0
     },
@@ -2999,19 +3101,9 @@
       "position": "Unknown Position",
       "Cost": 6.2,
       "Sel.%": 0.6,
-      "Form": 3.8,
+      "Form": 3.2,
       "Pts.": 67,
       "RP": 1
-    },
-    {
-      "name": "AmadMUNMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 6.2,
-      "Sel.%": 1.8,
-      "Form": 1.6,
-      "Pts.": 67,
-      "RP": 0
     },
     {
       "name": "MerinoARSMID",
@@ -3019,7 +3111,7 @@
       "position": "Unknown Position",
       "Cost": 5.4,
       "Sel.%": 0.9,
-      "Form": 1.2,
+      "Form": 0.0,
       "Pts.": 66,
       "RP": 0
     },
@@ -3029,7 +3121,7 @@
       "position": "Unknown Position",
       "Cost": 4.4,
       "Sel.%": 0.2,
-      "Form": 3.0,
+      "Form": 3.2,
       "Pts.": 66,
       "RP": 1
     },
@@ -3039,7 +3131,7 @@
       "position": "Unknown Position",
       "Cost": 5.2,
       "Sel.%": 1.9,
-      "Form": 2.4,
+      "Form": 1.0,
       "Pts.": 66,
       "RP": 2
     },
@@ -3047,9 +3139,9 @@
       "name": "HillBOUDEF",
       "team": "Unknown Team",
       "position": "Unknown Position",
-      "Cost": 4.0,
-      "Sel.%": 4.8,
-      "Form": 7.0,
+      "Cost": 4.1,
+      "Sel.%": 5.7,
+      "Form": 7.2,
       "Pts.": 65,
       "RP": 6
     },
@@ -3064,24 +3156,24 @@
       "RP": 0
     },
     {
-      "name": "BarryEVEFWD",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 5.7,
-      "Sel.%": 1.1,
-      "Form": 3.0,
-      "Pts.": 65,
-      "RP": 0
-    },
-    {
       "name": "KerkezLIVDEF",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.6,
-      "Sel.%": 2.9,
-      "Form": 2.4,
+      "Sel.%": 3.0,
+      "Form": 3.0,
       "Pts.": 65,
       "RP": 6
+    },
+    {
+      "name": "Mac AllisterLIVMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 6.2,
+      "Sel.%": 1.4,
+      "Form": 4.8,
+      "Pts.": 65,
+      "RP": 13
     },
     {
       "name": "Sangar\u00e9NFOMID",
@@ -3089,7 +3181,7 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 0.1,
-      "Form": 3.0,
+      "Form": 2.5,
       "Pts.": 65,
       "RP": 4
     },
@@ -3099,7 +3191,7 @@
       "position": "Unknown Position",
       "Cost": 4.3,
       "Sel.%": 0.2,
-      "Form": 2.7,
+      "Form": 3.0,
       "Pts.": 65,
       "RP": 4
     },
@@ -3109,7 +3201,7 @@
       "position": "Unknown Position",
       "Cost": 5.0,
       "Sel.%": 0.0,
-      "Form": 1.4,
+      "Form": 0.8,
       "Pts.": 64,
       "RP": 0
     },
@@ -3139,7 +3231,7 @@
       "position": "Unknown Position",
       "Cost": 5.8,
       "Sel.%": 0.2,
-      "Form": 1.4,
+      "Form": 1.5,
       "Pts.": 64,
       "RP": 3
     },
@@ -3149,7 +3241,7 @@
       "position": "Unknown Position",
       "Cost": 4.4,
       "Sel.%": 0.4,
-      "Form": 1.8,
+      "Form": 2.2,
       "Pts.": 64,
       "RP": 7
     },
@@ -3169,7 +3261,7 @@
       "position": "Unknown Position",
       "Cost": 4.4,
       "Sel.%": 0.1,
-      "Form": 2.5,
+      "Form": 2.8,
       "Pts.": 64,
       "RP": 2
     },
@@ -3179,7 +3271,7 @@
       "position": "Unknown Position",
       "Cost": 4.4,
       "Sel.%": 0.2,
-      "Form": 3.2,
+      "Form": 3.8,
       "Pts.": 63,
       "RP": 1
     },
@@ -3188,8 +3280,8 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.3,
-      "Sel.%": 2.4,
-      "Form": 2.4,
+      "Sel.%": 2.5,
+      "Form": 2.8,
       "Pts.": 63,
       "RP": 7
     },
@@ -3199,7 +3291,7 @@
       "position": "Unknown Position",
       "Cost": 5.3,
       "Sel.%": 1.0,
-      "Form": 2.2,
+      "Form": 1.8,
       "Pts.": 63,
       "RP": 2
     },
@@ -3209,7 +3301,7 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 0.2,
-      "Form": 2.4,
+      "Form": 2.8,
       "Pts.": 63,
       "RP": 0
     },
@@ -3219,7 +3311,7 @@
       "position": "Unknown Position",
       "Cost": 5.7,
       "Sel.%": 0.3,
-      "Form": 3.6,
+      "Form": 4.0,
       "Pts.": 63,
       "RP": 2
     },
@@ -3234,34 +3326,34 @@
       "RP": 1
     },
     {
-      "name": "Mac AllisterLIVMID",
+      "name": "\u00d8degaardARSMID",
       "team": "Unknown Team",
       "position": "Unknown Position",
-      "Cost": 6.2,
-      "Sel.%": 1.2,
-      "Form": 3.4,
+      "Cost": 7.8,
+      "Sel.%": 1.6,
+      "Form": 1.8,
       "Pts.": 62,
-      "RP": 10
-    },
-    {
-      "name": "ShawMUNDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 4.5,
-      "Sel.%": 0.8,
-      "Form": 2.0,
-      "Pts.": 62,
-      "RP": 0
+      "RP": 4
     },
     {
       "name": "BrobbeySUNFWD",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.5,
-      "Sel.%": 1.3,
-      "Form": 2.6,
+      "Sel.%": 1.2,
+      "Form": 1.5,
       "Pts.": 62,
       "RP": 1
+    },
+    {
+      "name": "HincapieARSDEF",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 5.1,
+      "Sel.%": 0.7,
+      "Form": 5.2,
+      "Pts.": 61,
+      "RP": 4
     },
     {
       "name": "KamaraAVLMID",
@@ -3289,7 +3381,7 @@
       "position": "Unknown Position",
       "Cost": 5.0,
       "Sel.%": 0.6,
-      "Form": 2.4,
+      "Form": 3.0,
       "Pts.": 61,
       "RP": 1
     },
@@ -3298,8 +3390,8 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.6,
-      "Sel.%": 4.9,
-      "Form": 1.4,
+      "Sel.%": 4.8,
+      "Form": 0.2,
       "Pts.": 61,
       "RP": 0
     },
@@ -3308,8 +3400,18 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.8,
-      "Sel.%": 1.3,
-      "Form": 3.0,
+      "Sel.%": 1.2,
+      "Form": 1.5,
+      "Pts.": 61,
+      "RP": 2
+    },
+    {
+      "name": "XaviTOTMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 6.5,
+      "Sel.%": 1.2,
+      "Form": 2.8,
       "Pts.": 61,
       "RP": 2
     },
@@ -3319,7 +3421,7 @@
       "position": "Unknown Position",
       "Cost": 4.8,
       "Sel.%": 0.7,
-      "Form": 2.8,
+      "Form": 2.2,
       "Pts.": 60,
       "RP": 2
     },
@@ -3329,19 +3431,9 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 0.1,
-      "Form": 0.4,
+      "Form": 0.5,
       "Pts.": 60,
       "RP": 2
-    },
-    {
-      "name": "XaviTOTMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 6.5,
-      "Sel.%": 1.1,
-      "Form": 2.8,
-      "Pts.": 60,
-      "RP": 1
     },
     {
       "name": "Est\u00e8veBURDEF",
@@ -3349,7 +3441,7 @@
       "position": "Unknown Position",
       "Cost": 3.9,
       "Sel.%": 7.9,
-      "Form": 2.4,
+      "Form": 2.2,
       "Pts.": 59,
       "RP": 2
     },
@@ -3359,7 +3451,7 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 0.1,
-      "Form": 3.2,
+      "Form": 3.5,
       "Pts.": 59,
       "RP": 2
     },
@@ -3369,19 +3461,19 @@
       "position": "Unknown Position",
       "Cost": 4.3,
       "Sel.%": 1.8,
-      "Form": 2.0,
+      "Form": 2.2,
       "Pts.": 59,
       "RP": 1
     },
     {
-      "name": "LammensMUNGKP",
+      "name": "MaguireMUNDEF",
       "team": "Unknown Team",
       "position": "Unknown Position",
-      "Cost": 5.0,
-      "Sel.%": 2.1,
-      "Form": 2.4,
+      "Cost": 4.3,
+      "Sel.%": 1.7,
+      "Form": 4.2,
       "Pts.": 59,
-      "RP": 0
+      "RP": 7
     },
     {
       "name": "HutchinsonNFOMID",
@@ -3389,7 +3481,7 @@
       "position": "Unknown Position",
       "Cost": 5.4,
       "Sel.%": 0.1,
-      "Form": 2.2,
+      "Form": 2.5,
       "Pts.": 59,
       "RP": 3
     },
@@ -3399,29 +3491,9 @@
       "position": "Unknown Position",
       "Cost": 4.4,
       "Sel.%": 0.1,
-      "Form": 4.2,
+      "Form": 4.8,
       "Pts.": 59,
       "RP": 6
-    },
-    {
-      "name": "\u00d8degaardARSMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 7.8,
-      "Sel.%": 1.6,
-      "Form": 1.5,
-      "Pts.": 58,
-      "RP": 0
-    },
-    {
-      "name": "HincapieARSDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 5.1,
-      "Sel.%": 0.7,
-      "Form": 3.8,
-      "Pts.": 58,
-      "RP": 1
     },
     {
       "name": "AdliBOUMID",
@@ -3429,7 +3501,7 @@
       "position": "Unknown Position",
       "Cost": 5.4,
       "Sel.%": 0.7,
-      "Form": 6.0,
+      "Form": 5.0,
       "Pts.": 58,
       "RP": 3
     },
@@ -3438,8 +3510,8 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.5,
-      "Sel.%": 2.6,
-      "Form": 0.4,
+      "Sel.%": 2.5,
+      "Form": 0.0,
       "Pts.": 58,
       "RP": 0
     },
@@ -3449,9 +3521,19 @@
       "position": "Unknown Position",
       "Cost": 5.2,
       "Sel.%": 0.1,
-      "Form": 1.5,
+      "Form": 1.6,
       "Pts.": 58,
       "RP": 3
+    },
+    {
+      "name": "GanaEVEMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 5.4,
+      "Sel.%": 0.1,
+      "Form": 1.8,
+      "Pts.": 57,
+      "RP": 2
     },
     {
       "name": "GudmundssonLEEDEF",
@@ -3459,9 +3541,19 @@
       "position": "Unknown Position",
       "Cost": 3.8,
       "Sel.%": 3.8,
-      "Form": 0.4,
+      "Form": 0.5,
       "Pts.": 57,
       "RP": 1
+    },
+    {
+      "name": "P.M.SarrTOTMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 4.5,
+      "Sel.%": 1.1,
+      "Form": 3.8,
+      "Pts.": 57,
+      "RP": 4
     },
     {
       "name": "FlemmingBURFWD",
@@ -3469,7 +3561,7 @@
       "position": "Unknown Position",
       "Cost": 5.3,
       "Sel.%": 0.3,
-      "Form": 2.8,
+      "Form": 3.5,
       "Pts.": 56,
       "RP": 9
     },
@@ -3482,16 +3574,6 @@
       "Form": 0.0,
       "Pts.": 56,
       "RP": 0
-    },
-    {
-      "name": "SpenceTOTDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 4.2,
-      "Sel.%": 1.0,
-      "Form": 0.4,
-      "Pts.": 56,
-      "RP": 1
     },
     {
       "name": "MalenAVLMID",
@@ -3509,7 +3591,7 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 0.3,
-      "Form": 1.0,
+      "Form": 1.2,
       "Pts.": 55,
       "RP": 5
     },
@@ -3518,8 +3600,8 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 6.4,
-      "Sel.%": 2.3,
-      "Form": 3.2,
+      "Sel.%": 2.2,
+      "Form": 0.8,
       "Pts.": 55,
       "RP": 0
     },
@@ -3528,20 +3610,10 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 6.2,
-      "Sel.%": 2.5,
-      "Form": 3.6,
+      "Sel.%": 2.4,
+      "Form": 4.2,
       "Pts.": 55,
       "RP": 2
-    },
-    {
-      "name": "GanaEVEMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 5.4,
-      "Sel.%": 0.1,
-      "Form": 2.2,
-      "Pts.": 55,
-      "RP": 0
     },
     {
       "name": "N.GonzalezMCIMID",
@@ -3564,12 +3636,22 @@
       "RP": 1
     },
     {
+      "name": "SpenceTOTDEF",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 4.2,
+      "Sel.%": 1.0,
+      "Form": 0.0,
+      "Pts.": 55,
+      "RP": 0
+    },
+    {
       "name": "Krej\u010d\u00edWOLDEF",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.5,
       "Sel.%": 0.1,
-      "Form": 1.7,
+      "Form": 1.8,
       "Pts.": 55,
       "RP": -1
     },
@@ -3579,7 +3661,7 @@
       "position": "Unknown Position",
       "Cost": 5.9,
       "Sel.%": 0.6,
-      "Form": 0.6,
+      "Form": 0.8,
       "Pts.": 54,
       "RP": 1
     },
@@ -3589,19 +3671,9 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 0.1,
-      "Form": 2.4,
+      "Form": 2.2,
       "Pts.": 54,
       "RP": 2
-    },
-    {
-      "name": "P.M.SarrTOTMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 4.5,
-      "Sel.%": 1.0,
-      "Form": 2.4,
-      "Pts.": 54,
-      "RP": 1
     },
     {
       "name": "Wan-BissakaWHUDEF",
@@ -3609,7 +3681,7 @@
       "position": "Unknown Position",
       "Cost": 4.1,
       "Sel.%": 4.6,
-      "Form": 5.0,
+      "Form": 5.8,
       "Pts.": 54,
       "RP": 6
     },
@@ -3619,7 +3691,7 @@
       "position": "Unknown Position",
       "Cost": 4.5,
       "Sel.%": 0.2,
-      "Form": 4.0,
+      "Form": 3.2,
       "Pts.": 53,
       "RP": 6
     },
@@ -3629,7 +3701,7 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 0.4,
-      "Form": 2.4,
+      "Form": 2.2,
       "Pts.": 53,
       "RP": 0
     },
@@ -3638,8 +3710,8 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.9,
-      "Sel.%": 0.7,
-      "Form": 0.6,
+      "Sel.%": 0.6,
+      "Form": 0.0,
       "Pts.": 52,
       "RP": 0
     },
@@ -3649,19 +3721,29 @@
       "position": "Unknown Position",
       "Cost": 4.4,
       "Sel.%": 1.1,
-      "Form": 1.4,
+      "Form": 0.8,
       "Pts.": 52,
       "RP": 1
     },
     {
-      "name": "MaguireMUNDEF",
+      "name": "IroegbunamEVEMID",
       "team": "Unknown Team",
       "position": "Unknown Position",
-      "Cost": 4.3,
-      "Sel.%": 1.7,
-      "Form": 2.6,
+      "Cost": 4.8,
+      "Sel.%": 0.0,
+      "Form": 0.8,
       "Pts.": 52,
-      "RP": 0
+      "RP": 2
+    },
+    {
+      "name": "MaduekeARSMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 6.8,
+      "Sel.%": 1.3,
+      "Form": 5.8,
+      "Pts.": 51,
+      "RP": 1
     },
     {
       "name": "LermaCRYMID",
@@ -3669,7 +3751,7 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 0.1,
-      "Form": 3.2,
+      "Form": 3.8,
       "Pts.": 51,
       "RP": 0
     },
@@ -3688,8 +3770,8 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 3.8,
-      "Sel.%": 3.2,
-      "Form": 2.4,
+      "Sel.%": 3.1,
+      "Form": 3.2,
       "Pts.": 51,
       "RP": 0
     },
@@ -3699,28 +3781,8 @@
       "position": "Unknown Position",
       "Cost": 4.3,
       "Sel.%": 2.1,
-      "Form": 0.8,
+      "Form": 0.5,
       "Pts.": 51,
-      "RP": 0
-    },
-    {
-      "name": "MaduekeARSMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 6.8,
-      "Sel.%": 1.3,
-      "Form": 4.8,
-      "Pts.": 50,
-      "RP": 0
-    },
-    {
-      "name": "IroegbunamEVEMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 4.8,
-      "Sel.%": 0.0,
-      "Form": 0.2,
-      "Pts.": 50,
       "RP": 0
     },
     {
@@ -3739,7 +3801,7 @@
       "position": "Unknown Position",
       "Cost": 4.3,
       "Sel.%": 0.3,
-      "Form": 1.6,
+      "Form": 0.5,
       "Pts.": 49,
       "RP": 0
     },
@@ -3749,7 +3811,7 @@
       "position": "Unknown Position",
       "Cost": 5.0,
       "Sel.%": 0.1,
-      "Form": 0.8,
+      "Form": 1.0,
       "Pts.": 49,
       "RP": 1
     },
@@ -3764,12 +3826,22 @@
       "RP": 0
     },
     {
+      "name": "TelTOTMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 6.2,
+      "Sel.%": 0.1,
+      "Form": 1.0,
+      "Pts.": 49,
+      "RP": 1
+    },
+    {
       "name": "ToluWOLFWD",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.4,
       "Sel.%": 0.2,
-      "Form": 2.5,
+      "Form": 2.8,
       "Pts.": 49,
       "RP": 0
     },
@@ -3779,7 +3851,7 @@
       "position": "Unknown Position",
       "Cost": 6.1,
       "Sel.%": 2.0,
-      "Form": 2.4,
+      "Form": 2.5,
       "Pts.": 48,
       "RP": 3
     },
@@ -3789,7 +3861,7 @@
       "position": "Unknown Position",
       "Cost": 4.4,
       "Sel.%": 0.4,
-      "Form": 1.4,
+      "Form": 1.5,
       "Pts.": 48,
       "RP": -1
     },
@@ -3799,26 +3871,16 @@
       "position": "Unknown Position",
       "Cost": 4.7,
       "Sel.%": 0.1,
-      "Form": 3.4,
+      "Form": 3.8,
       "Pts.": 48,
       "RP": 1
-    },
-    {
-      "name": "TelTOTMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 6.2,
-      "Sel.%": 0.1,
-      "Form": 0.8,
-      "Pts.": 48,
-      "RP": 0
     },
     {
       "name": "Man\u00e9WOLFWD",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.6,
-      "Sel.%": 2.8,
+      "Sel.%": 2.7,
       "Form": 2.0,
       "Pts.": 48,
       "RP": 2
@@ -3829,7 +3891,17 @@
       "position": "Unknown Position",
       "Cost": 4.3,
       "Sel.%": 0.2,
-      "Form": 2.4,
+      "Form": 2.5,
+      "Pts.": 47,
+      "RP": 1
+    },
+    {
+      "name": "BetoEVEFWD",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 5.0,
+      "Sel.%": 2.4,
+      "Form": 2.2,
       "Pts.": 47,
       "RP": 1
     },
@@ -3839,7 +3911,7 @@
       "position": "Unknown Position",
       "Cost": 5.3,
       "Sel.%": 0.1,
-      "Form": 2.4,
+      "Form": 1.5,
       "Pts.": 47,
       "RP": 0
     },
@@ -3848,7 +3920,7 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.0,
-      "Sel.%": 0.7,
+      "Sel.%": 0.6,
       "Form": 0.0,
       "Pts.": 46,
       "RP": 0
@@ -3859,7 +3931,7 @@
       "position": "Unknown Position",
       "Cost": 4.8,
       "Sel.%": 0.0,
-      "Form": 0.8,
+      "Form": 1.0,
       "Pts.": 46,
       "RP": 1
     },
@@ -3869,7 +3941,7 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 0.8,
-      "Form": 1.8,
+      "Form": 1.0,
       "Pts.": 46,
       "RP": 0
     },
@@ -3889,19 +3961,9 @@
       "position": "Unknown Position",
       "Cost": 6.5,
       "Sel.%": 2.4,
-      "Form": 1.4,
+      "Form": 1.2,
       "Pts.": 46,
       "RP": 1
-    },
-    {
-      "name": "BetoEVEFWD",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 5.0,
-      "Sel.%": 2.4,
-      "Form": 1.8,
-      "Pts.": 46,
-      "RP": 0
     },
     {
       "name": "BijolLEEDEF",
@@ -3909,7 +3971,7 @@
       "position": "Unknown Position",
       "Cost": 3.9,
       "Sel.%": 0.4,
-      "Form": 0.6,
+      "Form": 0.8,
       "Pts.": 46,
       "RP": 0
     },
@@ -3919,7 +3981,7 @@
       "position": "Unknown Position",
       "Cost": 5.4,
       "Sel.%": 0.1,
-      "Form": 1.4,
+      "Form": 1.5,
       "Pts.": 46,
       "RP": 3
     },
@@ -3939,7 +4001,7 @@
       "position": "Unknown Position",
       "Cost": 5.5,
       "Sel.%": 0.7,
-      "Form": 0.8,
+      "Form": 1.0,
       "Pts.": 46,
       "RP": 1
     },
@@ -3949,7 +4011,7 @@
       "position": "Unknown Position",
       "Cost": 5.3,
       "Sel.%": 0.1,
-      "Form": 2.2,
+      "Form": 0.8,
       "Pts.": 46,
       "RP": 0
     },
@@ -3959,7 +4021,7 @@
       "position": "Unknown Position",
       "Cost": 5.0,
       "Sel.%": 0.2,
-      "Form": 0.4,
+      "Form": 0.5,
       "Pts.": 45,
       "RP": 1
     },
@@ -3969,7 +4031,7 @@
       "position": "Unknown Position",
       "Cost": 3.9,
       "Sel.%": 1.0,
-      "Form": 3.6,
+      "Form": 2.2,
       "Pts.": 45,
       "RP": 2
     },
@@ -3979,7 +4041,7 @@
       "position": "Unknown Position",
       "Cost": 4.2,
       "Sel.%": 1.2,
-      "Form": 3.2,
+      "Form": 3.6,
       "Pts.": 45,
       "RP": 2
     },
@@ -3989,7 +4051,7 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 0.1,
-      "Form": 0.3,
+      "Form": 0.2,
       "Pts.": 45,
       "RP": 0
     },
@@ -4019,7 +4081,7 @@
       "position": "Unknown Position",
       "Cost": 5.6,
       "Sel.%": 0.1,
-      "Form": 0.8,
+      "Form": 0.6,
       "Pts.": 44,
       "RP": 0
     },
@@ -4029,7 +4091,7 @@
       "position": "Unknown Position",
       "Cost": 4.7,
       "Sel.%": 0.1,
-      "Form": 2.6,
+      "Form": 2.8,
       "Pts.": 43,
       "RP": 2
     },
@@ -4039,7 +4101,7 @@
       "position": "Unknown Position",
       "Cost": 5.1,
       "Sel.%": 0.0,
-      "Form": 1.4,
+      "Form": 1.8,
       "Pts.": 43,
       "RP": 6
     },
@@ -4049,7 +4111,7 @@
       "position": "Unknown Position",
       "Cost": 5.8,
       "Sel.%": 0.1,
-      "Form": 2.0,
+      "Form": 2.2,
       "Pts.": 43,
       "RP": 1
     },
@@ -4059,7 +4121,7 @@
       "position": "Unknown Position",
       "Cost": 4.8,
       "Sel.%": 0.2,
-      "Form": 0.2,
+      "Form": 0.0,
       "Pts.": 43,
       "RP": 0
     },
@@ -4068,7 +4130,7 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.5,
-      "Sel.%": 0.3,
+      "Sel.%": 0.2,
       "Form": 0.0,
       "Pts.": 43,
       "RP": 0
@@ -4078,10 +4140,20 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.9,
-      "Sel.%": 1.9,
+      "Sel.%": 1.8,
       "Form": 0.0,
       "Pts.": 43,
       "RP": 0
+    },
+    {
+      "name": "YoroMUNDEF",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 4.1,
+      "Sel.%": 1.2,
+      "Form": 2.0,
+      "Pts.": 43,
+      "RP": 6
     },
     {
       "name": "GrayTOTMID",
@@ -4089,7 +4161,7 @@
       "position": "Unknown Position",
       "Cost": 4.8,
       "Sel.%": 0.1,
-      "Form": 3.2,
+      "Form": 3.8,
       "Pts.": 43,
       "RP": 1
     },
@@ -4099,7 +4171,7 @@
       "position": "Unknown Position",
       "Cost": 6.4,
       "Sel.%": 0.5,
-      "Form": 0.4,
+      "Form": 0.5,
       "Pts.": 42,
       "RP": 0
     },
@@ -4114,12 +4186,22 @@
       "RP": 0
     },
     {
+      "name": "MartinelliARSMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 6.8,
+      "Sel.%": 1.0,
+      "Form": 2.4,
+      "Pts.": 41,
+      "RP": 1
+    },
+    {
       "name": "MingsAVLDEF",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.3,
       "Sel.%": 0.7,
-      "Form": 3.4,
+      "Form": 4.0,
       "Pts.": 41,
       "RP": 2
     },
@@ -4129,7 +4211,7 @@
       "position": "Unknown Position",
       "Cost": 6.3,
       "Sel.%": 0.5,
-      "Form": 3.8,
+      "Form": 4.0,
       "Pts.": 41,
       "RP": 6
     },
@@ -4141,16 +4223,6 @@
       "Sel.%": 1.3,
       "Form": 1.0,
       "Pts.": 41,
-      "RP": 0
-    },
-    {
-      "name": "MartinelliARSMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 6.8,
-      "Sel.%": 1.0,
-      "Form": 1.8,
-      "Pts.": 40,
       "RP": 0
     },
     {
@@ -4169,7 +4241,7 @@
       "position": "Unknown Position",
       "Cost": 4.3,
       "Sel.%": 0.1,
-      "Form": 2.3,
+      "Form": 2.8,
       "Pts.": 40,
       "RP": 4
     },
@@ -4178,8 +4250,8 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.8,
-      "Sel.%": 1.0,
-      "Form": 1.8,
+      "Sel.%": 0.9,
+      "Form": 2.5,
       "Pts.": 39,
       "RP": 0
     },
@@ -4209,7 +4281,7 @@
       "position": "Unknown Position",
       "Cost": 4.4,
       "Sel.%": 0.0,
-      "Form": 0.5,
+      "Form": 0.6,
       "Pts.": 39,
       "RP": 2
     },
@@ -4219,7 +4291,7 @@
       "position": "Unknown Position",
       "Cost": 4.2,
       "Sel.%": 0.6,
-      "Form": 3.6,
+      "Form": 3.2,
       "Pts.": 38,
       "RP": 2
     },
@@ -4229,7 +4301,7 @@
       "position": "Unknown Position",
       "Cost": 5.2,
       "Sel.%": 0.2,
-      "Form": 0.8,
+      "Form": 0.5,
       "Pts.": 38,
       "RP": 0
     },
@@ -4239,7 +4311,7 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 0.1,
-      "Form": 2.4,
+      "Form": 2.0,
       "Pts.": 38,
       "RP": 0
     },
@@ -4249,7 +4321,7 @@
       "position": "Unknown Position",
       "Cost": 4.3,
       "Sel.%": 0.1,
-      "Form": 1.6,
+      "Form": 1.0,
       "Pts.": 38,
       "RP": 1
     },
@@ -4269,7 +4341,7 @@
       "position": "Unknown Position",
       "Cost": 4.7,
       "Sel.%": 0.1,
-      "Form": 2.8,
+      "Form": 3.2,
       "Pts.": 37,
       "RP": 1
     },
@@ -4279,7 +4351,7 @@
       "position": "Unknown Position",
       "Cost": 4.5,
       "Sel.%": 1.5,
-      "Form": 2.2,
+      "Form": 1.8,
       "Pts.": 37,
       "RP": 1
     },
@@ -4299,17 +4371,7 @@
       "position": "Unknown Position",
       "Cost": 4.4,
       "Sel.%": 1.8,
-      "Form": 1.0,
-      "Pts.": 37,
-      "RP": 0
-    },
-    {
-      "name": "YoroMUNDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 4.1,
-      "Sel.%": 1.2,
-      "Form": 0.4,
+      "Form": 0.2,
       "Pts.": 37,
       "RP": 0
     },
@@ -4319,7 +4381,7 @@
       "position": "Unknown Position",
       "Cost": 5.0,
       "Sel.%": 0.0,
-      "Form": 0.8,
+      "Form": 1.0,
       "Pts.": 37,
       "RP": 3
     },
@@ -4329,7 +4391,7 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 0.0,
-      "Form": 0.6,
+      "Form": 0.8,
       "Pts.": 36,
       "RP": 1
     },
@@ -4339,7 +4401,7 @@
       "position": "Unknown Position",
       "Cost": 6.2,
       "Sel.%": 0.0,
-      "Form": 2.2,
+      "Form": 2.8,
       "Pts.": 36,
       "RP": 6
     },
@@ -4349,7 +4411,7 @@
       "position": "Unknown Position",
       "Cost": 6.5,
       "Sel.%": 2.6,
-      "Form": 1.6,
+      "Form": 1.8,
       "Pts.": 36,
       "RP": 2
     },
@@ -4359,7 +4421,7 @@
       "position": "Unknown Position",
       "Cost": 4.7,
       "Sel.%": 2.3,
-      "Form": 4.4,
+      "Form": 2.8,
       "Pts.": 36,
       "RP": 1
     },
@@ -4369,7 +4431,7 @@
       "position": "Unknown Position",
       "Cost": 4.5,
       "Sel.%": 0.0,
-      "Form": 0.8,
+      "Form": 1.0,
       "Pts.": 36,
       "RP": 1
     },
@@ -4379,7 +4441,7 @@
       "position": "Unknown Position",
       "Cost": 4.2,
       "Sel.%": 0.1,
-      "Form": 0.2,
+      "Form": 0.0,
       "Pts.": 36,
       "RP": 0
     },
@@ -4389,7 +4451,7 @@
       "position": "Unknown Position",
       "Cost": 5.3,
       "Sel.%": 0.0,
-      "Form": 0.8,
+      "Form": 1.0,
       "Pts.": 35,
       "RP": 1
     },
@@ -4404,14 +4466,34 @@
       "RP": 0
     },
     {
+      "name": "MainooMUNMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 4.6,
+      "Sel.%": 1.4,
+      "Form": 3.8,
+      "Pts.": 35,
+      "RP": 3
+    },
+    {
       "name": "ZirkzeeMUNFWD",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.8,
       "Sel.%": 0.4,
-      "Form": 0.4,
+      "Form": 0.5,
       "Pts.": 35,
       "RP": 0
+    },
+    {
+      "name": "Kolo MuaniTOTFWD",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 6.9,
+      "Sel.%": 0.4,
+      "Form": 2.8,
+      "Pts.": 35,
+      "RP": 7
     },
     {
       "name": "DelapCHEFWD",
@@ -4419,7 +4501,7 @@
       "position": "Unknown Position",
       "Cost": 6.2,
       "Sel.%": 0.9,
-      "Form": 1.8,
+      "Form": 2.0,
       "Pts.": 34,
       "RP": 1
     },
@@ -4439,7 +4521,7 @@
       "position": "Unknown Position",
       "Cost": 5.7,
       "Sel.%": 1.0,
-      "Form": 2.0,
+      "Form": 2.2,
       "Pts.": 34,
       "RP": 1
     },
@@ -4449,7 +4531,7 @@
       "position": "Unknown Position",
       "Cost": 8.3,
       "Sel.%": 2.5,
-      "Form": 3.6,
+      "Form": 2.0,
       "Pts.": 34,
       "RP": 4
     },
@@ -4459,7 +4541,7 @@
       "position": "Unknown Position",
       "Cost": 4.3,
       "Sel.%": 0.1,
-      "Form": 2.6,
+      "Form": 3.0,
       "Pts.": 34,
       "RP": 0
     },
@@ -4469,7 +4551,7 @@
       "position": "Unknown Position",
       "Cost": 5.0,
       "Sel.%": 0.0,
-      "Form": 1.2,
+      "Form": 0.8,
       "Pts.": 34,
       "RP": 1
     },
@@ -4498,8 +4580,8 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.0,
-      "Sel.%": 0.5,
-      "Form": 2.2,
+      "Sel.%": 0.6,
+      "Form": 2.5,
       "Pts.": 33,
       "RP": 1
     },
@@ -4518,8 +4600,8 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 3.7,
-      "Sel.%": 1.5,
-      "Form": 0.4,
+      "Sel.%": 1.6,
+      "Form": 0.5,
       "Pts.": 33,
       "RP": 1
     },
@@ -4529,7 +4611,7 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 0.7,
-      "Form": 0.4,
+      "Form": 0.2,
       "Pts.": 33,
       "RP": 0
     },
@@ -4539,7 +4621,7 @@
       "position": "Unknown Position",
       "Cost": 3.9,
       "Sel.%": 0.1,
-      "Form": 2.0,
+      "Form": 2.2,
       "Pts.": 32,
       "RP": 2
     },
@@ -4549,7 +4631,7 @@
       "position": "Unknown Position",
       "Cost": 4.3,
       "Sel.%": 0.1,
-      "Form": 0.6,
+      "Form": 0.8,
       "Pts.": 32,
       "RP": 1
     },
@@ -4559,7 +4641,7 @@
       "position": "Unknown Position",
       "Cost": 4.5,
       "Sel.%": 0.0,
-      "Form": 1.0,
+      "Form": 1.2,
       "Pts.": 32,
       "RP": 5
     },
@@ -4569,7 +4651,7 @@
       "position": "Unknown Position",
       "Cost": 6.3,
       "Sel.%": 0.3,
-      "Form": 0.8,
+      "Form": 1.0,
       "Pts.": 32,
       "RP": 1
     },
@@ -4579,19 +4661,9 @@
       "position": "Unknown Position",
       "Cost": 5.4,
       "Sel.%": 0.4,
-      "Form": 2.8,
+      "Form": 2.0,
       "Pts.": 32,
       "RP": 1
-    },
-    {
-      "name": "MainooMUNMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 4.6,
-      "Sel.%": 1.4,
-      "Form": 3.4,
-      "Pts.": 32,
-      "RP": 0
     },
     {
       "name": "DiarraSUNMID",
@@ -4599,7 +4671,7 @@
       "position": "Unknown Position",
       "Cost": 5.3,
       "Sel.%": 0.1,
-      "Form": 3.8,
+      "Form": 4.8,
       "Pts.": 32,
       "RP": 2
     },
@@ -4609,7 +4681,7 @@
       "position": "Unknown Position",
       "Cost": 4.2,
       "Sel.%": 0.2,
-      "Form": 0.4,
+      "Form": 0.5,
       "Pts.": 32,
       "RP": 0
     },
@@ -4629,7 +4701,7 @@
       "position": "Unknown Position",
       "Cost": 4.7,
       "Sel.%": 0.2,
-      "Form": 0.4,
+      "Form": 0.5,
       "Pts.": 31,
       "RP": 0
     },
@@ -4639,7 +4711,7 @@
       "position": "Unknown Position",
       "Cost": 4.3,
       "Sel.%": 0.1,
-      "Form": 0.4,
+      "Form": 0.0,
       "Pts.": 31,
       "RP": 0
     },
@@ -4649,7 +4721,7 @@
       "position": "Unknown Position",
       "Cost": 4.2,
       "Sel.%": 0.3,
-      "Form": 4.4,
+      "Form": 5.5,
       "Pts.": 31,
       "RP": 10
     },
@@ -4659,7 +4731,7 @@
       "position": "Unknown Position",
       "Cost": 5.1,
       "Sel.%": 0.0,
-      "Form": 1.0,
+      "Form": 1.2,
       "Pts.": 31,
       "RP": 3
     },
@@ -4669,7 +4741,7 @@
       "position": "Unknown Position",
       "Cost": 5.1,
       "Sel.%": 0.5,
-      "Form": 0.2,
+      "Form": 0.0,
       "Pts.": 30,
       "RP": 0
     },
@@ -4679,7 +4751,7 @@
       "position": "Unknown Position",
       "Cost": 4.4,
       "Sel.%": 0.2,
-      "Form": 2.0,
+      "Form": 2.2,
       "Pts.": 30,
       "RP": 1
     },
@@ -4689,7 +4761,7 @@
       "position": "Unknown Position",
       "Cost": 4.8,
       "Sel.%": 0.4,
-      "Form": 0.8,
+      "Form": 1.0,
       "Pts.": 30,
       "RP": 0
     },
@@ -4699,7 +4771,7 @@
       "position": "Unknown Position",
       "Cost": 5.3,
       "Sel.%": 0.2,
-      "Form": 3.2,
+      "Form": 3.8,
       "Pts.": 30,
       "RP": 6
     },
@@ -4719,7 +4791,7 @@
       "position": "Unknown Position",
       "Cost": 5.5,
       "Sel.%": 0.1,
-      "Form": 0.2,
+      "Form": 0.0,
       "Pts.": 29,
       "RP": 0
     },
@@ -4729,7 +4801,7 @@
       "position": "Unknown Position",
       "Cost": 4.3,
       "Sel.%": 0.1,
-      "Form": 1.6,
+      "Form": 1.0,
       "Pts.": 29,
       "RP": 1
     },
@@ -4744,22 +4816,12 @@
       "RP": 0
     },
     {
-      "name": "Kolo MuaniTOTFWD",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 6.9,
-      "Sel.%": 0.3,
-      "Form": 1.0,
-      "Pts.": 29,
-      "RP": 1
-    },
-    {
       "name": "Andrey SantosCHEMID",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.5,
       "Sel.%": 0.3,
-      "Form": 1.8,
+      "Form": 1.5,
       "Pts.": 28,
       "RP": 2
     },
@@ -4769,7 +4831,7 @@
       "position": "Unknown Position",
       "Cost": 5.7,
       "Sel.%": 3.9,
-      "Form": 3.0,
+      "Form": 3.8,
       "Pts.": 28,
       "RP": 2
     },
@@ -4789,7 +4851,7 @@
       "position": "Unknown Position",
       "Cost": 3.9,
       "Sel.%": 1.0,
-      "Form": 1.0,
+      "Form": -0.5,
       "Pts.": 27,
       "RP": 0
     },
@@ -4799,7 +4861,7 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 0.1,
-      "Form": 1.4,
+      "Form": 1.5,
       "Pts.": 27,
       "RP": 3
     },
@@ -4809,7 +4871,17 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 0.1,
-      "Form": 0.4,
+      "Form": 0.5,
+      "Pts.": 27,
+      "RP": 1
+    },
+    {
+      "name": "HeavenMUNDEF",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 3.7,
+      "Sel.%": 2.2,
+      "Form": 0.2,
       "Pts.": 27,
       "RP": 1
     },
@@ -4819,7 +4891,7 @@
       "position": "Unknown Position",
       "Cost": 5.2,
       "Sel.%": 0.5,
-      "Form": 0.6,
+      "Form": 0.2,
       "Pts.": 27,
       "RP": 1
     },
@@ -4829,7 +4901,7 @@
       "position": "Unknown Position",
       "Cost": 4.2,
       "Sel.%": 0.1,
-      "Form": 0.2,
+      "Form": 0.0,
       "Pts.": 27,
       "RP": 0
     },
@@ -4839,7 +4911,7 @@
       "position": "Unknown Position",
       "Cost": 5.5,
       "Sel.%": 0.1,
-      "Form": 4.2,
+      "Form": 4.8,
       "Pts.": 26,
       "RP": 3
     },
@@ -4874,16 +4946,6 @@
       "RP": 0
     },
     {
-      "name": "HeavenMUNDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 3.7,
-      "Sel.%": 2.1,
-      "Form": 0.0,
-      "Pts.": 26,
-      "RP": 0
-    },
-    {
       "name": "ChristieBOUMID",
       "team": "Unknown Team",
       "position": "Unknown Position",
@@ -4899,7 +4961,7 @@
       "position": "Unknown Position",
       "Cost": 6.0,
       "Sel.%": 0.1,
-      "Form": 0.4,
+      "Form": 0.2,
       "Pts.": 25,
       "RP": 0
     },
@@ -4909,7 +4971,7 @@
       "position": "Unknown Position",
       "Cost": 4.8,
       "Sel.%": 0.0,
-      "Form": 0.6,
+      "Form": 0.5,
       "Pts.": 25,
       "RP": 1
     },
@@ -4939,7 +5001,7 @@
       "position": "Unknown Position",
       "Cost": 5.8,
       "Sel.%": 0.2,
-      "Form": 2.0,
+      "Form": 2.2,
       "Pts.": 24,
       "RP": 1
     },
@@ -4959,7 +5021,7 @@
       "position": "Unknown Position",
       "Cost": 4.2,
       "Sel.%": 0.1,
-      "Form": 0.5,
+      "Form": 0.6,
       "Pts.": 23,
       "RP": 0
     },
@@ -4969,8 +5031,18 @@
       "position": "Unknown Position",
       "Cost": 4.2,
       "Sel.%": 0.1,
-      "Form": 0.5,
+      "Form": 0.6,
       "Pts.": 23,
+      "RP": 1
+    },
+    {
+      "name": "MosqueraARSDEF",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 5.3,
+      "Sel.%": 0.1,
+      "Form": 1.0,
+      "Pts.": 22,
       "RP": 1
     },
     {
@@ -4979,7 +5051,7 @@
       "position": "Unknown Position",
       "Cost": 4.5,
       "Sel.%": 0.1,
-      "Form": 0.4,
+      "Form": 0.2,
       "Pts.": 22,
       "RP": 0
     },
@@ -4988,7 +5060,7 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.6,
-      "Sel.%": 1.6,
+      "Sel.%": 2.1,
       "Form": 5.5,
       "Pts.": 22,
       "RP": 3
@@ -4999,19 +5071,19 @@
       "position": "Unknown Position",
       "Cost": 5.4,
       "Sel.%": 0.2,
-      "Form": 0.8,
+      "Form": 1.0,
       "Pts.": 22,
       "RP": 1
     },
     {
-      "name": "MosqueraARSDEF",
+      "name": "SolankeTOTFWD",
       "team": "Unknown Team",
       "position": "Unknown Position",
-      "Cost": 5.3,
-      "Sel.%": 0.1,
-      "Form": 0.7,
-      "Pts.": 21,
-      "RP": 0
+      "Cost": 7.2,
+      "Sel.%": 1.3,
+      "Form": 4.2,
+      "Pts.": 22,
+      "RP": 1
     },
     {
       "name": "PattersonEVEDEF",
@@ -5019,7 +5091,7 @@
       "position": "Unknown Position",
       "Cost": 4.4,
       "Sel.%": 0.0,
-      "Form": 0.6,
+      "Form": 0.2,
       "Pts.": 21,
       "RP": 0
     },
@@ -5029,7 +5101,7 @@
       "position": "Unknown Position",
       "Cost": 5.1,
       "Sel.%": 0.2,
-      "Form": 0.6,
+      "Form": 0.8,
       "Pts.": 21,
       "RP": 1
     },
@@ -5044,22 +5116,12 @@
       "RP": 0
     },
     {
-      "name": "SolankeTOTFWD",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 7.2,
-      "Sel.%": 1.3,
-      "Form": 3.6,
-      "Pts.": 21,
-      "RP": 0
-    },
-    {
       "name": "ScarlesWHUDEF",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.3,
       "Sel.%": 0.0,
-      "Form": 1.4,
+      "Form": 0.5,
       "Pts.": 21,
       "RP": 0
     },
@@ -5079,7 +5141,7 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 0.1,
-      "Form": 1.8,
+      "Form": 2.2,
       "Pts.": 20,
       "RP": 2
     },
@@ -5089,7 +5151,7 @@
       "position": "Unknown Position",
       "Cost": 4.2,
       "Sel.%": 0.1,
-      "Form": 2.0,
+      "Form": 1.2,
       "Pts.": 20,
       "RP": 0
     },
@@ -5099,7 +5161,7 @@
       "position": "Unknown Position",
       "Cost": 5.3,
       "Sel.%": 0.7,
-      "Form": 0.6,
+      "Form": 0.8,
       "Pts.": 20,
       "RP": 1
     },
@@ -5109,7 +5171,7 @@
       "position": "Unknown Position",
       "Cost": 4.9,
       "Sel.%": 0.2,
-      "Form": 0.6,
+      "Form": 0.5,
       "Pts.": 20,
       "RP": 0
     },
@@ -5179,7 +5241,7 @@
       "position": "Unknown Position",
       "Cost": 5.1,
       "Sel.%": 0.2,
-      "Form": 0.4,
+      "Form": 0.5,
       "Pts.": 19,
       "RP": 0
     },
@@ -5189,7 +5251,7 @@
       "position": "Unknown Position",
       "Cost": 5.5,
       "Sel.%": 0.1,
-      "Form": 3.2,
+      "Form": 3.0,
       "Pts.": 19,
       "RP": 2
     },
@@ -5199,7 +5261,7 @@
       "position": "Unknown Position",
       "Cost": 4.8,
       "Sel.%": 0.0,
-      "Form": 0.6,
+      "Form": 0.8,
       "Pts.": 18,
       "RP": 1
     },
@@ -5219,7 +5281,7 @@
       "position": "Unknown Position",
       "Cost": 7.3,
       "Sel.%": 0.6,
-      "Form": 1.0,
+      "Form": 0.8,
       "Pts.": 18,
       "RP": 0
     },
@@ -5228,7 +5290,7 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 6.4,
-      "Sel.%": 0.6,
+      "Sel.%": 0.5,
       "Form": 1.2,
       "Pts.": 17,
       "RP": 0
@@ -5244,12 +5306,22 @@
       "RP": 1
     },
     {
+      "name": "ArmstrongEVEMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 4.5,
+      "Sel.%": 0.1,
+      "Form": 1.8,
+      "Pts.": 17,
+      "RP": 2
+    },
+    {
       "name": "DiblingEVEMID",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.3,
       "Sel.%": 0.0,
-      "Form": 0.4,
+      "Form": 0.2,
       "Pts.": 17,
       "RP": 0
     },
@@ -5259,7 +5331,7 @@
       "position": "Unknown Position",
       "Cost": 3.8,
       "Sel.%": 0.2,
-      "Form": 1.0,
+      "Form": 0.2,
       "Pts.": 17,
       "RP": 0
     },
@@ -5269,9 +5341,19 @@
       "position": "Unknown Position",
       "Cost": 4.7,
       "Sel.%": 0.1,
-      "Form": 0.4,
+      "Form": 0.5,
       "Pts.": 17,
       "RP": 0
+    },
+    {
+      "name": "GallagherTOTMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 5.4,
+      "Sel.%": 0.1,
+      "Form": 3.2,
+      "Pts.": 17,
+      "RP": 2
     },
     {
       "name": "Ward-ProwseBURMID",
@@ -5279,7 +5361,7 @@
       "position": "Unknown Position",
       "Cost": 5.6,
       "Sel.%": 0.2,
-      "Form": 1.0,
+      "Form": 1.2,
       "Pts.": 16,
       "RP": 4
     },
@@ -5299,7 +5381,7 @@
       "position": "Unknown Position",
       "Cost": 5.5,
       "Sel.%": 0.1,
-      "Form": 0.6,
+      "Form": 0.5,
       "Pts.": 16,
       "RP": 0
     },
@@ -5314,32 +5396,12 @@
       "RP": 0
     },
     {
-      "name": "GallagherTOTMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 5.4,
-      "Sel.%": 0.1,
-      "Form": 2.8,
-      "Pts.": 16,
-      "RP": 1
-    },
-    {
-      "name": "ArmstrongEVEMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 4.5,
-      "Sel.%": 0.1,
-      "Form": 1.2,
-      "Pts.": 15,
-      "RP": 0
-    },
-    {
       "name": "JamesLEEMID",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 5.2,
       "Sel.%": 0.1,
-      "Form": 0.4,
+      "Form": 0.5,
       "Pts.": 15,
       "RP": 0
     },
@@ -5359,7 +5421,7 @@
       "position": "Unknown Position",
       "Cost": 4.3,
       "Sel.%": 0.3,
-      "Form": 0.4,
+      "Form": 0.2,
       "Pts.": 15,
       "RP": 0
     },
@@ -5369,7 +5431,7 @@
       "position": "Unknown Position",
       "Cost": 3.8,
       "Sel.%": 0.2,
-      "Form": 1.4,
+      "Form": 1.8,
       "Pts.": 14,
       "RP": 4
     },
@@ -5389,7 +5451,7 @@
       "position": "Unknown Position",
       "Cost": 4.3,
       "Sel.%": 0.8,
-      "Form": 0.4,
+      "Form": 0.2,
       "Pts.": 14,
       "RP": 1
     },
@@ -5449,7 +5511,7 @@
       "position": "Unknown Position",
       "Cost": 5.2,
       "Sel.%": 0.3,
-      "Form": 1.2,
+      "Form": 0.0,
       "Pts.": 13,
       "RP": 0
     },
@@ -5469,7 +5531,7 @@
       "position": "Unknown Position",
       "Cost": 4.0,
       "Sel.%": 0.1,
-      "Form": 0.2,
+      "Form": 0.0,
       "Pts.": 13,
       "RP": 0
     },
@@ -5588,7 +5650,7 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 6.0,
-      "Sel.%": 0.3,
+      "Sel.%": 0.4,
       "Form": 2.8,
       "Pts.": 11,
       "RP": 7
@@ -5599,7 +5661,7 @@
       "position": "Unknown Position",
       "Cost": 4.0,
       "Sel.%": 0.0,
-      "Form": 2.2,
+      "Form": 1.8,
       "Pts.": 11,
       "RP": 5
     },
@@ -5639,7 +5701,7 @@
       "position": "Unknown Position",
       "Cost": 4.7,
       "Sel.%": 0.2,
-      "Form": 2.2,
+      "Form": 2.8,
       "Pts.": 11,
       "RP": 3
     },
@@ -5652,6 +5714,16 @@
       "Form": 0.0,
       "Pts.": 11,
       "RP": 0
+    },
+    {
+      "name": "BissoumaTOTMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 5.2,
+      "Sel.%": 0.0,
+      "Form": 1.5,
+      "Pts.": 11,
+      "RP": 3
     },
     {
       "name": "DohertyWOLDEF",
@@ -5707,10 +5779,20 @@
       "name": "ArmstrongWOLFWD",
       "team": "Unknown Team",
       "position": "Unknown Position",
-      "Cost": 5.5,
+      "Cost": 5.4,
       "Sel.%": 0.1,
       "Form": 2.5,
       "Pts.": 10,
+      "RP": 2
+    },
+    {
+      "name": "BranthwaiteEVEDEF",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 5.3,
+      "Sel.%": 0.2,
+      "Form": 2.0,
+      "Pts.": 9,
       "RP": 2
     },
     {
@@ -5722,16 +5804,6 @@
       "Form": 0.0,
       "Pts.": 9,
       "RP": 0
-    },
-    {
-      "name": "BissoumaTOTMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 5.2,
-      "Sel.%": 0.0,
-      "Form": 1.6,
-      "Pts.": 9,
-      "RP": 1
     },
     {
       "name": "IrvingWHUMID",
@@ -5759,7 +5831,7 @@
       "position": "Unknown Position",
       "Cost": 7.3,
       "Sel.%": 0.6,
-      "Form": 1.2,
+      "Form": 1.4,
       "Pts.": 8,
       "RP": 0
     },
@@ -5769,9 +5841,19 @@
       "position": "Unknown Position",
       "Cost": 4.6,
       "Sel.%": 0.2,
-      "Form": 0.4,
+      "Form": 0.2,
       "Pts.": 8,
       "RP": 0
+    },
+    {
+      "name": "GeorgeEVEMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 4.8,
+      "Sel.%": 0.1,
+      "Form": 1.0,
+      "Pts.": 8,
+      "RP": 1
     },
     {
       "name": "LuccaNFOFWD",
@@ -5782,6 +5864,16 @@
       "Form": 2.0,
       "Pts.": 8,
       "RP": 1
+    },
+    {
+      "name": "DragusinTOTDEF",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 4.5,
+      "Sel.%": 0.0,
+      "Form": 1.5,
+      "Pts.": 8,
+      "RP": 2
     },
     {
       "name": "G.RodriguezWHUMID",
@@ -5799,7 +5891,7 @@
       "position": "Unknown Position",
       "Cost": 5.5,
       "Sel.%": 0.0,
-      "Form": 1.0,
+      "Form": 0.8,
       "Pts.": 8,
       "RP": 0
     },
@@ -5819,27 +5911,7 @@
       "position": "Unknown Position",
       "Cost": 4.4,
       "Sel.%": 0.0,
-      "Form": 0.8,
-      "Pts.": 7,
-      "RP": 0
-    },
-    {
-      "name": "GeorgeEVEMID",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 4.8,
-      "Sel.%": 0.1,
-      "Form": 0.6,
-      "Pts.": 7,
-      "RP": 0
-    },
-    {
-      "name": "BranthwaiteEVEDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 5.3,
-      "Sel.%": 0.2,
-      "Form": 1.4,
+      "Form": 0.0,
       "Pts.": 7,
       "RP": 0
     },
@@ -5860,16 +5932,6 @@
       "Cost": 5.0,
       "Sel.%": 0.1,
       "Form": 0.2,
-      "Pts.": 7,
-      "RP": 1
-    },
-    {
-      "name": "DragusinTOTDEF",
-      "team": "Unknown Team",
-      "position": "Unknown Position",
-      "Cost": 4.5,
-      "Sel.%": 0.0,
-      "Form": 1.2,
       "Pts.": 7,
       "RP": 1
     },
@@ -5919,7 +5981,7 @@
       "position": "Unknown Position",
       "Cost": 4.3,
       "Sel.%": 0.4,
-      "Form": 1.0,
+      "Form": 1.2,
       "Pts.": 6,
       "RP": 0
     },
@@ -5928,7 +5990,7 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.2,
-      "Sel.%": 0.4,
+      "Sel.%": 0.5,
       "Form": 0.0,
       "Pts.": 5,
       "RP": 0
@@ -5959,7 +6021,7 @@
       "position": "Unknown Position",
       "Cost": 4.8,
       "Sel.%": 0.1,
-      "Form": 0.2,
+      "Form": 0.0,
       "Pts.": 5,
       "RP": 0
     },
@@ -6099,7 +6161,7 @@
       "position": "Unknown Position",
       "Cost": 5.0,
       "Sel.%": 0.0,
-      "Form": 0.6,
+      "Form": 0.5,
       "Pts.": 3,
       "RP": 0
     },
@@ -6109,7 +6171,7 @@
       "position": "Unknown Position",
       "Cost": 4.4,
       "Sel.%": 0.1,
-      "Form": 0.4,
+      "Form": 0.5,
       "Pts.": 3,
       "RP": 1
     },
@@ -6119,7 +6181,7 @@
       "position": "Unknown Position",
       "Cost": 4.5,
       "Sel.%": 0.0,
-      "Form": 0.6,
+      "Form": 0.8,
       "Pts.": 3,
       "RP": 0
     },
@@ -6189,7 +6251,7 @@
       "position": "Unknown Position",
       "Cost": 4.0,
       "Sel.%": 0.4,
-      "Form": 0.3,
+      "Form": 0.4,
       "Pts.": 3,
       "RP": 0
     },
@@ -6289,7 +6351,7 @@
       "position": "Unknown Position",
       "Cost": 4.0,
       "Sel.%": 0.1,
-      "Form": 0.4,
+      "Form": 0.2,
       "Pts.": 2,
       "RP": 0
     },
@@ -6309,7 +6371,7 @@
       "position": "Unknown Position",
       "Cost": 4.3,
       "Sel.%": 0.6,
-      "Form": 0.2,
+      "Form": 0.0,
       "Pts.": 2,
       "RP": 0
     },
@@ -7138,7 +7200,7 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.0,
-      "Sel.%": 0.8,
+      "Sel.%": 0.7,
       "Form": 0.0,
       "Pts.": 0,
       "RP": 0
@@ -7148,7 +7210,7 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 3.9,
-      "Sel.%": 0.2,
+      "Sel.%": 0.3,
       "Form": 0.0,
       "Pts.": 0,
       "RP": 0
@@ -8338,7 +8400,7 @@
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 3.8,
-      "Sel.%": 0.8,
+      "Sel.%": 0.9,
       "Form": 0.0,
       "Pts.": 0,
       "RP": 0
@@ -9405,6 +9467,16 @@
     },
     {
       "name": "KyerematenTOTMID",
+      "team": "Unknown Team",
+      "position": "Unknown Position",
+      "Cost": 4.5,
+      "Sel.%": 0.0,
+      "Form": 0.0,
+      "Pts.": 0,
+      "RP": 0
+    },
+    {
+      "name": "WilsonTOTFWD",
       "team": "Unknown Team",
       "position": "Unknown Position",
       "Cost": 4.5,
@@ -13041,6 +13113,46 @@
         "Out": "Man\u00e9",
         "Result": "Accepted",
         "": ""
+      },
+      {
+        "GW": "28",
+        "Manager": "Andrew Smith",
+        "In": "Abraham",
+        "Out": "G.Jesus",
+        "Result": "Accepted",
+        "": ""
+      },
+      {
+        "GW": "28",
+        "Manager": "Andrew Smith",
+        "In": "Ampadu",
+        "Out": "Yarmoliuk",
+        "Result": "Accepted",
+        "": ""
+      },
+      {
+        "GW": "28",
+        "Manager": "chris duncam",
+        "In": "J.Palhinha",
+        "Out": "Mitoma",
+        "Result": "Accepted",
+        "": ""
+      },
+      {
+        "GW": "28",
+        "Manager": "chris duncam",
+        "In": "Mings",
+        "Out": "Martinez",
+        "Result": "Accepted",
+        "": ""
+      },
+      {
+        "GW": "28",
+        "Manager": "Don Kim",
+        "In": "Dunk",
+        "Out": "Mykolenko",
+        "Result": "Accepted",
+        "": ""
       }
     ],
     "freeAgents": [
@@ -13786,6 +13898,22 @@
         "In": "Gordon",
         "Out": "Barnes",
         "Date": "21 Feb",
+        "": ""
+      },
+      {
+        "GW": "28",
+        "Manager": "Zryan Bhao",
+        "In": "Rodon",
+        "Out": "Van de Ven",
+        "Date": "26 Feb",
+        "": ""
+      },
+      {
+        "GW": "28",
+        "Manager": "Zryan Bhao",
+        "In": "Iwobi",
+        "Out": "Doku",
+        "Date": "26 Feb",
         "": ""
       }
     ],
