@@ -407,34 +407,53 @@ def main():
         print_gameweek_summary(parsed_data, gameweek)
 
     # Step 9: Generate monthly payment summary (if end of month)
+    # Auto-detect end of month: if this is a final result and the last GW in its month
+    end_of_month_info = None
     if args.end_of_month:
-        import subprocess
-
-        # Parse end_of_month parameter: "December,14" or "December,14,18"
+        # Manual override via --end-of-month flag
         parts = args.end_of_month.split(',')
-        if len(parts) < 2:
-            print(f"\n⚠️ Warning: Invalid --end-of-month format. Use 'Month,StartGW' or 'Month,StartGW,EndGW'")
+        if len(parts) >= 2:
+            end_of_month_info = {
+                'month': parts[0].strip(),
+                'start_gw': int(parts[1].strip()),
+                'end_gw': int(parts[2].strip()) if len(parts) > 2 else gameweek
+            }
         else:
-            month_name = parts[0].strip()
-            start_gw = int(parts[1].strip())
-            end_gw = int(parts[2].strip()) if len(parts) > 2 else gameweek
+            print(f"\n⚠️ Warning: Invalid --end-of-month format. Use 'Month,StartGW' or 'Month,StartGW,EndGW'")
+    elif not is_partial and has_results:
+        # Auto-detect: check if this gameweek is the last one in its month
+        month_name = get_month_for_gameweek(gameweek)
+        if month_name:
+            month_gws = get_gameweeks_for_month(month_name)
+            if month_gws and gameweek == max(month_gws):
+                end_of_month_info = {
+                    'month': month_name,
+                    'start_gw': min(month_gws),
+                    'end_gw': gameweek
+                }
 
-            print(f"\n💰 Generating monthly payment summary for {month_name}...")
-            try:
-                result = subprocess.run(
-                    ['python3', 'generate_monthly_payments.py', month_name, str(start_gw), str(end_gw)],
-                    capture_output=True,
-                    text=True,
-                    timeout=30
-                )
-                if result.returncode == 0:
-                    print(f"  ✓ Monthly payment summary generated")
-                    print(f"  📄 Saved to: gw{end_gw}/monthly_payments_{month_name.lower()}.md")
-                else:
-                    print(f"  ⚠️ Warning: Monthly payment generation had issues:")
-                    print(f"     {result.stderr}")
-            except Exception as e:
-                print(f"  ⚠️ Warning: Failed to generate monthly payment summary: {e}")
+    if end_of_month_info:
+        import subprocess
+        month_name = end_of_month_info['month']
+        start_gw = end_of_month_info['start_gw']
+        end_gw = end_of_month_info['end_gw']
+
+        print(f"\n💰 End of {month_name} detected! Generating monthly payment summary...")
+        try:
+            result = subprocess.run(
+                ['python3', 'generate_monthly_payments.py', month_name, str(start_gw), str(end_gw)],
+                capture_output=True,
+                text=True,
+                timeout=30
+            )
+            if result.returncode == 0:
+                print(f"  ✓ Monthly payment summary generated")
+                print(f"  📄 Saved to: gw{end_gw}/monthly_payments_{month_name.lower()}.md")
+            else:
+                print(f"  ⚠️ Warning: Monthly payment generation had issues:")
+                print(f"     {result.stderr}")
+        except Exception as e:
+            print(f"  ⚠️ Warning: Failed to generate monthly payment summary: {e}")
 
     # Success!
     print("\n" + "=" * 80)
